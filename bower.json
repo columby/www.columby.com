@@ -4,6 +4,7 @@
   "dependencies": {
     "jquery": "1.x",
     "angular": "latest",
+    "angular-animate": "latest",
     "angular-resource": "latest",
     "angular-cookies": "latest",
     "angular-mocks": "latest",

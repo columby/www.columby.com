@@ -1,3 +1,18 @@
+<nav data-ng-controller="SiteNavController">
+  <div ng-class="{show:showSiteNav}" class="sitenav">
+    <div class="sitenav-content">
+      <ul>
+        <li>This is the side nav</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="main-logo" ng-click="toggleSiteNav($event)"><h1>C</h1></div>
+
+  <div class="sitenav-overlay" ng-class="{show:showSiteNav}" ng-click="toggleSiteNav($event)"></div>
+</div>
+
+
 <section data-ng-controller="IndexController">
-  <h1 mean-token="'home-default'">This is the home view</h1>
+  <h1 mean-token="'home-default'">Columby</h1>
 </section>
