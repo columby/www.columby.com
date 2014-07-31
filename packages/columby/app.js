@@ -45,7 +45,7 @@ Columby.register(function(app, auth, database) {
         //you now have the settings object
     });
     */
-  Columby.angularDependencies(['ngAnimate']);
+  //Columby.angularDependencies(['ngAnimate']);
   Columby.aggregateAsset('css','columby.css');
 
   return Columby;
