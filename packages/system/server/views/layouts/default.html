@@ -3,13 +3,21 @@
 {% include '../includes/head.html' %}
 
 <body>
-  <!-- include sitenav -->
-  {% include '../includes/nav.html' %}
+  <!-- include sitenav including sitenav-overlay -->
+  {% include '../includes/sitenav.html' %}
 
-  {% block content %}{% endblock %}
+  <div class="site-main">
+    <!-- include metabar -->
+    {% include '../includes/metabar.html' %}
 
+    <!-- main content -->
+    <div class="content">
+      <!-- content block -->
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+
+  <!-- footer -->
   {% include '../includes/foot.html' %}
-
 </body>
-
 </html>
