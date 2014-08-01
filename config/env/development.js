@@ -1,10 +1,11 @@
 'use strict';
 
 module.exports = {
-  db: 'mongodb://localhost/mean-dev',
+  db: 'mongodb://localhost/columby-dev',
   app: {
-    name: 'MEAN - FullStack JS - Development'
+    name: 'Columby - Development'
   },
+
   facebook: {
     clientID: 'APP_ID',
     clientSecret: 'APP_SECRET',
@@ -30,6 +31,11 @@ module.exports = {
     clientSecret: 'SECRET_KEY',
     callbackURL: 'http://localhost:3000/auth/linkedin/callback'
   },
+
+  mandrill: {
+    key: 'b-NHPu6xlOiYjytszKiDvg',
+  },
+
   emailFrom: 'SENDER EMAIL ADDRESS', // sender address like ABC <abc@example.com>
   mailer: {
     service: 'SERVICE_PROVIDER',

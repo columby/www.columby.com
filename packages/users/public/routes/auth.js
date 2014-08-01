@@ -26,18 +26,19 @@ angular.module('mean.users').config(['$stateProvider',
 
     // states for my app
     $stateProvider
-      .state('auth', {
+      /*.state('auth', {
         url: '/auth',
         templateUrl: 'users/views/index.html'
       })
-      .state('auth.login', {
+      */
+      .state('login', {
         url: '/login',
         templateUrl: 'users/views/login.html',
         resolve: {
           loggedin: checkLoggedOut
         }
       })
-      .state('auth.register', {
+      .state('register', {
         url: '/register',
         templateUrl: 'users/views/register.html',
         resolve: {

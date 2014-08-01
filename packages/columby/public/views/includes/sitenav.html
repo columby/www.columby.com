@@ -1,15 +1,13 @@
-<nav data-ng-controller="SiteNavController">
-  <div ng-class="{show:showSiteNav}" class="sitenav">
+<nav class="sitenav-wrapper" data-ng-controller="SiteNavController">
+  <div class="sitenav">
     <div class="sitenav-content">
       <ul>
         <li><a href="#!/auth/login">Home</a></li>
-        <li><a href="/">Jan Jansen</a></li>
+        <li><a href="/">{{global.user.username}}</a></li>
         <li><a href="/">New dataset</a></li>
       </ul>
     </div>
   </div>
 
-  <div class="main-logo" ng-click="toggleSiteNav($event)"><h1>C</h1></div>
-
   <div class="sitenav-overlay" ng-class="{show:showSiteNav}" ng-click="toggleSiteNav($event)"></div>
-</div>
+</nav>
