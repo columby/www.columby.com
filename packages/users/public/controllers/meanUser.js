@@ -1,18 +1,33 @@
 'use strict';
 angular.module('mean.users')
-  .controller('LoginCtrl', ['$scope', '$rootScope', '$http', '$location',
-    function($scope, $rootScope, $http, $location) {
+  .controller('LoginCtrl', ['$scope', '$rootScope', '$http', '$location', 'FlashSrv',
+    function($scope, $rootScope, $http, $location, FlashSrv) {
       // This object will be filled by the form
       $scope.user = {};
 
       // Register the login() function
       $scope.login = function() {
-        $http.post('/login', {
+        console.log('login');
+        $http.post('/api/v2/user/login', {
           email: $scope.user.email,
           password: $scope.user.password
         })
           .success(function(response) {
+            if (response.status === 'error'){
+              //FlashSrv.setMessage('User not found');
+              $scope.loginerror = 'Error logging in, please check your username and/or password.';
+            }
+            else if (response.statusCode === 200){
+              console.log('Successfully logged in');
+              FlashSrv.setMessage('Successfully logged in!');
+              //$rootScope.user = response.user;
+              $rootScope.$emit('loggedin', response.user);
+              //$scope.loginError = 0;
+              //window.location.reload();
+              //$location.path('/');
+            }
             // authentication OK
+            /*
             $scope.loginError = 0;
             $rootScope.user = response.user;
             $rootScope.$emit('loggedin');
@@ -26,8 +41,10 @@ angular.module('mean.users')
             } else {
               $location.url('/');
             }
+            */
           })
-          .error(function() {
+          .error(function(e) {
+            console.log(e);
             $scope.loginerror = 'Authentication failed.';
           });
       };

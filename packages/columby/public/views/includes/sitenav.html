@@ -3,8 +3,10 @@
     <div class="sitenav-content">
       <ul>
         <li><a href="#!/auth/login">Home</a></li>
-        <li><a href="/">{{global.user.username}}</a></li>
-        <li><a href="/">New dataset</a></li>
+        <li ng-show="global.authenticated"><a href="/me">{{global.user.username}}</a></li>
+        <li><a href="#!/publish">New dataset</a></li>
+        <li ng-hide="global.authenticated"><a href="#!/login" class="btn">Login</a></li>
+        <li ng-show="global.authenticated"><a class="btn" ng-click="logout()">Logout</a></li>
       </ul>
     </div>
   </div>

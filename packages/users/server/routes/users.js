@@ -5,8 +5,9 @@ var users = require('../controllers/users');
 
 module.exports = function(MeanUser, app, auth, database, passport) {
 
-  app.route('/logout')
+  app.route('/api/v2/user/logout')
     .get(users.signout);
+
   app.route('/users/me')
     .get(users.me);
 
@@ -30,15 +31,52 @@ module.exports = function(MeanUser, app, auth, database, passport) {
     });
 
   // Setting the local strategy route
-  app.route('/login')
-    .post(passport.authenticate('local', {
-      failureFlash: true
+  app.post('/api/v2/user/login', function(req,res,next){
+    passport.authenticate('local', function(err, user, info) {
+    if (err) {
+      console.log(err);
+      return next(err);
+    }
+    if (!user) {
+      console.log('no user');
+      return res.json({
+        status: 'error',
+        errorMessage: 'No user found'
+      });
+      //return res.redirect('/login');
+    }
+    req.logIn(user, function(err) {
+
+      if (err) {
+        console.log(err);
+        return res.json({
+          status: 'error',
+          statusCode: '',
+          statusMessage: 'Error logging in',
+          error: err
+        });
+        //return next(err);
+      }
+      return res.json({
+        status: 'success',
+        statusCode: '200',
+        statusMessage: 'Successfully logged in',
+        user: user
+      });
+    });
+  })(req, res, next);
+});
+/*
+{
+      failureFlash: true,
+      failureRedirect: '#!/login'
     }), function(req, res) {
       res.send({
         user: req.user,
         redirect: (req.user.roles.indexOf('admin') !== -1) ? req.get('referer') : false
       });
     });
+*/
 
   // Setting the facebook oauth routes
   app.route('/auth/facebook')

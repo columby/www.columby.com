@@ -33,7 +33,12 @@ exports.signin = function(req, res) {
  */
 exports.signout = function(req, res) {
   req.logout();
-  res.redirect('/');
+  //res.redirect('/');
+  res.json({
+    status: 'success',
+    statusCode: '200',
+    statusMessage: 'Successfully logged out. '
+  });
 };
 
 /**
@@ -101,7 +106,7 @@ exports.create = function(req, res, next) {
     }
     req.logIn(user, function(err) {
       if (err) return next(err);
-      return res.redirect('/');
+      return res.json({success:true});//res.redirect('/');
     });
     res.status(200);
   });

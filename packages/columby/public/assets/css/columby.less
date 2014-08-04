@@ -59,7 +59,26 @@ body {
   .metabar-wrapper {
     border-bottom: 1px solid #eee;
     height: 40px;
-  line-height: 40px;
+    line-height: 40px;
+    .logo {
+      width: 30px;
+      height: 30px;
+      background-color: #222;
+      margin-top: 5px;
+      color: #fff;
+      line-height: 25px;
+      text-align: center;
+      font-weight: 100;
+      font-size: 30px;
+      border-radius: 100%;
+      cursor: pointer;
+      -webkit-transition-duration: 200ms; /* Safari */
+      transition-duration: 200ms;
+      &:hover{
+        background-color:#eee;
+        color: #222
+      }
+    }
   }
 }
 
