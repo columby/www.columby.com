@@ -5,15 +5,9 @@
  */
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
-  async = require('async'),
-  config = require('meanio').loadConfig(),
-  crypto = require('crypto'),
-  nodemailer = require('nodemailer'),
-  templates = require('../template'),
   config = require('meanio').loadConfig(),
   mandrill = require('mandrill-api/mandrill'),
   mandrill_client = new mandrill.Mandrill(config.mandrill.key),
-  //VerificationToken = mongoose.model('VerificationToken'),
   uuid = require('node-uuid')
 ;
 
@@ -24,9 +18,9 @@ exports.authCallback = function(req, res) {
   res.redirect('/');
 };
 
+
 exports.passwordlessLogin = function(req,res,next){
-  console.log('body', req.body);
-  console.log('query', req.query);
+
   var email = req.body.email;
   // Check if email-address is registered
   User.findOne({'email': email}, function(err,user){
@@ -79,8 +73,9 @@ exports.passwordlessLogin = function(req,res,next){
                 statusMessage: 'VerificationToken sent.'
               });
             } else {
-              res.json(400,{
+              res.json({
                 status: 'error',
+                statusCode: 400,
                 statusMessage: 'Error sending mail.',
                 error: result
               });
@@ -123,15 +118,6 @@ exports.verify = function(req,res,next) {
   });
 };
 
-/**
- * Show login form
- */
-exports.signin = function(req, res) {
-  if (req.isAuthenticated()) {
-    return res.redirect('/');
-  }
-  res.redirect('#!/login');
-};
 
 /**
  * Logout
@@ -145,12 +131,7 @@ exports.signout = function(req, res) {
   });
 };
 
-/**
- * Session
- */
-exports.session = function(req, res) {
-  res.redirect('/');
-};
+
 
 /**
  * Create user
@@ -164,13 +145,14 @@ exports.create = function(req, res, next) {
   //req.assert('name', 'You must enter a name').notEmpty();
   req.assert('email', 'You must enter a valid email address').isEmail();
   req.assert('username', 'Username cannot be more than 20 characters').len(1, 20);
-  req.assert('password', 'Password must be between 8-20 characters long').len(8, 20);
-  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  //req.assert('password', 'Password must be between 8-20 characters long').len(8, 20);
+  //req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
   var errors = req.validationErrors();
   if (errors) {
-    res.json(400,{
+    res.json({
       status: 'error',
+      statusCode: 400,
       statusMessage: errors
     });
   } else {
@@ -217,8 +199,9 @@ exports.create = function(req, res, next) {
                   value: err.errors[x].value
                 });
               }
-              res.json(400,{
+              res.json({
                 status: 'error',
+                statusCode: 400,
                 statusMessage: modelErrors
               });
             }
@@ -250,8 +233,9 @@ exports.create = function(req, res, next) {
               statusMessage: 'VerificationToken sent.'
             });
           } else {
-            res.json(400,{
+            res.json({
               status: 'error',
+              statusCode: 400,
               statusMessage: 'Error sending mail.',
               error: result
             });
@@ -283,134 +267,4 @@ exports.user = function(req, res, next, id) {
       req.profile = user;
       next();
     });
-};
-
-/**
- * Resets the password
- */
-
-exports.resetpassword = function(req, res, next) {
-  User.findOne({
-    resetPasswordToken: req.params.token,
-    resetPasswordExpires: {
-      $gt: Date.now()
-    }
-  }, function(err, user) {
-    if (err) {
-      return res.status(400).json({
-        msg: err
-      });
-    }
-    if (!user) {
-      return res.status(400).json({
-        msg: 'Token invalid or expired'
-      });
-    }
-    req.assert('password', 'Password must be between 8-20 characters long').len(8, 20);
-    req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
-    var errors = req.validationErrors();
-    if (errors) {
-      return res.status(400).send(errors);
-    }
-    user.password = req.body.password;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
-    user.save(function(err) {
-      req.logIn(user, function(err) {
-        if (err) return next(err);
-        return res.send({
-          user: user,
-        });
-      });
-    });
-  });
-};
-
-/**
- * Send reset password email
- */
-function sendMail(mailOptions) {
-  mandrill_client.messages.send({
-    'message': {
-      'html': '<p>Example HTML content</p>',
-      'text': 'Example text content',
-      'subject': 'example subject',
-      'from_email': 'admin@columby.com',
-      'from_name': 'Columby Admin',
-      'to': [{
-        'email': 'arn@urbanlink.nl',
-        'name': 'avdp',
-        'type': 'to'
-      }],
-      'headers': {
-        'Reply-To': 'admin@columby.com'
-      },
-    }
-  }, function(result){
-    console.log(result);
-  });
-
-  var transport = nodemailer.createTransport('SMTP', config.mailer);
-  transport.sendMail(mailOptions, function(err, response) {
-    if (err) return err;
-    return response;
-  });
-}
-
-
-//sendMail();
-
-/**
- * Callback for forgot password link
- */
-exports.forgotpassword = function(req, res, next) {
-  async.waterfall([
-
-      function(done) {
-        crypto.randomBytes(20, function(err, buf) {
-          var token = buf.toString('hex');
-          done(err, token);
-        });
-      },
-      function(token, done) {
-        User.findOne({
-          $or: [{
-            email: req.body.text
-          }, {
-            username: req.body.text
-          }]
-        }, function(err, user) {
-          if (err || !user) return done(true);
-          done(err, user, token);
-        });
-      },
-      function(user, token, done) {
-        user.resetPasswordToken = token;
-        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
-        user.save(function(err) {
-          done(err, token, user);
-        });
-      },
-      function(token, user, done) {
-        var mailOptions = {
-          to: user.email,
-          from: config.emailFrom
-        };
-        mailOptions = templates.forgot_password_email(user, req, token, mailOptions);
-        sendMail(mailOptions);
-        done(null, true);
-      }
-    ],
-    function(err, status) {
-      var response = {
-        message: 'Mail successfully sent',
-        status: 'success'
-      };
-      if (err) {
-        response.message = 'User does not exist';
-        response.status = 'danger';
-      }
-      res.json(response);
-    }
-  );
 };

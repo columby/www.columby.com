@@ -1,6 +1,5 @@
 'use strict';
 
-
 angular.module('mean.columby')
 
   // Define authentication events

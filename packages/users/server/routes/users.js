@@ -5,6 +5,16 @@ var users = require('../controllers/users');
 
 module.exports = function(MeanUser, app, auth, database, passport) {
 
+  // Setting up the userId param
+  app.param('userId', users.user);
+
+  // AngularJS route to check for authentication
+  app.route('/loggedin')
+    .get(function(req, res) {
+      res.send(req.isAuthenticated() ? req.user : '0');
+    });
+
+  // Login paths
   app.route('/api/v2/user/passwordless-login')
     .post(users.passwordlessLogin);
 
@@ -21,6 +31,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
     .get(users.me);
 
   // Setting up the users api
+  /*
   app.route('/api/v2/user/register')
     .post(users.create);
 
@@ -29,17 +40,11 @@ module.exports = function(MeanUser, app, auth, database, passport) {
 
   app.route('/reset/:token')
     .post(users.resetpassword);
+  */
 
-  // Setting up the userId param
-  app.param('userId', users.user);
-
-  // AngularJS route to check for authentication
-  app.route('/loggedin')
-    .get(function(req, res) {
-      res.send(req.isAuthenticated() ? req.user : '0');
-    });
 
   // Setting the local strategy route
+  /*
   app.post('/api/v2/user/login', function(req,res,next){
     passport.authenticate('local', function(err, user, info) {
       if (err) {
@@ -142,5 +147,5 @@ module.exports = function(MeanUser, app, auth, database, passport) {
     .get(passport.authenticate('linkedin', {
       failureRedirect: '#!/login'
     }), users.authCallback);
-
+    */
 };
