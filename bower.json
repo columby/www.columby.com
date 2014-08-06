@@ -13,6 +13,6 @@
     "angular-bootstrap": "0.11.0",
     "angular-ui-router": "#master",
     "mandrill-api": "1.0.40",
-    "node-uuid": "1.4.1",
+    "node-uuid": "1.4.1"
   }
 }
