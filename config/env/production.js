@@ -9,7 +9,7 @@ module.exports = {
   },
 
   mandrill: {
-    key: env.MANDRILL_APIKEY,
+    key: process.env.MANDRILL_APIKEY,
   },
 
   facebook: {
