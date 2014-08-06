@@ -8,6 +8,10 @@ module.exports = {
     name: 'Columby - datastore'
   },
 
+  mandrill: {
+    key: env.MANDRILL_APIKEY,
+  },
+
   facebook: {
     clientID: 'APP_ID',
     clientSecret: 'APP_SECRET',
