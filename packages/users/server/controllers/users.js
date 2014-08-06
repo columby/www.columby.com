@@ -23,6 +23,11 @@ exports.authCallback = function(req, res) {
   res.redirect('/');
 };
 
+exports.passportlessLogin = function(req,res,next){
+  console.log(req.body);
+  var email = req.body.email;
+  //VerificationToken.findOne({'email': email})
+};
 
 exports.verify = function(req,res,next) {
   console.log(req.query);

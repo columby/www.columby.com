@@ -14,9 +14,23 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
   var authenticated = (user.hasOwnProperty('_id')) ? true : false;
 
   return {
+    
+    passwordlessLogin: function(email){
+      var promise = $http.post('/api/v2/user/passwordless-login', email)
+        .then(function (response) {
+          console.log(response);
+          if (response.data.status === 'success') {
+            user = response.data.user;
+            return response.data;
+          } else {
+            return response.data;
+          }
+        });
+      return promise;
+    },
 
     login: function(credentials) {
-       var promise = $http.post('/api/v2/user/login', credentials)
+      var promise = $http.post('/api/v2/user/login', credentials)
         .then(function (response) {
           // The then function here is an opportunity to modify the response
           //console.log(response.data);

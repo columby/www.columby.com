@@ -58,11 +58,18 @@ angular.module('mean.columby')
     });
   })
 
-  .controller('ColumbyLoginCrl', function ($scope, $rootScope, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
+  .controller('ColumbyLoginCtrl', function ($scope, $rootScope, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
 
     $scope.credentials = {
       username: '',
       password: ''
+    };
+
+    // Handle passwordless login
+    $scope.passwordlessLogin = function(email){
+      ColumbyAuthSrv.passwordlessLogin(email).then(function(response){
+        console.log(response);
+      });
     };
 
     $scope.login = function (credentials) {

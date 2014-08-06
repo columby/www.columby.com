@@ -16,10 +16,8 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
         authorizedRoles: ['authenticated']
       }
     })
-    ;
 
-    /*
-    .state('signin', {
+  /*  .state('signin', {
       url: '/signin',
       templateUrl: 'columby/views/signin.html'
     })
@@ -28,7 +26,7 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
       url: '/authenticate',
       templateUrl: 'columby/views/authenticate.html'
     })
-    ;
     */
+    ;
   }
 ]);

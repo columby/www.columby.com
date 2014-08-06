@@ -5,6 +5,9 @@ var users = require('../controllers/users');
 
 module.exports = function(MeanUser, app, auth, database, passport) {
 
+//  app.route('/api/v2/user/passwordless-login')
+  //  .post(users.passwordlessLogin);
+
   app.route('/api/v2/user/verify')
     .get(users.verify);
 
