@@ -9,13 +9,56 @@ var mongoose = require('mongoose'),
   config = require('meanio').loadConfig(),
   crypto = require('crypto'),
   nodemailer = require('nodemailer'),
-  templates = require('../template');
+  templates = require('../template'),
+  config = require('meanio').loadConfig(),
+  mandrill = require('mandrill-api/mandrill'),
+  mandrill_client = new mandrill.Mandrill(config.mandrill.key),
+  VerificationToken = mongoose.model('VerificationToken')
+;
 
 /**
  * Auth callback
  */
 exports.authCallback = function(req, res) {
   res.redirect('/');
+};
+
+
+exports.verify = function(req,res,next) {
+  console.log(req.query);
+  var token = req.query.token;
+  console.log('token', token);
+
+  VerificationToken.findOne({'token': token}, function (err, doc){
+    console.log(err);
+    console.log(doc);
+      if (err || !doc) {
+        res.json({
+          status: 'error',
+          statusMessage: 'Error finding the verification token. ',
+          error: err
+        });
+      }
+      else {
+        User.findOne({_id: doc._userId}, function (err, user) {
+          if (err) {
+            res.json({
+              status: 'error',
+              statusMessage: 'Error finding the verification token. ',
+              error: err
+            });
+          } else {
+            user.verified = true;
+            user.save(function(err) {
+              res.json({
+                  status: 'success',
+                  statusMessage: 'Succesfully verified the account. '
+                });
+            });
+          }
+        });
+      }
+  });
 };
 
 /**
@@ -34,9 +77,8 @@ exports.signin = function(req, res) {
 exports.signout = function(req, res) {
   req.logout();
   //res.redirect('/');
-  res.json({
+  res.json(200,{
     status: 'success',
-    statusCode: '200',
     statusMessage: 'Successfully logged out. '
   });
 };
@@ -57,33 +99,47 @@ exports.create = function(req, res, next) {
   user.provider = 'local';
 
   // because we set our user.provider to local our models/user.js validation will always be true
-  req.assert('name', 'You must enter a name').notEmpty();
+  //req.assert('name', 'You must enter a name').notEmpty();
   req.assert('email', 'You must enter a valid email address').isEmail();
-  req.assert('password', 'Password must be between 8-20 characters long').len(8, 20);
   req.assert('username', 'Username cannot be more than 20 characters').len(1, 20);
+  req.assert('password', 'Password must be between 8-20 characters long').len(8, 20);
   req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
   var errors = req.validationErrors();
   if (errors) {
-    return res.status(400).send(errors);
+    res.json(400,{
+      status: 'error',
+      statusMessage: errors
+    });
   }
 
   // Hard coded for now. Will address this with the user permissions system in v0.3.5
   user.roles = ['authenticated'];
+  user.name = user.username;
+
   user.save(function(err) {
     if (err) {
+      console.log(err);
       switch (err.code) {
         case 11000:
-          res.status(400).send([{
-            msg: 'Email already taken',
-            param: 'email'
-          }]);
+          res.json({
+            status: 'error',
+            statusCode: 400,
+            statusMessage: [{
+              msg: 'Email already taken',
+              param: 'email'
+            }]
+          });
           break;
         case 11001:
-          res.status(400).send([{
-            msg: 'Username already taken',
-            param: 'username'
-          }]);
+          res.json({
+            status: 'error',
+            statusCode: 400,
+            statusMessage: [{
+              msg: 'Username already taken',
+              param: 'username'
+            }]
+          });
           break;
         default:
           var modelErrors = [];
@@ -98,17 +154,56 @@ exports.create = function(req, res, next) {
               });
             }
 
-            res.status(400).send(modelErrors);
+            res.json(400,{
+              status: 'error',
+              statusMessage: modelErrors
+            });
           }
       }
 
-      return res.status(400);
+    } else {
+      // Create and send verification-token
+      var verificationToken = new VerificationToken({_userId: user._id});
+      verificationToken.createVerificationToken(function (err, token) {
+        if (err) {
+          res.json({'error': err});
+        } else {
+          //sendmail
+          mandrill_client.messages.send({
+            'message': {
+              'html': req.protocol + '://' + req.get('host') + '/verify/' + token,
+              'text': req.protocol + '://' + req.get('host') + '/verify/' + token,
+              'subject': 'Validate your account at Columby',
+              'from_email': 'admin@columby.com',
+              'from_name': 'Columby Admin',
+              'to': [{
+                'email': 'arn@urbanlink.nl',
+                'name': 'avdp',
+                'type': 'to'
+              }],
+              'headers': {
+                'Reply-To': 'admin@columby.com'
+              },
+            }
+          }, function(result){
+            if (result[0].status === 'sent') {
+              res.json(200,{
+                status: 'success',
+                statusMessage: 'VerificationToken sent.'
+              });
+            } else {
+              res.json(400,{
+                status: 'error',
+                statusMessage: 'Error sending mail.',
+                error: result
+              });
+            }
+
+          });
+        }
+      });
+      //res.json(token);
     }
-    req.logIn(user, function(err) {
-      if (err) return next(err);
-      return res.json({success:true});//res.redirect('/');
-    });
-    res.status(200);
   });
 };
 /**
@@ -179,12 +274,35 @@ exports.resetpassword = function(req, res, next) {
  * Send reset password email
  */
 function sendMail(mailOptions) {
+  mandrill_client.messages.send({
+    'message': {
+      'html': '<p>Example HTML content</p>',
+      'text': 'Example text content',
+      'subject': 'example subject',
+      'from_email': 'admin@columby.com',
+      'from_name': 'Columby Admin',
+      'to': [{
+        'email': 'arn@urbanlink.nl',
+        'name': 'avdp',
+        'type': 'to'
+      }],
+      'headers': {
+        'Reply-To': 'admin@columby.com'
+      },
+    }
+  }, function(result){
+    console.log(result);
+  });
+
   var transport = nodemailer.createTransport('SMTP', config.mailer);
   transport.sendMail(mailOptions, function(err, response) {
     if (err) return err;
     return response;
   });
 }
+
+
+//sendMail();
 
 /**
  * Callback for forgot password link

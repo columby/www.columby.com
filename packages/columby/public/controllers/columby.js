@@ -3,6 +3,7 @@
 
 angular.module('mean.columby')
 
+  // Define authentication events
   .constant('AUTH_EVENTS', {
     loginSuccess: 'auth-login-success',
     loginFailed: 'auth-login-failed',
@@ -12,7 +13,52 @@ angular.module('mean.columby')
     notAuthorized: 'auth-not-authorized'
   })
 
-  .controller('ColumbyLoginCrl', function ($scope, $rootScope, AUTH_EVENTS, ColumbyAuthSrv) {
+  // Define user roles
+  .constant('USER_ROLES', {
+    all: '*',
+    admin: 'admin',
+    editor: 'editor',
+    authenticated: 'authenticated',
+    guest: 'guest'
+  })
+
+
+  // Check permission to view the page.
+  .run(function ($rootScope, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
+    $rootScope.$on('$stateChangeStart', function (event, next) {
+      $rootScope.$broadcast('sitenav::toggle', 'close');
+      if (next.hasOwnProperty('data')) {
+        if (next.data.hasOwnProperty('authorizedRoles')) {
+          var authorizedRoles = next.data.authorizedRoles;
+          if (!ColumbyAuthSrv.isAuthorized(authorizedRoles)) {
+            event.preventDefault();
+            if (ColumbyAuthSrv.isAuthenticated()) {
+              // user is not allowed
+              console.log('not autheorized');
+              $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
+            } else {
+              console.log('not authenticated');
+              // user is not logged in
+              $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+            }
+          }
+        }
+      }
+    });
+
+    $rootScope.$on('$stateChangeSuccess', function(evt, toState, toParams, fromState, fromParams) {
+      //console.log('Checking for message');
+      //FlashSrv.setMessage('This is a new message');
+      var msg = FlashSrv.getMessage();
+
+      if (msg !== '') {
+        //console.log('message received: ' + msg);
+        $rootScope.$broadcast('flashmessage', msg);
+      }
+    });
+  })
+
+  .controller('ColumbyLoginCrl', function ($scope, $rootScope, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
 
     $scope.credentials = {
       username: '',
@@ -20,11 +66,15 @@ angular.module('mean.columby')
     };
 
     $scope.login = function (credentials) {
-      console.log('Controlle credentials received, sending to srv');
+      //console.log('Controlle credentials received, sending to srv');
       ColumbyAuthSrv.login(credentials).then(function (response) {
-        console.log('login controller response: ');
-        console.log(response);
+        //console.log('login controller response: ');
+        //console.log(response);
         if (response.status === 'success'){
+          FlashSrv.setMessage({
+              value: 'You are successfully logged in.',
+              status: 'info'
+          });
           $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, response.user);
           //$scope.setCurrentUser(response.user);
         } else {
@@ -37,6 +87,66 @@ angular.module('mean.columby')
     };
   })
 
+  .controller('ColumbyRegisterCtrl', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
+
+    // Initiate the registration process (register-form)
+    $scope.register = function (credentials) {
+      // Get the credentials from the form
+      credentials = {
+        email: $scope.user.email,
+        username: $scope.user.username,
+        password: $scope.user.password,
+        confirmPassword: $scope.user.confirmPassword
+      };
+      // Register at the server
+      ColumbyAuthSrv.register(credentials).then(function (response) {
+        console.log(response);
+        // Something went wrong during registration at the server
+        if (response.status === 'error') {
+          $scope.registerError = response.statusMessage;
+        // registration successful
+        } else if (response.status === 'success'){
+          // The server sent an email with the confirmation link.
+          // Create a flashmessage for feedback
+          FlashSrv.setMessage({
+              value: 'A confirmation email has been sent. Please check your inbox for the confirmation link. ',
+              status: 'info'
+          });
+          // Let the app know
+          $rootScope.$broadcast(AUTH_EVENTS.registrationSuccess, response.user);
+          // Redirect back to frontpage
+          $location.path('/');
+          $state.go($state.current, {}, {reload: true});
+        } else {
+          // Something went wrong
+          $scope.registrationError = response.errorMessage;
+          $rootScope.$broadcast(AUTH_EVENTS.registrationFailed);
+        }
+      }, function () {
+        $rootScope.$broadcast(AUTH_EVENTS.registrationFailed);
+      });
+    };
+  })
+
+  .controller('ColumbyVerifyCtrl', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
+    var token = 12;
+    ColumbyAuthSrv.verify(token).then(function(response){
+      console.log(response);
+      if (response.status === 'error') {
+        $scope.verifyError = response.statusMessage;
+      // registration successful
+      } else if (response.status === 'success'){
+        FlashSrv.setMessage({
+          value: 'Succesfully confirmed, you are now logged in. ',
+          status: 'info'
+        });
+        $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, response.user);
+        $location.path('/');
+        $state.go($state.current, {}, {reload: true});
+      }
+    });
+  })
+
   /*** Main App controller ***/
   .controller('ColumbyController', ['$rootScope','$scope', 'Global', 'Columby',
   function($rootScope, $scope, Global, Columby) {
@@ -45,46 +155,38 @@ angular.module('mean.columby')
       name: 'columby'
     };
 
+    /*
     $scope.toggleSiteNav = function(e) {
       $rootScope.$broadcast('sitenav::toggle');
     };
+    */
+
+    //console.log('columbycontroller created');
+    $scope.$on('flashmessage', function(e,msg){
+      $scope.flashMessage = msg;
+    });
 
   }
 ]);
 
-angular.module('mean.columby').controller('SiteNavController', ['$rootScope', '$scope', 'Global', 'Columby','$http','FlashSrv','$location', 'ColumbyAuthSrv','AUTH_EVENTS',
-  function($rootScope, $scope, Global, Columby,$http,FlashSrv,$location,ColumbyAuthSrv,AUTH_EVENTS) {
+angular.module('mean.columby').controller('SiteNavController', ['$rootScope', '$scope', 'Global', 'Columby','$http','FlashSrv','$location', 'ColumbyAuthSrv','AUTH_EVENTS','$state',
+  function($rootScope, $scope, Global, Columby,$http,FlashSrv,$location,ColumbyAuthSrv,AUTH_EVENTS, $state) {
     $scope.controller = {
       name: 'SiteNavController'
     };
-    console.log(ColumbyAuthSrv.user());
+    //console.log(ColumbyAuthSrv.user());
     $scope.global = {};
     $scope.global.user = ColumbyAuthSrv.user();
-    console.log(ColumbyAuthSrv.isAuthenticated());
+    //console.log(ColumbyAuthSrv.isAuthenticated());
     $scope.global.authenticated = ColumbyAuthSrv.isAuthenticated();
 
     $rootScope.$on(AUTH_EVENTS.loginSuccess, function(e){
-      console.log('authentication successful');
+      //console.log('authentication successful');
       //console.log(ColumbyAuthSrv.user());
       $scope.global.user = ColumbyAuthSrv.user();
       $scope.global.authenticated = true;
-      FlashSrv.setMessage('loginSuccess!');
       $location.path('/');
-
-    });
-
-    //console.log(Global);
-    // For every state change, disable the sitenav panel
-    $scope.$on('$stateChangeStart', function(evt, toState, toParams, fromState, fromParams) {
-      $rootScope.$broadcast('sitenav::toggle', 'close');
-    });
-
-    $scope.$on('$stateChangeSuccess', function(evt, toState, toParams, fromState, fromParams) {
-      console.log('statechangesuccess');
-      FlashSrv.getMessage(function(response){
-        console.log('flash: ');
-        console.log(response);
-      });
+      $state.go($state.current, {}, {reload: true});
     });
 
     // respond to an event from rootscope to toggle the sitenav panel. Most likely this comes from the metabar icon.
@@ -115,14 +217,18 @@ angular.module('mean.columby').controller('SiteNavController', ['$rootScope', '$
     };
 
     $scope.logout = function(){
-      console.log('logout');
+
       ColumbyAuthSrv.logout().then(function(response){
-        console.log(response);
         $scope.global.user = ColumbyAuthSrv.user();
-        $scope.global.authenticated = ColumbyAuthSrv.isAuthenticated();
-        FlashSrv.setMessage('You have been sucesfully signed out.');
-        $rootScope.$broadcast('sitenav::toggle', 'close');
+        $scope.global.authenticated = false;
+
+        FlashSrv.setMessage({
+          value: 'You have been sucesfully signed out.',
+          status: 'info'
+        });
+
         $location.path('/');
+        $state.go($state.current, {}, {reload: true});
       });
     };
   }

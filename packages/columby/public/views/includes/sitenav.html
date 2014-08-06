@@ -1,15 +1,15 @@
 <nav class="sitenav-wrapper" data-ng-controller="SiteNavController">
-  <div class="sitenav">
-    <div class="sitenav-content">
-      <ul>
-        <li><a href="#!/auth/login">Home</a></li>
-        <li ng-show="global.authenticated"><a href="/me">{{global.user.username}}</a></li>
-        <li><a href="#!/publish">New dataset</a></li>
-        <li ng-hide="global.authenticated"><a href="#!/login" class="btn">Login</a></li>
-        <li ng-show="global.authenticated"><a class="btn" ng-click="logout()">Logout</a></li>
-      </ul>
-    </div>
+
+  <div class="sitenav-content">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li ng-show="global.authenticated"><a ui-sref='me'>{{global.user.username}}</a></li>
+      <li><a ui-sref='publish'>New dataset</a></li>
+      <li ng-hide="global.authenticated"><a ui-sref='login' class="btn">Login</a></li>
+      <li ng-show="global.authenticated"><a class="btn" ng-click="logout()">Logout</a></li>
+    </ul>
   </div>
+
 
   <div class="sitenav-overlay" ng-class="{show:showSiteNav}" ng-click="toggleSiteNav($event)"></div>
 </nav>

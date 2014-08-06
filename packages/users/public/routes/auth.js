@@ -45,6 +45,13 @@ angular.module('mean.users').config(['$stateProvider',
           loggedin: checkLoggedOut
         }
       })
+      .state('verify', {
+        url: '/verify',
+        templateUrl: 'users/views/verify.html',
+        resolve: {
+          loggedin: checkLoggedOut
+        }
+      })
       .state('forgot-password', {
         url: '/forgot-password',
         templateUrl: 'users/views/forgot-password.html',
