@@ -13,7 +13,8 @@ var mongoose = require('mongoose'),
   config = require('meanio').loadConfig(),
   mandrill = require('mandrill-api/mandrill'),
   mandrill_client = new mandrill.Mandrill(config.mandrill.key),
-  VerificationToken = mongoose.model('VerificationToken')
+  //VerificationToken = mongoose.model('VerificationToken'),
+  uuid = require('node-uuid')
 ;
 
 /**
@@ -23,46 +24,102 @@ exports.authCallback = function(req, res) {
   res.redirect('/');
 };
 
-exports.passportlessLogin = function(req,res,next){
-  console.log(req.body);
+exports.passwordlessLogin = function(req,res,next){
+  console.log('body', req.body);
+  console.log('query', req.query);
   var email = req.body.email;
-  //VerificationToken.findOne({'email': email})
+  // Check if email-address is registered
+  User.findOne({'email': email}, function(err,user){
+    if (err) {
+      res.json(200, {
+        status: 'error',
+        error: err
+      });
+      console.log('error: ', err);
+    } else if(!user){
+      res.status(200).json({
+        status: 'error',
+        error: 'User not found'
+      });
+      console.log('User not found.');
+    } else {
+      console.log('User found: ', user);
+      // User found, create a new token
+      var token = uuid.v4();
+      console.log('Token created.', token);
+      user.loginToken = token;
+      user.loginTokenCreated = new Date();
+      user.save(function(err){
+        if (err) {
+          console.log('error',err);
+          res.json(401,{'error': err});
+        } else {
+          console.log('User token updated.', user);
+          // Send the new token by email
+          mandrill_client.messages.send({
+            'message': {
+              'html': req.protocol + '://' + req.get('host') + '/verify?token=' + user.loginToken,
+              'text': req.protocol + '://' + req.get('host') + '/verify?token=' + user.loginToken,
+              'subject': 'Login at Columby',
+              'from_email': 'admin@columby.com',
+              'from_name': 'Columby Admin',
+              'to': [{
+                'email': 'arn@urbanlink.nl',
+                'name': 'avdp',
+                'type': 'to'
+              }],
+              'headers': {
+                'Reply-To': 'admin@columby.com'
+              },
+            }
+          }, function(result){
+            if (result[0].status === 'sent') {
+              res.json(200,{
+                status: 'success',
+                statusMessage: 'VerificationToken sent.'
+              });
+            } else {
+              res.json(400,{
+                status: 'error',
+                statusMessage: 'Error sending mail.',
+                error: result
+              });
+            }
+
+          });
+        }
+      });
+    }
+  });
 };
 
 exports.verify = function(req,res,next) {
-  console.log(req.query);
-  var token = req.query.token;
-  console.log('token', token);
 
-  VerificationToken.findOne({'token': token}, function (err, doc){
-    console.log(err);
-    console.log(doc);
-      if (err || !doc) {
-        res.json({
-          status: 'error',
-          statusMessage: 'Error finding the verification token. ',
-          error: err
+  var token = req.query.token;
+  console.log('Received token: ' +token);
+  User.findOne({'loginToken': token}, function(err, user){
+    if (err || !user) {
+      console.log('Error finding user with loginToken: ' + token);
+      res.json({
+        status: 'error',
+        statusMessage: 'Error finding the verification token. ',
+        error: err
+      });
+    } else {
+      // update token
+      user.loginToken = '';
+      user.save(function(err){
+        console.log('err', res);
+        console.log('user', user);
+        req.logIn(user, function(err) {
+          if (err) return next(err);
+          return res.json({
+            status: 'success',
+            user: user,
+          });
         });
-      }
-      else {
-        User.findOne({_id: doc._userId}, function (err, user) {
-          if (err) {
-            res.json({
-              status: 'error',
-              statusMessage: 'Error finding the verification token. ',
-              error: err
-            });
-          } else {
-            user.verified = true;
-            user.save(function(err) {
-              res.json({
-                  status: 'success',
-                  statusMessage: 'Succesfully verified the account. '
-                });
-            });
-          }
-        });
-      }
+      });
+    }
   });
 };
 
@@ -116,100 +173,95 @@ exports.create = function(req, res, next) {
       status: 'error',
       statusMessage: errors
     });
-  }
+  } else {
+    // Hard coded for now. Will address this with the user permissions system in v0.3.5
+    user.roles = ['authenticated'];
+    user.name = user.username;
+    user.loginToken = uuid.v4();
 
-  // Hard coded for now. Will address this with the user permissions system in v0.3.5
-  user.roles = ['authenticated'];
-  user.name = user.username;
+    console.log('saving user', user);
 
-  user.save(function(err) {
-    if (err) {
-      console.log(err);
-      switch (err.code) {
-        case 11000:
-          res.json({
-            status: 'error',
-            statusCode: 400,
-            statusMessage: [{
-              msg: 'Email already taken',
-              param: 'email'
-            }]
-          });
-          break;
-        case 11001:
-          res.json({
-            status: 'error',
-            statusCode: 400,
-            statusMessage: [{
-              msg: 'Username already taken',
-              param: 'username'
-            }]
-          });
-          break;
-        default:
-          var modelErrors = [];
-
-          if (err.errors) {
-
-            for (var x in err.errors) {
-              modelErrors.push({
-                param: x,
-                msg: err.errors[x].message,
-                value: err.errors[x].value
-              });
-            }
-
-            res.json(400,{
+    user.save(function(err) {
+      if (err) {
+        console.log('Saving user error:', err);
+        switch (err.code) {
+          case 11000:
+            res.json({
               status: 'error',
-              statusMessage: modelErrors
+              statusCode: 400,
+              statusMessage: [{
+                msg: 'Email already taken',
+                param: 'email'
+              }]
             });
-          }
-      }
+            break;
+          case 11001:
+            res.json({
+              status: 'error',
+              statusCode: 400,
+              statusMessage: [{
+                msg: 'Username already taken',
+                param: 'username'
+              }]
+            });
+            break;
+          default:
+            var modelErrors = [];
 
-    } else {
-      // Create and send verification-token
-      var verificationToken = new VerificationToken({_userId: user._id});
-      verificationToken.createVerificationToken(function (err, token) {
-        if (err) {
-          res.json({'error': err});
-        } else {
-          //sendmail
-          mandrill_client.messages.send({
-            'message': {
-              'html': req.protocol + '://' + req.get('host') + '/verify/' + token,
-              'text': req.protocol + '://' + req.get('host') + '/verify/' + token,
-              'subject': 'Validate your account at Columby',
-              'from_email': 'admin@columby.com',
-              'from_name': 'Columby Admin',
-              'to': [{
-                'email': 'arn@urbanlink.nl',
-                'name': 'avdp',
-                'type': 'to'
-              }],
-              'headers': {
-                'Reply-To': 'admin@columby.com'
-              },
-            }
-          }, function(result){
-            if (result[0].status === 'sent') {
-              res.json(200,{
-                status: 'success',
-                statusMessage: 'VerificationToken sent.'
-              });
-            } else {
+            if (err.errors) {
+
+              for (var x in err.errors) {
+                modelErrors.push({
+                  param: x,
+                  msg: err.errors[x].message,
+                  value: err.errors[x].value
+                });
+              }
+
               res.json(400,{
                 status: 'error',
-                statusMessage: 'Error sending mail.',
-                error: result
+                statusMessage: modelErrors
               });
             }
-
-          });
         }
-      });
-      //res.json(token);
-    }
-  });
+
+      } else {
+        //sendmail
+        mandrill_client.messages.send({
+          'message': {
+            'html': req.protocol + '://' + req.get('host') + '/signin?token=' + user.loginToken,
+            'text': req.protocol + '://' + req.get('host') + '/signin?token=' + user.loginToken,
+            'subject': 'Login at Columby',
+            'from_email': 'admin@columby.com',
+            'from_name': 'Columby Admin',
+            'to': [{
+              'email': user.email,
+              'name': user.username,
+              'type': 'to'
+            }],
+            'headers': {
+              'Reply-To': 'admin@columby.com'
+            },
+          }
+        }, function(result){
+          console.log('Mail result.', result);
+          if (result[0].status === 'sent') {
+            res.json(200,{
+              status: 'success',
+              statusMessage: 'VerificationToken sent.'
+            });
+          } else {
+            res.json(400,{
+              status: 'error',
+              statusMessage: 'Error sending mail.',
+              error: result
+            });
+          }
+
+        });
+      }
+    });
+  }
 };
 /**
  * Send User

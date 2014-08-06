@@ -10,10 +10,12 @@ var mongoose = require('mongoose'),
 /**
  * Validations
  */
+/*
 var validatePresenceOf = function(value) {
   // If you are authenticating by any of the oauth strategies, don't validate.
   return (this.provider && this.provider !== 'local') || (value && value.length);
 };
+*/
 
 var validateUniqueEmail = function(value, callback) {
   var User = mongoose.model('User');
@@ -36,10 +38,6 @@ var validateUniqueEmail = function(value, callback) {
 
 var UserSchema = new Schema({
 
-  name: {
-    type: String,
-    required: false
-  },
   email: {
     type: String,
     required: true,
@@ -47,16 +45,19 @@ var UserSchema = new Schema({
     match: [/.+\@.+\..+/, 'Please enter a valid email'],
     validate: [validateUniqueEmail, 'E-mail address is already in-use']
   },
-
+  username: {
+    type: String,
+    unique: true,
+    required: true
+  },
   verified: {
     type: Boolean,
     default: false
   },
 
-  username: {
+  name: {
     type: String,
-    unique: true,
-    required: true
+    required: false
   },
   roles: {
     type: Array,
@@ -64,13 +65,25 @@ var UserSchema = new Schema({
   },
   hashed_password: {
     type: String,
-    validate: [validatePresenceOf, 'Password cannot be blank']
+    //validate: [validatePresenceOf, 'Password cannot be blank']
   },
   provider: {
     type: String,
     default: 'local'
   },
   salt: String,
+
+  // passwordless login token
+  loginToken: {
+    type: String
+  },
+  loginTokenCreated: {
+    type: Date,
+    required: true,
+    default: Date.now,
+    expires: '4h'
+  },
+
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   facebook: {},
@@ -95,8 +108,8 @@ UserSchema.virtual('password').set(function(password) {
  * Pre-save hook
  */
 UserSchema.pre('save', function(next) {
-  if (this.isNew && this.provider === 'local' && this.password && !this.password.length)
-    return next(new Error('Invalid password'));
+  //if (this.isNew && this.provider === 'local' && this.password && !this.password.length)
+    //return next(new Error('Invalid password'));
   next();
 });
 

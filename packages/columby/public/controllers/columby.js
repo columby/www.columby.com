@@ -58,19 +58,72 @@ angular.module('mean.columby')
     });
   })
 
-  .controller('ColumbyLoginCtrl', function ($scope, $rootScope, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
+  .controller('ColumbyLoginCtrl', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
+
+    var params = $location.search();
+
+    // Request is a login token request, process this.
+    if (params.token) {
+      $scope.verifyInProgress = true;
+      ColumbyAuthSrv.passwordlessVerify(params.token).then(function(response){
+        $scope.verifyInProgress = false;
+        console.log('verifyResponse', response);
+        if (response.status === 'success'){
+          // Let the app know
+          $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, response.user);
+          // Redirect back to frontpage
+          $location.path('/');
+          $state.go($state.current, {}, {reload: true});
+        } else {
+          $scope.verifyError = response.errorMessage;
+        }
+      });
+    }
+
+
+    $scope.loginInProgress = false;
 
     $scope.credentials = {
       username: '',
+      email: '',
       password: ''
     };
 
+
     // Handle passwordless login
-    $scope.passwordlessLogin = function(email){
-      ColumbyAuthSrv.passwordlessLogin(email).then(function(response){
+    $scope.passwordlessLogin = function(){
+      $scope.loginInProgress = true;
+      var credentials = $scope.credentials;
+      console.log('passwordlesslogin');
+      console.log(credentials);
+
+      ColumbyAuthSrv.passwordlessLogin(credentials).then(function(response){
+        $scope.loginInProgress = false;
         console.log(response);
+        if (response.status === 'success') {
+          $scope.signinSuccess = true;
+        } else if (response.error === 'User not found') {
+          $scope.loginError = response.error;
+          $scope.showRegister = true;
+          $scope.credentials.username = $scope.credentials.email.replace(/@.*$/,'');
+        }
       });
     };
+    $scope.passwordlessRegister = function(){
+      var credentials = $scope.credentials;
+      console.log('passwordlessRegister', credentials);
+
+      ColumbyAuthSrv.passwordlessRegister(credentials).then(function(response){
+        console.log(response);
+        if (response.error === 'Error registering user.') {
+          $scope.registerError = response.error;
+          //$scope.showRegister = true;
+          //$scope.credentials.username = $scope.credentials.email.replace(/@.*$/,'');
+        }
+      });
+    };
+
+
 
     $scope.login = function (credentials) {
       //console.log('Controlle credentials received, sending to srv');

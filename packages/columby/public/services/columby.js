@@ -14,17 +14,30 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
   var authenticated = (user.hasOwnProperty('_id')) ? true : false;
 
   return {
-    
-    passwordlessLogin: function(email){
-      var promise = $http.post('/api/v2/user/passwordless-login', email)
+
+    passwordlessLogin: function(credentials){
+      var promise = $http.post('/api/v2/user/passwordless-login', credentials)
         .then(function (response) {
-          console.log(response);
-          if (response.data.status === 'success') {
-            user = response.data.user;
-            return response.data;
-          } else {
-            return response.data;
-          }
+          console.log('authResponse', response.data);
+          return response.data;
+        });
+      return promise;
+    },
+
+    passwordlessRegister: function(credentials){
+      var promise = $http.post('/api/v2/user/passwordless-register', credentials)
+        .then(function (response) {
+          console.log('authRegisterResponse', response.data);
+          return response.data;
+        });
+      return promise;
+    },
+
+    passwordlessVerify: function(token){
+      var promise = $http.get('/api/v2/user/passwordless-verify?token='+token)
+        .then(function (response) {
+          console.log('authResponse', response.data);
+          return response.data;
         });
       return promise;
     },
