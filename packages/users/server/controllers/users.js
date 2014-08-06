@@ -217,7 +217,6 @@ exports.create = function(req, res, next) {
                   value: err.errors[x].value
                 });
               }
-
               res.json(400,{
                 status: 'error',
                 statusMessage: modelErrors
