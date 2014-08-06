@@ -60,35 +60,37 @@ angular.module('mean.columby')
 
   .controller('ColumbyLoginCtrl', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
 
-    var params = $location.search();
-
-    // Request is a login token request, process this.
-    if (params.token) {
-      $scope.verifyInProgress = true;
-      ColumbyAuthSrv.passwordlessVerify(params.token).then(function(response){
-        $scope.verifyInProgress = false;
-        console.log('verifyResponse', response);
-        if (response.status === 'success'){
-          // Let the app know
-          $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, response.user);
-          // Redirect back to frontpage
-          $location.path('/');
-          $state.go($state.current, {}, {reload: true});
-        } else {
-          $scope.verifyError = response.errorMessage;
-        }
-      });
-    }
-
-
+    console.log('ColumbyLoginController loaded.');
+    console.log('user', ColumbyAuthSrv.user());
+    // Initialization
     $scope.loginInProgress = false;
-
     $scope.credentials = {
       username: '',
       email: '',
       password: ''
     };
 
+    // Check if a request is a login token request
+    var params = $location.search();
+    if (params.token) {
+      console.log('token received.');
+      $scope.verifyInProgress = true;
+      ColumbyAuthSrv.passwordlessVerify(params.token).then(function(response){
+        $scope.verifyInProgress = false;
+        if (response.status === 'success'){
+          // Let the app know
+          $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, response.user);
+          FlashSrv.setMessage({
+            value: 'You have succesfully signed in.',
+            status: 'info'
+          });
+          // Redirect back to frontpage
+          $state.go('home', {}, {reload: true});
+        } else {
+          $scope.verifyError = response.statusMessage;
+        }
+      });
+    }
 
     // Handle passwordless login
     $scope.passwordlessLogin = function(){
@@ -102,6 +104,11 @@ angular.module('mean.columby')
         console.log(response);
         if (response.status === 'success') {
           $scope.signinSuccess = true;
+          FlashSrv.setMessage({
+            value: 'You have been successfully signed in.',
+            status: 'info'
+          });
+          console.log('user', ColumbyAuthSrv.user());
         } else if (response.error === 'User not found') {
           $scope.loginError = response.error;
           $scope.showRegister = true;
@@ -109,12 +116,14 @@ angular.module('mean.columby')
         }
       });
     };
+
     $scope.passwordlessRegister = function(){
       var credentials = $scope.credentials;
       console.log('passwordlessRegister', credentials);
 
       ColumbyAuthSrv.passwordlessRegister(credentials).then(function(response){
         console.log(response);
+        console.log('user', ColumbyAuthSrv.user());
         if (response.error === 'Error registering user.') {
           $scope.registerError = response.error;
           //$scope.showRegister = true;
@@ -122,90 +131,8 @@ angular.module('mean.columby')
         }
       });
     };
-
-
-
-    $scope.login = function (credentials) {
-      //console.log('Controlle credentials received, sending to srv');
-      ColumbyAuthSrv.login(credentials).then(function (response) {
-        //console.log('login controller response: ');
-        //console.log(response);
-        if (response.status === 'success'){
-          FlashSrv.setMessage({
-              value: 'You are successfully logged in.',
-              status: 'info'
-          });
-          $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, response.user);
-          //$scope.setCurrentUser(response.user);
-        } else {
-          $scope.loginerror = response.errorMessage;
-          $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-        }
-      }, function () {
-        $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-      });
-    };
   })
 
-  .controller('ColumbyRegisterCtrl', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
-
-    // Initiate the registration process (register-form)
-    $scope.register = function (credentials) {
-      // Get the credentials from the form
-      credentials = {
-        email: $scope.user.email,
-        username: $scope.user.username,
-        password: $scope.user.password,
-        confirmPassword: $scope.user.confirmPassword
-      };
-      // Register at the server
-      ColumbyAuthSrv.register(credentials).then(function (response) {
-        console.log(response);
-        // Something went wrong during registration at the server
-        if (response.status === 'error') {
-          $scope.registerError = response.statusMessage;
-        // registration successful
-        } else if (response.status === 'success'){
-          // The server sent an email with the confirmation link.
-          // Create a flashmessage for feedback
-          FlashSrv.setMessage({
-              value: 'A confirmation email has been sent. Please check your inbox for the confirmation link. ',
-              status: 'info'
-          });
-          // Let the app know
-          $rootScope.$broadcast(AUTH_EVENTS.registrationSuccess, response.user);
-          // Redirect back to frontpage
-          $location.path('/');
-          $state.go($state.current, {}, {reload: true});
-        } else {
-          // Something went wrong
-          $scope.registrationError = response.errorMessage;
-          $rootScope.$broadcast(AUTH_EVENTS.registrationFailed);
-        }
-      }, function () {
-        $rootScope.$broadcast(AUTH_EVENTS.registrationFailed);
-      });
-    };
-  })
-
-  .controller('ColumbyVerifyCtrl', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
-    var token = 12;
-    ColumbyAuthSrv.verify(token).then(function(response){
-      console.log(response);
-      if (response.status === 'error') {
-        $scope.verifyError = response.statusMessage;
-      // registration successful
-      } else if (response.status === 'success'){
-        FlashSrv.setMessage({
-          value: 'Succesfully confirmed, you are now logged in. ',
-          status: 'info'
-        });
-        $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, response.user);
-        $location.path('/');
-        $state.go($state.current, {}, {reload: true});
-      }
-    });
-  })
 
   /*** Main App controller ***/
   .controller('ColumbyController', ['$rootScope','$scope', 'Global', 'Columby',
@@ -214,12 +141,6 @@ angular.module('mean.columby')
     $scope.package = {
       name: 'columby'
     };
-
-    /*
-    $scope.toggleSiteNav = function(e) {
-      $rootScope.$broadcast('sitenav::toggle');
-    };
-    */
 
     //console.log('columbycontroller created');
     $scope.$on('flashmessage', function(e,msg){
@@ -231,22 +152,23 @@ angular.module('mean.columby')
 
 angular.module('mean.columby').controller('SiteNavController', ['$rootScope', '$scope', 'Global', 'Columby','$http','FlashSrv','$location', 'ColumbyAuthSrv','AUTH_EVENTS','$state',
   function($rootScope, $scope, Global, Columby,$http,FlashSrv,$location,ColumbyAuthSrv,AUTH_EVENTS, $state) {
-    $scope.controller = {
-      name: 'SiteNavController'
-    };
-    //console.log(ColumbyAuthSrv.user());
+
+    //Initialization
+    $scope.controller = {name: 'SiteNavController'};
     $scope.global = {};
     $scope.global.user = ColumbyAuthSrv.user();
-    //console.log(ColumbyAuthSrv.isAuthenticated());
     $scope.global.authenticated = ColumbyAuthSrv.isAuthenticated();
 
-    $rootScope.$on(AUTH_EVENTS.loginSuccess, function(e){
-      //console.log('authentication successful');
-      //console.log(ColumbyAuthSrv.user());
+    // respond to user events
+    $scope.$on(AUTH_EVENTS.loginSuccess, function(e){
       $scope.global.user = ColumbyAuthSrv.user();
       $scope.global.authenticated = true;
-      $location.path('/');
-      $state.go($state.current, {}, {reload: true});
+      console.log('Toggle user', $scope.global.user);
+    });
+    $scope.$on(AUTH_EVENTS.logoutSuccess, function(e){
+      $scope.global.user = ColumbyAuthSrv.user();
+      $scope.global.authenticated = false;
+      console.log('Toggle user', $scope.global.user);
     });
 
     // respond to an event from rootscope to toggle the sitenav panel. Most likely this comes from the metabar icon.
@@ -278,21 +200,22 @@ angular.module('mean.columby').controller('SiteNavController', ['$rootScope', '$
 
     $scope.logout = function(){
 
+      // initiate logout
       ColumbyAuthSrv.logout().then(function(response){
-        $scope.global.user = ColumbyAuthSrv.user();
-        $scope.global.authenticated = false;
-
+        // UI feedback
         FlashSrv.setMessage({
           value: 'You have been sucesfully signed out.',
           status: 'info'
         });
-
-        $location.path('/');
-        $state.go($state.current, {}, {reload: true});
+        $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
+        // redirect back to home
+        $state.go('home', {}, {reload: true});
       });
     };
   }
 ]);
+
+
 
 angular.module('mean.columby').controller('MetabarController', ['$rootScope', '$scope', 'Global', 'Columby',
   function($rootScope, $scope, Global, Columby) {

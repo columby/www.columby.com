@@ -19,6 +19,9 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
       var promise = $http.post('/api/v2/user/passwordless-login', credentials)
         .then(function (response) {
           console.log('authResponse', response.data);
+          if (response.data.user){
+            user = response.data.user;
+          }
           return response.data;
         });
       return promise;
@@ -28,6 +31,9 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
       var promise = $http.post('/api/v2/user/passwordless-register', credentials)
         .then(function (response) {
           console.log('authRegisterResponse', response.data);
+          if (response.data.user){
+            user = response.data.user;
+          }
           return response.data;
         });
       return promise;
@@ -37,25 +43,12 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
       var promise = $http.get('/api/v2/user/passwordless-verify?token='+token)
         .then(function (response) {
           console.log('authResponse', response.data);
+          if (response.data.user){
+            user = response.data.user;
+          }
           return response.data;
         });
       return promise;
-    },
-
-    login: function(credentials) {
-      var promise = $http.post('/api/v2/user/login', credentials)
-        .then(function (response) {
-          // The then function here is an opportunity to modify the response
-          //console.log(response.data);
-          // The return value gets picked up by the then in the controller.
-          if (response.data.status === 'success') {
-            user = response.data.user;
-            return response.data;
-          } else {
-            return response.data;
-          }
-        });
-        return promise;
     },
 
     logout: function(){
@@ -66,28 +59,6 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
           return response.data;
         });
       return promise;
-    },
-
-    register: function(credentials){
-      var promise = $http.post('/api/v2/user/register', credentials)
-        .then(function(response){
-          //console.log(response);
-          return response.data;
-        });
-        return promise;
-    },
-
-    verify: function(token){
-      var promise = $http.get('/api/v2/user/verify?token=' + token)
-       .then(function (response) {
-         if (response.data.status === 'success') {
-           user = response.data.user;
-           return response.data;
-         } else {
-           return response.data;
-         }
-       });
-       return promise;
     },
 
     isAuthenticated: function() {
