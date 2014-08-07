@@ -3,7 +3,7 @@
   <div class="alert alert-info animated fadeIn" ng-show="logininfo">{{logininfo}}</div>
   <h1>Sign in</h1>
 
-  <form  ng-submit="passwordlessLogin()" class="signin form-horizontal">
+  <form name="loginForm" ng-submit="passwordlessLogin()" class="signin form-horizontal novalidate">
     <div class="row">
       <div class="alert alert-danger animated fadeIn col-md-offset-4 col-md-4" ng-show="loginError">{{loginError}}</div>
     </div>
@@ -11,12 +11,13 @@
       <label for="email" class="col-md-4 control-label">Email</label>
       <div class="col-md-4">
         <input required id="email" type="email" name="email" placeholder="Email" class="form-control" ng-model="credentials.email"/>
+        <p ng-show="loginForm.email.$invalid && !loginForm.email.$pristine" class="help-block">Enter a valid email.</p>
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-md-offset-4 col-md-8">
-        <button type="submit" class="btn btn-primary" ng-disabled="requestingToken">Sign in</button>
+        <button type="submit" class="btn btn-primary" ng-disabled="loginForm.$invalid || requestingToken">Sign in</button>
       </div>
     </div>
 
@@ -24,17 +25,19 @@
 
   <div class="register-form" ng-show="showRegister">
     <h1>Register</h1>
-    <form  ng-submit="passwordlessRegister()" class="form-horizontal">
+    <form name="registerForm" ng-submit="passwordlessRegister()" class="form-horizontal">
       <div class="form-group">
         <label for="email" class="col-md-4 control-label">Email</label>
         <div class="col-md-4">
-          <input required id="email" type="email" name="email" placeholder="Email" class="form-control" ng-model="credentials.email" required/>
+          <input required id="email" type="email" name="email" placeholder="Email" class="form-control" ng-model="newuser.email" required/>
+          <p ng-show="registerForm.email.$invalid && !registerForm.email.$pristine" class="help-block">Enter a valid email.</p>
         </div>
       </div>
       <div class="form-group">
         <label for="username" class="col-md-4 control-label">Username</label>
         <div class="col-md-4">
-          <input required id="username" type="text" name="username" placeholder="Your public username" class="form-control" ng-model="credentials.username" required/>
+          <input required id="username" type="text" name="username" placeholder="Your public username" class="form-control" ng-minlength="3" ng-maxlength="20" ng-model="newuser.username" required/>
+          <p ng-show="registerForm.username.$invalid && !registerForm.username.$pristine" class="help-block">The username should between 3 and 20 characters.</p>
         </div>
       </div>
 
@@ -47,6 +50,15 @@
 
     </form>
   </div>
+
+  <!-- Verification madal -->
+  <div class="verify-in-progress" ng-show="verifyInProgress">
+    <h1>Signing in</h1>
+    <p>Your verification token is checked for validity.</p>
+    <p><a href="/">home</a></p>
+  </div>
+
+  <!-- Token request success madal -->
   <div class="signin-success" ng-show="signinSuccess">
     <h1>Success!</h1>
     <p>The signin process was successful. You should receive a login link in your inbox soon.</p>

@@ -72,7 +72,6 @@ angular.module('mean.columby')
     // Check if a request is a login token request
     var params = $location.search();
     if (params.token) {
-      console.log('token received.');
       $scope.verifyInProgress = true;
       ColumbyAuthSrv.passwordlessVerify(params.token).then(function(response){
         $scope.verifyInProgress = false;
@@ -109,18 +108,22 @@ angular.module('mean.columby')
           });
           console.log('user', ColumbyAuthSrv.user());
         } else if (response.error === 'User not found') {
-          $scope.loginError = response.error;
+          $scope.loginError = 'The email address ' + credentials.email + ' does not exist. Would you like to register for a new account?';
           $scope.showRegister = true;
-          $scope.credentials.username = $scope.credentials.email.replace(/@.*$/,'');
+          $scope.newuser={
+            email: $scope.credentials.email,
+            username: $scope.credentials.email.replace(/@.*$/,'')
+          };
+          //$scope.credentials.email = null;
         }
       });
     };
 
     $scope.passwordlessRegister = function(){
-      var credentials = $scope.credentials;
-      console.log('passwordlessRegister', credentials);
+      var newuser = $scope.newuser;
+      console.log('passwordlessRegister', newuser);
 
-      ColumbyAuthSrv.passwordlessRegister(credentials).then(function(response){
+      ColumbyAuthSrv.passwordlessRegister(newuser).then(function(response){
         console.log(response);
         console.log('user', ColumbyAuthSrv.user());
         if (response.error === 'Error registering user.') {

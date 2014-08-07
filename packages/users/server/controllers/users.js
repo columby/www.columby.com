@@ -58,8 +58,8 @@ exports.passwordlessLogin = function(req,res,next){
               'from_email': 'admin@columby.com',
               'from_name': 'Columby Admin',
               'to': [{
-                'email': 'arn@urbanlink.nl',
-                'name': 'avdp',
+                'email': user.email,
+                'name': user.username,
                 'type': 'to'
               }],
               'headers': {
