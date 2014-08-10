@@ -4,6 +4,7 @@
 angular.module('mean.users').config(['$stateProvider',
   function($stateProvider) {
     // Check if the user is not connected
+    /*
     var checkLoggedOut = function($q, $timeout, $http, $location) {
       // Initialize a new promise
       var deferred = $q.defer();
@@ -22,15 +23,16 @@ angular.module('mean.users').config(['$stateProvider',
 
       return deferred.promise;
     };
-
+    */
 
     // states for my app
-    $stateProvider
-      /*.state('auth', {
+    /*$stateProvider
+
+      .state('auth', {
         url: '/auth',
         templateUrl: 'users/views/index.html'
       })
-      */
+
       .state('login', {
         url: '/login',
         templateUrl: 'users/views/login.html',
@@ -66,5 +68,6 @@ angular.module('mean.users').config(['$stateProvider',
           loggedin: checkLoggedOut
         }
       });
+      */
   }
 ]);

@@ -5,21 +5,21 @@
  */
 var Module = require('meanio').Module;
 
-var Dataset = new Module('dataset');
+var Datasets = new Module('datasets');
 
 /*
  * All MEAN packages require registration
  * Dependency injection is used to define required modules
  */
-Dataset.register(function(app, auth, database) {
+Datasets.register(function(app, auth, database) {
 
   //We enable routing. By default the Package Object is passed to the routes
-  Dataset.routes(app, auth, database);
+  Datasets.routes(app, auth, database);
 
   //We are adding a link to the main menu for all authenticated users
-  Dataset.menus.add({
-    title: 'dataset example page',
-    link: 'dataset example page',
+  Datasets.menus.add({
+    title: 'datasets example page',
+    link: 'datasets example page',
     roles: ['authenticated'],
     menu: 'main'
   });
@@ -28,7 +28,7 @@ Dataset.register(function(app, auth, database) {
     //Uncomment to use. Requires meanio@0.3.7 or above
     // Save settings with callback
     // Use this for saving data from administration pages
-    Dataset.settings({
+    Datasets.settings({
         'someSetting': 'some value'
     }, function(err, settings) {
         //you now have the settings object
@@ -36,15 +36,16 @@ Dataset.register(function(app, auth, database) {
 
     // Another save settings example this time with no callback
     // This writes over the last settings.
-    Dataset.settings({
+    Datasets.settings({
         'anotherSettings': 'some value'
     });
 
     // Get settings. Retrieves latest saved settigns
-    Dataset.settings(function(err, settings) {
+    Datasets.settings(function(err, settings) {
         //you now have the settings object
     });
     */
+    Datasets.aggregateAsset('css','datasets.css');
 
-  return Dataset;
+  return Datasets;
 });

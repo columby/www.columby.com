@@ -6,27 +6,29 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
     $stateProvider
 
     .state('me', {
-      url:'/me'
+      url:'/me',
+      templateurl: 'columby/views/account.html',
+      authorization: {
+        authorizedRoles: ['authenticated']
+      }
     })
 
     .state('publish', {
       url: '/publish',
-      templateurl: 'columby/vieuws/publish.html',
-      data: {
+      templateurl: 'columby/views/publish.html',
+      authorization: {
         authorizedRoles: ['authenticated']
       }
     })
 
     .state('signin', {
       url: '/signin',
-      templateUrl: 'columby/views/signin.html'
-    })
-    
-    .state('authenticate', {
-      url: '/authenticate',
-      templateUrl: 'columby/views/authenticate.html'
-    })
+      templateUrl: 'columby/views/signin.html',
+      authorization: {
+        anonymousOnly: true
+      }
 
+    })
     ;
   }
 ]);

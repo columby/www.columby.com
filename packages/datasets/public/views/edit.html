@@ -1,0 +1,44 @@
+<div class="dataset item edit" ng-controller="DatasetEditCtrl">
+
+  <div class="loading" ng-show="contentLoading">LOADING >>></div>
+
+  <div class="autosave-status">
+    <p><strong>Publication status: </strong>{{dataset.status || 'draft'}}</p>
+    <p><strong>Autosave status: </strong><span ng-show="isEmpty(dataset.draft)">There are no revisision saved. </span><span ng-hide="isEmpty(dataset.draft)">{{isEmpty(dataset.draft)}} This post has unpublished edits</span><span ng-show="autosaveInProgress">Saving...</span>
+  </div>
+
+  <form name="editDatasetForm">
+  <div triangle class="dataset-header-wrapper">
+    <div class="dataset-header container">
+      <!-- Ttile -->
+      <div class="title row">
+        <div class="col-md-offset-2 col-md-8">
+          <h1 class="editable-placeholder" ng-hide="draftWorking.title">Your title</h1>
+          <h1 contenteditable
+            name="title"
+            ng-model="draftWorking.title"
+            strip-br="true"
+            required></h1>
+        </div>
+      </div>
+
+      <div class="avatar">
+        <img src="{{dataset.avatar.url}}"/>
+      </div>
+    </div>
+  </div>
+    <div class="dataset-content">
+      <!-- Description -->
+      <div class="description row">
+        <div class="col-md-offset-2 col-md-8">
+          <div class="editable-placeholder" ng-hide="draftWorking.description">Your description</div>
+          <div class="description-content" style="position: relative" contenteditable
+            name="description"
+            ng-model="draftWorking.description"
+            strip-br="false">
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

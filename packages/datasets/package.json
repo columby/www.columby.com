@@ -1,7 +1,7 @@
 {
-  "name": "dataset",
+  "name": "datasets",
   "version": "0.0.1",
-  "description": "Some description of dataset",
+  "description": "Some description of datasets",
   "author": {
     "name": "mean scaffold"
   },

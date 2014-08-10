@@ -91,6 +91,8 @@ angular.module('mean.columby').factory('FlashSrv', ['$rootScope', function($root
     setMessage: function(message) {
       //console.log('Adding message: ' + message);
       queue.push(message);
+
+      $rootScope.$broadcast('flashMessage::newMessage', message);
     },
 
     getMessage: function() {

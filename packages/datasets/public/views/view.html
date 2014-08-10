@@ -1,0 +1,106 @@
+<div class="dataset item edit" ng-controller="DatasetViewCtrl">
+
+  <div class="loader" ng-class="{noshow:!contentLoading}">Loading dataset</div>
+  
+  <div class="dataset-content" ng-class="{show:!contentLoading}">
+    <div triangle class="dataset-header-wrapper">
+      <div class="dataset-header container">
+        <!-- Ttile -->
+        <div class="title">
+          <h1>{{dataset.title || 'No title yet'}}</h1>
+        </div>
+
+        <div class="avatar">
+          <img src="{{dataset.avatar.url}}"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="dataset-description-wrapper">
+      <div class="dataset-description container">
+        <div class="col-md-12">
+          <div>{{dataset.description || 'Dataset description currently empty'}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dataset-info-wrapper">
+      <div class="container">
+        <div class="dataset-info">
+          <div class="dataset-info-content">This dataset is of the type <strong>ArcGIS</strong>. The License if <strong>CC0</strong>. There should be some valid data published so that there is an API available.
+          </div>
+      </div>
+    </div>
+
+    <div class="dataset-sources-wrapper">
+      <div class="dataset-sources container">
+        <div class="content">
+          <h3>Sources</h3>
+          <ul>
+            <li>very-interesting-dataset.csv</li>
+            <li>another-dataset.xml</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="dataset-preview-wrapper">
+      <div class="content">
+        <table class="table">
+          <thead>
+            <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+          </thead>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="dataset-use-wrapper">
+      <div class="dataset-use container">
+        <div class="content">
+          <h3>Use the Columby API</h3>
+          <p>Swag flexitarian synth 3 wolf moon hella umami normcore, mixtape bespoke Marfa scenester blog keytar XOXO. Direct trade pug leggings Cosby sweater mumblecore. Intelligentsia flexitarian dreamcatcher next level church-key, iPhone aesthetic stumptown kitsch bitters leggings. Readymade Marfa roof party, biodiesel four loko small batch lo-fi PBR&B 90's disrupt. Gastropub ennui Helvetica tote bag, Pinterest McSweeney's put a bird on it flexitarian bitters gluten-free Carles ethical twee. Kitsch tofu meh keffiyeh paleo polaroid, bitters PBR&B trust fund meggings actually swag jean shorts flexitarian sriracha. Dreamcatcher food truck gluten-free tofu polaroid, Godard Tumblr photo booth vegan jean shorts letterpress Brooklyn.</p>
+      </div>
+    </div>
+
+    <div class="dataset-id-wrapper">
+      <div class="dataset-id container">
+        <div class="content">
+          <h4>UUID: {{dataset._id}}</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="dataset-references-wrapper">
+      <div class="dataset-references container">
+        <div class="content">
+          <h3>References</h3>
+          <ul>
+            <li>Very interesting reference</li>
+            <li>Another reference</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="dataset-author-wrapper">
+      <div class="dataset-author container">
+        <div class="row">
+          <div class="dataset-editor-content col-md-6">
+            <h3>About {{dataset.user.username}}</h3>
+            <p>Swag flexitarian synth 3 wolf moon hella umami normcore, mixtape bespoke Marfa scenester blog keytar XOXO. Direct trade pug leggings Cosby sweater mumblecore. Intelligentsia flexitarian dreamcatcher next level church-key, iPhone aesthetic stumptown kitsch bitters leggings. Readymade Marfa roof party, biodiesel four loko small batch lo-fi</p>
+          </div>
+
+          <div class="dataset-organisation-content col-md-6">
+            <h3>About Organisation</h3>
+            <p>Swag flexitarian synth 3 wolf moon hella umami normcore, mixtape bespoke Marfa scenester blog keytar XOXO. Direct trade pug leggings Cosby sweater mumblecore. Intelligentsia flexitarian dreamcatcher next level church-key, iPhone aesthetic stumptown kitsch bitters leggings. Readymade Marfa roof party, biodiesel four loko small batch lo-fi</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

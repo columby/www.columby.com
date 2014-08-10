@@ -1,3 +1,27 @@
-<section data-ng-controller="IndexController">
-  <h1 mean-token="'home-default'">Columby</h1>
+<section class="page page-home" data-ng-controller="ColumbyHomeCtrl">
+
+  <div triangle class="page-header">
+    <div class="container">
+      <h1 class="page-title">Columby</h1>
+      <h2 class="page-subtitle">data discovery</p>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <div class="container">
+      <div class="searchbox">
+        <input placeholder="Search datasets">
+      </div>
+
+      <div class="recent-publications">
+        <h3>Recently published</h2>
+        <div class="publication-listing">
+          <div ng-repeat="dataset in datasets" class="publication-item">
+            <h4><a ui-sref="dataset view({ datasetId: dataset._id })" >{{dataset.title}} [{{dataset._id}}]</a><span ng-show=""><em>{{dataset.publishStatus}}</em></h4>
+            {{dataset.user.name}} on {{dataset.created}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>

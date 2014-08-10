@@ -1,26 +1,28 @@
 // out: columby.css, compress:true
+
 /*** ---- MAIN TYPOGRAPHY ---------------------------- ***/
-body {
-  font-family: "tk-merriweather";
+html, body, p {
+  font-family: "merriweather", serif;
 }
 h1,h2,h3,h4,h5,h6{
-  font-family: "tk-lato";
+  font-family: "lato", sans-serif;
 }
 h1 {
 
-  font-weight: 100;
+  font-weight: 400;
   text-transform: uppercase;
 }
 h2 {
-  font-weight: 100;
-  text-transform: lowercase;
-  text-align: center;
+  font-weight: 400;
   font-size: 18px;
 }
 
+/*** ---- DEFAULT ELEMENTS ---------------------------- ***/
+*:focus{outline: none;}
+
 /*** ---- SITENAV ---------------------------- ***/
 body {
-  overflow: hidden;
+  overflow-x: hidden;
   -webkit-transition-duration: 200ms; /* Safari */
   transition-duration: 200ms;
   -webkit-transition: -webkit-transform 200ms cubic-bezier(.2, .3, .25, .9);
@@ -63,14 +65,19 @@ body {
 
   // METABAR
   .metabar-wrapper {
-    border-bottom: 1px solid #eee;
-    height: 40px;
-    line-height: 40px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    /*border-bottom: 1px solid #eee;*/
+    height: 60px;
+    line-height: 60px;
+    /*background: rgba(255,255,255,0.97);*/
+    .metabar{}
     .logo {
       width: 30px;
       height: 30px;
       background-color: #222;
-      margin-top: 5px;
+      margin-top: 15px;
       color: #fff;
       line-height: 25px;
       text-align: center;
@@ -89,8 +96,35 @@ body {
 }
 
 
+/*** ---- MESSAGES ---------------------------- ***/
+.message {
+  -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.25s;
+  -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.25s;
+  -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.25s;
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.25s;
+
+  position: fixed;
+  top: -40px;
+  z-index: 700;
+  width: 75%;
+  margin-left: 12.5%;
+  font-size: 20px;
+  line-height: 2;
+  opacity:0;
+  border-radius:0;
+}
+.message.show{
+  top:0;
+  opacity: 1;
+}
+
 
 /*** ---- LOGIN ---------------------------- ***/
+.signin {
+  .signin-header {}
+  .login-form {}
+  .register-form {}
+}
 .signin-success {
   position: absolute;
   padding-top: 40px;
@@ -103,6 +137,42 @@ body {
   opacity: 0.95;
 }
 
+
+/*** ---- HOMEPAGE ---------------------------- ***/
+.page-home {
+  .page-header {
+    text-align: center;
+    min-height: 300px;
+    color: #FFF;
+    h1.page-title {
+      margin-top: 100px;
+      font-weight: 100;
+    }
+    h1.page-subtitle { }
+  }
+  .searchbox {
+    margin: 100px 50px;
+    text-align: center;
+    input {
+      padding: 10px;
+      width: 50%;
+      font-size: 24px;
+    }
+  }
+  .recent-publications {
+    .publication-listing {
+      border-top: 2px solid #222;
+      .publication-item {
+        margin-bottom: 30px;
+        h4 {
+          a {
+            color: #222;
+          }
+        }
+      }
+    }
+  }
+}
 
 .sitenav ul li  a {
   color: #111;
