@@ -16,7 +16,7 @@ angular.module('mean.datasets')
         var t = new Trianglify();
         var pattern = t.generate(element.width(), element.height());
         element[0].setAttribute('style', 'background-image: '+pattern.dataUrl);
-      },500);
+      },100);
     }
   };
 })

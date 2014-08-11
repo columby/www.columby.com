@@ -69,7 +69,9 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
       if (!angular.isArray(authorizedRoles)) {
         authorizedRoles = [authorizedRoles];
       }
-      return (this.isAuthenticated() && authorizedRoles.indexOf(user.roles[0]) !== -1);
+      //console.log('authenticated', this.isAuthenticated());
+      //console.log('role', user.roles);
+      return (authenticated && authorizedRoles.indexOf(user.roles[0]) !== -1);
     },
 
     user: function() {

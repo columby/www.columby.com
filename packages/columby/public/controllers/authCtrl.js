@@ -49,10 +49,6 @@ angular.module('mean.columby')
         console.log(response);
         if (response.status === 'success') {
           $scope.signinSuccess = true;
-          FlashSrv.setMessage({
-            value: 'You have been successfully signed in.',
-            status: 'info'
-          });
           console.log('user', ColumbyAuthSrv.user());
         } else if (response.error === 'User not found') {
           $scope.loginError = 'The email address ' + credentials.email + ' does not exist. Would you like to register for a new account?';
@@ -75,13 +71,29 @@ angular.module('mean.columby')
 
     $scope.passwordlessRegister = function(){
       $scope.registrationInProgress = true;
+      $scope.loginError = null;
       ColumbyAuthSrv.passwordlessRegister($scope.newuser).then(function(response){
         if (response.error === 'Error registering user.') {
           $scope.registrationError = response.error;
         }
+        $scope.registrationSuccess = true;
         $scope.registrationInProgress = false;
       });
     };
   }])
 
+
+  .controller('ColumbyAccountCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'ColumbyAuthSrv', 'FlashSrv', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
+    // Get current user
+    $scope.user = ColumbyAuthSrv.user();
+    // Get email requires server check
+    //$scope.user.email = ColumbyAuthSrv.getEmail();
+    console.log($scope.user);
+  }])
+
+  .controller('ColumbyProfileCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'ColumbyAuthSrv', 'FlashSrv', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
+    // Get current user
+    $scope.user = ColumbyAuthSrv.user();
+    $scope.profile = ColumbyAuthSrv.user();
+  }])
 ;

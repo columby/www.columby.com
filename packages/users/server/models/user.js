@@ -38,6 +38,10 @@ var validateUniqueEmail = function(value, callback) {
 
 var UserSchema = new Schema({
 
+  /**
+   * Account fields
+   **/
+
   email: {
     type: String,
     required: true,
@@ -54,26 +58,32 @@ var UserSchema = new Schema({
     type: Boolean,
     default: false
   },
-
-  name: {
-    type: String,
-    required: false
-  },
   roles: {
     type: Array,
     default: ['authenticated']
   },
-  hashed_password: {
-    type: String,
-    //validate: [validatePresenceOf, 'Password cannot be blank']
-  },
-  provider: {
-    type: String,
-    default: 'local'
-  },
-  salt: String,
 
-  // passwordless login token
+
+  /**
+   * Profile fields
+   **/
+  name: {
+    type: String,
+    required: false
+  },
+  description: {
+    type: String,
+    required: false
+  },
+  headerBackground: {
+    type: String,
+    required: false
+  },
+
+
+  /**
+   * Passwordless login
+   **/
   loginToken: {
     type: String
   },
@@ -84,6 +94,18 @@ var UserSchema = new Schema({
     expires: '4h'
   },
 
+  /**
+   * Unused
+   **/
+  hashed_password: {
+    type: String,
+    //validate: [validatePresenceOf, 'Password cannot be blank']
+  },
+  provider: {
+    type: String,
+    default: 'local'
+  },
+  salt: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   facebook: {},

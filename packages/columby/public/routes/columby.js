@@ -5,17 +5,48 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
 
     $stateProvider
 
+    // view own profile
+    // redirect to /profile/username based on id
     .state('me', {
       url:'/me',
-      templateurl: 'columby/views/account.html',
+      templateUrl: 'columby/views/profile.html',
       authorization: {
-        authorizedRoles: ['authenticated']
+        authorizedRoles: ['authenticated'],
+        permissions:[
+          'can view own profile',
+          'can view all profiles'
+        ]
+      }
+    })
+
+    // view public profile of any member
+    .state('profile view', {
+      url:'/profile/:username',
+      templateUrl: 'columby/views/profile.html',
+      authorization: {
+        permissions:[
+          'can view own profile',
+          'can view all profiles'
+        ]
+      }
+    })
+
+    // Edit account settings
+    .state('account', {
+      url:'/me/account',
+      templateUrl: 'columby/views/account.html',
+      authorization: {
+        authorizedRoles: ['authenticated'],
+        permissions:[
+          'can edit own account',
+          'can edit accounts'
+        ]
       }
     })
 
     .state('publish', {
       url: '/publish',
-      templateurl: 'columby/views/publish.html',
+      templateUrl: 'columby/views/publish.html',
       authorization: {
         authorizedRoles: ['authenticated']
       }

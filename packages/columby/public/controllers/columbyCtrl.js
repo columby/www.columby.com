@@ -50,9 +50,10 @@ angular.module('mean.columby')
         else if (next.authorization.hasOwnProperty('authorizedRoles')) {
           var authorizedRoles = next.authorization.authorizedRoles;
           console.log('users with the following roles only! ', authorizedRoles);
-
+          console.log(ColumbyAuthSrv.isAuthorized(authorizedRoles));
           // Check if user has the required role
           if (!ColumbyAuthSrv.isAuthorized(authorizedRoles)) {
+
             event.preventDefault();
             FlashSrv.setMessage({
               value: 'You are not authorized to access the requested page',
