@@ -10,8 +10,8 @@ angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$st
 ]);
 
 
-angular.module('mean.datasets').controller('DatasetViewCtrl', ['$scope', '$state', '$stateParams', 'DatasetsSrv',
-  function($scope, $state, $stateParams, DatasetsSrv) {
+angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetsSrv', 'MetabarSrv',
+  function($rootScope, $scope, $state, $stateParams, DatasetsSrv, MetabarSrv) {
 
     $scope.contentLoading = true;
 
@@ -19,6 +19,8 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$scope', '$state
       console.log('dataset', res);
       $scope.dataset = res;
       $scope.contentLoading = false;
+      console.log(res.user);
+      MetabarSrv.setPostMeta(res.user);
     });
   }
 ]);
@@ -108,6 +110,11 @@ angular.module('mean.datasets').controller('DatasetEditCtrl', ['$scope', '$state
 
         // start the timer for autosave (notice: no check if server response is ok... )
         $interval(autoSave, 5000);
+
+        // Open sidebar
+        angular.element('.editorSidebar').addClass('isOpen');
+        angular.element('body').addClass('editorSidebarOpen');
+
       } else {
         console.log('error or something', res);
       }

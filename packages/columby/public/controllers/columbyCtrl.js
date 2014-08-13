@@ -25,19 +25,20 @@ angular.module('mean.columby')
   // Check permission to view the page.
   .run(function ($rootScope, AUTH_EVENTS, $state, ColumbyAuthSrv, FlashSrv) {
     $rootScope.$on('$stateChangeStart', function (event, next) {
-      console.log('statechange start');
-      // Always close the sitenav bar
+      // Show page loader
+      angular.element('body').addClass('isLoading');
+
+      // Always close the sitenav bar on every page transition
       $rootScope.$broadcast('sitenav::toggle', 'close');
 
       // Check if there is authorization data attached to the route
       if (next.hasOwnProperty('authorization')) {
-        console.log(next.authorization);
+
         // Check Authentication status needed
         if (next.authorization.hasOwnProperty('anonymousOnly')) {
           if (ColumbyAuthSrv.isAuthenticated()){
             event.preventDefault();
             // Checking for Anonymous access only.2
-            console.log('Anonymous users only!');
             FlashSrv.setMessage({
               value: 'You are already logged in.',
               status: 'info'
@@ -49,8 +50,7 @@ angular.module('mean.columby')
         // Check which roles is/are required
         else if (next.authorization.hasOwnProperty('authorizedRoles')) {
           var authorizedRoles = next.authorization.authorizedRoles;
-          console.log('users with the following roles only! ', authorizedRoles);
-          console.log(ColumbyAuthSrv.isAuthorized(authorizedRoles));
+
           // Check if user has the required role
           if (!ColumbyAuthSrv.isAuthorized(authorizedRoles)) {
 
@@ -64,6 +64,10 @@ angular.module('mean.columby')
           }
         }
       }
+    });
+
+    $rootScope.$on('$stateChangeSuccess', function (event, next) {
+      angular.element('body').removeClass('isLoading');
     });
   })
 
@@ -98,9 +102,13 @@ angular.module('mean.columby')
    *
    ***/
   .controller('ColumbyHomeCtrl', function($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv, DatasetsSrv) {
+    angular.element('body').addClass('contentLoading');
+    $scope.contentLoading = true;
 
     DatasetsSrv.index().then(function(response){
       $scope.datasets = response;
+      $scope.contentLoading = false;
+      angular.element('body').removeClass('contentLoading');
     });
   })
 
@@ -173,22 +181,4 @@ angular.module('mean.columby')
       };
     }
   ])
-
-
-  /***
-   * Controller for the metabar
-   *
-   ***/
-  .controller('MetabarController', ['$rootScope', '$scope', 'Global', 'Columby',
-    function($rootScope, $scope, Global, Columby) {
-      //$scope.global = Global;
-      console.log('Metabar controller loaded');
-
-      // Send a message to the rootscope to toggle the sitenav
-      $scope.toggleSiteNav = function(e) {
-        $rootScope.$broadcast('sitenav::toggle');
-      };
-    }
-  ])
-
 ;

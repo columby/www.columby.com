@@ -1,10 +1,24 @@
 <div class="dataset item edit" ng-controller="DatasetEditCtrl">
 
-  <div class="loading" ng-show="contentLoading">LOADING >>></div>
+  <!-- Editor Sidebar -->
+  <div class="editorSidebar">
+    <div class="editorSidebarContent">
+      <h3>Publication settings</h3>
 
-  <div class="autosave-status">
-    <p><strong>Publication status: </strong>{{dataset.status || 'draft'}}</p>
-    <p><strong>Autosave status: </strong><span ng-show="isEmpty(dataset.draft)">There are no revisision saved. </span><span ng-hide="isEmpty(dataset.draft)">{{isEmpty(dataset.draft)}} This post has unpublished edits</span><span ng-show="autosaveInProgress">Saving...</span>
+      <button class="btn dbt-default">Publish</button>
+      <div class="autosave-status">
+        <span ng-show="isEmpty(dataset.draft)">No changes. </span>
+        <span ng-hide="isEmpty(dataset.draft)">{{isEmpty(dataset.draft)}} Your dataset has unpublished changes. </span>
+        <span ng-show="autosaveInProgress">Saving...</span>
+      </div>
+
+      <h3>Status</h3>
+      <p><strong>Publication status: </strong>{{dataset.status || 'draft'}}</p>
+
+      <h3>Publication account</h3>
+
+
+    </div>
   </div>
 
   <form name="editDatasetForm">

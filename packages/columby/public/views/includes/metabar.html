@@ -1,8 +1,14 @@
 <nav class="metabar" data-ng-controller="MetabarController">
   <div class="metabar-content">
+
     <div class="col-md-1">
       <p class="logo" ng-click="toggleSiteNav($event)">c</p>
     </div>
+
+    <div class="postMeta" ng-show="postMeta">
+      <p>{{postMeta.username}}</p>
+    </div>
+
     <div class="col-md-offset-10 col-md-1">
       <a ui-sref="publish" class="btn btn-default">publish</a>
     </div>

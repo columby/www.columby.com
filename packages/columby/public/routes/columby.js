@@ -7,8 +7,8 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
 
     // view own profile
     // redirect to /profile/username based on id
-    .state('me', {
-      url:'/me',
+    .state('profile', {
+      url:'/:profileName',
       templateUrl: 'columby/views/profile.html',
       authorization: {
         authorizedRoles: ['authenticated'],
@@ -19,21 +19,9 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
       }
     })
 
-    // view public profile of any member
-    .state('profile view', {
-      url:'/profile/:username',
-      templateUrl: 'columby/views/profile.html',
-      authorization: {
-        permissions:[
-          'can view own profile',
-          'can view all profiles'
-        ]
-      }
-    })
-
     // Edit account settings
-    .state('account', {
-      url:'/me/account',
+    .state('settings', {
+      url:'/settings',
       templateUrl: 'columby/views/account.html',
       authorization: {
         authorizedRoles: ['authenticated'],

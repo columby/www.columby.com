@@ -30,7 +30,6 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
     passwordlessRegister: function(credentials){
       var promise = $http.post('/api/v2/user/passwordless-register', credentials)
         .then(function (response) {
-          console.log('authRegisterResponse', response.data);
           if (response.data.user){
             user = response.data.user;
           }
@@ -39,12 +38,13 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
       return promise;
     },
 
+    // Verify a login token. 
     passwordlessVerify: function(token){
       var promise = $http.get('/api/v2/user/passwordless-verify?token='+token)
         .then(function (response) {
-          console.log('authResponse', response.data);
           if (response.data.user){
             user = response.data.user;
+            authenticated = (user.hasOwnProperty('_id')) ? true : false;
           }
           return response.data;
         });

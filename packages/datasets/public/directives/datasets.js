@@ -32,7 +32,9 @@ angular.module('mean.datasets')
 
         // Specify how UI should be updated
         ngModel.$render = function() {
-          element.html($sce.getTrustedHtml(ngModel.$viewValue || ''));
+          console.log(ngModel);
+          console.log(ngModel.$viewValue);
+          element.html($sce.trustAsHtml(ngModel.$viewValue || ''));
         };
 
         element.bind('keydown', function(event) {

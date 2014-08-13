@@ -17,6 +17,7 @@
         <div class="organisations">
           <div class="col-md-offset-2 col-md-8">
             <h3>Organisations</h3>
+            <p ng-show="organisations.length === 0">No orgnisations for this user</p>
             <ul>
               <li ng-repeat="organisation in organisations">
                 {{organisation.name}}
