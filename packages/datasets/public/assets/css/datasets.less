@@ -31,11 +31,81 @@
       &.show {
         opacity: 1;
       }
+		  .dataset-use p, .dataset-editor-content p, .dataset-organisation-content p, .dataset-info {
+				font-size: 18px;
+				font-weight: 300;
+				line-height: 30px;
+				color: #4d4d4d;
+				padding: 6px
+		  }
+			.dataset-info {
+				color: #0E0E0E;
+			}
+			.dataset-editor-content p, .dataset-organisation-content p  {
+				font-size: 14px;
+				line-height: 28px;
+			}
+		  .dataset-sources h3, .dataset-use h3, .dataset-references h3, .dataset-editor-content h3, .dataset-organisation-content h3 {
+				font-size: 24px;
+				line-height: 40px;
+				border-bottom: 1px solid #d9d9d9;
+				margin-bottom: 10px;
+				font-weight: bold;
+				color: #7a7a7a;
+				padding: 6px
+		  }
+		  .dataset-id {
+				background: #7a7a7a;
+				text-align: center;
+				padding: 10px;
+				margin-top: 30px;
+				margin-bottom: 30px;
+		  }
+			.dataset-id h4{
+				font-family: "merriweather", serif;
+				font-size: 24px;
+				font-weight: 700;
+				color: #fff;
+			}
+			.dataset-sources li{
+				padding-left: 10px;
+				margin-bottom: 20px;
+			}
+			.dataset-sources li.primary{
+				border-left: 4px green solid;
+			}
+			.dataset-sources h4, .dataset-references h4{
+				font-family: "merriweather", serif;
+				font-size: 18px;
+				color: #c8c8c8;
+				margin-bottom: 0;
+			}
+			.dataset-sources h4 a, .dataset-references h4 a{
+				text-decoration: underline;
+			}
+			.dataset-sources .date-size, .dataset-references .date-url{
+				font-size: 14px;
+				color: #c8c8c8;
+			}
+			.dataset-references ul, .dataset-sources ul{
+				list-style: none;
+				padding: 6px;
+			}
+			.dataset-references li, .dataset-sources li{
+				color: #4d4d4d;
+				font-size: 18px;
+				font-weight: 300;
+				line-height: 30px;
+			}
     }
     .dataset-header-wrapper{
       margin-bottom: 4.5em;
+			background: #ccc;
       .dataset-header{
         h1 {
+					font-size: 70px;
+					font-weight: 700;
+					color: #fff;
           margin-top: 1em;
           position: relative;
           text-align: center;
@@ -54,18 +124,19 @@
           img {
             display: block;
             margin: 0 auto;
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             background-color: #eee;
           }
         }
       }
     }
     .dataset-description{
-      padding: 0 30px;
-      font-size: 1.3em;
-      line-height: 2;
-      color: #ccc;
+			font-size: 18px;
+			font-weight: 300;
+			line-height: 30px;
+			color: #4d4d4d;
+			padding: 6px;
       .editable-placeholder{
         position:absolute;
         width: 100%;
