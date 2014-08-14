@@ -34,7 +34,7 @@ angular.module('mean.datasets')
         ngModel.$render = function() {
           console.log(ngModel);
           console.log(ngModel.$viewValue);
-          element.html($sce.trustAsHtml(ngModel.$viewValue || ''));
+          element.html(ngModel.$viewValue || 'niet goed');
         };
 
         element.bind('keydown', function(event) {
