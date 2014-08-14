@@ -27,6 +27,7 @@ angular.module('mean.columby')
     $rootScope.$on('$stateChangeStart', function (event, next) {
       // Show page loader
       angular.element('body').addClass('isLoading');
+      angular.element('body').removeClass('editorSidebarOpen');
 
       // Always close the sitenav bar on every page transition
       $rootScope.$broadcast('sitenav::toggle', 'close');
@@ -49,6 +50,7 @@ angular.module('mean.columby')
         }
         // Check which roles is/are required
         else if (next.authorization.hasOwnProperty('authorizedRoles')) {
+          console.log('authorizedroles', next.authorization);
           var authorizedRoles = next.authorization.authorizedRoles;
 
           // Check if user has the required role
@@ -78,7 +80,6 @@ angular.module('mean.columby')
    ***/
   .controller('ColumbyController', ['$rootScope','$scope', '$timeout', 'Global', 'Columby',
     function($rootScope, $scope, $timeout, Global, Columby) {
-
 
       // Respond to flash messages
       $scope.$on('flashMessage::newMessage', function(e,msg){

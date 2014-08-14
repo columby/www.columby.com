@@ -20,7 +20,14 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
       $scope.dataset = res;
       $scope.contentLoading = false;
       console.log(res.user);
-      MetabarSrv.setPostMeta(res.user);
+      var meta = {
+        postType: 'dataset',
+        _id: res._id,
+        user: res.user,
+        created: res.created,
+        updated: res.updated
+      };
+      MetabarSrv.setPostMeta(meta);
     });
   }
 ]);
@@ -46,10 +53,18 @@ angular.module('mean.datasets').controller('DatasetCreateController', ['$scope',
 angular.module('mean.datasets').controller('DatasetEditCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$interval', 'DatasetsSrv',
   function($scope, $state, $stateParams, $timeout, $interval, DatasetsSrv) {
 
+    /*** SCOPE INITIALIZATION ***/
+    $scope.contentLoading = true;
+
+    /*** VARIABLES ***/
+    var autoSaveTimer;
+
+
     $scope.isEmpty = function(obj) {
       return angular.equals({}, obj);
     };
 
+    /*** FUNCTIONS ***/
     function autoSave() {
       console.log('Starting autosave');
       // check for changes in the model
@@ -83,6 +98,15 @@ angular.module('mean.datasets').controller('DatasetEditCtrl', ['$scope', '$state
       }
     }
 
+    function startAutoSave(){
+      autoSaveTimer = $interval(autoSave, 5000);
+    }
+    function stopAutoSave(){
+      if (angular.isDefined(autoSaveTimer)) {
+        $interval.cancel(autoSaveTimer);
+        autoSaveTimer = undefined;
+      }
+    }
     function resetDrafts(){
       console.log('updating draft models');
 
@@ -99,26 +123,34 @@ angular.module('mean.datasets').controller('DatasetEditCtrl', ['$scope', '$state
     }
 
     // Load dataset
-    $scope.contentLoading = true;
-    DatasetsSrv.retrieve($stateParams.datasetId).then(function(res){
-      if (res._id) {
-        console.log('Dataset received', res);
-        $scope.dataset = res;
+    function loadDataset(){
+      DatasetsSrv.retrieve($stateParams.datasetId).then(function(res){
+        if (res._id) {
+          console.log('Dataset received', res);
+          $scope.dataset = res;
 
-        // inititiate the draft master version (for reference)
-        resetDrafts();
+          // inititiate the draft master version (for reference)
+          resetDrafts();
 
-        // start the timer for autosave (notice: no check if server response is ok... )
-        $interval(autoSave, 5000);
+          // start the timer for autosave (notice: no check if server response is ok... )
+          startAutoSave();
 
-        // Open sidebar
-        angular.element('.editorSidebar').addClass('isOpen');
-        angular.element('body').addClass('editorSidebarOpen');
+          // Open sidebar
+          angular.element('.editorSidebar').addClass('isOpen');
+          angular.element('body').addClass('editorSidebarOpen');
 
-      } else {
-        console.log('error or something', res);
-      }
-      $scope.contentLoading = false;
-    });
+        } else {
+          console.log('error or something', res);
+        }
+
+        $scope.contentLoading = false;
+      });
+    }
+
+    /*** ROOTSCOPE EVENTS ***/
+    $scope.$on('stopAutosave', stopAutoSave());
+
+    /*** INIT ***/
+    loadDataset();
   }
 ]);

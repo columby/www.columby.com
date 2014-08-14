@@ -5,19 +5,19 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
 
     $stateProvider
 
-    // view own profile
-    // redirect to /profile/username based on id
-    .state('profile', {
-      url:'/:profileName',
-      templateUrl: 'columby/views/profile.html',
+    .state('home', {
+      url:'/',
+      templateUrl: 'columby/views/home.html'
+    })
+
+    .state('signin', {
+      url: '/signin',
+      templateUrl: 'columby/views/signin.html',
       authorization: {
-        authorizedRoles: ['authenticated'],
-        permissions:[
-          'can view own profile',
-          'can view all profiles'
-        ]
+        anonymousOnly: true
       }
     })
+
 
     // Edit account settings
     .state('settings', {
@@ -32,6 +32,11 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
       }
     })
 
+    .state('terms', {
+      url: '/terms',
+      templateUrl: 'columby/views/terms.html',
+    })
+    
     .state('publish', {
       url: '/publish',
       templateUrl: 'columby/views/publish.html',
@@ -40,14 +45,20 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
       }
     })
 
-    .state('signin', {
-      url: '/signin',
-      templateUrl: 'columby/views/signin.html',
+    // view own profile
+    // redirect to /profile/username based on id
+    .state('profile', {
+      url:'/:userSlug',
+      templateUrl: 'columby/views/profile.html',
       authorization: {
-        anonymousOnly: true
+        authorizedRoles: ['authenticated'],
+        permissions:[
+          'can view own profile',
+          'can view all profiles'
+        ]
       }
-
     })
+
     ;
   }
 ]);

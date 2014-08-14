@@ -5,6 +5,8 @@
     <div class="editorSidebarContent">
       <h3>Publication settings</h3>
 
+      <p><a ui-sref="dataset view({datasetId: dataset._id})" class="btn btn-default">Close</a></p>
+
       <button class="btn dbt-default">Publish</button>
       <div class="autosave-status">
         <span ng-show="isEmpty(dataset.draft)">No changes. </span>

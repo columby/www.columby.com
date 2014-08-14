@@ -5,12 +5,18 @@
       <p class="logo" ng-click="toggleSiteNav($event)">c</p>
     </div>
 
-    <div class="postMeta" ng-show="postMeta">
-      <p>{{postMeta.username}}</p>
+    <div class="postMeta col-md-8">
+      <div class="datasetMeta" ng-show="postMeta.postType === 'dataset'">
+        <a class="avatar" ui-sref="user/:postMeta.user.slug">
+          <img class="avatar" src="{{postMeta.user.avatar}}"/>
+          <span class="postMetaInline">{{postMeta.user.name}}</span>
+        </a>
+         on <time class="post-date">{{postMeta.created | date:'d MMMM yyyy'}}</time>
+      </div>
     </div>
 
-    <div class="col-md-offset-10 col-md-1">
-      <a ui-sref="publish" class="btn btn-default">publish</a>
+    <div class="actions col-md-3">
+      <a ui-sref="dataset edit({datasetId: postMeta.dataset._id})" ng-show="canEdit">Edit</a>
     </div>
   </div>
 </nav>

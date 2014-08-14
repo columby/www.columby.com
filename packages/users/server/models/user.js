@@ -49,6 +49,9 @@ var UserSchema = new Schema({
     match: [/.+\@.+\..+/, 'Please enter a valid email'],
     validate: [validateUniqueEmail, 'E-mail address is already in-use']
   },
+  slug: {
+    type: String
+  },
   username: {
     type: String,
     unique: true,
@@ -67,10 +70,6 @@ var UserSchema = new Schema({
   /**
    * Profile fields
    **/
-  name: {
-    type: String,
-    required: false
-  },
   description: {
     type: String,
     required: false
