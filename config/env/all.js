@@ -28,7 +28,7 @@ module.exports = {
     secure: false,
     // Only set the maxAge to null if the cookie shouldn't be expired
     // at all. The cookie will expunge when the browser is closed.
-    maxAge: null
+    maxAge: 1000 * 60 * 60 * 24 * 365
   },
 
   // The session cookie name
