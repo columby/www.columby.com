@@ -3,9 +3,8 @@
   <!-- Editor Sidebar -->
   <div class="editorSidebar">
     <div class="editorSidebarContent">
+      <button type="button" class="close" data-dismiss="alert" ui-sref="dataset view({datasetId: dataset._id})"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
       <h3>Publication settings</h3>
-
-      <p><a ui-sref="dataset view({datasetId: dataset._id})" class="btn btn-default">Close</a></p>
 
       <button class="btn dbt-default">Publish</button>
       <div class="autosave-status">

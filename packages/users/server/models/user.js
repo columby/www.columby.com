@@ -96,6 +96,9 @@ var UserSchema = new Schema({
   /**
    * Unused
    **/
+  name: {
+    type: 'String'
+  },
   hashed_password: {
     type: String,
     //validate: [validatePresenceOf, 'Password cannot be blank']

@@ -158,7 +158,7 @@ exports.create = function(req, res, next) {
   } else {
     // Hard coded for now. Will address this with the user permissions system in v0.3.5
     user.roles = ['authenticated'];
-    user.name = user.username;
+    user.username = user.username;
     user.loginToken = uuid.v4();
 
     console.log('saving user', user);

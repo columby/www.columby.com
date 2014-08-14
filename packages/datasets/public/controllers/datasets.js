@@ -25,7 +25,9 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
         _id: res._id,
         user: res.user,
         created: res.created,
-        updated: res.updated
+        updated: res.updated,
+        //canEdit: ( (user._id === res.user._id) || ('administrator' in user.roles) )
+
       };
       MetabarSrv.setPostMeta(meta);
     });
