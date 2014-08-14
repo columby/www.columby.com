@@ -16,13 +16,9 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
     $scope.contentLoading = true;
 
     DatasetsSrv.retrieve($stateParams.datasetId).then(function(dataset){
-      console.log('dataset', dataset);
       $scope.dataset = dataset;
       $scope.contentLoading = false;
-      console.log(dataset.user);
 
-      console.log(ColumbyAuthSrv.canEdit(dataset));
-      
       // send metadata to the metabar
       var meta = {
         postType: 'dataset',

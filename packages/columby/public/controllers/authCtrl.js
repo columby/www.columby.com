@@ -91,9 +91,31 @@ angular.module('mean.columby')
     console.log($scope.user);
   }])
 
-  .controller('ColumbyProfileCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'ColumbyAuthSrv', 'FlashSrv', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
-    // Get current user
-    $scope.user = ColumbyAuthSrv.user();
-    $scope.profile = ColumbyAuthSrv.user();
+  /***
+   * Controller a user's profile page
+   *
+   ***/
+  .controller('ColumbyProfileCtrl', ['$scope', '$rootScope', '$location', '$state', '$stateParams', 'AUTH_EVENTS', 'ColumbyAuthSrv', 'FlashSrv', 'MetabarSrv', function ($scope, $rootScope, $location, $state, $stateParams, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv, MetabarSrv) {
+
+    $scope.contentLoading = true;
+
+    // get profile informatio of user by userSlug
+    ColumbyAuthSrv.getProfile($stateParams.userSlug).then(function(result){
+      $scope.profile = result.profile;
+      $scope.contentLoading = false;
+      var item = result.profile;
+      item.postType = 'profile';
+      // send metadata to the metabar
+      var meta = {
+        postType: 'profile',
+        _id: result.profile._id,
+        canEdit: ColumbyAuthSrv.canEdit(item)
+      };
+      MetabarSrv.setPostMeta(meta);
+
+    });
+
+    // Send info to metabar
+
   }])
 ;

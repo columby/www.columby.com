@@ -1,7 +1,7 @@
 <section class="profile" data-ng-controller="ColumbyProfileCtrl">
+
   <div class="page-header">
     <h1>{{profile.username}}</h1>
-    <div ng-show="user._id === profile._id" class="edit">edit</div>
     <div class="avatar">
       <img src="profile.avatar"/>
     </div>
@@ -9,15 +9,15 @@
 
   <div class="page-content">
     <div class="container">
-      <div class="col-md-offset-2 col-md-8">
+      <div class="col-md-12">
         <div class="description">
           {{profile.description || 'No description yet'}}
         </div>
 
         <div class="organisations">
-          <div class="col-md-offset-2 col-md-8">
+          <div class="col-md-12">
             <h3>Organisations</h3>
-            <p ng-show="organisations.length === 0">No orgnisations for this user</p>
+            <p ng-show="!organisations">No orgnisations for this user</p>
             <ul>
               <li ng-repeat="organisation in organisations">
                 {{organisation.name}}
@@ -27,8 +27,9 @@
         </div>
 
         <div class="recent-publications">
-          <div class="col-md-offset-2 col-md-8">
+          <div class="col-md-12">
             <h3>Recently published</h3>
+            <p ng-show="!publications">No publications for this user</p>
             <ul>
               <li ng-repeat="publication in publications">
                 {{publication.title}}
