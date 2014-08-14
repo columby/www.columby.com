@@ -69,11 +69,16 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
       if (!angular.isArray(authorizedRoles)) {
         authorizedRoles = [authorizedRoles];
       }
-      var success = authorizedRoles.every(function(v,i) {
-        return user.roles.indexOf(v) !== -1;
-      });
+      console.log('authorizedRoles', authorizedRoles);
+      console.log('user roles', user.roles);
+      var trustedRole = false;
+      if (user.roles) {
+        trustedRole = authorizedRoles.every(function(v,i) {
+          return user.roles.indexOf(v) !== -1;
+        });
+      }
 
-      return (authenticated && success);
+      return (authenticated && trustedRole);
     },
 
     canEdit: function(content){
@@ -81,7 +86,9 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
       // check role
       ret = this.isAuthorized('administrator');
       // check author
+      console.log('check can edit');
       console.log(content.user);
+      console.log(user);
       if (content.user) {
         if (content.user.hasOwnProperty('_id')) {
           if (content.user._id === user._id) {
