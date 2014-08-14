@@ -4,13 +4,20 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+  Schema = mongoose.Schema,
+  shortId = require('shortid');
 
 
 /**
  * Dataset Schema
  */
 var DatasetSchema = new Schema({
+
+  _id: {
+    type: String,
+    unique: true,
+    'default': shortId.generate
+  },
 
   created: { type: Date, default: Date.now },
 
