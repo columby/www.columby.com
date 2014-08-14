@@ -16,7 +16,9 @@ exports.dataset = function(req, res, next, id) {
   Dataset.load(id, function(err, dataset) {
     if (err) return next(err);
     if (!dataset) return next(new Error('Failed to load dataset ' + id));
+
     req.dataset = dataset;
+
     next();
   });
 };

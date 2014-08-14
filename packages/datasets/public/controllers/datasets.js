@@ -10,24 +10,27 @@ angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$st
 ]);
 
 
-angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetsSrv', 'MetabarSrv',
-  function($rootScope, $scope, $state, $stateParams, DatasetsSrv, MetabarSrv) {
+angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetsSrv', 'MetabarSrv', 'ColumbyAuthSrv',
+  function($rootScope, $scope, $state, $stateParams, DatasetsSrv, MetabarSrv, ColumbyAuthSrv) {
 
     $scope.contentLoading = true;
 
-    DatasetsSrv.retrieve($stateParams.datasetId).then(function(res){
-      console.log('dataset', res);
-      $scope.dataset = res;
+    DatasetsSrv.retrieve($stateParams.datasetId).then(function(dataset){
+      console.log('dataset', dataset);
+      $scope.dataset = dataset;
       $scope.contentLoading = false;
-      console.log(res.user);
+      console.log(dataset.user);
+
+      console.log(ColumbyAuthSrv.canEdit(dataset));
+      
+      // send metadata to the metabar
       var meta = {
         postType: 'dataset',
-        _id: res._id,
-        user: res.user,
-        created: res.created,
-        updated: res.updated,
-        //canEdit: ( (user._id === res.user._id) || ('administrator' in user.roles) )
-
+        _id: dataset._id,
+        user: dataset.user,
+        created: dataset.created,
+        updated: dataset.updated,
+        canEdit: ColumbyAuthSrv.canEdit(dataset)
       };
       MetabarSrv.setPostMeta(meta);
     });

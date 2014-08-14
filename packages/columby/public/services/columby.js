@@ -38,7 +38,7 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
       return promise;
     },
 
-    // Verify a login token. 
+    // Verify a login token.
     passwordlessVerify: function(token){
       var promise = $http.get('/api/v2/user/passwordless-verify?token='+token)
         .then(function (response) {
@@ -69,10 +69,30 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
       if (!angular.isArray(authorizedRoles)) {
         authorizedRoles = [authorizedRoles];
       }
-      //console.log('authenticated', this.isAuthenticated());
-      //console.log('role', user.roles);
-      return (authenticated && authorizedRoles.indexOf(user.roles[0]) !== -1);
+      var success = authorizedRoles.every(function(v,i) {
+        return user.roles.indexOf(v) !== -1;
+      });
+
+      return (authenticated && success);
     },
+
+    canEdit: function(content){
+      var ret = false;
+      // check role
+      ret = this.isAuthorized('administrator');
+      // check author
+      console.log(content.user);
+      if (content.user) {
+        if (content.user.hasOwnProperty('_id')) {
+          if (content.user._id === user._id) {
+            ret=true;
+          }
+        }
+      }
+
+      return ret;
+    },
+
 
     user: function() {
       return user;
