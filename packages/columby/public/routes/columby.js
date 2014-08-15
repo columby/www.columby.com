@@ -36,7 +36,7 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
       url: '/terms',
       templateUrl: 'columby/views/terms.html',
     })
-    
+
     .state('publish', {
       url: '/publish',
       templateUrl: 'columby/views/publish.html',
@@ -51,11 +51,7 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
       url:'/:userSlug',
       templateUrl: 'columby/views/profile.html',
       authorization: {
-        authorizedRoles: ['authenticated'],
-        permissions:[
-          'can view own profile',
-          'can view all profiles'
-        ]
+        authorizedRoles: ['authenticated']
       }
     })
 

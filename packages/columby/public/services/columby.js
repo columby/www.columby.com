@@ -87,8 +87,6 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
       ret = this.isAuthorized('administrator');
       // check author
       console.log('check can edit');
-      console.log(content.user);
-      console.log(user);
       if (content.user) {
         if (content.user.hasOwnProperty('_id')) {
           if (content.user._id === user._id) {
@@ -96,10 +94,27 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
           }
         }
       }
-
+      console.log('c', content);
+      switch (content.postType){
+        case 'profile':
+          console.log(content._id);
+          console.log(user._id);
+          if (content._id === user._id) {
+            ret = true;
+          }
+        break;
+      }
       return ret;
     },
 
+
+    getProfile: function(userSlug) {
+      var promise = $http.get('/api/v2/user/profile?slug=' + userSlug)
+        .then(function(response){
+          return response.data;
+        });
+      return promise;
+    },
 
     user: function() {
       return user;

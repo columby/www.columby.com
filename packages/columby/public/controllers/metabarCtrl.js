@@ -14,21 +14,18 @@ angular.module('mean.columby')
       $rootScope.$broadcast('sitenav::toggle');
     };
 
-    // Show icon or not?
-    $scope.showIcon = true;
 
-    // Show post meta information
+    /*** ROOTSCOPE EVENTS ***/
+    // metadata received, set it in the scope
     $rootScope.$on('metabar::newMeta', function(evt, meta){
-      console.log(evt);
-      console.log(meta);
-      console.log('setting postmeta to', meta);
-      $scope.postMeta = meta;
+      // add ui-sref
 
+      // add to scope
+      $scope.postMeta = meta;
     });
 
     // Hide postMeta on a pagechange
     $rootScope.$on('$stateChangeStart', function (event, next) {
-      console.log('setting postmeta to null');
       $scope.postMeta = null;
     });
 

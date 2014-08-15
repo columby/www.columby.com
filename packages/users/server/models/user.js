@@ -7,6 +7,15 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   crypto = require('crypto');
 
+function slugify(text) {
+
+  return text.toString().toLowerCase()
+    .replace(/\s+/g, '-')        // Replace spaces with -
+    .replace(/[^\w\-]+/g, '')   // Remove all non-word chars
+    .replace(/\-\-+/g, '-')      // Replace multiple - with single -
+    .replace(/^-+/, '')          // Trim - from start of text
+    .replace(/-+$/, '');         // Trim - from end of text
+}
 /**
  * Validations
  */
@@ -50,7 +59,8 @@ var UserSchema = new Schema({
     validate: [validateUniqueEmail, 'E-mail address is already in-use']
   },
   slug: {
-    type: String
+    type: String,
+    unique: true
   },
   username: {
     type: String,
@@ -117,6 +127,7 @@ var UserSchema = new Schema({
   linkedin: {}
 });
 
+
 /**
  * Virtuals
  */
@@ -133,7 +144,13 @@ UserSchema.virtual('password').set(function(password) {
  */
 UserSchema.pre('save', function(next) {
   //if (this.isNew && this.provider === 'local' && this.password && !this.password.length)
-    //return next(new Error('Invalid password'));
+  //return next(new Error('Invalid password'));
+
+  //http://blog.benmcmahen.com/post/41122888102/creating-slugs-for-your-blog-using-express-js-and
+  var self=this;
+  var slug=slugify(self.username);
+  self.set('slug', slug);
+
   next();
 });
 
@@ -197,6 +214,16 @@ UserSchema.methods = {
     var salt = new Buffer(this.salt, 'base64');
     return crypto.pbkdf2Sync(password, salt, 10000, 64).toString('base64');
   }
+};
+
+UserSchema.statics.findBySlug = function(slug, cb) {
+  var User = mongoose.model('User');
+
+  User
+    .findOne({slug: slug}, 'username description roles headerBackground')
+    .exec(function(err,p){
+      cb(err, p);
+    });
 };
 
 mongoose.model('User', UserSchema);

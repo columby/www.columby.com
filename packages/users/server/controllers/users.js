@@ -132,7 +132,16 @@ exports.signout = function(req, res) {
 };
 
 
-
+exports.getProfile = function(req,res){
+  console.log(req.query.slug);
+  User.findBySlug(req.query.slug, function(err,p){
+    if (err) return res.json({status: 'error'});
+    return res.json({
+      status:'success',
+      profile: p
+    });
+  });
+};
 /**
  * Create user
  */
