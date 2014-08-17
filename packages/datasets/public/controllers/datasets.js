@@ -30,6 +30,7 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
       };
       MetabarSrv.setPostMeta(meta);
     });
+    
   }
 ]);
 

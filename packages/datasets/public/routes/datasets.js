@@ -6,7 +6,7 @@ angular.module('mean.datasets').config(['$stateProvider',
 
       .state('dataset view', {
         url: '/dataset/:datasetId',
-        templateUrl: 'datasets/views/view.html'
+        templateUrl: 'datasets/views/view.html',
       })
 
       .state('dataset create', {

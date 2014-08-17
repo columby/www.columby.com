@@ -93,15 +93,6 @@ var UserSchema = new Schema({
   /**
    * Passwordless login
    **/
-  loginToken: {
-    type: String
-  },
-  loginTokenCreated: {
-    type: Date,
-    required: true,
-    default: Date.now
-  },
-
   provider: {
     type: String,
     default: 'local'

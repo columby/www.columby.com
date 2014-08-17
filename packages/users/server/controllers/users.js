@@ -5,6 +5,7 @@
  */
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
+  Token = mongoose.model('Token'),
   config = require('meanio').loadConfig(),
   mandrill = require('mandrill-api/mandrill'),
   mandrill_client = new mandrill.Mandrill(config.mandrill.key),
@@ -31,7 +32,7 @@ exports.passwordlessLogin = function(req,res,next){
       });
       console.log('error: ', err);
     } else if(!user){
-      res.status(200).json({
+      res.json({
         status: 'error',
         error: 'User not found'
       });
@@ -39,50 +40,48 @@ exports.passwordlessLogin = function(req,res,next){
     } else {
       console.log('User found: ', user);
       // User found, create a new token
-      var token = uuid.v4();
-      console.log('Token created.', token);
-      user.loginToken = token;
-      user.loginTokenCreated = new Date();
-      user.save(function(err){
-        if (err) {
+      var token = new Token();
+      token.user = user._id;
+      token.save(function(err){
+        if (err){
           console.log('error',err);
           res.json(401,{'error': err});
-        } else {
-          console.log('User token updated.', user);
-          // Send the new token by email
-          mandrill_client.messages.send({
-            'message': {
-              'html': req.protocol + '://' + req.get('host') + '/#!/signin?token=' + user.loginToken,
-              'text': req.protocol + '://' + req.get('host') + '/#!/signin?token=' + user.loginToken,
-              'subject': 'Login at Columby',
-              'from_email': 'admin@columby.com',
-              'from_name': 'Columby Admin',
-              'to': [{
-                'email': user.email,
-                'name': user.username,
-                'type': 'to'
-              }],
-              'headers': {
-                'Reply-To': 'admin@columby.com'
-              },
-            }
-          }, function(result){
-            if (result[0].status === 'sent') {
-              res.json(200,{
-                status: 'success',
-                statusMessage: 'VerificationToken sent.'
-              });
-            } else {
-              res.json({
-                status: 'error',
-                statusCode: 400,
-                statusMessage: 'Error sending mail.',
-                error: result
-              });
-            }
+        }
+      });
+      console.log('token created', token);
 
+      // Send the new token by email
+      mandrill_client.messages.send({
+        'message': {
+          'html': req.protocol + '://' + req.get('host') + '/#!/signin?token=' + token.token,
+          'text': req.protocol + '://' + req.get('host') + '/#!/signin?token=' + token.token,
+          'subject': 'Login at Columby',
+          'from_email': 'admin@columby.com',
+          'from_name': 'Columby Admin',
+          'to': [{
+            'email': user.email,
+            'name': user.username,
+            'type': 'to'
+          }],
+          'headers': {
+            'Reply-To': 'admin@columby.com'
+          },
+        }
+      }, function(result){
+        if (result[0].status === 'sent') {
+          res.json({
+            status: 'success',
+            statusMessage: 'VerificationToken sent.'
+          });
+        } else {
+          res.json({
+            status: 'error',
+            statusCode: 400,
+            statusMessage: 'Error sending mail.',
+            error: result
           });
         }
+
       });
     }
   });
@@ -91,22 +90,30 @@ exports.passwordlessLogin = function(req,res,next){
 exports.verify = function(req,res,next) {
 
   var token = req.query.token;
-  console.log('Received token: ' +token);
-  User.findOne({'loginToken': token}, function(err, user){
-    if (err || !user) {
-      console.log('Error finding user with loginToken: ' + token);
-      res.json({
+
+  Token.findOne({'token': token}, function(err,t){
+
+    if (err || !t) {
+      console.log('err',err);
+      console.log('t',t);
+      console.log('not found');
+      return res.json({
         status: 'error',
         statusMessage: 'Error finding the verification token. ',
         error: err
       });
+
     } else {
-      // update token
-      user.loginToken = '';
-      user.save(function(err){
-        console.log('err', res);
-        console.log('user', user);
-        req.logIn(user, function(err) {
+      // delete the token
+      Token.remove({'token':token}, function(err){
+        if (err) {
+          console.log ('t errr',err);
+        }
+      });
+
+      // fetch user and login
+      User.findOne({_id:t.user}, function(err,user){
+        req.logIn(user, function(err){
           if (err) return next(err);
           return res.json({
             status: 'success',
@@ -237,7 +244,7 @@ exports.create = function(req, res, next) {
         }, function(result){
           console.log('Mail result.', result);
           if (result[0].status === 'sent') {
-            res.json(200,{
+            res.json({
               status: 'success',
               statusMessage: 'VerificationToken sent.'
             });

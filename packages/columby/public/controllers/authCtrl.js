@@ -12,8 +12,7 @@ angular.module('mean.columby')
     $scope.loginInProgress = false;
     $scope.credentials = {
       username: '',
-      email: '',
-      password: ''
+      email: ''
     };
 
     // Check if a request is a login token request
@@ -24,6 +23,7 @@ angular.module('mean.columby')
         if (response.status === 'success'){
           // Let the app know
           $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, response.user);
+          console.log('Logged in.');
           FlashSrv.setMessage({
             value: 'You have succesfully signed in.',
             status: 'info'
@@ -31,7 +31,10 @@ angular.module('mean.columby')
           // Redirect back to frontpage
           $state.go('home');
         } else {
-          $scope.verificationError = response.statusMessage;
+          FlashSrv.setMessage({
+            value: 'There was an error verifying the login. Please try again.',
+            status: 'danger'
+          });
         }
         $scope.verificationInProgress = true;
       });
@@ -41,15 +44,13 @@ angular.module('mean.columby')
     $scope.passwordlessLogin = function(){
       $scope.loginInProgress = true;
       var credentials = $scope.credentials;
-      console.log('passwordlesslogin');
-      console.log(credentials);
 
       ColumbyAuthSrv.passwordlessLogin(credentials).then(function(response){
         $scope.loginInProgress = false;
-        console.log(response);
+
         if (response.status === 'success') {
           $scope.signinSuccess = true;
-          console.log('user', ColumbyAuthSrv.user());
+
         } else if (response.error === 'User not found') {
           $scope.loginError = 'The email address ' + credentials.email + ' does not exist. Would you like to register for a new account?';
           $scope.showRegister = true;
