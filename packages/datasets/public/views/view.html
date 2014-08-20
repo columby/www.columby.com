@@ -3,11 +3,20 @@
   <div class="loader" ng-class="{noshow:!contentLoading}">Loading dataset</div>
 
   <div class="dataset-content" ng-class="{show:!contentLoading}">
+
     <div class="dataset-header-wrapper">
       <div class="dataset-header container">
-        <!-- Ttile -->
-        <div class="title">
-          <h1>{{dataset.title || 'No title yet'}}</h1>
+
+        <div class="title" ng-switch="editMode">
+
+          <h1 ng-switch-default>{{dataset.title}}</h1>
+          <h1 ng-switch-when="true"
+            contenteditable
+            name="title"
+            ng-model="dataset.title"
+            htmlFormat="plain">
+          </h1>
+
         </div>
 
         <div class="avatar">
@@ -17,12 +26,20 @@
     </div>
 
     <div class="dataset-description-wrapper">
+
       <div class="dataset-description container">
-        <div class="col-md-12">
-          <div>{{dataset.description || 'Dataset description currently empty'}}</div>
+        <div class="col-md-12" ng-switch="editMode">
+          <div ng-switch-default ng-bind-html="dataset.description || 'Dataset description currently empty!'"></div>
+          <div ng-switch-when="true"
+            ng-bind-html="dataset.description || 'Dataset description currently empty!'"
+            contenteditable
+            name="description"
+            ng-model="dataset.description"></div>
         </div>
       </div>
     </div>
+
+<a class="col-md-offset-3" ng-click="enableEdit()">Edit</a>
 
     <div class="dataset-info-wrapper">
       <div class="container">

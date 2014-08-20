@@ -9,12 +9,22 @@ angular.module('mean.columby')
 .controller('MetabarController', ['$rootScope', '$scope', 'Global', 'Columby', 'MetabarSrv',
   function($rootScope, $scope, Global, Columby, MetabarSrv) {
 
+    /*** INITIALISATION ***/
+    $scope.editMode=false;
+
+
+    /*** SCOPE FUNCTIONS ***/
     // Send a message to the rootscope to toggle the sitenav
     $scope.toggleSiteNav = function(e) {
       $rootScope.$broadcast('sitenav::toggle');
     };
 
+    $scope.edit = function(){
+      $scope.editMode = !$scope.editMode;
+      $rootScope.$broadcast('metabar::editMode', $scope.editMode);
+    };
 
+    
     /*** ROOTSCOPE EVENTS ***/
     // metadata received, set it in the scope
     $rootScope.$on('metabar::newMeta', function(evt, meta){

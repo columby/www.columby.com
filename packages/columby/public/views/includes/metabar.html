@@ -17,7 +17,9 @@
 
 
     <div class="actions col-md-3">
-      <a ui-sref="dataset edit({datasetId: postMeta._id})" ng-show="postMeta.canEdit">Edit</a>
+      <!-- <a ui-sref="dataset edit({datasetId: postMeta._id})" ng-show="postMeta.canEdit">Edit</a> -->
+      <a ng-click="edit()" ng-show="postMeta.canEdit && !editMode">Edit</a>
+      <a ng-click="edit()" ng-show="postMeta.canEdit && editMode">Stop editing</a>
     </div>
   </div>
 </nav>

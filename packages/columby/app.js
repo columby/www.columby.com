@@ -45,7 +45,9 @@ Columby.register(function(app, auth, database) {
         //you now have the settings object
     });
     */
-  //Columby.angularDependencies(['ngAnimate']);
+
+  Columby.angularDependencies(['xeditable']);
+
   Columby.aggregateAsset('css','fontello/fontello.css');
   Columby.aggregateAsset('css','fontello/animation.css');
   Columby.aggregateAsset('css','columby.css');

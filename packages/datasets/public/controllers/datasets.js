@@ -1,5 +1,9 @@
 'use strict';
 
+angular.module('mean.datasets').run(function(editableOptions) {
+  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+});
+
 angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$state', 'Global', 'DatasetsSrv',
   function($scope, $state, Global, DatasetsSrv) {
     $scope.global = Global;
@@ -13,24 +17,52 @@ angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$st
 angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetsSrv', 'MetabarSrv', 'ColumbyAuthSrv',
   function($rootScope, $scope, $state, $stateParams, DatasetsSrv, MetabarSrv, ColumbyAuthSrv) {
 
+    /*** INITIALISATION ***/
+    var editWatcher;
     $scope.contentLoading = true;
 
-    DatasetsSrv.retrieve($stateParams.datasetId).then(function(dataset){
-      $scope.dataset = dataset;
-      $scope.contentLoading = false;
 
-      // send metadata to the metabar
-      var meta = {
-        postType: 'dataset',
-        _id: dataset._id,
-        user: dataset.user,
-        created: dataset.created,
-        updated: dataset.updated,
-        canEdit: ColumbyAuthSrv.canEdit(dataset)
-      };
-      MetabarSrv.setPostMeta(meta);
+    /*** FUNCTIONS ***/
+    function getDataset(){
+      DatasetsSrv.retrieve($stateParams.datasetId).then(function(dataset){
+        $scope.dataset = dataset;
+        $scope.contentLoading = false;
+
+        // send metadata to the metabar
+        var meta = {
+          postType: 'dataset',
+          _id: dataset._id,
+          user: dataset.user,
+          created: dataset.created,
+          updated: dataset.updated,
+          canEdit: ColumbyAuthSrv.canEdit(dataset)
+        };
+        MetabarSrv.setPostMeta(meta);
+      });
+    }
+
+    /*** SCOPE FUNCTIONS ***/
+
+    /*** ROOTSCOPE EVENTS ***/
+    $scope.$on('metabar::editMode', function(evt,mode){
+
+      if (mode === true){
+        $scope.editMode = true;
+
+        editWatcher = $scope.$watchCollection('dataset', function (newval, oldval) {
+          console.log('old', oldval);
+          console.log('new', newval);
+          // save if different
+          //DatasetSrv.update(newval);
+        });
+        console.log(editWatcher);
+      } else {
+        $scope.editMode = false;
+        editWatcher();
+      }
     });
-    
+
+    getDataset();
   }
 ]);
 
