@@ -102,11 +102,11 @@ angular.module('mean.columby')
    * Controller for the Home page
    *
    ***/
-  .controller('ColumbyHomeCtrl', function($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv, DatasetsSrv) {
+  .controller('ColumbyHomeCtrl', function($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv, DatasetSrv) {
     angular.element('body').addClass('contentLoading');
     $scope.contentLoading = true;
 
-    DatasetsSrv.query(function(response){
+    DatasetSrv.query(function(response){
       console.log(response);
       $scope.datasets = response;
       $scope.contentLoading = false;
