@@ -1,9 +1,5 @@
 'use strict';
 
-angular.module('mean.datasets').run(function(editableOptions) {
-  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-});
-
 angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$state', 'Global', 'DatasetSrv',
   function($scope, $state, Global, DatasetSrv) {
     $scope.global = Global;
