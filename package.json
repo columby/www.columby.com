@@ -1,35 +1,19 @@
 {
   "name": "mean",
-  "description": "MEAN.io: A fullstack JavaScript framework powered by MongoDB, ExpressJS, AngularJS, NodeJS.",
-  "version": "0.4.0",
-  "private": false,
-  "author": "Linnovate <mean@linnovate.net>",
+  "description": "Columby datastore",
+  "version": "0.1.0",
+  "private": true,
+  "author": "Columby <hello@columby.com>",
   "contributors": [
     {
-      "name": "Lior Kesos",
-      "mail": "lior@linnovate.net"
-    },
-    {
-      "name": "Yonatan Ellman",
-      "mail": "yonatan@linnovate.net"
-    },
-    {
-      "name": "Drew Fyock",
-      "mail": "drew@steelbisondev.com"
-    },
-    {
-      "name": "Ehud Shahak",
-      "mail": "ehud@linnovate.net"
-    },
-    {
-      "name": "Amos Haviv",
-      "mail": "mail@amoshaviv.com"
+      "name": "Arn van der Pluijm",
+      "mail": "arn@urbanlink.nl"
     }
   ],
   "mean": "0.4.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/linnovate/mean.git"
+    "url": "https://github.com/columby/mean.columby.com.git"
   },
   "engines": {
     "node": "0.10.x",
