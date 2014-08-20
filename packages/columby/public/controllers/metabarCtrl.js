@@ -13,6 +13,21 @@ angular.module('mean.columby')
     $scope.editMode=false;
 
 
+    /*** FUNCTIONS ***/
+    function toggleEditMode(editMode){
+      console.log('metabar editmode', editMode);
+      $scope.editMode = editMode;
+
+      if ($scope.editMode){
+        angular.element('body').addClass('editMode');
+      } else {
+        angular.element('body').removeClass('editMode');
+      }
+
+      $rootScope.$broadcast('metabar::editMode', $scope.editMode);
+    }
+
+
     /*** SCOPE FUNCTIONS ***/
     // Send a message to the rootscope to toggle the sitenav
     $scope.toggleSiteNav = function(e) {
@@ -20,11 +35,11 @@ angular.module('mean.columby')
     };
 
     $scope.edit = function(){
-      $scope.editMode = !$scope.editMode;
-      $rootScope.$broadcast('metabar::editMode', $scope.editMode);
+      toggleEditMode(true);
     };
 
-    
+
+
     /*** ROOTSCOPE EVENTS ***/
     // metadata received, set it in the scope
     $rootScope.$on('metabar::newMeta', function(evt, meta){
@@ -33,10 +48,15 @@ angular.module('mean.columby')
       // add to scope
       $scope.postMeta = meta;
     });
+    $scope.$on('editMode::false', function(evt){
+      console.log('rootscope edit mode false');
+      toggleEditMode(false);
+    });
 
     // Hide postMeta on a pagechange
     $rootScope.$on('$stateChangeStart', function (event, next) {
       $scope.postMeta = null;
+      angular.element('body').removeClass('editMode');
     });
 
   }

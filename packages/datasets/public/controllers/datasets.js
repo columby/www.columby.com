@@ -4,8 +4,8 @@ angular.module('mean.datasets').run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
 
-angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$state', 'Global', 'DatasetsSrv',
-  function($scope, $state, Global, DatasetsSrv) {
+angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$state', 'Global', 'DatasetSrv',
+  function($scope, $state, Global, DatasetSrv) {
     $scope.global = Global;
     $scope.package = {
       name: 'datasets'
@@ -14,20 +14,25 @@ angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$st
 ]);
 
 
-angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetsSrv', 'MetabarSrv', 'ColumbyAuthSrv',
-  function($rootScope, $scope, $state, $stateParams, DatasetsSrv, MetabarSrv, ColumbyAuthSrv) {
+angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'MetabarSrv', 'ColumbyAuthSrv', 'FlashSrv',
+  function($rootScope, $scope, $state, $stateParams, DatasetSrv, MetabarSrv, ColumbyAuthSrv, FlashSrv) {
 
-    /*** INITIALISATION ***/
-    var editWatcher;
-    $scope.contentLoading = true;
+    /***   INITIALISATION   ***/
+    var editWatcher;               // Watch for model changes in editmode
 
+    $scope.contentLoading = true;  // show loading message while loading dataset
+    $scope.editMode = false;       // edit mode is on or off
+    $scope.contentEdited = false;  // models is changed or not during editmode
 
-    /*** FUNCTIONS ***/
+    /***   FUNCTIONS   ***/
     function getDataset(){
-      DatasetsSrv.retrieve($stateParams.datasetId).then(function(dataset){
+
+      DatasetSrv.get({
+        datasetId: $stateParams.datasetId
+      }, function(dataset) {
+        console.log(dataset);
         $scope.dataset = dataset;
         $scope.contentLoading = false;
-
         // send metadata to the metabar
         var meta = {
           postType: 'dataset',
@@ -41,42 +46,76 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
       });
     }
 
-    /*** SCOPE FUNCTIONS ***/
+    /***   SCOPE FUNCTIONS   ***/
+    $scope.toggleEditMode = function(){
+
+      $scope.editMode = !$scope.editMode;
+      // send closed message to metabar
+      if ($scope.editMode === false) {
+        $rootScope.$broadcast('editMode::false');
+      }
+    };
+
+    $scope.update = function(){
+
+      var dataset = {
+        _id: $scope.dataset._id,
+        title: $scope.dataset.title,
+        description: $scope.dataset.description
+      };
+
+      console.log('Sending update', dataset);
+
+      DatasetSrv.update(dataset,function(res){
+        console.log(res);
+        if (res._id){
+          $scope.dataset = res;
+          FlashSrv.setMessage({
+            value: 'Dataset udated!',
+            status: 'info'
+          });
+          $scope.toggleEditMode();
+        }
+      });
+    };
 
     /*** ROOTSCOPE EVENTS ***/
+    // Turn on or off editMode for a dataset
     $scope.$on('metabar::editMode', function(evt,mode){
+      console.log('editmode on');
+      $scope.editMode = mode;
 
       if (mode === true){
-        $scope.editMode = true;
-
+        // turn edit mode on
         editWatcher = $scope.$watchCollection('dataset', function (newval, oldval) {
-          console.log('old', oldval);
-          console.log('new', newval);
-          // save if different
-          //DatasetSrv.update(newval);
+          if (!angular.equals(oldval, newval)) {
+            $scope.contentEdited = true;
+          }
         });
-        console.log(editWatcher);
       } else {
-        $scope.editMode = false;
+        // turn watching off.
         editWatcher();
       }
     });
 
+
+
+    /*** INIT ***/
     getDataset();
   }
 ]);
 
-angular.module('mean.datasets').controller('DatasetCreateController', ['$scope', '$state', 'DatasetsSrv',
-  function($scope, $state, DatasetsSrv) {
+angular.module('mean.datasets').controller('DatasetCreateController', ['$rootScope', '$scope', '$state', 'DatasetSrv',
+  function($rootScope, $scope, $state, DatasetSrv) {
 
-    $scope.package = { name: 'datasets'};
+    var dataset = new DatasetSrv({
+      title: 'New dataset'
+    });
 
-    console.log('DatasetsCreateController created');
-
-    DatasetsSrv.create().then(function(res){
+    dataset.$save(function(res){
       console.log('dataset', res);
       if (res._id) {
-        $state.go('dataset edit', {datasetId:res._id});
+        $state.go('dataset view', {datasetId:res._id});
       } else {
         console.log('error or something', res);
       }
@@ -84,8 +123,8 @@ angular.module('mean.datasets').controller('DatasetCreateController', ['$scope',
   }
 ]);
 
-angular.module('mean.datasets').controller('DatasetEditCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$interval', 'DatasetsSrv',
-  function($scope, $state, $stateParams, $timeout, $interval, DatasetsSrv) {
+angular.module('mean.datasets').controller('DatasetEditCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$interval', 'DatasetSrv',
+  function($scope, $state, $stateParams, $timeout, $interval, DatasetSrv) {
 
     /*** SCOPE INITIALIZATION ***/
     $scope.contentLoading = true;
@@ -115,7 +154,7 @@ angular.module('mean.datasets').controller('DatasetEditCtrl', ['$scope', '$state
           draft: $scope.draftWorking
         };
 
-        DatasetsSrv.autoSave(d).then(function(res){
+        DatasetSrv.autoSave(d).then(function(res){
 
           console.log('Autosave response', res);
           // Update the main dataset
@@ -158,7 +197,7 @@ angular.module('mean.datasets').controller('DatasetEditCtrl', ['$scope', '$state
 
     // Load dataset
     function loadDataset(){
-      DatasetsSrv.retrieve($stateParams.datasetId).then(function(res){
+      DatasetSrv.retrieve($stateParams.datasetId).then(function(res){
         if (res._id) {
           console.log('Dataset received', res);
           $scope.dataset = res;

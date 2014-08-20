@@ -4,11 +4,6 @@ angular.module('mean.datasets').config(['$stateProvider',
   function($stateProvider) {
     $stateProvider
 
-      .state('dataset view', {
-        url: '/dataset/:datasetId',
-        templateUrl: 'datasets/views/view.html',
-      })
-
       .state('dataset create', {
         url: '/dataset/create',
         templateUrl: 'datasets/views/create.html',
@@ -23,6 +18,11 @@ angular.module('mean.datasets').config(['$stateProvider',
         authorization: {
           authorizedRoles: ['authenticated']
         }
+      })
+      
+      .state('dataset view', {
+        url: '/dataset/:datasetId',
+        templateUrl: 'datasets/views/view.html',
       })
     ;
   }

@@ -155,10 +155,9 @@
   padding: 30px;
 }
 .dataset.item.edit .editorSidebar {
-  display: none;
   position: fixed;
   top: 0;
-  right: 0;
+  right: 300px;
   bottom: 0;
   padding: 12px 20px;
   width: 300px;
@@ -175,15 +174,6 @@
   -ms-transform: translate3d(300px, 0, 0);
   -o-transform: translate3d(300px, 0, 0);
   transform: translate3d(300px, 0, 0);
-}
-.dataset.item.edit .editorSidebar.isOpen {
-  display: block;
-  min-width: 300px;
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  -ms-transform: translate3d(0, 0, 0);
-  -o-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
 }
 .dataset.item.edit .editorSidebar h3 {
   font-family: "merriweather", serif;

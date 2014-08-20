@@ -16,9 +16,7 @@ exports.dataset = function(req, res, next, id) {
   Dataset.load(id, function(err, dataset) {
     if (err) return next(err);
     if (!dataset) return next(new Error('Failed to load dataset ' + id));
-
     req.dataset = dataset;
-
     next();
   });
 };
@@ -27,13 +25,17 @@ exports.dataset = function(req, res, next, id) {
  * Create an dataset
  */
 exports.create = function(req, res) {
+  console.log('new dataset');
+  console.log(req.body);
   var dataset = new Dataset(req.body);
+
   dataset.user = req.user;
 
   dataset.save(function(err) {
     if (err) {
-      return res.json(500, {
-        error: 'Cannot save the dataset'
+      console.log(err);
+      return res.json({
+        error: err
       });
     }
     res.json(dataset);
@@ -45,18 +47,22 @@ exports.create = function(req, res) {
  * Update an dataset
  */
 exports.update = function(req, res) {
-  var dataset = req.dataset;
 
-  dataset = _.extend(dataset, req.body);
+  Dataset.findOne({ _id: req.dataset.id }, function (err, dataset){
 
-  dataset.save(function(err) {
-    if (err) {
-      return res.json(500, {
-        error: 'Cannot update the dataset'
-      });
-    }
-    res.json(dataset);
+    dataset.title = req.body.title;
+    dataset.description = req.body.description;
+    dataset.updated = new Date();
 
+    dataset.save(function(err){
+      if (err) {
+        return res.json(500, {
+          error: 'Cannot update the dataset'
+        });
+      }
+
+      res.json(dataset);
+    });
   });
 };
 

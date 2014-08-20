@@ -106,7 +106,8 @@ angular.module('mean.columby')
     angular.element('body').addClass('contentLoading');
     $scope.contentLoading = true;
 
-    DatasetsSrv.index().then(function(response){
+    DatasetsSrv.query(function(response){
+      console.log(response);
       $scope.datasets = response;
       $scope.contentLoading = false;
       angular.element('body').removeClass('contentLoading');

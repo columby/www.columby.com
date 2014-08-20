@@ -3,79 +3,6 @@
 angular.module('mean.datasets')
 
 
-.directive('inline22', function () {
-  return {
-    template: '<span ng-switch on="edit" >' +
-              '<span ng-switch-default>{{value}}<i class="icon-edit"></i>edit</span>' +
-              '<input ng-switch-when="true" type="text" ng-model="$parent.value"/>' +
-              '</span>',
-    restrict: 'A',
-    scope: {
-      inline: '='
-    },
-    link: function (scope, element, attribs) {
-      scope.value = scope.inline;
-      console.log(scope.inline);
-      /* watch for changes from the controller */
-      scope.$watch('inline', function (val) {
-        scope.value = val;
-      });
-
-      /* enable inline editing functionality */
-      var enablingEditing = function () {
-        scope.edit = true;
-
-        setTimeout(function () {
-          console.log(element.children().children('input'));
-          element.children().children('input')[0].focus();
-          element.children().children('input').bind('blur', function (e) {
-            scope.$apply(function () {
-              disablingEditing();
-            });
-          });
-        }, 100);
-      };
-
-
-      /* disable inline editing functionality */
-      var disablingEditing = function () {
-        scope.edit = false;
-        scope.inline = scope.value;
-      };
-
-
-      /* set up the default */
-      disablingEditing();
-
-
-      /* when the element with the inline attribute is clicked, enable editing */
-      element.bind('click', function (e) {
-
-        if ((e.target.nodeName.toLowerCase() === 'span') || (e.target.nodeName.toLowerCase() === 'img')) {
-          scope.$apply(function () { // bind to scope
-            enablingEditing();
-          });
-        }
-      });
-
-      /* allow editing to be disabled by pressing the enter key */
-      element.bind('keypress', function (e) {
-
-        if (e.target.nodeName.toLowerCase() !== 'input') return;
-
-        var keyCode = (window.event) ? e.keyCode : e.which;
-
-        if (keyCode === 13) {
-          scope.$apply(function () { // bind scope
-            disablingEditing();
-          });
-        }
-      });
-    }
-  };
-})
-
-
 .directive('triangle', function ($timeout) {
 
   return {
@@ -118,9 +45,12 @@ angular.module('mean.datasets')
 
         element.bind('keydown', function(event) {
           // no enter
-          if (attrs.nobreak && event.keyCode === 13) {
+          if (attrs.htmlMode==='plain' && event.keyCode === 13) {
             //console.log('DONT');
             return false;
+          } else if (event.keyCode === 13) {
+            // Create paragraph instead of div
+            document.execCommand('formatBlock', false, 'p');
           }
         });
 
@@ -130,7 +60,8 @@ angular.module('mean.datasets')
         });
 
         // Listen for change events to enable binding
-        element.on('blur keyup change', function() { //scope.$apply(read);
+        element.on('blur keyup change', function() {
+          //scope.$apply(read);
         });
 
         // Write data to the model
@@ -139,7 +70,7 @@ angular.module('mean.datasets')
           var html = element.html();
 
           // remove html for plain
-          if (attrs.htmlFormat === 'plain') {
+          if (attrs.htmlformat === 'plain') {
             html=html.replace(/<br>/gi, '');
             html=html.replace(/<div>/gi, '');
             html=html.replace(/<\/div>/gi, '');

@@ -7,11 +7,11 @@
 
     <div class="postMeta col-md-8">
       <div class="datasetMeta" ng-show="postMeta.postType === 'dataset'">
-        <a class="avatar" ui-sref="user/:postMeta.user.slug">
+        <a class="avatar" ui-sref="profile({userSlug: postMeta.user.slug })">
           <img class="avatar" src="{{postMeta.user.avatar}}"/>
           <span class="postMetaInline">{{postMeta.user.username}}</span>
         </a>
-         on <time class="post-date">{{postMeta.created | date:'d MMMM yyyy'}}</time>
+        &nbsp;on&nbsp;<time class="post-date">{{postMeta.created | date:'d MMMM yyyy'}}</time>
       </div>
     </div>
 
@@ -19,7 +19,6 @@
     <div class="actions col-md-3">
       <!-- <a ui-sref="dataset edit({datasetId: postMeta._id})" ng-show="postMeta.canEdit">Edit</a> -->
       <a ng-click="edit()" ng-show="postMeta.canEdit && !editMode">Edit</a>
-      <a ng-click="edit()" ng-show="postMeta.canEdit && editMode">Stop editing</a>
     </div>
   </div>
 </nav>
