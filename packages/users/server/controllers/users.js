@@ -154,8 +154,8 @@ exports.getProfile = function(req,res){
  */
 exports.create = function(req, res, next) {
   var user = new User(req.body);
-
-  user.provider = 'local';
+      user.provider = 'local';
+      user.roles = ['authenticated'];
 
   // because we set our user.provider to local our models/user.js validation will always be true
   //req.assert('name', 'You must enter a name').notEmpty();
@@ -172,12 +172,6 @@ exports.create = function(req, res, next) {
       statusMessage: errors
     });
   } else {
-    // Hard coded for now. Will address this with the user permissions system in v0.3.5
-    user.roles = ['authenticated'];
-    user.username = user.username;
-    user.loginToken = uuid.v4();
-
-    console.log('saving user', user);
 
     user.save(function(err) {
       if (err) {
@@ -224,11 +218,24 @@ exports.create = function(req, res, next) {
         }
 
       } else {
+
+        // Create a new token
+        var token = new Token();
+
+        token.user = user._id;
+        token.save(function(err){
+          if (err){
+            console.log('error',err);
+            res.json({'error': err});
+          }
+        });
+        console.log('token created', token);
+
         //sendmail
         mandrill_client.messages.send({
           'message': {
-            'html': req.protocol + '://' + req.get('host') + '/#!/signin?token=' + user.loginToken,
-            'text': req.protocol + '://' + req.get('host') + '/#!/signin?token=' + user.loginToken,
+            'html': req.protocol + '://' + req.get('host') + '/#!/signin?token=' + token.token,
+            'text': req.protocol + '://' + req.get('host') + '/#!/signin?token=' + token.token,
             'subject': 'Login at Columby',
             'from_email': 'admin@columby.com',
             'from_name': 'Columby Admin',
@@ -242,7 +249,6 @@ exports.create = function(req, res, next) {
             },
           }
         }, function(result){
-          console.log('Mail result.', result);
           if (result[0].status === 'sent') {
             res.json({
               status: 'success',
@@ -258,6 +264,7 @@ exports.create = function(req, res, next) {
           }
 
         });
+        
       }
     });
   }

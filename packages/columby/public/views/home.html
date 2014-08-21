@@ -20,7 +20,7 @@
 					<ul>
           <li ng-repeat="dataset in datasets" class="publication-item">
             <h4><a ui-sref="dataset view({ datasetId: dataset._id })" >{{dataset.title || 'Oops! No title found'}}</a><br/>[{{dataset._id}}]<span ng-show=""><em>{{dataset.publishStatus}}</em></h4>
-            <div class="user-date">{{dataset.user.name || '[Oops! No publisher found]'}} on {{dataset.created}}</div>
+            <div class="user-date">{{dataset.user.username || '[Oops! No publisher found]'}} on {{dataset.created}}</div>
           </li>
         	</ul>
 				</div>

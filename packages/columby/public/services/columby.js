@@ -122,28 +122,3 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
   };
 
 });
-
-/***
- * Message Flash Service
- ***/
-angular.module('mean.columby').factory('FlashSrv', ['$rootScope', function($rootScope) {
-  var queue = [];
-  var currentMessage = '';
-
-  return {
-
-    setMessage: function(message) {
-      //console.log('Adding message: ' + message);
-      queue.push(message);
-
-      $rootScope.$broadcast('flashMessage::newMessage', message);
-    },
-
-    getMessage: function() {
-      currentMessage = queue.shift() || '';
-      //console.log('Getting Message');
-      //console.log(currentMessage);
-      return currentMessage;
-    }
-  };
-}]);

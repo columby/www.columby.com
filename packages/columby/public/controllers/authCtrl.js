@@ -81,15 +81,38 @@ angular.module('mean.columby')
         $scope.registrationInProgress = false;
       });
     };
+
+
   }])
 
 
-  .controller('ColumbyAccountCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'ColumbyAuthSrv', 'FlashSrv', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
+  .controller('AccountCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'ColumbyAuthSrv', 'FlashSrv', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
+
     // Get current user
     $scope.user = ColumbyAuthSrv.user();
-    // Get email requires server check
-    //$scope.user.email = ColumbyAuthSrv.getEmail();
-    console.log($scope.user);
+
+  }])
+
+
+  .controller('LogoutCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'ColumbyAuthSrv', 'FlashSrv', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
+
+    // Logout
+    ColumbyAuthSrv.logout().then(function(response){
+      console.log(response);
+      $scope.status = response;
+      if (response.status === 'success') {
+
+        $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess, response.user);
+
+        FlashSrv.setMessage({
+          value: 'You are now signed out.',
+          status: 'info'
+        });
+
+        $state.go('home');
+
+      }
+    });
   }])
 
   /***

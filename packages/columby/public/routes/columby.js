@@ -18,6 +18,15 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
       }
     })
 
+    .state('logout', {
+      url: '/logout',
+      templateUrl: 'columby/views/logout.html',
+      
+      authorization: {
+        authorizedRoles: ['authenticated']
+      }
+    })
+
 
     // Edit account settings
     .state('settings', {

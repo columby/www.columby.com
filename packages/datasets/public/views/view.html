@@ -33,7 +33,7 @@
 
         <div class="title" ng-switch="editMode">
 
-          <h1 ng-switch-default>{{dataset.title}}</h1>
+          <h1 ng-switch-default ng-bind-html="dataset.title || 'no title yet'"></h1>
           <h1 ng-switch-when="true"
             contenteditable
             name="title"

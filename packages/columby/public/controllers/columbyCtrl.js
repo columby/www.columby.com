@@ -78,8 +78,8 @@ angular.module('mean.columby')
    * Main application controller
    *
    ***/
-  .controller('ColumbyController', ['$rootScope','$scope', '$timeout', 'Global', 'Columby',
-    function($rootScope, $scope, $timeout, Global, Columby) {
+  .controller('ColumbyController', ['$rootScope','$scope', '$timeout', 'Global', 'Columby', 'FlashSrv',
+    function($rootScope, $scope, $timeout, Global, Columby, FlashSrv) {
 
       // Respond to flash messages
       $scope.$on('flashMessage::newMessage', function(e,msg){
@@ -89,9 +89,12 @@ angular.module('mean.columby')
 
       $scope.$on('$stateChangeSuccess', function(evt, toState, toParams, fromState, fromParams){
         $scope.flashMessage = null;
+        // check for queued messages
+        FlashSrv.getMessage();
       });
 
       function closeMessage(){
+        console.log('closing message');
         $scope.flashMessage = null;
       }
     }
