@@ -15,6 +15,7 @@
     "angular-ui-router": "#master",
     "d3": "latest",
     "trianglify": "latest",
-    "ng-zenpen": "latest"
+    "ng-zenpen": "latest",
+    "textAngular": "latest"
   }
 }
