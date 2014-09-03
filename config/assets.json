@@ -2,7 +2,7 @@
   "core": {
     "css": {
       "bower_components/build/css/dist.min.css": [
-        "bower_components/angular-xeditable/dist/css/xeditable.css"
+        "bower_components/font-awesome/css/font-awesome.min.css"
       ]
     },
     "js": {
@@ -19,7 +19,12 @@
         "bower_components/angular-sanitize/angular-sanitize.js",
         "bower_components/angular-ui-router/release/angular-ui-router.js",
         "bower_components/angular-bootstrap/ui-bootstrap.js",
-        "bower_components/angular-bootstrap/ui-bootstrap-tpls.js"
+        "bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
+        "bower_components/ng-zenpen/angular-zenpen.js",
+        "bower_components/textAngular/dist/textAngular-sanitize.min.js",
+        "bower_components/textAngular/dist/textAngular.min.js",
+        "bower_components/angular-gravatar/build/md5.js",
+        "bower_components/angular-gravatar/build/angular-gravatar.js"
       ]
     }
   }

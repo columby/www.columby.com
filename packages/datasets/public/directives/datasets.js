@@ -89,4 +89,66 @@ angular.module('mean.datasets')
       }
     };
   }]
-);
+)
+
+.directive('zenpeneditor', ['$rootScope', '$timeout', '$window', function ($rootScope, $timeout, $window) {
+
+    var baseUrl = '/bower_components/',
+    template = '<div class="{{zId}} section yin">' +
+                  '<div class="ui">' +
+                    '<div class="wrapper">' +
+                      '<div class="top editing">' +
+                        '<button class="color-flip useicons" title="Invert colors">&#xe002;</button>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                  '<div class="text-options">' +
+                    '<div class="options">' +
+                      '<span class="no-overflow">' +
+                        '<span class="lengthen ui-inputs">' +
+                          '<button class="url useicons">&#xe005;</button>' +
+                          '<input class="url-input" type="text" placeholder="Type or Paste URL here"/>' +
+                          '<button class="bold">b</button>' +
+                          '<button class="italic">i</button>' +
+                          '<button class="quote">&rdquo;</button>' +
+                        '</span>' +
+                      '</span>' +
+                    '</div>' +
+                  '</div>' +
+                  '<article contenteditable="true" placeholder="{{ph}}" class="content">{{currentContent}}</article>' +
+                  '<div class="word-counter">' +
+                    '<span class="progress complete"></span>' +
+                  '</div>' +
+                '</div>';
+
+    return {
+      restrict : 'ACE',
+      template : template,
+      scope : {
+        ngModel : '='
+      },
+      
+      link : function(scope, element, attrs) {
+        console.log('directive!');
+        scope.baseUrl = scope.baseUrl || baseUrl;
+        scope.currentContent = scope.ngModel;
+        console.log('ngmodel', scope.ngModel);
+
+        if ($window.zeditor) {
+          console.log('window z-editor', $window.zeditor);
+          $timeout(function() {
+            new $window.zeditor({
+              wrapperField : document.querySelector('.' + scope.zId),
+              onKeyUp : function(html) {
+                scope.ngModel = html;
+                $rootScope.safeApply();
+              }
+            });
+          }, 0);
+        }
+
+      }
+    };
+}])
+
+;

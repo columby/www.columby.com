@@ -10,7 +10,6 @@
 
       <h3>Publication settings</h3>
 
-
       <div class="autosave-status">
         <span ng-show="isEmpty(dataset.draft)">No changes. </span>
         <span ng-hide="isEmpty(dataset.draft)">{{isEmpty(dataset.draft)}} Your dataset has unpublished changes. </span>
@@ -55,21 +54,21 @@
         <div class="col-md-12" ng-switch="editMode">
           <div ng-switch-default ng-bind-html="dataset.description || 'Dataset description currently empty!'"></div>
           <div ng-switch-when="true"
-            ng-bind-html="dataset.description || 'Dataset description currently empty!'"
-            contenteditable
-            name="description"
             ng-model="dataset.description"
-            htmlFormat="html"
+            text-angular
+            placeholder="please enter your description"
+            ta-toolbar="[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"
           ></div>
         </div>
       </div>
     </div>
 
-    <div class="dataset-info-wrapper">
+    <div class="dataset-info-wrapper" ng-hide="editMode">
       <div class="container">
         <div class="dataset-info">
           <div class="dataset-info-content">This dataset is of the type <strong>ArcGIS</strong>. The License if <strong>CC0</strong>. There should be some valid data published so that there is an API available.
           </div>
+        </div>
       </div>
     </div>
 
@@ -91,7 +90,7 @@
       </div>
     </div>
 
-    <div class="dataset-preview-wrapper">
+    <div class="dataset-preview-wrapper" ng-hide="editMode">
       <div class="content">
         <table class="table">
           <thead>
@@ -106,11 +105,12 @@
       </div>
     </div>
 
-    <div class="dataset-use-wrapper">
+    <div class="dataset-use-wrapper" ng-hide="editMode">
       <div class="dataset-use container">
         <div class="content">
           <h3>Use the Columby API</h3>
           <p>Swag flexitarian synth 3 wolf moon hella umami normcore, mixtape bespoke Marfa scenester blog keytar XOXO. Direct trade pug leggings Cosby sweater mumblecore. Intelligentsia flexitarian dreamcatcher next level church-key, iPhone aesthetic stumptown kitsch bitters leggings. Readymade Marfa roof party, biodiesel four loko small batch lo-fi PBR&B 90's disrupt. Gastropub ennui Helvetica tote bag, Pinterest McSweeney's put a bird on it flexitarian bitters gluten-free Carles ethical twee. Kitsch tofu meh keffiyeh paleo polaroid, bitters PBR&B trust fund meggings actually swag jean shorts flexitarian sriracha. Dreamcatcher food truck gluten-free tofu polaroid, Godard Tumblr photo booth vegan jean shorts letterpress Brooklyn.</p>
+        </div>
       </div>
     </div>
 
@@ -144,7 +144,7 @@
       </div>
     </div>
 
-    <div class="dataset-author-wrapper">
+    <div class="dataset-author-wrapper" ng-hide="editMode">
       <div class="dataset-author container">
         <div class="row">
           <div class="dataset-editor-content col-md-6">
