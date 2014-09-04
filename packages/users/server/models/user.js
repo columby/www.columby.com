@@ -84,9 +84,13 @@ var UserSchema = new Schema({
     type: String,
     required: false
   },
-  headerBackground: {
+  headerImage: {
     type: String,
-    required: false
+    default: '/columby/assets/img/header/images/header_bg_01.png'
+  },
+  headerPattern: {
+    type: String,
+    default: '/columby/assets/img/header/patterns/1.svg'
   },
 
 
@@ -148,7 +152,7 @@ UserSchema.statics.findBySlug = function(slug, cb) {
   var User = mongoose.model('User');
 
   User
-    .findOne({slug: slug}, 'username description roles headerBackground')
+    .findOne({slug: slug}, 'username description roles headerImage headerPattern')
     .exec(function(err,p){
       cb(err, p);
     });

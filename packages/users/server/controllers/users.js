@@ -12,6 +12,7 @@ var mongoose = require('mongoose'),
   //, uuid = require('node-uuid')
 ;
 
+
 /**
  * Auth callback
  */
@@ -87,6 +88,7 @@ exports.passwordlessLogin = function(req,res,next){
   });
 };
 
+
 exports.verify = function(req,res,next) {
 
   var token = req.query.token;
@@ -139,6 +141,9 @@ exports.signout = function(req, res) {
 };
 
 
+/**
+ * Get a user's profile
+ */
 exports.getProfile = function(req,res){
   console.log(req.query.slug);
   User.findBySlug(req.query.slug, function(err,p){
@@ -149,6 +154,23 @@ exports.getProfile = function(req,res){
     });
   });
 };
+
+
+/**
+ * Update an existing user's profile
+ */
+exports.updateProfile = function(req,res){
+  var update = { $set: req.body.updated };
+  User.update(req.body._id, update, function(err,p){
+    if (err) return res.json({status: 'error'});
+    return res.json({
+      status:'success',
+      statusMessage: 'Profile updated'
+    });
+  });
+};
+
+
 /**
  * Create user
  */

@@ -6,38 +6,38 @@
       <a ng-click="toggleEditMode()">cancel</a>
       <button class="btn dbt-default" ng-show="contentEdited" ng-click="update()">Update</button>
 
-      <h3>Publication settings</h3>
+      <h3>Update you profile</h3>
 
-      <div class="autosave-status">
-        <span ng-show="isEmpty(dataset.draft)">No changes. </span>
-        <span ng-hide="isEmpty(dataset.draft)">{{isEmpty(dataset.draft)}} Your dataset has unpublished changes. </span>
-        <span ng-show="autosaveInProgress">Saving...</span>
-      </div>
-
-      <h3>Status</h3>
-      <p><strong>Publication status: </strong>{{dataset.status || 'draft'}}</p>
-
-      <h3>Publication account</h3>
-
+      <p>Change your account settings <a ui-sref="settings">here</a></p>
 
     </div>
   </div>
 
-  <div class="page-header">
+  <div class="page-header" ng-style="headerStyle">
     <h1>{{profile.username}}</h1>
     <div class="avatar">
-      <img gravatar-src="'hello@columby.com'" gravatar-size="100">
+      <img src="/columby/assets/img/avatar.png">
     </div>
   </div>
 
   <div class="page-content">
+    <div class="description-wrapper">
+      <div class="description container">
+        <div class="col-md-12" ng-switch="editMode">
+          <div class="description" ng-switch-default ng-bind-html="profile.description || 'This profile has no description yet!'"></div>
+          <div class="description" ng-switch-when="true"
+            ng-model="profile.description"
+            text-angular
+            placeholder="Please enter your description"
+            ta-toolbar="[['bold','italics','underline'],['insertLink']]"
+          ></div>
+        </div>
+      </div>
+    </div>
+
     <div class="container">
       <div class="col-md-12">
-        <div class="description">
-          {{profile.description || 'No description yet'}}
-        </div>
-        <div>{{global}}</div>
-        <div class="organisations">
+        <div class="organisations" ng-show="organisations">
           <div class="col-md-12">
             <h3>Organisations</h3>
             <p ng-show="!organisations">No orgnisations for this user</p>

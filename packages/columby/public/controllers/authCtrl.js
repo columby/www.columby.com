@@ -121,25 +121,102 @@ angular.module('mean.columby')
    ***/
   .controller('ColumbyProfileCtrl', ['$scope', '$rootScope', '$location', '$state', '$stateParams', 'AUTH_EVENTS', 'ColumbyAuthSrv', 'FlashSrv', 'MetabarSrv', function ($scope, $rootScope, $location, $state, $stateParams, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv, MetabarSrv) {
 
+    /***   INITIALISATION   ***/
+    var editWatcher;               // Watch for model changes in editmode
+
     $scope.contentLoading = true;
+    $scope.editMode = false;       // edit mode is on or off
+    $scope.contentEdited = false;  // models is changed or not during editmode
 
-    // get profile informatio of user by userSlug
-    ColumbyAuthSrv.getProfile($stateParams.userSlug).then(function(result){
-      $scope.profile = result.profile;
-      $scope.contentLoading = false;
-      var item = result.profile;
-      item.postType = 'profile';
-      // send metadata to the metabar
-      var meta = {
-        postType: 'profile',
-        _id: result.profile._id,
-        canEdit: ColumbyAuthSrv.canEdit(item)
-      };
-      MetabarSrv.setPostMeta(meta);
 
+    /*** ROOTSCOPE EVENTS ***/
+    // Turn on or off editMode for a dataset
+    $scope.$on('metabar::editMode', function(evt,mode){
+      $scope.editMode = mode;
+      if (mode === true){
+        // turn edit mode on
+        editWatcher = $scope.$watchCollection('profile', function (newval, oldval) {
+          if (!angular.equals(oldval, newval)) {
+            $scope.contentEdited = true;
+          }
+        });
+      } else {
+        // turn watching off.
+        editWatcher();
+      }
     });
 
-    // Send info to metabar
+
+    /***   FUNCTIONS   ***/
+    function getProfile(){
+      // get profile informatio of user by userSlug
+      ColumbyAuthSrv.getProfile($stateParams.userSlug).then(function(result){
+
+        $scope.profile = result.profile;
+        $scope.contentLoading = false;
+
+        // send metadata to the metabar
+        var item = result.profile;
+        item.postType = 'profile';
+        var meta = {
+          postType: 'profile',
+          _id: result.profile._id,
+          canEdit: ColumbyAuthSrv.canEdit(item)
+        };
+        MetabarSrv.setPostMeta(meta);
+
+        // Send a message to the headerController to update the background
+        var img = {
+          img: result.profile.headerImage,
+          pattern: result.profile.headerPattern
+        };
+
+        $scope.headerStyle={
+          'background-image': 'url(' + result.profile.headerPattern + '), url(' + result.profile.headerImage + ')',
+          'background-size': 'auto, 100%',
+          
+          'background-blend-mode': 'multiply',
+        };
+
+      });
+    }
+
+
+    /***   SCOPE FUNCTIONS   ***/
+    $scope.toggleEditMode = function(){
+      $scope.editMode = !$scope.editMode;
+      // send closed message to metabar
+      if ($scope.editMode === false) {
+        $rootScope.$broadcast('editMode::false');
+      }
+    };
+
+    $scope.update = function(){
+
+      var updated = {
+        _id: $scope.profile._id,
+        updated: {
+          description: $scope.profile.description
+        }
+      };
+
+      console.log('Sending update', updated);
+
+      ColumbyAuthSrv.updateProfile(updated).then(function(res){
+        console.log(res);
+        if (res.status === 'success'){
+          $scope.profile = res;
+          FlashSrv.setMessage({
+            value: 'Profile updated!',
+            status: 'info'
+          });
+          $scope.toggleEditMode();
+        }
+      });
+    };
+
+    /*** INIT ***/
+    getProfile();
 
   }])
 ;

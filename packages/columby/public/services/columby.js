@@ -116,6 +116,14 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
       return promise;
     },
 
+    updateProfile: function(profile) {
+      var promise = $http.put('/api/v2/user/profile', profile)
+        .then(function(result){
+          return result.data;
+        });
+      return promise;
+    },
+
     user: function() {
       return user;
     }

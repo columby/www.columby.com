@@ -19,6 +19,7 @@ Columby.register(function(app, auth, database) {
   Columby.aggregateAsset('css','fontello/fontello.css');
   Columby.aggregateAsset('css','fontello/animation.css');
   Columby.aggregateAsset('css','columby.css');
+  Columby.aggregateAsset('css','editor-sidebar.css');
 
   if (process.env.NODE_ENV === 'development') {
     Columby.aggregateAsset('js', 'typekit.js');
