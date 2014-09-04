@@ -37,6 +37,25 @@
 
     <div class="container">
       <div class="col-md-12">
+        <div class="image" ng-show="editMode"
+          ng-model="profile.headerImage"
+          text-angular
+          placeholder="Please enter your description"
+          ta-toolbar="[['bold']]"
+        >header image</div>
+      </div>
+      <div class="col-md-12">
+        <div class="pattern" ng-show="editMode"
+          ng-model="profile.headerPattern"
+          text-angular
+          placeholder="Please enter your description"
+          ta-toolbar="[['bold']]"
+        >header pattern</div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="col-md-12">
         <div class="organisations" ng-show="organisations">
           <div class="col-md-12">
             <h3>Organisations</h3>

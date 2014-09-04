@@ -18,7 +18,6 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
     passwordlessLogin: function(credentials){
       var promise = $http.post('/api/v2/user/passwordless-login', credentials)
         .then(function (response) {
-          console.log('authResponse', response.data);
           if (response.data.user){
             user = response.data.user;
           }
@@ -54,7 +53,6 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
     logout: function(){
       var promise = $http.get('/api/v2/user/logout')
         .then(function(response){
-          console.log(response.data);
           user = {};
           return response.data;
         });
@@ -69,8 +67,6 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
       if (!angular.isArray(authorizedRoles)) {
         authorizedRoles = [authorizedRoles];
       }
-      console.log('authorizedRoles', authorizedRoles);
-      console.log('user roles', user.roles);
       var trustedRole = false;
       if (user.roles) {
         trustedRole = authorizedRoles.every(function(v,i) {
@@ -81,30 +77,39 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
       return (authenticated && trustedRole);
     },
 
-    canEdit: function(content){
-      var ret = false;
-      // check role
-      ret = this.isAuthorized('administrator');
-      // check author
-      console.log('check can edit');
-      if (content.user) {
-        if (content.user.hasOwnProperty('_id')) {
-          if (content.user._id === user._id) {
-            ret=true;
-          }
-        }
-      }
-      console.log('c', content);
-      switch (content.postType){
+    /**
+     * Check if the current logged in user can edit an item
+     *
+     **/
+    canEdit: function(item){
+
+      var allowEdit = false;
+
+      // Admin can edit everything
+      allowEdit = this.isAuthorized('administrator');
+
+      // Define access based on content type
+      switch (item.postType) {
         case 'profile':
-          console.log(content._id);
-          console.log(user._id);
-          if (content._id === user._id) {
-            ret = true;
+          // edit own content
+          if (item._id === user._id) {
+            allowEdit = true;
+          }
+        break;
+
+        case 'dataset':
+          // check if logged in user is author
+          if (item.user) {
+            if (item.user.hasOwnProperty('_id')) {
+              if (item.user._id === user._id) {
+                allowEdit = true;
+              }
+            }
           }
         break;
       }
-      return ret;
+
+      return allowEdit;
     },
 
 
@@ -118,6 +123,30 @@ angular.module('mean.columby').factory('ColumbyAuthSrv', function ($http) {
 
     updateProfile: function(profile) {
       var promise = $http.put('/api/v2/user/profile', profile)
+        .then(function(result){
+          return result.data;
+        });
+      return promise;
+    },
+
+    // Get account of currently logged in user, and save it as the main user object
+    getAccount: function(){
+      var promise = $http.get('/api/v2/user/account')
+        .then(function(result){
+          user = result.data;
+          return result.data;
+        });
+      return promise;
+    },
+
+    updateAccount: function(id,account){
+      var update = {
+        update: {
+          id: id,
+          account:account
+        }
+      };
+      var promise = $http.put('/api/v2/user/account', update)
         .then(function(result){
           return result.data;
         });

@@ -78,14 +78,19 @@ angular.module('mean.columby')
    * Main application controller
    *
    ***/
-  .controller('ColumbyController', ['$rootScope','$scope', '$timeout', 'Global', 'Columby', 'FlashSrv',
-    function($rootScope, $scope, $timeout, Global, Columby, FlashSrv) {
+  .controller('ColumbyController', ['$rootScope','$scope', '$timeout', 'Global', 'Columby', 'FlashSrv', 'ColumbyAuthSrv',
+    function($rootScope, $scope, $timeout, Global, Columby, FlashSrv, ColumbyAuthSrv) {
 
+      // MAIN APP INITIALIZATION
       // Add console object to window for IE9
       window.console = window.console || {};
       window.console.log = window.console.log || function() {};
-      
-      console.log('columbyctrl loaded');
+
+      // get currenlty logged in user
+      ColumbyAuthSrv.getAccount().then(function(res){
+        window.user = res;
+      });
+
       // Respond to flash messages
       $scope.$on('flashMessage::newMessage', function(e,msg){
         $scope.flashMessage = msg;
@@ -115,7 +120,6 @@ angular.module('mean.columby')
     $scope.contentLoading = true;
 
     DatasetSrv.query(function(response){
-      console.log(response);
       $scope.datasets = response;
       $scope.contentLoading = false;
       angular.element('body').removeClass('contentLoading');
@@ -131,25 +135,28 @@ angular.module('mean.columby')
   .controller('SiteNavController', ['$rootScope', '$scope', 'Global', 'Columby','$http','FlashSrv','$location', 'ColumbyAuthSrv','AUTH_EVENTS','$state',
     function($rootScope, $scope, Global, Columby,$http,FlashSrv,$location,ColumbyAuthSrv,AUTH_EVENTS, $state) {
 
-      //Initialization
+      /* ---------- SETUP ----------------------------------------------------------------------------- */
       $scope.controller = {name: 'SiteNavController'};
       $scope.global = {};
       $scope.global.user = ColumbyAuthSrv.user();
       $scope.global.authenticated = ColumbyAuthSrv.isAuthenticated();
 
-      // respond to user events
+      /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
+      // User login
       $scope.$on(AUTH_EVENTS.loginSuccess, function(e){
         $scope.global.user = ColumbyAuthSrv.user();
         $scope.global.authenticated = true;
-        console.log('Toggle user', $scope.global.user);
       });
+      // User logout
       $scope.$on(AUTH_EVENTS.logoutSuccess, function(e){
         $scope.global.user = ColumbyAuthSrv.user();
         $scope.global.authenticated = false;
-        console.log('Toggle user', $scope.global.user);
       });
-
-      // respond to an event from rootscope to toggle the sitenav panel. Most likely this comes from the metabar icon.
+      // Account updated
+      $scope.$on('account::updated', function(e){
+        $scope.global.user = ColumbyAuthSrv.user();
+      });
+      // Toggle sidebar
       $scope.$on('sitenav::toggle', function(event, action) {
         switch (action){
           case 'close':
@@ -171,6 +178,7 @@ angular.module('mean.columby')
           }
       });
 
+      /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
       // function to send a message to the rootscope to toggle the sitenav
       $scope.toggleSiteNav = function(e) {
         $rootScope.$broadcast('sitenav::toggle');

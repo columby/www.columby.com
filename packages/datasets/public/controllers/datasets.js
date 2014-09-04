@@ -36,8 +36,9 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
           user: dataset.user,
           created: dataset.created,
           updated: dataset.updated,
-          canEdit: ColumbyAuthSrv.canEdit(dataset)
         };
+        meta.canEdit = ColumbyAuthSrv.canEdit(meta);
+
         MetabarSrv.setPostMeta(meta);
       });
     }
