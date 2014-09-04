@@ -81,6 +81,11 @@ angular.module('mean.columby')
   .controller('ColumbyController', ['$rootScope','$scope', '$timeout', 'Global', 'Columby', 'FlashSrv',
     function($rootScope, $scope, $timeout, Global, Columby, FlashSrv) {
 
+      // Add console object to window for IE9
+      window.console = window.console || {};
+      window.console.log = window.console.log || function() {};
+      
+      console.log('columbyctrl loaded');
       // Respond to flash messages
       $scope.$on('flashMessage::newMessage', function(e,msg){
         $scope.flashMessage = msg;

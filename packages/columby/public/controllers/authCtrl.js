@@ -166,16 +166,8 @@ angular.module('mean.columby')
         MetabarSrv.setPostMeta(meta);
 
         // Send a message to the headerController to update the background
-        var img = {
-          img: result.profile.headerImage,
-          pattern: result.profile.headerPattern
-        };
-
         $scope.headerStyle={
-          'background-image': 'url(' + result.profile.headerPattern + '), url(' + result.profile.headerImage + ')',
-          'background-size': 'auto, 100%',
-          
-          'background-blend-mode': 'multiply',
+          'background-image': 'url(' + result.profile.headerPattern + '), url(' + result.profile.headerImage + ')'
         };
 
       });
