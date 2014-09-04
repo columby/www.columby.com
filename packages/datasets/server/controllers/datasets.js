@@ -4,8 +4,9 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  Dataset = mongoose.model('Dataset'),
-  _ = require('lodash');
+  Dataset = mongoose.model('Dataset')
+  //, _ = require('lodash')
+;
 
 
 /**

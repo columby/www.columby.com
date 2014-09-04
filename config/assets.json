@@ -20,11 +20,8 @@
         "bower_components/angular-ui-router/release/angular-ui-router.js",
         "bower_components/angular-bootstrap/ui-bootstrap.js",
         "bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
-        "bower_components/ng-zenpen/angular-zenpen.js",
         "bower_components/textAngular/dist/textAngular-sanitize.min.js",
-        "bower_components/textAngular/dist/textAngular.min.js",
-        "bower_components/angular-gravatar/build/md5.js",
-        "bower_components/angular-gravatar/build/angular-gravatar.js"
+        "bower_components/textAngular/dist/textAngular.min.js"
       ]
     }
   }

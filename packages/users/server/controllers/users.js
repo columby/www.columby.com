@@ -8,8 +8,8 @@ var mongoose = require('mongoose'),
   Token = mongoose.model('Token'),
   config = require('meanio').loadConfig(),
   mandrill = require('mandrill-api/mandrill'),
-  mandrill_client = new mandrill.Mandrill(config.mandrill.key),
-  uuid = require('node-uuid')
+  mandrill_client = new mandrill.Mandrill(config.mandrill.key)
+  //, uuid = require('node-uuid')
 ;
 
 /**
@@ -264,7 +264,7 @@ exports.create = function(req, res, next) {
           }
 
         });
-        
+
       }
     });
   }

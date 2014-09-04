@@ -7,7 +7,7 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
 
     .state('home', {
       url:'/',
-      templateUrl: 'columby/views/home.html'
+      templateUrl: 'columby/views/home.html',
     })
 
     .state('signin', {
@@ -21,7 +21,7 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
     .state('logout', {
       url: '/logout',
       templateUrl: 'columby/views/logout.html',
-      
+
       authorization: {
         authorizedRoles: ['authenticated']
       }
