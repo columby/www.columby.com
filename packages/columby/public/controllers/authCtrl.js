@@ -88,31 +88,47 @@ angular.module('mean.columby')
 
   .controller('AccountCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'ColumbyAuthSrv', 'FlashSrv', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
 
-    // Get current user
-    $scope.user = ColumbyAuthSrv.user();
+    /*** FUNCTIONS ***/
+    function getAccount(){
+      ColumbyAuthSrv.getAccount().then(function(account){
+        $scope.account = account;
+      });
+    }
 
-  }])
-
-
-  .controller('LogoutCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'ColumbyAuthSrv', 'FlashSrv', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv) {
-
-    // Logout
-    ColumbyAuthSrv.logout().then(function(response){
-      console.log(response);
-      $scope.status = response;
-      if (response.status === 'success') {
-
-        $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess, response.user);
-
+    /*** SCOPE FUNCTIONS ***/
+    $scope.logout = function(){
+      ColumbyAuthSrv.logout().then(function(res){
+        $rootScope.$broadcast(AUTH_EVENTS.logoutSuccess);
         FlashSrv.setMessage({
           value: 'You are now signed out.',
           status: 'info'
         });
 
         $state.go('home');
+      });
+    };
 
-      }
-    });
+    $scope.update = function(){
+      var update = {
+        username: $scope.account.username,
+        email: $scope.account.email
+      };
+      var id = $scope.account._id;
+      delete update._id;
+
+      ColumbyAuthSrv.updateAccount(id, update).then(function(res){
+        $rootScope.$broadcast('account::updated');
+        FlashSrv.setMessage({
+          value: 'Account updated',
+          status: 'info'
+        });
+
+      });
+    };
+
+    /*** INIT ***/
+    getAccount();
+
   }])
 
   /***
@@ -121,7 +137,7 @@ angular.module('mean.columby')
    ***/
   .controller('ColumbyProfileCtrl', ['$scope', '$rootScope', '$location', '$state', '$stateParams', 'AUTH_EVENTS', 'ColumbyAuthSrv', 'FlashSrv', 'MetabarSrv', function ($scope, $rootScope, $location, $state, $stateParams, AUTH_EVENTS, ColumbyAuthSrv, FlashSrv, MetabarSrv) {
 
-    /***   INITIALISATION   ***/
+    /* ---------- SETUP ----------------------------------------------------------------------------- */
     var editWatcher;               // Watch for model changes in editmode
 
     $scope.contentLoading = true;
@@ -149,9 +165,10 @@ angular.module('mean.columby')
 
     /***   FUNCTIONS   ***/
     function getProfile(){
-      // get profile informatio of user by userSlug
+      console.log('get profile');
+      // get profile information of user by userSlug
       ColumbyAuthSrv.getProfile($stateParams.userSlug).then(function(result){
-
+        console.log('result', result);
         $scope.profile = result.profile;
         $scope.contentLoading = false;
 
@@ -163,16 +180,21 @@ angular.module('mean.columby')
           _id: result.profile._id,
           canEdit: ColumbyAuthSrv.canEdit(item)
         };
+        console.log('meta', meta);
         MetabarSrv.setPostMeta(meta);
 
-        // Send a message to the headerController to update the background
-        $scope.headerStyle={
-          'background-image': 'url(' + result.profile.headerPattern + '), url(' + result.profile.headerImage + ')'
-        };
+        updateHeaderImage();
 
       });
     }
 
+    function updateHeaderImage(){
+      $scope.headerStyle={
+        'background-image': 'url(' + $scope.profile.headerPattern + '), url(' + $scope.profile.headerImage + ')',
+        '-webkit-filter': 'hue-rotate(90deg)',
+        'background-blend-mode': 'multiply'
+      };
+    }
 
     /***   SCOPE FUNCTIONS   ***/
     $scope.toggleEditMode = function(){
@@ -188,16 +210,17 @@ angular.module('mean.columby')
       var updated = {
         _id: $scope.profile._id,
         updated: {
-          description: $scope.profile.description
+          description: $scope.profile.description,
+          headerImage: $scope.profile.headerImage,
+          headerPattern: $scope.profile.headerPattern
         }
       };
 
-      console.log('Sending update', updated);
-
       ColumbyAuthSrv.updateProfile(updated).then(function(res){
-        console.log(res);
         if (res.status === 'success'){
-          $scope.profile = res;
+
+          updateHeaderImage();
+
           FlashSrv.setMessage({
             value: 'Profile updated!',
             status: 'info'

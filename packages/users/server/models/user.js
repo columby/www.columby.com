@@ -144,9 +144,10 @@ UserSchema.methods = {
    * @api public
    */
   isAdmin: function() {
-    return this.roles.indexOf('admin') !== -1;
+    return this.roles.indexOf('administrator') !== -1;
   }
 };
+
 
 UserSchema.statics.findBySlug = function(slug, cb) {
   var User = mongoose.model('User');

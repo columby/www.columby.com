@@ -27,12 +27,15 @@ module.exports = function(MeanUser, app, auth, database, passport) {
   app.route('/api/v2/user/logout')
     .get(users.signout);
 
+  // Profile
   app.route('/api/v2/user/profile')
     .get(users.getProfile)
     .put(users.updateProfile);
 
-  app.route('/users/me')
-    .get(users.me);
+  // User account
+  app.route('/api/v2/user/account')
+    .get(users.account)
+    .put(users.updateAccount);
 
   // Setting up the users api
   /*

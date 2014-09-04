@@ -116,6 +116,7 @@ exports.verify = function(req,res,next) {
       // fetch user and login
       User.findOne({_id:t.user}, function(err,user){
         req.logIn(user, function(err){
+          console.log('user', user);
           if (err) return next(err);
           return res.json({
             status: 'success',
@@ -161,6 +162,7 @@ exports.getProfile = function(req,res){
  */
 exports.updateProfile = function(req,res){
   var update = { $set: req.body.updated };
+  console.log('update', update);
   User.update(req.body._id, update, function(err,p){
     if (err) return res.json({status: 'error'});
     return res.json({
@@ -291,12 +293,42 @@ exports.create = function(req, res, next) {
     });
   }
 };
+
+
 /**
- * Send User
+ * Send logged in User account
  */
-exports.me = function(req, res) {
-  res.json(req.user || null);
+exports.account = function(req, res) {
+  return res.json(req.user || null);
 };
+
+exports.updateAccount = function(req, res) {
+  var id = req.body.update.id ;
+  console.log('id', id);
+
+  var update = { $set: req.body.update.account };
+  console.log('update', update);
+
+  User.update(req.body.id, update, function(err,p){
+    console.log(err);
+    console.log(p);
+    if (err) return res.json({
+      status:'error',
+      err: err
+      });
+    if (p === 0) {
+      return res.json({
+        status: 'error',
+        err: 'No account updated'
+      });
+    }
+    return res.json({
+      status: 'success',
+      statusMessage: 'Account updated'
+    });
+  });
+};
+
 
 /**
  * Find user by id
