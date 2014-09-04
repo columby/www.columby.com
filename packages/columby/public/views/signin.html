@@ -1,6 +1,6 @@
 <div data-ng-controller="ColumbyLoginCtrl" class="signin container">
   <div class="signin-header">
-    <h1>Columby</h1>
+    <img src="/columby/assets/img/logo.png" class="logo">
   </div>
 
   <div class="row">
@@ -50,14 +50,14 @@
           </div>
         </div>
         <div class="form-group">
-          <div class="col-sm-2">
+          <div class="col-sm-4">
             <button type="submit" class="btn btn-default" ng-disabled="registrationInProgress || registerForm.username.$invalid || registerForm.email.$invalid" || registerForm.$invalid>Register</button>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-8">
             <i class="icon-spin animate-spin" ng-show="registrationInProgress">::</i>
             <div ng-show="registerForm.$invalid && !registerForm.$pristine" class="alert alert-warning" role="alert">
-              <span ng-show="registerForm.email.$invalid && !registerForm.email.$pristine">Enter a valid email.</span>
-              <span ng-show="registerForm.username.$invalid && !registerForm.username.$pristine">The username should between 3 and 20 characters.</span>
+              <span ng-show="registerForm.email.$invalid">Enter a valid email.</span>
+              <span ng-show="registerForm.username.$invalid">The username should between 3 and 20 characters.</span>
             </div>
             <div class="alert alert-danger animated fadeIn" ng-show="registrationError">{{registrationError}}</div>
           </div>

@@ -332,6 +332,16 @@ body .metabar-wrapper .actions {
   opacity: 1;
 }
 /*** ---- LOGIN ---------------------------- ***/
+.signin .signin-header {
+  text-align: center;
+}
+.signin .signin-header .logo {
+  margin-top: 70px;
+}
+.signin .row {
+  margin-top: 70px;
+  margin-bottom: 70px;
+}
 .signin-success,
 .registration-success {
   position: absolute;
