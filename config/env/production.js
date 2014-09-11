@@ -8,6 +8,10 @@ module.exports = {
     name: 'Columby - datastore'
   },
 
+  jwt: {
+    secret: process.env.JWT_SECRET,
+  },
+
   mandrill: {
     key: process.env.MANDRILL_APIKEY,
   },
