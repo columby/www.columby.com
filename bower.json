@@ -19,5 +19,8 @@
     "textAngular": "latest",
     "font-awesome": "latest",
     "angular-notifications": "latest"
+  },
+  "resolutions": {
+    "angular": "1.2.23"
   }
 }
