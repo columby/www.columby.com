@@ -5,7 +5,7 @@ module.exports = {
   db: process.env.MONGOHQ_URL,
 
   app: {
-    name: 'Columby - datastore'
+    name: 'Columby.com'
   },
 
   jwt: {
