@@ -1,4 +1,4 @@
-<div data-ng-controller="ColumbyLoginCtrl" class="signin container">
+<div data-ng-controller="LoginCtrl" class="signin container">
   <div class="signin-header">
     <img src="/columby/assets/img/logo.png" class="logo">
   </div>
@@ -7,7 +7,7 @@
     <!-- login form -->
     <div class="login-form col-md-6">
       <h2>Login to continue</h2>
-      <form class="form-horizontal novalidate" role="form" name="loginForm" ng-submit="passwordlessLogin()" >
+      <form class="form-horizontal novalidate" role="form" name="loginForm" ng-submit="login()" >
         <div class="form-group">
           <div class="col-sm-12">
             <input required id="email" type="email" name="email" placeholder="Your email address" class="form-control" ng-model="credentials.email"/>
@@ -33,7 +33,7 @@
 
     <div class="register-form col-md-6">
       <h2>Register your account</h2>
-      <form class="form-horizontal" role="form" name="registerForm" ng-submit="passwordlessRegister()">
+      <form class="form-horizontal" role="form" name="registerForm" ng-submit="register()">
         <div class="form-group">
           <div class="col-sm-12">
             <input type="email" class="form-control" id="email" name="email" placeholder="Email" ng-model="newuser.email" required>

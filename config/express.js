@@ -12,13 +12,13 @@ var mean = require('meanio'),
   bodyParser = require('body-parser'),
   methodOverride = require('method-override'),
   assetmanager = require('assetmanager'),
-  session = require('express-session'),
-  mongoStore = require('connect-mongo')(session),
+  //session = require('express-session'),
+  //mongoStore = require('connect-mongo')(session),
   helpers = require('view-helpers'),
   flash = require('connect-flash'),
   config = mean.loadConfig();
 
-module.exports = function(app, passport, db) {
+module.exports = function(app, db) {
 
   app.set('showStackError', true);
 
@@ -75,7 +75,11 @@ module.exports = function(app, passport, db) {
     });
   });
 
+  // JWT Setup
+  app.set('jwtTokenSecret', config.jwt.secret);
+  
   // Express/Mongo session storage
+  /*
   app.use(session({
     secret: config.sessionSecret,
     store: new mongoStore({
@@ -87,13 +91,14 @@ module.exports = function(app, passport, db) {
     resave: true,
     saveUninitialized: true
   }));
+  */
 
   // Dynamic helpers
   app.use(helpers(config.app.name));
 
   // Use passport session
-  app.use(passport.initialize());
-  app.use(passport.session());
+  //app.use(passport.initialize());
+  //app.use(passport.session());
 
   //mean middleware from modules before routes
   app.use(mean.chainware.before);
@@ -101,20 +106,4 @@ module.exports = function(app, passport, db) {
   // Connect flash for flash messages
   app.use(flash());
 
-  // Elastic search
-  /*
-  ElasticSearchClient = require('elasticsearchclient');
-  var serverOptions = {
-    host: 'localhost',
-    port: 9200,
-    pathPrefix:'optional pathPrefix',
-    secure: true||false,
-    //Optional basic HTTP Auth
-    auth: {
-    username: process.env.ES_USERNAME,
-        password: process.env.ES_PASSWORD
-    }
-  };
-  */
-  
 };

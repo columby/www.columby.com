@@ -10,8 +10,8 @@ angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$st
 ]);
 
 
-angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'MetabarSrv', 'ColumbyAuthSrv', 'FlashSrv',
-  function($rootScope, $scope, $state, $stateParams, DatasetSrv, MetabarSrv, ColumbyAuthSrv, FlashSrv) {
+angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'MetabarSrv', 'AuthSrv', 'FlashSrv',
+  function($rootScope, $scope, $state, $stateParams, DatasetSrv, MetabarSrv, AuthSrv, FlashSrv) {
 
     /***   INITIALISATION   ***/
     var editWatcher;               // Watch for model changes in editmode
@@ -37,7 +37,7 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
           created: dataset.created,
           updated: dataset.updated,
         };
-        meta.canEdit = ColumbyAuthSrv.canEdit(meta);
+        meta.canEdit = AuthSrv.canEdit(meta);
 
         MetabarSrv.setPostMeta(meta);
       });

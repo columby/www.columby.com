@@ -3,9 +3,12 @@
 /**
  * Module dependencies.
  */
-var mongoose = require('mongoose'),
-  Schema = mongoose.Schema,
-  shortId = require('shortid');
+var mean = require('meanio'),
+    config = mean.loadConfig(),
+    mongoose = require('mongoose'),
+    mongoosastic = require('mongoosastic'),
+    Schema = mongoose.Schema,
+    shortId = require('shortid');
 
 
 /**
@@ -41,6 +44,21 @@ var DatasetSchema = new Schema({
 
 });
 
+
+// Elasticsearch
+var url               = require('url');
+var elasticConnection = url.parse(process.env.BONSAI_URL || config.elasticsearch.url);
+
+DatasetSchema.plugin(mongoosastic, {
+  host:elasticConnection.hostname,
+  curlDebug:true,
+  auth: elasticConnection.auth,
+  port: elasticConnection.port,
+  protocol: elasticConnection.protocol === 'https:' ? 'https' : 'http'
+});
+
+
+
 /**
  * Validations
  */
@@ -59,3 +77,18 @@ DatasetSchema.statics.load = function(id, cb) {
 };
 
 mongoose.model('Dataset', DatasetSchema);
+
+/*
+var stream = Dataset.synchronize();
+var count = 0;
+
+stream.on('data', function(err, doc){
+  count++;
+});
+stream.on('close', function(){
+  console.log('indexed ' + count + ' documents!');
+});
+stream.on('error', function(err){
+  console.log(err);
+});
+*/

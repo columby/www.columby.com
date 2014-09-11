@@ -2,15 +2,16 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml" itemscope="itemscope" itemtype="http://schema.org/Product">
 {% include '../includes/head.html' %}
 
-<body ng-controller="ColumbyController">
+<body ng-controller="ColumbyCtrl">
+
   <div class="loadingBar"></div>
+
+  <div notifications="top right"></div>
 
   <!-- include sitenav including sitenav-overlay -->
   <div class="sitenav" data-ng-include="'/columby/views/includes/sitenav.html'"></div>
 
   <div class="site-main">
-    <!-- include sitenav including sitenav-overlay -->
-    <div class="messages" data-ng-include="'/columby/views/includes/flashmessages.html'"></div>
 
     <!-- include metabar -->
     <div class="metabar-wrapper" data-ng-include="'/columby/views/includes/metabar.html'"></div>

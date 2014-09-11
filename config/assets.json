@@ -2,7 +2,8 @@
   "core": {
     "css": {
       "bower_components/build/css/dist.min.css": [
-        "bower_components/font-awesome/css/font-awesome.min.css"
+        "bower_components/font-awesome/css/font-awesome.min.css",
+        "bower_components/angular-notifications/notification.min.css"
       ]
     },
     "js": {
@@ -21,7 +22,8 @@
         "bower_components/angular-bootstrap/ui-bootstrap.js",
         "bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
         "bower_components/textAngular/dist/textAngular-sanitize.min.js",
-        "bower_components/textAngular/dist/textAngular.min.js"
+        "bower_components/textAngular/dist/textAngular.min.js",
+        "bower_components/angular-notifications/notification.js"
       ]
     }
   }

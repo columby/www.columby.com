@@ -16,14 +16,14 @@
         <a ui-sref="dataset create"><i class="fa fa-edit"></i> Publish dataset</a>
       </li>
     -->
-      <li ng-show="global.authenticated">
-        <a ui-sref='profile({userSlug: global.user.slug})'><i class="fa fa-user"></i> {{global.user.username}}</a>
+      <li ng-show="$root.user.isAuthenticated">
+        <a ui-sref='profile({userSlug: $root.user.account.slug})'><i class="fa fa-user"></i> {{$root.user.account.username}}</a>
         <span class="settings">
           <a ui-sref='settings'><i class="fa fa-cog"></i></a>
         </span>
       </li>
 
-      <li ng-hide="global.authenticated">
+      <li ng-hide="$root.user.isAuthenticated">
         <a ui-sref='signin'>Login</a>
       </li>
     </ul>

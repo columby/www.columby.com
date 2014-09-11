@@ -5,20 +5,13 @@
  */
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
-  Token = mongoose.model('Token'),
+  Token = mongoose.model('LoginToken'),
+  moment = require('moment'),
+  jwt = require('jwt-simple'),
   config = require('meanio').loadConfig(),
   mandrill = require('mandrill-api/mandrill'),
   mandrill_client = new mandrill.Mandrill(config.mandrill.key)
-  //, uuid = require('node-uuid')
 ;
-
-
-/**
- * Auth callback
- */
-exports.authCallback = function(req, res) {
-  res.redirect('/');
-};
 
 
 exports.passwordlessLogin = function(req,res,next){
@@ -91,37 +84,41 @@ exports.passwordlessLogin = function(req,res,next){
 
 exports.verify = function(req,res,next) {
 
-  var token = req.query.token;
+  var loginToken = req.query.token;
 
-  Token.findOne({'token': token}, function(err,t){
-
+  // Check if supplied token exists
+  Token.findOne({'token': loginToken}, function(err,t){
     if (err || !t) {
-      console.log('err',err);
-      console.log('t',t);
-      console.log('not found');
       return res.json({
         status: 'error',
         statusMessage: 'Error finding the verification token. ',
         error: err
       });
-
     } else {
+
       // delete the token
-      Token.remove({'token':token}, function(err){
-        if (err) {
-          console.log ('t errr',err);
-        }
+      Token.remove({'token': loginToken}, function(err){
+        if (err) { console.log ('Token remove error', err); }
       });
 
       // fetch user and login
       User.findOne({_id:t.user}, function(err,user){
-        req.logIn(user, function(err){
-          console.log('user', user);
-          if (err) return next(err);
-          return res.json({
-            status: 'success',
-            user: user,
-          });
+
+        // Create a new JWT
+        var expires = moment().add(7, 'days').valueOf();
+
+				var token = jwt.encode({
+						iss: user._id,
+						exp: expires
+            },
+					  config.jwt.secret
+				);
+
+        return res.json({
+          status: 'success',
+          user: user,
+          token : token,
+          expires : expires
         });
       });
     }
@@ -133,7 +130,7 @@ exports.verify = function(req,res,next) {
  * Logout
  */
 exports.signout = function(req, res) {
-  req.logout();
+  //req.logout();
   //res.redirect('/');
   res.json(200,{
     status: 'success',

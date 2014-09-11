@@ -13,7 +13,7 @@ var mongoose = require('mongoose'),
  * Token Schema
  */
 
-var TokenSchema = new Schema({
+var LoginTokenSchema = new Schema({
 
   token: {
     type: String,
@@ -36,4 +36,4 @@ var TokenSchema = new Schema({
 
 
 
-mongoose.model('Token', TokenSchema);
+mongoose.model('LoginToken', LoginTokenSchema);

@@ -12,6 +12,11 @@ module.exports = {
     key: process.env.MANDRILL_APIKEY,
   },
 
+  elasticsearch: {
+    host: '',
+    port: ''
+  },
+
   facebook: {
     clientID: 'APP_ID',
     clientSecret: 'APP_SECRET',

@@ -1,0 +1,60 @@
+'use strict';
+
+angular.module('mean.access')
+
+.config(function ($httpProvider) {
+  //$httpProvider.interceptors.push('AuthInterceptor');
+})
+
+// Define authentication events
+.constant('AUTH_EVENTS', {
+  loginSuccess: 'authLoginSuccess',
+  loginFailed: 'authLoginFailed',
+  logoutSuccess: 'authLogoutSuccess',
+  notAuthenticated: 'authNotAuthenticated',
+  notAuthorized: 'authNotAuthorized'
+})
+
+// Check permission to view the page.
+.run(function ($rootScope, AUTH_EVENTS, $state, AuthSrv, FlashSrv) {
+
+  $rootScope.$on('$stateChangeStart', function (event, next) {
+
+    // Check if there is authorization data attached to the route
+    if (next.hasOwnProperty('authorization')) {
+
+      // Check Authentication status needed
+      if (next.authorization.hasOwnProperty('anonymousOnly')) {
+        if (AuthSrv.isAuthenticated()){
+          event.preventDefault();
+          // Checking for Anonymous access only.
+          FlashSrv.setMessage({
+            value: 'You are already logged in.',
+            status: 'info'
+          });
+          // Redirect back to account page
+          $state.go('home');
+        }
+      }
+      // Check which roles is/are required
+      else if (next.authorization.hasOwnProperty('authorizedRoles')) {
+        console.log('authorizedroles', next.authorization);
+        var authorizedRoles = next.authorization.authorizedRoles;
+
+        // Check if user has the required role
+        if (!AuthSrv.isAuthorized(authorizedRoles)) {
+
+          event.preventDefault();
+          FlashSrv.setMessage({
+            value: 'You are not authorized to access the requested page',
+            status: 'danger'
+          });
+          //If no previous state, go to home
+          $state.go('home');
+        }
+      }
+    }
+  });
+})
+
+;

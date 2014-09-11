@@ -16,6 +16,8 @@ Columby.register(function(app, auth, database) {
   //We enable routing. By default the Package Object is passed to the routes
   Columby.routes(app, auth, database);
 
+  Columby.angularDependencies(['growlNotifications', 'notifications']);
+
   Columby.aggregateAsset('css','fontello/fontello.css');
   Columby.aggregateAsset('css','fontello/animation.css');
   Columby.aggregateAsset('css','columby.css');

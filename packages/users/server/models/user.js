@@ -4,8 +4,18 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+  Schema = mongoose.Schema,
+  PublicationAccount = mongoose.model('PublicationAccount')
+;
 
+/* --- FUNCTIONS --------------------------------------------------------------- */
+function createPublicationAccount(user){
+  var pubAccount = new PublicationAccount(
+    {owner: user._id}
+  );
+
+  console.log('pubAccount', pubAccount);
+}
 
 function slugify(text) {
 
@@ -120,6 +130,11 @@ UserSchema.pre('save', function(next) {
   next();
 });
 
+
+UserSchema.post('save', function (user) {
+  createPublicationAccount(user);
+});
+
 /**
  * Methods
  */
@@ -148,6 +163,34 @@ UserSchema.methods = {
   }
 };
 
+UserSchema.statics.getAccount = function(id, cb) {
+  var account = {};
+  var User = mongoose.model('User');
+  var PubAccounts = mongoose.model('PublicationAccount');
+
+  User
+    .findOne({
+      _id: id
+    })
+    .exec(function(err, user) {
+      if (err) cb({err:err});
+      if (!user) cb({'Failed to load User ': id});
+      account = user;
+      console.log('account1: ', account);
+
+      PubAccounts.find({owner:account._id})
+        .exec(function(err,pubAccounts){
+          console.log('err', err);
+          console.log('pubAccounts', pubAccounts);
+          if (err) cb({err:err});
+          if (!pubAccounts) cb({err: 'Failed to load pubaccounts'});
+
+          account.pubAccounts = pubAccounts;
+        });
+      console.log('account2: ', account);
+      cb({account: account});
+    });
+};
 
 UserSchema.statics.findBySlug = function(slug, cb) {
   var User = mongoose.model('User');
