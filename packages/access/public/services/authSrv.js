@@ -5,7 +5,8 @@ angular.module('mean.access')
 .factory('AuthSrv', [
   '$http',
   function ($http) {
-    var user = window.user || {};
+    // user object
+    var user = (window.user.hasOwnProperty('account')) ? window.user.account : {};
 
     return {
 
@@ -56,6 +57,7 @@ angular.module('mean.access')
       getAccount: function(){
         var promise = $http.get('/api/v2/user/account')
           .then(function(result){
+            console.log('fetched account', result);
             user = result.data;
             return result.data;
           });
@@ -86,6 +88,7 @@ angular.module('mean.access')
           authorizedRoles = [authorizedRoles];
         }
         var trustedRole = false;
+        console.log(user);
         if (user.roles) {
           trustedRole = authorizedRoles.every(function(v,i) {
             return user.roles.indexOf(v) !== -1;

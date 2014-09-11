@@ -45,7 +45,10 @@ angular.module('mean.columby')
       }
       // Get account with token
       // account was already fetched before angular init
-      $rootScope.user = AuthSrv.user();
+      $rootScope.user = {
+        account: AuthSrv.user(),
+        isAuthenticated: AuthSrv.isAuthenticated()
+      };
 
       if ($rootScope.user.isAuthenticated){
         $rootScope.$broadcast('addNotification', 'Welcome back, ' + $rootScope.user.account.username);
