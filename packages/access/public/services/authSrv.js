@@ -79,7 +79,7 @@ angular.module('mean.access')
       },
 
       isAuthenticated: function() {
-        var authenticated = (user.hasOwnProperty('_id')) ? true : false;
+        var authenticated = (user && user.hasOwnProperty('_id')) ? true : false;
         return authenticated;
       },
 
@@ -88,7 +88,6 @@ angular.module('mean.access')
           authorizedRoles = [authorizedRoles];
         }
         var trustedRole = false;
-        console.log(user);
         if (user.roles) {
           trustedRole = authorizedRoles.every(function(v,i) {
             return user.roles.indexOf(v) !== -1;

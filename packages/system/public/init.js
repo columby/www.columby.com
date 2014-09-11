@@ -8,8 +8,9 @@ angular.element(document).ready(function() {
     //Then init the app
     angular.bootstrap(document, ['mean']);
   }
-  
+
   // Get user
+  window.user={};
   var xmlHttp;
   var token = JSON.parse(localStorage.getItem('auth_token'));
   if (token){
@@ -19,7 +20,7 @@ angular.element(document).ready(function() {
         var account = JSON.parse(xmlHttp.responseText);
         window.user = {
           account: account,
-          isAuthenticated: (account.hasOwnProperty('_id')) ? true : false
+          isAuthenticated: (account && account.hasOwnProperty('_id')) ? true : false
         };
         initApp();
       }

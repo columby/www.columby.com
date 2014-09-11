@@ -9,13 +9,6 @@ var mongoose = require('mongoose'),
 ;
 
 /* --- FUNCTIONS --------------------------------------------------------------- */
-function createPublicationAccount(user){
-  var pubAccount = new PublicationAccount(
-    {owner: user._id}
-  );
-
-  console.log('pubAccount', pubAccount);
-}
 
 function slugify(text) {
 
@@ -105,11 +98,19 @@ var UserSchema = new Schema({
 
 
   /**
+   * Publication Accounts
+   **/
+  publicationAccounts: {
+    type: Array
+  },
+
+
+  /**
    * Passwordless login
    **/
-  provider: {
-    type: String,
-    default: 'local'
+  jwt: {
+    type: Array,
+    default: []
   }
 });
 
@@ -126,14 +127,28 @@ UserSchema.pre('save', function(next) {
   var self=this;
   var slug=slugify(self.username);
   self.set('slug', slug);
+  console.log('usermodel, updating pubAccount');
+  // add default publication account
+  var pubAccount = new PublicationAccount({
+    owner: self._id,
+    accountType: 'personal',
+    plan: 'free',
+    name: self.username,
+    slug: self.slug,
+    description: self.description
+  });
+  console.log('puaccount', pubAccount);
+  self.publicationAccounts.push(pubAccount);
 
   next();
 });
 
 
+/*
 UserSchema.post('save', function (user) {
   createPublicationAccount(user);
 });
+*/
 
 /**
  * Methods

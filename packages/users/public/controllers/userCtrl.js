@@ -77,8 +77,8 @@ angular.module('mean.users')
     }
   };
 
-  $scope.update = function(){
-
+  $scope.updateProfile = function(){
+    console.log('updating profile');
     var updated = {
       _id: $scope.profile._id,
       updated: {
@@ -88,7 +88,7 @@ angular.module('mean.users')
       }
     };
 
-    AuthSrv.updateProfile(updated).then(function(res){
+    UserSrv.updateProfile(updated).then(function(res){
       if (res.status === 'success'){
 
         updateHeaderImage();

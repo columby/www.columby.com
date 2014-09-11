@@ -9,9 +9,15 @@
 	      <form class="form-horizontal novalidate" role="form" name="accountForm" ng-submit="updateAccount()" >
 
 	        <div class="form-group">
-	          <div class="">
-	            <label>Email</label>
-	            <input required id="email" type="email" name="email" placeholder="Your email address" class="form-control" ng-model="account.email"/>
+	          <div class="email">
+	            <p><strong>Email: {{account.email}}</strong><br/>
+                (It is not possible to change your email address)</p>
+
+              <p><strong>Public link: </strong><a>columby.com/{{account.slug}}</a><br/>
+                  (It is not possible to change your public link yet)</p>
+
+              <p><strong>Account id: </strong>{{account._id}}</p>
+
 	          </div>
 	        </div>
 

@@ -54,7 +54,7 @@ angular.module('mean.access')
       });
     }
 
-    
+
     /* ----- ROOTSCOPE EVENTS -------------------------------------------------------- */
 
     /* ----- SCOPE FUNCTIONS -------------------------------------------------------- */
@@ -109,4 +109,45 @@ angular.module('mean.access')
       verify(params.token);
     }
   }])
+
+  .controller('AccountCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'AuthSrv', '$notification', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, AuthSrv, $notification) {
+
+    /*** FUNCTIONS ***/
+    function getAccount(){
+      AuthSrv.getAccount().then(function(account){
+        $scope.account = account;
+      });
+    }
+
+    $scope.logout = function(){
+      console.log('logging out');
+      AuthSrv.logout().then(function(result){
+        localStorage.removeItem('auth_token');
+        $rootScope.user = {};
+        $notification.info('You are now signed out.');
+
+        $state.go('home');
+      });
+    };
+
+    $scope.updateAccount = function(){
+      console.log('updating account.');
+      var update = {
+        username: $scope.account.username,
+      };
+      var id = $scope.account._id;
+      delete update._id;
+
+      AuthSrv.updateAccount(id, update).then(function(res){
+        console.log('auth response', res);
+        $rootScope.$broadcast('account::updated');
+        $notification.info('Account updated');
+      });
+    };
+
+    /*** INIT ***/
+    getAccount();
+
+  }])
+
 ;

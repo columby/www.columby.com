@@ -306,14 +306,14 @@ exports.updateAccount = function(req, res) {
   var update = { $set: req.body.update.account };
   console.log('update', update);
 
-  User.update(req.body.id, update, function(err,p){
-    console.log(err);
-    console.log(p);
+  User.update({_id: id}, update, function(err, account){
+    console.log('error', err);
+    console.log('account', account);
     if (err) return res.json({
       status:'error',
       err: err
       });
-    if (p === 0) {
+    if (account === 0) {
       return res.json({
         status: 'error',
         err: 'No account updated'
