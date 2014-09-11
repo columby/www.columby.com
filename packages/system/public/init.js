@@ -4,9 +4,32 @@ angular.element(document).ready(function() {
   //Fixing facebook bug with redirect
   if (window.location.hash === '#_=_') window.location.hash = '#!';
 
-  //Then init the app
-  angular.bootstrap(document, ['mean']);
-
+  function initApp(){
+    //Then init the app
+    angular.bootstrap(document, ['mean']);
+  }
+  
+  // Get user
+  var xmlHttp;
+  var token = JSON.parse(localStorage.getItem('auth_token'));
+  if (token){
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange=function() {
+      if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+        var account = JSON.parse(xmlHttp.responseText);
+        window.user = {
+          account: account,
+          isAuthenticated: (account.hasOwnProperty('_id')) ? true : false
+        };
+        initApp();
+      }
+    };
+    xmlHttp.open( 'GET', '/api/v2/user/account', true );
+    xmlHttp.setRequestHeader('Authorization', 'Bearer ' + token);
+    xmlHttp.send( null );
+  } else {
+    initApp();
+  }
 });
 
 // Dynamically add angular modules declared by packages

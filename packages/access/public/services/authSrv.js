@@ -5,8 +5,7 @@ angular.module('mean.access')
 .factory('AuthSrv', [
   '$http',
   function ($http) {
-
-    var user = {};
+    var user = window.user || {};
 
     return {
 

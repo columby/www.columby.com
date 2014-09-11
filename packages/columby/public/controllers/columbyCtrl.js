@@ -44,17 +44,13 @@ angular.module('mean.columby')
         $http.defaults.headers.common.Authorization = 'Bearer ' + token;
       }
       // Get account with token
-      AuthSrv.getAccount().then(function(res){
-        console.log('get Account', res);
-        $rootScope.user = {
-          account: AuthSrv.user(),
-          isAuthenticated: AuthSrv.isAuthenticated()
-        };
-        if ($rootScope.user.isAuthenticated){
-          $rootScope.$broadcast('addNotification', 'Welcome back, ' + $rootScope.user.account.username);
-          $notification.info('Welcome', 'Welcome back ' + $rootScope.user.account.username);
-        }
-      });
+      // account was already fetched before angular init
+      $rootScope.user = AuthSrv.user();
+
+      if ($rootScope.user.isAuthenticated){
+        $rootScope.$broadcast('addNotification', 'Welcome back, ' + $rootScope.user.account.username);
+        $notification.info('Welcome', 'Welcome back ' + $rootScope.user.account.username);
+      }
     }
   ])
 
