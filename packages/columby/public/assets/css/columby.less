@@ -433,6 +433,9 @@ body {
       position: relative;
       text-align: center;
       text-transform: none;
+			color: #fff;
+			font-size: 4.3em;
+			letter-spacing: -2px;
       &.editable-placeholder {
         opacity:0.5;
         position: absolute;
@@ -450,8 +453,13 @@ body {
         width: 80px;
         height: 80px;
         background-color: #eee;
+				outline: 8px solid #EEEEEE;
       }
     }
+		height: 260px;
+		padding-top: 30px;
+		background-size: 100%;
+		background-position: 50%;
   }
   .page-content {
     h3 {
@@ -478,14 +486,34 @@ body {
 	.account{
 		text-align: left;
 	}
-	h3{
-		font-size: 1.3em;
+	
+	h2{
+		font-size: 1.8em;
 		line-height: 1.5em;
 		border-bottom: 1px solid #d9d9d9;
 		margin-bottom: 10px;
 		font-weight: bold;
 		color: #7a7a7a;
 		padding: 6px;
+	}
+	.accounts-listing {
+		ul{
+			padding: 0;
+		}
+		li{
+			list-style: none;
+			padding: 6px;
+			margin-bottom: 30px;
+		}
+		h3 a{
+			font-family: "lato", sans-serif;
+			font-size: 1em;
+			font-weight: 700;
+			color: #222;
+		}
+		.account-detail {
+			color: #c8c8c8;
+		}
 	}
 	
 }
