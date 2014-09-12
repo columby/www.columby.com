@@ -6,11 +6,11 @@ var mean = require('meanio'),
     UserModel = mongoose.model('User'),
     jwt = require('jwt-simple');
 
-// Check user
-exports.jwt = function(req, res, next){
+// Check token validity
 
-  console.log('using jwtauth');
-  console.log('req.user, ', req.user);
+
+// Verify token and get user's account
+exports.jwtCheckAccount = function(req, res, next){
 
   if (!req.user){
     console.log('no user present. Fetching user based on JWT. ');
@@ -38,14 +38,16 @@ exports.jwt = function(req, res, next){
         //res.status(401).json('Access token has expired');
       }
 
-      UserModel.findOne({ '_id': decoded.iss }, function(err, user){
-        console.log(err);
-        console.log(user);
+
+      UserModel.getAccount({ '_id': decoded.iss }, function(user,err){
+        console.log('userfind error',err);
+        console.log('user',user);
         if (!err) {
+          // reconstruct account
           req.user = user;
-          console.log('User attached to req: ', req.user);
-          next();
+          console.log('User attached to req: ');
         }
+        next();
       });
 
     } else {

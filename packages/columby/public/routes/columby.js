@@ -10,37 +10,6 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
       templateUrl: 'columby/views/home.html',
     })
 
-    .state('signin', {
-      url: '/signin',
-      templateUrl: 'columby/views/signin.html',
-      authorization: {
-        anonymousOnly: true
-      }
-    })
-
-    .state('logout', {
-      url: '/logout',
-      templateUrl: 'columby/views/logout.html',
-
-      authorization: {
-        authorizedRoles: ['authenticated']
-      }
-    })
-
-
-    // Edit account settings
-    .state('settings', {
-      url:'/settings',
-      templateUrl: 'columby/views/account.html',
-      authorization: {
-        authorizedRoles: ['authenticated'],
-        permissions:[
-          'can edit own account',
-          'can edit accounts'
-        ]
-      }
-    })
-
     .state('terms', {
       url: '/terms',
       templateUrl: 'columby/views/terms.html',
@@ -53,17 +22,6 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
         authorizedRoles: ['authenticated']
       }
     })
-
-    // view own profile
-    // redirect to /profile/username based on id
-    .state('profile', {
-      url:'/:userSlug',
-      templateUrl: 'columby/views/profile.html',
-      authorization: {
-        authorizedRoles: ['authenticated']
-      }
-    })
-
     ;
   }
 ]);

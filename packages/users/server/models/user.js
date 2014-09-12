@@ -4,8 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  Schema = mongoose.Schema,
-  PublicationAccount = mongoose.model('PublicationAccount')
+  Schema = mongoose.Schema
 ;
 
 /* --- FUNCTIONS --------------------------------------------------------------- */
@@ -19,16 +18,10 @@ function slugify(text) {
     .replace(/^-+/, '')          // Trim - from start of text
     .replace(/-+$/, '');         // Trim - from end of text
 }
+
 /**
  * Validations
  */
-/*
-var validatePresenceOf = function(value) {
-  // If you are authenticating by any of the oauth strategies, don't validate.
-  return (this.provider && this.provider !== 'local') || (value && value.length);
-};
-*/
-
 var validateUniqueEmail = function(value, callback) {
   var User = mongoose.model('User');
   User.find({
@@ -96,17 +89,12 @@ var UserSchema = new Schema({
     default: '/columby/assets/img/header/patterns/1.svg'
   },
 
-
-  /**
-   * Publication Accounts
-   **/
   publicationAccounts: {
-    type: Array
+    personal:{},
+    organisations: []
   },
-
-
   /**
-   * Passwordless login
+   * Passwordless login, issued tokens
    **/
   jwt: {
     type: Array,
@@ -127,28 +115,12 @@ UserSchema.pre('save', function(next) {
   var self=this;
   var slug=slugify(self.username);
   self.set('slug', slug);
-  console.log('usermodel, updating pubAccount');
-  // add default publication account
-  var pubAccount = new PublicationAccount({
-    owner: self._id,
-    accountType: 'personal',
-    plan: 'free',
-    name: self.username,
-    slug: self.slug,
-    description: self.description
-  });
-  console.log('puaccount', pubAccount);
-  self.publicationAccounts.push(pubAccount);
 
   next();
 });
 
 
-/*
-UserSchema.post('save', function (user) {
-  createPublicationAccount(user);
-});
-*/
+
 
 /**
  * Methods
@@ -175,36 +147,62 @@ UserSchema.methods = {
    */
   isAdmin: function() {
     return this.roles.indexOf('administrator') !== -1;
+  },
+
+  createPersonalPublicationAccount: function(){
+
+  },
+
+  getPersonalPublicationAccount: function(){
+    //return pubAccount;
+  },
+
+  getOrganisationPublicationAccounts: function(){
+
   }
+
 };
 
 UserSchema.statics.getAccount = function(id, cb) {
-  var account = {};
+  console.log('id', id);
   var User = mongoose.model('User');
-  var PubAccounts = mongoose.model('PublicationAccount');
+  var PublicationAccount = mongoose.model('PublicationAccount');
 
-  User
-    .findOne({
-      _id: id
-    })
-    .exec(function(err, user) {
-      if (err) cb({err:err});
-      if (!user) cb({'Failed to load User ': id});
-      account = user;
-      console.log('account1: ', account);
-
-      PubAccounts.find({owner:account._id})
-        .exec(function(err,pubAccounts){
-          console.log('err', err);
-          console.log('pubAccounts', pubAccounts);
-          if (err) cb({err:err});
-          if (!pubAccounts) cb({err: 'Failed to load pubaccounts'});
-
-          account.pubAccounts = pubAccounts;
+  // Get User
+  User.findOne({_id: id._id}).exec(function(err, user) {
+    if (err) cb({err:err});
+    if (!user) cb({'Failed to load User ': id});
+    if (user){
+      console.log('user found', user);
+      // check if personal account exists
+      if (!user.publicationAccounts) {
+        console.log('No publication accounts found');
+        user.publicationAccounts = {};
+      }
+      if (!user.publicationAccounts.personal) {
+        console.log('No personal publication account found');
+        user.publicationAccounts.personal = {};
+        // add personal account
+        var pubAccount = new PublicationAccount({
+          owner: user._id,
+          accountType: 'personal',
+          plan: 'free',
+          name: user.username,
+          slug: user.slug,
+          description: user.description
         });
-      console.log('account2: ', account);
-      cb({account: account});
-    });
+        user.publicationAccounts.personal = pubAccount;
+        user.save(function(err){
+          console.log('New saved user: ', user);
+
+          cb({account: user});
+        });
+      } else {
+        console.log('User: ', user);
+        cb({account: user});
+      }
+    }
+  });
 };
 
 UserSchema.statics.findBySlug = function(slug, cb) {

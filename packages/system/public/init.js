@@ -17,10 +17,10 @@ angular.element(document).ready(function() {
     xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange=function() {
       if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-        var account = JSON.parse(xmlHttp.responseText);
+        var response = JSON.parse(xmlHttp.responseText);
         window.user = {
-          account: account,
-          isAuthenticated: (account && account.hasOwnProperty('_id')) ? true : false
+          account: response.account,
+          isAuthenticated: (response.account && response.account.hasOwnProperty('_id')) ? true : false
         };
         initApp();
       }

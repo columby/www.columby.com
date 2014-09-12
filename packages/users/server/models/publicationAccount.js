@@ -91,7 +91,7 @@ var PublicationAccountSchema = new Schema({
 PublicationAccountSchema.pre('save', function(next) {
 
   var self=this;
-  var slug=slugify(self.username);
+  var slug=slugify(self.name);
   self.set('slug', slug);
 
   next();

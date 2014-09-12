@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
   Token = mongoose.model('LoginToken'),
+  PublicationAccount = mongoose.model('PublicationAccount'),
   moment = require('moment'),
   jwt = require('jwt-simple'),
   config = require('meanio').loadConfig(),
@@ -174,16 +175,13 @@ exports.updateProfile = function(req,res){
  * Create user
  */
 exports.create = function(req, res, next) {
+  console.log('user check', req.body);
+
   var user = new User(req.body);
-      user.provider = 'local';
       user.roles = ['authenticated'];
 
-  // because we set our user.provider to local our models/user.js validation will always be true
-  //req.assert('name', 'You must enter a name').notEmpty();
   req.assert('email', 'You must enter a valid email address').isEmail();
   req.assert('username', 'Username cannot be more than 20 characters').len(1, 20);
-  //req.assert('password', 'Password must be between 8-20 characters long').len(8, 20);
-  //req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
   var errors = req.validationErrors();
   if (errors) {
@@ -195,6 +193,7 @@ exports.create = function(req, res, next) {
   } else {
 
     user.save(function(err) {
+      console.log('user after save', user);
       if (err) {
         console.log('Saving user error:', err);
         switch (err.code) {
@@ -240,17 +239,29 @@ exports.create = function(req, res, next) {
 
       } else {
 
-        // Create a new token
-        var token = new Token();
-
-        token.user = user._id;
-        token.save(function(err){
-          if (err){
-            console.log('error',err);
-            res.json({'error': err});
-          }
+        // Create a new loginToken
+        var token = new Token({
+          user: user._id
         });
+        token.save();
         console.log('token created', token);
+
+        // Create the default publicationAccount
+        // add default publication account
+        var pubAccount = new PublicationAccount({
+          owner: user._id,
+          accountType: 'personal',
+          plan: 'free',
+          name: user.username,
+          slug: user.slug,
+          description: user.description
+        });
+        user.publicationAccounts.personal = pubAccount;
+        user.save(function(err){
+          console.log('save err', err);
+        });
+
+        console.log('pubAccount', pubAccount);
 
         //sendmail
         mandrill_client.messages.send({
@@ -292,44 +303,11 @@ exports.create = function(req, res, next) {
 };
 
 
-/**
- * Send logged in User account
- */
-exports.account = function(req, res) {
-  return res.json(req.user || null);
-};
-
-exports.updateAccount = function(req, res) {
-  var id = req.body.update.id ;
-  console.log('id', id);
-
-  var update = { $set: req.body.update.account };
-  console.log('update', update);
-
-  User.update({_id: id}, update, function(err, account){
-    console.log('error', err);
-    console.log('account', account);
-    if (err) return res.json({
-      status:'error',
-      err: err
-      });
-    if (account === 0) {
-      return res.json({
-        status: 'error',
-        err: 'No account updated'
-      });
-    }
-    return res.json({
-      status: 'success',
-      statusMessage: 'Account updated'
-    });
-  });
-};
-
 
 /**
  * Find user by id
  */
+/*
 exports.user = function(req, res, next, id) {
   User
     .findOne({
@@ -342,3 +320,4 @@ exports.user = function(req, res, next, id) {
       next();
     });
 };
+*/

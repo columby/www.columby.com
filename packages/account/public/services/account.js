@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.access')
+angular.module('mean.account')
 
 .factory('AuthSrv', [
   '$http',
@@ -36,6 +36,7 @@ angular.module('mean.access')
       verify: function(token){
         var promise = $http.get('/api/v2/user/verify?token='+token)
           .then(function (response) {
+            console.log('USer after verify login', response);
             if (response.data.user){
               user = response.data.user;
             }

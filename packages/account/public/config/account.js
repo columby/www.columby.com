@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.access')
+angular.module('mean.account')
 
 .config(function ($httpProvider) {
   //$httpProvider.interceptors.push('AuthInterceptor');

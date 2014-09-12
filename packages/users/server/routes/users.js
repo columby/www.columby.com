@@ -6,7 +6,7 @@ var users = require('../controllers/users');
 module.exports = function(MeanUser, app, auth, database) {
 
   // Setting up the userId param
-  app.param('userId', users.user);
+  //app.param('userId', users.user);
 
 
   app.route('/api/v2/user/login')
@@ -22,12 +22,8 @@ module.exports = function(MeanUser, app, auth, database) {
     .get(users.signout);
 
   // Profile of currently loggedin user
-  app.route('/api/v2/user/profile')
+  app.route('/api/v2/user/profile/:slug')
     .get(users.getProfile)
     .put(users.updateProfile);
-
-  // Account of currently loggedin user
-  app.route('/api/v2/user/account')
-    .get(auth.jwt, users.account)
-    .put(users.updateAccount);
+  
 };

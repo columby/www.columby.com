@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.access')
+angular.module('mean.account')
 
   /***
    * Controller for the Signin page
@@ -114,8 +114,8 @@ angular.module('mean.access')
 
     /*** FUNCTIONS ***/
     function getAccount(){
-      AuthSrv.getAccount().then(function(account){
-        $scope.account = account;
+      AuthSrv.getAccount().then(function(result){
+        $scope.account = result.account;
       });
     }
 
