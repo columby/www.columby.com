@@ -10,10 +10,6 @@
       "bower_components/build/js/dist.min.js": [
 
         "bower_components/jquery/dist/jquery.min.js",
-
-        "bower_components/d3/d3.min.js",
-        "bower_components/trianglify/trianglify.js",
-
         "bower_components/angular/angular.js",
         "bower_components/angular-mocks/angular-mocks.js",
         "bower_components/angular-cookies/angular-cookies.js",
@@ -22,6 +18,8 @@
         "bower_components/angular-ui-router/release/angular-ui-router.js",
         "bower_components/angular-bootstrap/ui-bootstrap.js",
         "bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
+        "bower_components/d3/d3.min.js",
+        "bower_components/trianglify/trianglify.js",
         "bower_components/textAngular/dist/textAngular-sanitize.min.js",
         "bower_components/textAngular/dist/textAngular.min.js",
         "bower_components/angular-notifications/notification.js"
