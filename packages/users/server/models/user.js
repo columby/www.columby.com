@@ -58,7 +58,7 @@ var UserSchema = new Schema({
     type: String,
     unique: true
   },
-  username: {
+  name: {
     type: String,
     unique: true,
     required: true
@@ -89,10 +89,16 @@ var UserSchema = new Schema({
     default: '/columby/assets/img/header/patterns/1.svg'
   },
 
-  publicationAccounts: {
-    personal:{},
-    organisations: []
-  },
+  datasets: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Dataset'
+  }],
+
+  organisations: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Organisation'
+  }],
+
   /**
    * Passwordless login, issued tokens
    **/
@@ -149,15 +155,7 @@ UserSchema.methods = {
     return this.roles.indexOf('administrator') !== -1;
   },
 
-  createPersonalPublicationAccount: function(){
-
-  },
-
-  getPersonalPublicationAccount: function(){
-    //return pubAccount;
-  },
-
-  getOrganisationPublicationAccounts: function(){
+  getOrganisations: function(){
 
   }
 
@@ -166,41 +164,17 @@ UserSchema.methods = {
 UserSchema.statics.getAccount = function(id, cb) {
   console.log('id', id);
   var User = mongoose.model('User');
-  var PublicationAccount = mongoose.model('PublicationAccount');
 
   // Get User
-  User.findOne({_id: id._id}).exec(function(err, user) {
+  User
+    .findOne({_id: id._id})
+    .populate('organisations')
+    .exec(function(err, user) {
     if (err) cb({err:err});
-    if (!user) cb({'Failed to load User ': id});
     if (user){
       console.log('user found', user);
       // check if personal account exists
-      if (!user.publicationAccounts) {
-        console.log('No publication accounts found');
-        user.publicationAccounts = {};
-      }
-      if (!user.publicationAccounts.personal) {
-        console.log('No personal publication account found');
-        user.publicationAccounts.personal = {};
-        // add personal account
-        var pubAccount = new PublicationAccount({
-          owner: user._id,
-          accountType: 'personal',
-          plan: 'free',
-          name: user.username,
-          slug: user.slug,
-          description: user.description
-        });
-        user.publicationAccounts.personal = pubAccount;
-        user.save(function(err){
-          console.log('New saved user: ', user);
-
-          cb({account: user});
-        });
-      } else {
-        console.log('User: ', user);
-        cb({account: user});
-      }
+      cb({account: user});
     }
   });
 };

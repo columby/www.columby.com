@@ -23,7 +23,9 @@ module.exports = function(MeanUser, app, auth, database) {
 
   // Profile of currently loggedin user
   app.route('/api/v2/user/profile/:slug')
-    .get(users.getProfile)
+    .get(users.getProfile);
+  app.route('/api/v2/user/profile')
+    // check permission
     .put(users.updateProfile);
-  
+
 };

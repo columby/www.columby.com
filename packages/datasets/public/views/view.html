@@ -43,7 +43,7 @@
         </div>
 
         <div class="avatar">
-          <img src="{{dataset.avatar.url}}"/>
+          <img src="{{dataset.publisher.avatar.url}}"/>
         </div>
       </div>
     </div>
@@ -52,7 +52,7 @@
 
       <div class="dataset-description container">
         <div class="col-md-12" ng-switch="editMode">
-          <div ng-switch-default ng-bind-html="dataset.description || 'Dataset description currently empty!'"></div>
+          <div ng-switch-default ng-bind-html="dataset.description || 'The publisher of this dataset has not yet provided a description for this dataset yet.'"></div>
           <div ng-switch-when="true"
             ng-model="dataset.description"
             text-angular
@@ -74,19 +74,14 @@
 
     <div class="dataset-sources-wrapper">
       <div class="dataset-sources container">
-        <div class="content col-md-6">
-          <h3>Sources</h3>
-          <ul>
-            <li class="primary">
-							<h4><a href="#">Very-interesting-dataset.csv</a></h4>
-							<div class="date-size">April 25, 2014 - 256 kb</div>
-						</li>
-            <li>
-							<h4><a href="#">Another-dataset.xml</a></h4>
-							<div class="date-size">April 25, 2014 - 256 kb</div>
-						</li>
-          </ul>
-        </div>
+        <h3>Sources</h3>
+        <ul>
+          <li ng-repeat="source in dataset.sources">
+						<h4><a href="#">{{source.title}}</a></h4>
+						<div class="date-size">{{source.createdAt}} - {{source.size}}</div>
+					</li>
+        </ul>
+        <p ng-show="!dataset.sources || dataset.sources.length===0">No sources added yet</p>
       </div>
     </div>
 
@@ -108,7 +103,7 @@
     <div class="dataset-use-wrapper" ng-hide="editMode">
       <div class="dataset-use container">
         <div class="content">
-          <h3>Use the Columby API</h3>
+          <h3>Use this dataset</h3>
           <p>Swag flexitarian synth 3 wolf moon hella umami normcore, mixtape bespoke Marfa scenester blog keytar XOXO. Direct trade pug leggings Cosby sweater mumblecore. Intelligentsia flexitarian dreamcatcher next level church-key, iPhone aesthetic stumptown kitsch bitters leggings. Readymade Marfa roof party, biodiesel four loko small batch lo-fi PBR&B 90's disrupt. Gastropub ennui Helvetica tote bag, Pinterest McSweeney's put a bird on it flexitarian bitters gluten-free Carles ethical twee. Kitsch tofu meh keffiyeh paleo polaroid, bitters PBR&B trust fund meggings actually swag jean shorts flexitarian sriracha. Dreamcatcher food truck gluten-free tofu polaroid, Godard Tumblr photo booth vegan jean shorts letterpress Brooklyn.</p>
         </div>
       </div>
@@ -127,34 +122,22 @@
         <div class="content">
           <h3>References</h3>
           <ul>
-            <li>
-							<h4><a href="#">Title of an App using this data</a></h4>
-							<div class="date-url">April 25, 2014 - <a href="#">thenextweb.com</a></div>
-						</li>
-            <li>
-							<h4><a href="#">Title of a blogpost using this data</a></h4>
-							<div class="date-url">April 25, 2014 - <a href="#">nu.nl</a></div>
-						</li>
-            <li>
-							<h4><a href="#">Infographic</a></h4>
-							<div class="date-url">April 25, 2014 - <a href="#">dropbox.com</a></div>
+            <li ng-repeat="reference in dataset.references">
+							<h4><a href="#">{{reference.title}}</a></h4>
+							<div class="date-url">{{reference.date}} - <a href="#">{{reference.url}}</a></div>
 						</li>
           </ul>
+          <p ng-show="!dataset.references || dataset.references.length===0">No references added yet</p>
         </div>
       </div>
     </div>
 
-    <div class="dataset-author-wrapper" ng-hide="editMode">
-      <div class="dataset-author container">
+    <div class="dataset-publisher-wrapper" ng-hide="editMode">
+      <div class="container">
         <div class="row">
-          <div class="dataset-editor-content col-md-6">
-            <h3>About {{dataset.user.username}}</h3>
-            <p>Swag flexitarian synth 3 wolf moon hella umami normcore, mixtape bespoke Marfa scenester blog keytar XOXO. Direct trade pug leggings Cosby sweater mumblecore. Intelligentsia flexitarian dreamcatcher next level church-key, iPhone aesthetic stumptown kitsch bitters leggings. Readymade Marfa roof party, biodiesel four loko small batch lo-fi</p>
-          </div>
-
-          <div class="dataset-organisation-content col-md-6">
-            <h3>About Organisation</h3>
-            <p>Swag flexitarian synth 3 wolf moon hella umami normcore, mixtape bespoke Marfa scenester blog keytar XOXO. Direct trade pug leggings Cosby sweater mumblecore. Intelligentsia flexitarian dreamcatcher next level church-key, iPhone aesthetic stumptown kitsch bitters leggings. Readymade Marfa roof party, biodiesel four loko small batch lo-fi</p>
+          <div class="publisher-content col-md-12">
+            <h3>About the publisher: <a ui-sref="profile({slug: dataset.publisher.slug})">{{dataset.publisher.name}}</a></h3>
+            <div ng-bind-html="dataset.publisher.description"></div>
           </div>
         </div>
       </div>

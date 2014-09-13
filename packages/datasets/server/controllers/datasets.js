@@ -14,12 +14,21 @@ var mongoose = require('mongoose'),
  */
 exports.dataset = function(req, res, next, id) {
 
-  Dataset.load(id, function(err, dataset) {
-    if (err) return next(err);
-    if (!dataset) return next(new Error('Failed to load dataset ' + id));
-    req.dataset = dataset;
-    next();
-  });
+  Dataset
+    .findOne({_id: id}, function(err,dataset){
+      if (err) return next(err);
+      if (!dataset) return next(new Error('Failed to load dataset ' + id));
+
+      var opts = [{ path:'publisher', model:dataset.publisherType, select: 'name slug description avatar plan'}];
+
+      Dataset.populate(dataset, opts, function(err, pop){
+        console.log(err);
+        console.log(pop);
+        req.dataset = dataset;
+        next();
+      });
+    })
+  ;
 };
 
 /**
@@ -30,8 +39,6 @@ exports.create = function(req, res) {
   console.log(req.body);
   var dataset = new Dataset(req.body);
 
-  dataset.user = req.user;
-
   dataset.save(function(err) {
     if (err) {
       console.log(err);
@@ -39,8 +46,8 @@ exports.create = function(req, res) {
         error: err
       });
     }
+    console.log('Dataset created', dataset);
     res.json(dataset);
-
   });
 };
 
@@ -98,7 +105,8 @@ exports.all = function(req, res) {
   Dataset
     .find()
     .sort('-created')
-    .populate('user', 'name username')
+    //Model.populate(docs, options, [cb(err,doc)])
+    .populate('publisherType')
     .exec(function(err, datasets) {
       if (err) {
         return res.json(500, {

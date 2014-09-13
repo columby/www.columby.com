@@ -8,9 +8,9 @@ angular.module('mean.users')
 
     return {
 
-      getProfile: function(userSlug) {
+      getProfile: function(slug) {
         console.log('fetching profile');
-        var promise = $http.get('/api/v2/user/profile?slug=' + userSlug)
+        var promise = $http.get('/api/v2/user/profile/' + slug)
           .then(function(response){
             return response.data;
           });
@@ -18,6 +18,7 @@ angular.module('mean.users')
       },
 
       updateProfile: function(profile) {
+        console.log('profile', profile);
         var promise = $http.put('/api/v2/user/profile', profile)
           .then(function(result){
             return result.data;

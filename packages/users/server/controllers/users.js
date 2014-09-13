@@ -6,7 +6,6 @@
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
   Token = mongoose.model('LoginToken'),
-  PublicationAccount = mongoose.model('PublicationAccount'),
   moment = require('moment'),
   jwt = require('jwt-simple'),
   config = require('meanio').loadConfig(),
@@ -144,8 +143,7 @@ exports.signout = function(req, res) {
  * Get a user's profile
  */
 exports.getProfile = function(req,res){
-  console.log(req.query.slug);
-  User.findBySlug(req.query.slug, function(err,p){
+  User.findBySlug(req.params.slug, function(err,p){
     if (err) return res.json({status: 'error'});
     return res.json({
       status:'success',
@@ -245,23 +243,6 @@ exports.create = function(req, res, next) {
         });
         token.save();
         console.log('token created', token);
-
-        // Create the default publicationAccount
-        // add default publication account
-        var pubAccount = new PublicationAccount({
-          owner: user._id,
-          accountType: 'personal',
-          plan: 'free',
-          name: user.username,
-          slug: user.slug,
-          description: user.description
-        });
-        user.publicationAccounts.personal = pubAccount;
-        user.save(function(err){
-          console.log('save err', err);
-        });
-
-        console.log('pubAccount', pubAccount);
 
         //sendmail
         mandrill_client.messages.send({

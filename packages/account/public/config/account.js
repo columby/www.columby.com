@@ -16,7 +16,7 @@ angular.module('mean.account')
 })
 
 // Check permission to view the page.
-.run(function ($rootScope, AUTH_EVENTS, $state, AuthSrv, FlashSrv) {
+.run(function ($rootScope, AUTH_EVENTS, $state, AuthSrv, $notification) {
 
   $rootScope.$on('$stateChangeStart', function (event, next) {
 
@@ -28,10 +28,7 @@ angular.module('mean.account')
         if (AuthSrv.isAuthenticated()){
           event.preventDefault();
           // Checking for Anonymous access only.
-          FlashSrv.setMessage({
-            value: 'You are already logged in.',
-            status: 'info'
-          });
+          $notification.info('You are already logged in.');
           // Redirect back to account page
           $state.go('home');
         }
@@ -45,10 +42,8 @@ angular.module('mean.account')
         if (!AuthSrv.isAuthorized(authorizedRoles)) {
 
           event.preventDefault();
-          FlashSrv.setMessage({
-            value: 'You are not authorized to access the requested page',
-            status: 'danger'
-          });
+          $notification.info('You are not authorized to access the requested page');
+          
           //If no previous state, go to home
           $state.go('home');
         }

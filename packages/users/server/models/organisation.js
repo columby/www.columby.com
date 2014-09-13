@@ -22,7 +22,7 @@ function slugify(text) {
  * Validations
  */
 /*
-var validatePublicationAccountType = function(value, callback) {
+var validateOrganisationType = function(value, callback) {
   if (value !== 'user'){
     callback(false);
   } else {
@@ -35,23 +35,9 @@ var validatePublicationAccountType = function(value, callback) {
  * Publication Account Schema
  */
 
-var PublicationAccountSchema = new Schema({
+var OrganisationSchema = new Schema({
 
-  owner: {
-    type: Schema.ObjectId,
-    ref: 'User'
-  },
-
-  accountType: {
-    type: String,
-    //validate: [validatePublicationAccountType, 'Not a valid account type']
-  },
-
-  plan: {
-    type: String,
-    default: 'free'
-  },
-
+  // Account settings
   name: {
     type: String,
     unique: true
@@ -62,6 +48,12 @@ var PublicationAccountSchema = new Schema({
     unique: true
   },
 
+  plan: {
+    type: String,
+    default: 'free'
+  },
+
+  // Profile Settings
   description: {
     type: String,
     required: false
@@ -72,13 +64,16 @@ var PublicationAccountSchema = new Schema({
     required: false
   },
 
+  // Reference to Organisation's Administrator
+  administrator: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  },
+
+  // Reference to Datasets published by this organisation
   datasets:[{
-    dataset: {
-      id: {
-        type: Schema.ObjectId,
-        ref: 'Dataset'
-      }
-    }
+    type: Schema.ObjectId,
+    ref: 'Dataset'
   }],
 
 });
@@ -88,7 +83,7 @@ var PublicationAccountSchema = new Schema({
 /**
  * Pre-save hook
  */
-PublicationAccountSchema.pre('save', function(next) {
+OrganisationSchema.pre('save', function(next) {
 
   var self=this;
   var slug=slugify(self.name);
@@ -102,14 +97,14 @@ PublicationAccountSchema.pre('save', function(next) {
  */
 
 
-PublicationAccountSchema.statics.findBySlug = function(slug, cb) {
-  var PublicationAccount = mongoose.model('PublicationAccount');
+OrganisationSchema.statics.findBySlug = function(slug, cb) {
+  var Organisation = mongoose.model('Organisation');
 
-  PublicationAccount
+  Organisation
     .findOne({slug: slug})
     .exec(function(err,p){
       cb(err, p);
     });
 };
 
-mongoose.model('PublicationAccount', PublicationAccountSchema);
+mongoose.model('Organisation', OrganisationSchema);

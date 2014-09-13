@@ -6,8 +6,12 @@ module.exports = function(Dataset, app, auth, database) {
 
   // Article authorization helpers
   var hasAuthorization = function(req, res, next) {
-    if (!req.user.isAdmin && req.dataset.user.id !== req.user.id) {
-      return res.send(401, 'User is not authorized');
+    console.log('hasAuthorization user', req.user.account.id);
+    console.log('hasAuthorization dset', req.dataset.publisher.id);
+
+    if (req.dataset.publisher.id !== req.user.account.id) {
+      console.log('User not authorized to edit this dataset');
+      return res.status(401).send('User is not authorized');
     }
     next();
   };
@@ -21,8 +25,8 @@ module.exports = function(Dataset, app, auth, database) {
 
   app.route('/api/v2/dataset/:datasetId')
     .get(datasets.show)
-    .put(auth.requiresLogin, hasAuthorization, datasets.update)
-    .delete(auth.requiresLogin, hasAuthorization, datasets.destroy);
+    .put(auth.jwtCheckAccount, hasAuthorization, datasets.update)
+    .delete(hasAuthorization, datasets.destroy);
 
 
 

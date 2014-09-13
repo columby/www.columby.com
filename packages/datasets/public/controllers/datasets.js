@@ -26,14 +26,14 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
       DatasetSrv.get({
         datasetId: $stateParams.datasetId
       }, function(dataset) {
-        console.log(dataset);
+        console.log('dataset received',dataset);
         $scope.dataset = dataset;
         $scope.contentLoading = false;
         // send metadata to the metabar
         var meta = {
           postType: 'dataset',
           _id: dataset._id,
-          user: dataset.user,
+          publisher: dataset.publisher,
           created: dataset.created,
           updated: dataset.updated,
         };

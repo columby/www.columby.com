@@ -22,26 +22,36 @@ var DatasetSchema = new Schema({
     'default': shortId.generate
   },
 
+  // Dataset properties
   created: { type: Date, default: Date.now },
-
   updated: { type: Date },
-
   title: { type: String, trim: true },
-
   description: { type: String, trim: true },
 
-  user: { type: Schema.ObjectId, ref: 'User' },
+  // Publication account (user/organisation)
+  publisherType: {
+    type: String
+  },
+  publisher: {
+    type: Schema.ObjectId,
+    ref:  'User'
+  },
 
+  // Status of the publication
   publishStatus: { type: String, default: 'draft' },
-
-  // draft
   draft: {
     title: { type:String, trim:true },
     description: { type: String, trim: true },
   },
 
-  history: { type: String }
-
+  // publication activity
+  history: [{
+    date: {
+      type: Date,
+      default: Date.now
+    },
+    acitvity: { type: String }
+  }]
 });
 
 

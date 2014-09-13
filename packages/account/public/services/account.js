@@ -58,8 +58,8 @@ angular.module('mean.account')
       getAccount: function(){
         var promise = $http.get('/api/v2/user/account')
           .then(function(result){
-            console.log('fetched account', result);
-            user = result.data;
+            console.log('fetched account', result.data.account);
+            user = result.data.account;
             return result.data;
           });
         return promise;
@@ -90,6 +90,7 @@ angular.module('mean.account')
         }
         var trustedRole = false;
         if (user.roles) {
+          console.log('user roles,', user.roles);
           trustedRole = authorizedRoles.every(function(v,i) {
             return user.roles.indexOf(v) !== -1;
           });
@@ -117,9 +118,9 @@ angular.module('mean.account')
 
           case 'dataset':
             // check if logged in user is author
-            if (item.user) {
-              if (item.user.hasOwnProperty('_id')) {
-                if (item.user._id === user._id) {
+            if (item.publisher) {
+              if (item.publisher.hasOwnProperty('_id')) {
+                if (item.publisher._id === user._id) {
                   allowEdit = true;
                 }
               }

@@ -7,10 +7,7 @@ angular.module('mean.users').config(['$stateProvider', '$locationProvider',
 
     .state('profile', {
       url:'/:slug',
-      templateUrl: 'users/views/profile.html',
-      authorization: {
-        authorizedRoles: ['authenticated']
-      }
+      templateUrl: 'users/views/profile.html'
     });
   }
 ]);

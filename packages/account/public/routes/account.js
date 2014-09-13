@@ -8,7 +8,7 @@ angular.module('mean.account')
     $stateProvider
 
     .state('signin', {
-      url: '/signin',
+      url: '/u/signin',
       templateUrl: 'account/views/signin.html',
       authorization: {
         anonymousOnly: true
@@ -18,7 +18,7 @@ angular.module('mean.account')
 
     // Edit account settings
     .state('settings', {
-      url:'/settings',
+      url:'/u/settings',
       templateUrl: 'account/views/account.html',
       authorization: {
         authorizedRoles: ['authenticated'],

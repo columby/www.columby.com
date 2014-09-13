@@ -39,7 +39,7 @@ angular.module('mean.users')
   function getProfile(){
     console.log('get profile');
     // get profile information of user by userSlug
-    UserSrv.getProfile($stateParams.userSlug).then(function(result){
+    UserSrv.getProfile($stateParams.slug).then(function(result){
       console.log('result', result);
       $scope.profile = result.profile;
       $scope.contentLoading = false;

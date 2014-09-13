@@ -45,7 +45,7 @@ exports.jwtCheckAccount = function(req, res, next){
         if (!err) {
           // reconstruct account
           req.user = user;
-          console.log('User attached to req: ');
+          console.log('User attached to req.');
         }
         next();
       });
@@ -61,7 +61,7 @@ exports.jwtCheckAccount = function(req, res, next){
  * Generic require login routing middleware
  */
 exports.requiresLogin = function(req, res, next) {
-  if (!req.isAuthenticated()) {
+  if (!req.user._id) {
     return res.send(401, 'User is not authorized');
   }
   next();
@@ -72,7 +72,7 @@ exports.requiresLogin = function(req, res, next) {
  * Basic Role checking - future release with full permission system
  */
 exports.requiresAdmin = function(req, res, next) {
-  if (!req.isAuthenticated() || !req.user.hasRole('admin')) {
+  if (!req.user._id || !req.user.hasRole('admin')) {
     return res.send(401, 'User is not authorized');
   }
   next();
