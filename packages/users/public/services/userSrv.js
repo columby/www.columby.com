@@ -9,9 +9,9 @@ angular.module('mean.users')
     return {
 
       getProfile: function(slug) {
-        console.log('fetching profile');
         var promise = $http.get('/api/v2/user/profile/' + slug)
           .then(function(response){
+            console.log('profile', response);
             return response.data;
           });
         return promise;

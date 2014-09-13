@@ -37,10 +37,8 @@ angular.module('mean.users')
 
   /***   FUNCTIONS   ***/
   function getProfile(){
-    console.log('get profile');
     // get profile information of user by userSlug
     UserSrv.getProfile($stateParams.slug).then(function(result){
-      console.log('result', result);
       $scope.profile = result.profile;
       $scope.contentLoading = false;
 
@@ -52,7 +50,6 @@ angular.module('mean.users')
         _id: result.profile._id,
         canEdit: AuthSrv.canEdit(item)
       };
-      console.log('meta', meta);
       MetabarSrv.setPostMeta(meta);
 
       updateHeaderImage();

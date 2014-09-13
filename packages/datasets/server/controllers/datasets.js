@@ -4,7 +4,8 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  Dataset = mongoose.model('Dataset')
+  Dataset = mongoose.model('Dataset'),
+  User = mongoose.model('User')
   //, _ = require('lodash')
 ;
 
@@ -17,13 +18,11 @@ exports.dataset = function(req, res, next, id) {
   Dataset
     .findOne({_id: id}, function(err,dataset){
       if (err) return next(err);
-      if (!dataset) return next(new Error('Failed to load dataset ' + id));
+      if (!dataset) return res.json({error:'Failed to load dataset ' + id, err:err});
 
       var opts = [{ path:'publisher', model:dataset.publisherType, select: 'name slug description avatar plan'}];
 
       Dataset.populate(dataset, opts, function(err, pop){
-        console.log(err);
-        console.log(pop);
         req.dataset = dataset;
         next();
       });
@@ -35,17 +34,26 @@ exports.dataset = function(req, res, next, id) {
  * Create an dataset
  */
 exports.create = function(req, res) {
-  console.log('new dataset');
-  console.log(req.body);
+
   var dataset = new Dataset(req.body);
+  dataset.publishStatus = 'draft';
 
   dataset.save(function(err) {
-    if (err) {
-      console.log(err);
-      return res.json({
-        error: err
-      });
+    if (err) { return res.json({error: err }); }
+    // update publication account.
+
+    if (dataset.publisherType === 'User') {
+      User.findByIdAndUpdate(
+        { _id: dataset.publisher },
+        { $push: { datasets: dataset._id } },
+        { safe: true, upsert: true },
+        function(err, model) {
+          console.log(err);
+          console.log('model', model);
+        }
+      );
     }
+    
     console.log('Dataset created', dataset);
     res.json(dataset);
   });
@@ -102,18 +110,19 @@ exports.show = function(req, res) {
  * List of Datasets
  */
 exports.all = function(req, res) {
+  var filter;
+  if (req.query.userId) { filter = {publisher: req.query.userId}; }
+
   Dataset
-    .find()
+    .find(filter)
     .sort('-created')
-    //Model.populate(docs, options, [cb(err,doc)])
-    .populate('publisherType')
     .exec(function(err, datasets) {
-      if (err) {
-        return res.json(500, {
-          error: 'Cannot list the datasets'
-        });
-      }
-      res.json(datasets);
+      if (err) { return res.json(500, { error: 'Cannot list the datasets' }); }
+        console.log('datasets', datasets);
+      var opts = [{ path:'publisher', model:datasets.publisherType, select: 'name slug avatar plan'}];
+      Dataset.populate(datasets, opts, function(err, pop){
+        res.json(datasets);
+      });
     })
   ;
 };

@@ -1,3 +1,16 @@
+.ta-scroll-window.form-control,
+.ta-scroll-window > .ta-bind {
+  min-height: 0;
+}
+.ta-scroll-window > .ta-bind {
+  padding: 12px 0;
+}
+.ta-scroll-window.form-control,
+.ta-root.focussed .ta-scroll-window.form-control {
+  border: 0;
+  -webkit-box-shadow: 0 0;
+  box-shadow: 0 0;
+}
 .dataset.item .loader {
   display: block;
   text-align: center;

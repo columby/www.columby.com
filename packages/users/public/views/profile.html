@@ -70,11 +70,12 @@
 
         <div class="recent-publications">
           <div class="col-md-12">
-            <h3>Recently published</h3>
-            <p ng-show="!publications">No publications for this user</p>
+            <h3>Publications</h3>
+            <p ng-show="!profile.datasets">No publications for this user</p>
             <ul>
-              <li ng-repeat="publication in publications">
-                {{publication.title}}
+              <li ng-repeat="dataset in profile.datasets">
+                <a ui-sref="dataset.view({datasetId: dataset._id})">{{dataset.title}}</a>
+                <date>{{dataset.created | date:'short'}}</date>
               </li>
             </ul>
           </div>

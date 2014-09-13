@@ -10,25 +10,51 @@ angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$st
 ]);
 
 
-angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'MetabarSrv', 'AuthSrv', 'FlashSrv',
-  function($rootScope, $scope, $state, $stateParams, DatasetSrv, MetabarSrv, AuthSrv, FlashSrv) {
+angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'MetabarSrv', 'AuthSrv', '$notification',
+  function($rootScope, $scope, $state, $stateParams, DatasetSrv, MetabarSrv, AuthSrv, $notification) {
 
     /***   INITIALISATION   ***/
     var editWatcher;               // Watch for model changes in editmode
 
-    $scope.contentLoading = true;  // show loading message while loading dataset
     $scope.editMode = false;       // edit mode is on or off
     $scope.contentEdited = false;  // models is changed or not during editmode
 
+    if ($state.current.data && $state.current.data.editMode) {
+      $scope.editMode = true;
+    }
     /***   FUNCTIONS   ***/
     function getDataset(){
+      $scope.contentLoading = true;  // show loading message while loading dataset
 
       DatasetSrv.get({
         datasetId: $stateParams.datasetId
       }, function(dataset) {
-        console.log('dataset received',dataset);
+
         $scope.dataset = dataset;
         $scope.contentLoading = false;
+        if (!$scope.dataset.draft){
+          $scope.dataset.draft={};
+        }
+
+        // create summary
+        var summary = '<h3>Summary</h3><p>';
+        // check for file source
+        if (!dataset.sources) {
+          summary += 'There is no data for this dataset available yet. ';
+        } else if (!dataset.sources.primary) {
+          summary += 'There is no primary source for this dataset yet. ';
+        } else if (dataset.sources.primary.type) {
+          summary += 'This dataset if of the type <strong>' + dataset.sources.primary.type + '</strong>.';
+        }
+        // check for license
+        if (!dataset.license) {
+          summary += 'There is no license defined. ';
+        } else {
+          summary += 'The licens for this dataset is <strong>' + dataset.license.name + '</strong>';
+        }
+        $scope.summary = summary + '</p>';
+
+        console.log(summary);
         // send metadata to the metabar
         var meta = {
           postType: 'dataset',
@@ -38,10 +64,22 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
           updated: dataset.updated,
         };
         meta.canEdit = AuthSrv.canEdit(meta);
-
         MetabarSrv.setPostMeta(meta);
+
       });
     }
+
+    function initiateNewDataset(){
+      $scope.dataset = {
+        title: 'New title',
+        description: 'Description',
+        publishStatus: 'unpublished',
+        draft:{},
+        publisherType: 'User',
+        publisher: $rootScope.user.account._id
+      };
+    }
+
 
     /***   SCOPE FUNCTIONS   ***/
     $scope.toggleEditMode = function(){
@@ -67,11 +105,18 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
         console.log(res);
         if (res._id){
           $scope.dataset = res;
-          FlashSrv.setMessage({
-            value: 'Dataset udated!',
-            status: 'info'
-          });
+          $notification.info('Dataset udated!');
           $scope.toggleEditMode();
+        }
+      });
+    };
+
+    $scope.create = function(){
+      DatasetSrv.save($scope.dataset, function(res){
+        console.log(res);
+        if (res._id) {
+          $notification.info('Dataset created!');
+          $state.go('dataset.view', {datasetId:res._id});
         }
       });
     };
@@ -98,27 +143,15 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
 
 
     /*** INIT ***/
-    getDataset();
+    if (!$scope.editMode) {
+      getDataset();
+    } else {
+      initiateNewDataset();
+      $rootScope.$broadcast('metabar::editMode', true);
+    }
   }
 ]);
 
-angular.module('mean.datasets').controller('DatasetCreateController', ['$rootScope', '$scope', '$state', 'DatasetSrv',
-  function($rootScope, $scope, $state, DatasetSrv) {
-
-    var dataset = new DatasetSrv({
-      title: 'New dataset'
-    });
-
-    dataset.$save(function(res){
-      console.log('dataset', res);
-      if (res._id) {
-        $state.go('dataset view', {datasetId:res._id});
-      } else {
-        console.log('error or something', res);
-      }
-    });
-  }
-]);
 
 angular.module('mean.datasets').controller('DatasetEditCtrl', ['$scope', '$state', '$stateParams', '$timeout', '$interval', 'DatasetSrv',
   function($scope, $state, $stateParams, $timeout, $interval, DatasetSrv) {

@@ -33,7 +33,7 @@ var DatasetSchema = new Schema({
     type: String
   },
   publisher: {
-    type: Schema.ObjectId,
+    type: String,
     ref:  'User'
   },
 
@@ -81,9 +81,12 @@ DatasetSchema.path('title').validate(function(title) {
  * Statics
  */
 DatasetSchema.statics.load = function(id, cb) {
-  this.findOne({
-    _id: id
-  }).populate('user', 'name username slug').exec(cb);
+  var Dataset = mongoose.model('Dataset');
+  Dataset
+    .findOne({_id: id}, function(err,dataset){
+      var opts = [{ path:'publisher', model:dataset.publisherType, select: 'name slug description avatar plan'}];
+      Dataset.populate(dataset, opts, cb);
+    });
 };
 
 mongoose.model('Dataset', DatasetSchema);

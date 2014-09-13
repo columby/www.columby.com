@@ -66,13 +66,13 @@ var OrganisationSchema = new Schema({
 
   // Reference to Organisation's Administrator
   administrator: {
-    type: Schema.ObjectId,
+    type: String,
     ref: 'User'
   },
 
   // Reference to Datasets published by this organisation
   datasets:[{
-    type: Schema.ObjectId,
+    type: String,
     ref: 'Dataset'
   }],
 

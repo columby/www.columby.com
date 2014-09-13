@@ -90,12 +90,12 @@ var UserSchema = new Schema({
   },
 
   datasets: [{
-    type: Schema.Types.ObjectId,
+    type: String,
     ref: 'Dataset'
   }],
 
   organisations: [{
-    type: Schema.Types.ObjectId,
+    type: String,
     ref: 'Organisation'
   }],
 
@@ -183,7 +183,13 @@ UserSchema.statics.findBySlug = function(slug, cb) {
   var User = mongoose.model('User');
 
   User
-    .findOne({slug: slug}, 'username description roles headerImage headerPattern')
+    .findOne({slug: slug}, 'username description datasets roles headerImage headerPattern')
+    .populate({
+      path: 'datasets',
+      options: {
+        sort: { 'created': -1 }
+      },
+      select: 'title created'})
     .exec(function(err,p){
       cb(err, p);
     });
