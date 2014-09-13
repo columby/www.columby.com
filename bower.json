@@ -13,7 +13,6 @@
     "bootstrap": "3.1.1",
     "angular-bootstrap": "0.11.0",
     "angular-ui-router": "#master",
-
     "d3": "latest",
     "trianglify": "latest",
     "textAngular": "latest",
@@ -21,6 +20,6 @@
     "angular-notifications": "latest"
   },
   "resolutions": {
-    "angular": "1.2.23"
+    "angular": "~1.2.x"
   }
 }
