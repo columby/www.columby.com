@@ -416,7 +416,6 @@ body .metabar-wrapper .actions {
   font-size: 1.8em;
   line-height: 1.5em;
   border-bottom: 1px solid #d9d9d9;
-  margin-bottom: 10px;
   font-weight: bold;
   color: #7a7a7a;
   padding: 6px;
@@ -427,7 +426,12 @@ body .metabar-wrapper .actions {
 .account-settings .accounts-listing li {
   list-style: none;
   padding: 6px;
-  margin-bottom: 30px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.account-settings .accounts-listing h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .account-settings .accounts-listing h3 a {
   font-family: "lato", sans-serif;
@@ -435,8 +439,21 @@ body .metabar-wrapper .actions {
   font-weight: 700;
   color: #222;
 }
+.account-settings .accounts-listing .new-account {
+  color: #ccc;
+  font-size: 0.6em;
+}
 .account-settings .accounts-listing .account-detail {
   color: #c8c8c8;
+}
+.account-settings .accounts-listing .badge {
+  vertical-align: top;
+  margin-top: 10px;
+  margin-left: 10px;
+  background-color: #4AB110;
+}
+.account-settings .accounts-listing .badge.blue {
+  background-color: #2A93DA;
 }
 /*** ---- HOMEPAGE ---------------------------- ***/
 .page-home .page-header {
