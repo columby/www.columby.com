@@ -47,8 +47,8 @@ exports.passwordlessLogin = function(req,res,next){
       // Send the new token by email
       mandrill_client.messages.send({
         'message': {
-          'html': req.protocol + '://' + req.get('host') + '/#!/signin?token=' + token.token,
-          'text': req.protocol + '://' + req.get('host') + '/#!/signin?token=' + token.token,
+          'html': req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token,
+          'text': req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token,
           'subject': 'Login at Columby',
           'from_email': 'admin@columby.com',
           'from_name': 'Columby Admin',
@@ -247,8 +247,8 @@ exports.create = function(req, res, next) {
         //sendmail
         mandrill_client.messages.send({
           'message': {
-            'html': req.protocol + '://' + req.get('host') + '/#!/signin?token=' + token.token,
-            'text': req.protocol + '://' + req.get('host') + '/#!/signin?token=' + token.token,
+            'html': req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token,
+            'text': req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token,
             'subject': 'Login at Columby',
             'from_email': 'admin@columby.com',
             'from_name': 'Columby Admin',
