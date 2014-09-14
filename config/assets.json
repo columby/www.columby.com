@@ -2,7 +2,6 @@
   "core": {
     "css": {
       "bower_components/build/css/dist.min.css": [
-        "bower_components/font-awesome/css/font-awesome.min.css",
         "bower_components/angularjs-toaster/toaster.css"
       ]
     },
