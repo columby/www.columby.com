@@ -13,7 +13,7 @@ angular.module('mean.account')
     /* ----- SETUP ------------------------------------------------------------ */
     $scope.loginInProgress = false;
     $scope.credentials = {
-      username: '',
+      name: '',
       email: ''
     };
 
@@ -77,7 +77,7 @@ angular.module('mean.account')
             newmail = newmail + c;
             c++;
           }
-          $scope.newuser.username = newmail;
+          $scope.newuser.name = newmail;
 
           //$scope.credentials.email = null;
         }
@@ -129,7 +129,7 @@ angular.module('mean.account')
     $scope.updateAccount = function(){
       console.log('updating account.');
       var update = {
-        username: $scope.account.username,
+        name: $scope.account.name,
       };
       var id = $scope.account._id;
       delete update._id;

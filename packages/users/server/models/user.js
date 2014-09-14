@@ -119,7 +119,7 @@ UserSchema.pre('save', function(next) {
 
   //http://blog.benmcmahen.com/post/41122888102/creating-slugs-for-your-blog-using-express-js-and
   var self=this;
-  var slug=slugify(self.username);
+  var slug=slugify(self.name);
   self.set('slug', slug);
 
   next();
@@ -183,7 +183,7 @@ UserSchema.statics.findBySlug = function(slug, cb) {
   var User = mongoose.model('User');
 
   User
-    .findOne({slug: slug}, 'username description datasets roles headerImage headerPattern')
+    .findOne({slug: slug}, 'name description datasets roles headerImage headerPattern')
     .populate({
       path: 'datasets',
       options: {

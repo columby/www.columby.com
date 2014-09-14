@@ -54,7 +54,7 @@ exports.passwordlessLogin = function(req,res,next){
           'from_name': 'Columby Admin',
           'to': [{
             'email': user.email,
-            'name': user.username,
+            'name': user.name,
             'type': 'to'
           }],
           'headers': {
@@ -179,7 +179,7 @@ exports.create = function(req, res, next) {
       user.roles = ['authenticated'];
 
   req.assert('email', 'You must enter a valid email address').isEmail();
-  req.assert('username', 'Username cannot be more than 20 characters').len(1, 20);
+  req.assert('name', 'Name cannot be more than 20 characters').len(1, 20);
 
   var errors = req.validationErrors();
   if (errors) {
@@ -210,8 +210,8 @@ exports.create = function(req, res, next) {
               status: 'error',
               statusCode: 400,
               statusMessage: [{
-                msg: 'Username already taken',
-                param: 'username'
+                msg: 'Name already taken',
+                param: 'name'
               }]
             });
             break;
@@ -254,7 +254,7 @@ exports.create = function(req, res, next) {
             'from_name': 'Columby Admin',
             'to': [{
               'email': user.email,
-              'name': user.username,
+              'name': user.name,
               'type': 'to'
             }],
             'headers': {
