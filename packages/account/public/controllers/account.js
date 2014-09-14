@@ -38,7 +38,7 @@ angular.module('mean.account')
           };
           $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, response.user);
           console.log('Logged in.');
-          toaster.pop('success', 'success', 'You have succesfully signed in.'),
+          toaster.pop('success', 'success', 'You have succesfully signed in.');
 
           // Redirect back to frontpage
           $state.go('home');

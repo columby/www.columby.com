@@ -14,6 +14,7 @@ angular.element(document).ready(function() {
   var xmlHttp;
   var token = JSON.parse(localStorage.getItem('auth_token'));
   if (token){
+    console.log('init, token found', token);
     xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange=function() {
       if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
