@@ -16,7 +16,7 @@ Account.register(function(app, auth, database) {
   //We enable routing. By default the Package Object is passed to the routes
   Account.routes(app, auth, database);
 
-  Account.angularDependencies(['ngAnimate','toaster']);
+  //Account.angularDependencies(['ngAnimate','toaster']);
 
   /**
     //Uncomment to use. Requires meanio@0.3.7 or above
