@@ -26,7 +26,7 @@ MeanUser.register(function(app, auth, database) {
 
   MeanUser.aggregateAsset('js', 'users.js');
 
-  MeanUser.angularDependencies(['textAngular','toaster']);
+  MeanUser.angularDependencies(['textAngular','ngAnimate','toaster']);
 
   /**
     //Uncomment to use. Requires meanio@0.3.7 or above
