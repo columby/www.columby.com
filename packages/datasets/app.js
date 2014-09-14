@@ -17,5 +17,7 @@ Datasets.register(function(app, auth, database) {
 
   Datasets.aggregateAsset('css','datasets.css');
 
+  Datasets.angularDependencies(['textAngular','toaster']);
+
   return Datasets;
 });

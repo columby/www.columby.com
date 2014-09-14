@@ -41,7 +41,7 @@ for (var index in window.modules) {
 }
 
 // Default modules
-var modules = ['ngCookies', 'ngResource', 'ngSanitize','ui.bootstrap', 'ui.router', 'ngAnimate', 'toaster'];
+var modules = ['ngCookies', 'ngResource', 'ngSanitize','ui.bootstrap', 'ui.router'];
 modules = modules.concat(packageModules);
 
 // Combined modules

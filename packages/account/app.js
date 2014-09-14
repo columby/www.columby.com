@@ -16,6 +16,8 @@ Account.register(function(app, auth, database) {
   //We enable routing. By default the Package Object is passed to the routes
   Account.routes(app, auth, database);
 
+  Account.angularDependencies(['toaster']);
+
   /**
     //Uncomment to use. Requires meanio@0.3.7 or above
     // Save settings with callback

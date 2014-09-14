@@ -17,9 +17,6 @@
     "trianglify": "latest",
     "textAngular": "latest",
     "font-awesome": "latest",
-    "angularjs-toaster": "~0.4.7"
-  },
-  "resolutions": {
-    "angular": "~1.2.x"
+    "angularjs-toaster": "latest"
   }
 }
