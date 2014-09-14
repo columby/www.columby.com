@@ -7,8 +7,8 @@ angular.module('mean.account')
    *
    ***/
   .controller('LoginCtrl', [
-    '$scope', '$rootScope', '$location', '$http','$state', 'AUTH_EVENTS', 'AuthSrv', 'FlashSrv',
-    function ($scope, $rootScope, $location, $http, $state, AUTH_EVENTS, AuthSrv, FlashSrv) {
+    '$scope', '$rootScope', '$location', '$http','$state', 'AUTH_EVENTS', 'AuthSrv', 'toaster',
+    function ($scope, $rootScope, $location, $http, $state, AUTH_EVENTS, AuthSrv, toaster) {
 
     /* ----- SETUP ------------------------------------------------------------ */
     $scope.loginInProgress = false;
@@ -38,17 +38,12 @@ angular.module('mean.account')
           };
           $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, response.user);
           console.log('Logged in.');
-          FlashSrv.setMessage({
-            value: 'You have succesfully signed in.',
-            status: 'info'
-          });
+          toaster.pop('success', 'success', 'You have succesfully signed in.'),
+
           // Redirect back to frontpage
           $state.go('home');
         } else {
-          FlashSrv.setMessage({
-            value: 'There was an error verifying the login. Please try again.',
-            status: 'danger'
-          });
+          toaster.pop('success', 'error', 'There was an error verifying the login. Please try again.'),
         }
         $scope.verificationInProgress = true;
       });
@@ -110,7 +105,8 @@ angular.module('mean.account')
     }
   }])
 
-  .controller('AccountCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'AuthSrv', 'toaster', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, AuthSrv, toaster) {
+  .controller('AccountCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'AuthSrv', 'toaster',
+  function ($scope, $rootScope, $location, $state, AUTH_EVENTS, AuthSrv, toaster) {
 
     /*** FUNCTIONS ***/
     function getAccount(){
