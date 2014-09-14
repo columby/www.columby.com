@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('mean.datasets', []);
+angular.module('mean.datasets', ['textAngular']);
