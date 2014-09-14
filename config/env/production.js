@@ -2,6 +2,8 @@
 
 module.exports = {
 
+  debug: true,
+  
   db: process.env.MONGOHQ_URL,
 
   app: {
