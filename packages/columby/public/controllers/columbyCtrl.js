@@ -21,8 +21,8 @@ angular.module('mean.columby')
    *
    ***/
   .controller('ColumbyCtrl', [
-    '$window','$rootScope','$scope','$timeout','$http','$notification','Columby','AuthSrv',
-    function($window,$rootScope, $scope, $timeout, $http, $notification, Columby, AuthSrv) {
+    '$window','$rootScope','$scope','$timeout','$http','toaster','Columby','AuthSrv',
+    function($window,$rootScope, $scope, $timeout, $http, toaster, Columby, AuthSrv) {
 
       /* ----- SETUP -----------------------------------------------------------------*/
       // Add console object to window for IE9
@@ -51,8 +51,7 @@ angular.module('mean.columby')
       };
 
       if ($rootScope.user.isAuthenticated){
-        $rootScope.$broadcast('addNotification', 'Welcome back, ' + $rootScope.user.account.username);
-        $notification.info('Welcome', 'Welcome back ' + $rootScope.user.account.username);
+        toaster.pop('success', 'Welcome', 'Welcome back ' + $rootScope.user.account.username);
       }
     }
   ])
@@ -62,7 +61,9 @@ angular.module('mean.columby')
    * Controller for the Home page
    *
    ***/
-  .controller('ColumbyHomeCtrl', function($scope, $rootScope, $location, $state, $notification, AUTH_EVENTS, AuthSrv, DatasetSrv) {
+  .controller('ColumbyHomeCtrl',
+    function($scope, $rootScope, $location, $state, toaster, AUTH_EVENTS, AuthSrv, DatasetSrv) {
+
     angular.element('body').addClass('contentLoading');
     $scope.contentLoading = true;
 
@@ -79,8 +80,8 @@ angular.module('mean.columby')
    * Controller for the main Site Navigation
    *
    ***/
-  .controller('SiteNavController', ['$rootScope', '$scope', 'Global', 'Columby','$http','$notification','$location', 'AuthSrv','AUTH_EVENTS','$state',
-    function($rootScope, $scope, Global, Columby,$http,$notification,$location,AuthSrv,AUTH_EVENTS, $state) {
+  .controller('SiteNavController', ['$rootScope', '$scope', '$http','toaster','$location', 'AuthSrv', '$state',
+    function($rootScope, $scope, $http, toaster, $location, AuthSrv, $state) {
 
       /* ---------- SETUP ----------------------------------------------------------------------------- */
       $scope.controller = {name: 'SiteNavController'};

@@ -3,7 +3,7 @@
     "css": {
       "bower_components/build/css/dist.min.css": [
         "bower_components/font-awesome/css/font-awesome.min.css",
-        "bower_components/angular-notifications/notification.min.css"
+        "bower_components/angularjs-toaster/toaster.css"
       ]
     },
     "js": {
@@ -11,6 +11,7 @@
 
         "bower_components/jquery/dist/jquery.min.js",
         "bower_components/angular/angular.js",
+        "bower_components/angular-animate/angular-animate.min.js",
         "bower_components/angular-mocks/angular-mocks.js",
         "bower_components/angular-cookies/angular-cookies.js",
         "bower_components/angular-resource/angular-resource.js",
@@ -20,7 +21,7 @@
         "bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
         "bower_components/textAngular/dist/textAngular-sanitize.min.js",
         "bower_components/textAngular/dist/textAngular.min.js",
-        "bower_components/angular-notifications/notification.js"
+        "bower_components/angularjs-toaster/toaster.js"
       ]
     }
   }

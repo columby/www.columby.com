@@ -10,8 +10,8 @@ angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$st
 ]);
 
 
-angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'MetabarSrv', 'AuthSrv', '$notification',
-  function($rootScope, $scope, $state, $stateParams, DatasetSrv, MetabarSrv, AuthSrv, $notification) {
+angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'MetabarSrv', 'AuthSrv', 'toaster',
+  function($rootScope, $scope, $state, $stateParams, DatasetSrv, MetabarSrv, AuthSrv, toaster) {
 
     /***   INITIALISATION   ***/
     var editWatcher;               // Watch for model changes in editmode
@@ -99,13 +99,10 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
         description: $scope.dataset.description
       };
 
-      console.log('Sending update', dataset);
-
       DatasetSrv.update(dataset,function(res){
-        console.log(res);
         if (res._id){
           $scope.dataset = res;
-          $notification.info('Dataset udated!');
+          toaster.pop('success', 'Updated', 'Dataset updated.');
           $scope.toggleEditMode();
         }
       });
@@ -113,9 +110,8 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
 
     $scope.create = function(){
       DatasetSrv.save($scope.dataset, function(res){
-        console.log(res);
         if (res._id) {
-          $notification.info('Dataset created!');
+          toaster.pop('success', 'Created', 'Dataset created.');
           $state.go('dataset.view', {datasetId:res._id});
         }
       });
@@ -124,7 +120,6 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
     /*** ROOTSCOPE EVENTS ***/
     // Turn on or off editMode for a dataset
     $scope.$on('metabar::editMode', function(evt,mode){
-      console.log('editmode on');
       $scope.editMode = mode;
 
       if (mode === true){

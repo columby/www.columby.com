@@ -110,7 +110,7 @@ angular.module('mean.account')
     }
   }])
 
-  .controller('AccountCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'AuthSrv', '$notification', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, AuthSrv, $notification) {
+  .controller('AccountCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'AuthSrv', 'toaster', function ($scope, $rootScope, $location, $state, AUTH_EVENTS, AuthSrv, toaster) {
 
     /*** FUNCTIONS ***/
     function getAccount(){
@@ -124,7 +124,7 @@ angular.module('mean.account')
       AuthSrv.logout().then(function(result){
         localStorage.removeItem('auth_token');
         $rootScope.user = {};
-        $notification.info('You are now signed out.');
+        toaster.pop('success', 'Signed out', 'You are now signed out.');
 
         $state.go('home');
       });
@@ -141,7 +141,7 @@ angular.module('mean.account')
       AuthSrv.updateAccount(id, update).then(function(res){
         console.log('auth response', res);
         $rootScope.$broadcast('account::updated');
-        $notification.info('Account updated');
+        toaster.pop('success', 'Account updated', 'Your account is updated.');
       });
     };
 

@@ -24,7 +24,7 @@ MeanUser.register(function(app, auth, database) {
   //     menu: 'main'
   // });
 
-  MeanUser.aggregateAsset('js', 'meanUser.js');
+  MeanUser.aggregateAsset('js', 'users.js');
 
   /**
     //Uncomment to use. Requires meanio@0.3.7 or above
