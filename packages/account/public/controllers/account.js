@@ -43,7 +43,7 @@ angular.module('mean.account')
           // Redirect back to frontpage
           $state.go('home');
         } else {
-          toaster.pop('success', 'error', 'There was an error verifying the login. Please try again.'),
+          toaster.pop('success', 'error', 'There was an error verifying the login. Please try again.');
         }
         $scope.verificationInProgress = true;
       });
