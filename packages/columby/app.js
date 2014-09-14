@@ -21,7 +21,7 @@ Columby.register(function(app, auth, database) {
   Columby.aggregateAsset('css','columby.css');
   Columby.aggregateAsset('css','editor-sidebar.css');
 
-  Columby.angularDependencies(['toaster']);
+  Columby.angularDependencies(['ngAnimate, toaster']);
 
   /*
   if (process.env.NODE_ENV === 'development') {
