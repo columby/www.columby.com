@@ -9,7 +9,7 @@ angular.module('mean.collection').config(['$stateProvider',
       })
 
       .state('collection.create', {
-        url: '/:accountSlug/collection/new',
+        url: '/new/c?accountId',
         templateUrl: 'collection/views/view.html',
         authorization: {
           authorizedRoles: ['authenticated']
@@ -20,7 +20,7 @@ angular.module('mean.collection').config(['$stateProvider',
       })
 
       .state('collection.view', {
-        url: '/:acountSlug/collection/:collectionId',
+        url: '/c/:collectionId',
         templateUrl: 'collection/views/view.html',
       })
 

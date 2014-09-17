@@ -8,6 +8,9 @@ module.exports = function(MeanUser, app, auth, database) {
   // Setting up the userId param
   //app.param('userId', users.user);
 
+  // Account of currently loggedin user
+  app.route('/api/v2/user')
+    .get(auth.jwtCheckAccount, users.user);
 
   app.route('/api/v2/user/login')
     .post(users.passwordlessLogin);
@@ -20,12 +23,5 @@ module.exports = function(MeanUser, app, auth, database) {
 
   app.route('/api/v2/user/logout')
     .get(users.signout);
-
-  // Profile of currently loggedin user
-  app.route('/api/v2/user/profile/:slug')
-    .get(users.getProfile);
-  app.route('/api/v2/user/profile')
-    // check permission
-    .put(users.updateProfile);
 
 };

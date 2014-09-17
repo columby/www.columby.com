@@ -45,13 +45,11 @@ angular.module('mean.columby')
       }
       // Get account with token
       // account was already fetched before angular init
-      $rootScope.user = {
-        account: AuthSrv.user(),
-        isAuthenticated: AuthSrv.isAuthenticated()
-      };
-
+      // We assume this is already processed.
+      $rootScope.user = window.user;
+      
       if ($rootScope.user.isAuthenticated){
-        toaster.pop('success', 'Welcome', 'Welcome back ' + $rootScope.user.account.username);
+        toaster.pop('success', 'Welcome', 'Welcome back ' + $rootScope.user.email);
       }
     }
   ])

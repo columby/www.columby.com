@@ -22,7 +22,7 @@ function slugify(text) {
  * Validations
  */
 /*
-var validateOrganisationType = function(value, callback) {
+var validateAccountType = function(value, callback) {
   if (value !== 'user'){
     callback(false);
   } else {
@@ -35,46 +35,24 @@ var validateOrganisationType = function(value, callback) {
  * Publication Account Schema
  */
 
-var OrganisationSchema = new Schema({
+var AccountSchema = new Schema({
 
   // Account settings
-  name: {
-    type: String,
-    unique: true
-  },
+  name        : { type: String, unique: true },
 
-  slug: {
-    type: String,
-    unique: true
-  },
+  slug        : { type: String, unique: true },
 
-  plan: {
-    type: String,
-    default: 'free'
-  },
+  primary     : { type: Boolean },
 
-  // Profile Settings
-  description: {
-    type: String,
-    required: false
-  },
+  plan        : { type: String, default: 'free' },
 
-  avatar: {
-    type: String,
-    required: false
-  },
+  description : { type: String, required: false },
 
-  // Reference to Organisation's Administrator
-  administrator: {
-    type: String,
-    ref: 'User'
-  },
+  avatar      : { type: String, required: false },
 
-  // Reference to Datasets published by this organisation
-  datasets:[{
-    type: String,
-    ref: 'Dataset'
-  }],
+  owner       : { type: Schema.ObjectId, ref: 'User' },
+
+  datasets    : [{ type: Schema.ObjectId, ref: 'Dataset' }]
 
 });
 
@@ -83,7 +61,7 @@ var OrganisationSchema = new Schema({
 /**
  * Pre-save hook
  */
-OrganisationSchema.pre('save', function(next) {
+AccountSchema.pre('save', function(next) {
 
   var self=this;
   var slug=slugify(self.name);
@@ -97,14 +75,14 @@ OrganisationSchema.pre('save', function(next) {
  */
 
 
-OrganisationSchema.statics.findBySlug = function(slug, cb) {
-  var Organisation = mongoose.model('Organisation');
+AccountSchema.statics.findBySlug = function(slug, cb) {
+  var Account = mongoose.model('Account');
 
-  Organisation
+  Account
     .findOne({slug: slug})
     .exec(function(err,p){
       cb(err, p);
     });
 };
 
-mongoose.model('Organisation', OrganisationSchema);
+mongoose.model('Account', AccountSchema);

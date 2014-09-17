@@ -1,7 +1,7 @@
 {
-  "name": "account",
+  "name": "accounts",
   "version": "0.0.1",
-  "description": "Some description of auth",
+  "description": "Some description of accounts",
   "author": {
     "name": "mean scaffold"
   },

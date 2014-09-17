@@ -5,7 +5,7 @@ README: Collection
 - _id         : id
 - title       : string
 - slug        : string
-- owner       : ref.userId
+- owner       : ref.accountId
 - datasets    : [ref.datasetId]
 - createdAt   : Date
 - updatedAt   : Date

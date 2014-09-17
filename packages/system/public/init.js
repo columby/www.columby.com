@@ -18,15 +18,18 @@ angular.element(document).ready(function() {
     xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange=function() {
       if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-        var response = JSON.parse(xmlHttp.responseText);
-        window.user = {
-          account: response.account,
-          isAuthenticated: (response.account && response.account.hasOwnProperty('_id')) ? true : false
-        };
+        var response = JSON.parse(xmlHttp.responseText) || {};
+        if (response && response.hasOwnProperty('_id')) {
+          response.isAuthenticated = true;
+        } else {
+          response.authenticated = false;
+        }
+        window.user = response;
+
         initApp();
       }
     };
-    xmlHttp.open( 'GET', '/api/v2/user/account', true );
+    xmlHttp.open( 'GET', '/api/v2/user', true );
     xmlHttp.setRequestHeader('Authorization', 'Bearer ' + token);
     xmlHttp.send( null );
   } else {

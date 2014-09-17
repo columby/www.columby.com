@@ -1,0 +1,31 @@
+<section class="account-settings" data-ng-controller="UserCtrl">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-offset-2 col-md-8">
+				<h2>Your account</h2>
+	      <p><strong>Email: </strong>{{user.email}}</p>
+        <p><strong>Account id: </strong>{{user._id}}</p>
+			</div>
+    </div>
+    <hr />
+
+    <div class="row">
+      <div class="col-md-offset-2 col-md-8">
+        <a class="btn btn-default" ng-click="logout()">Logout</a>
+      </div>
+    </div>
+    <hr/>
+
+    <div class="row accounts">
+		  <div class="col-md-offset-2 col-md-8">
+        <h2>Accounts</h2>
+        <div class="accounts" ng-repeat="account in user.accounts">
+          {{account}}
+        </div>
+      <div>
+      <h3><a ui-sref="account.create({userId: user._id})" class="new-account">&#43; Add a new publication account</a></h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

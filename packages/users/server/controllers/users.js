@@ -6,12 +6,21 @@
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
   Token = mongoose.model('LoginToken'),
+  Account = mongoose.model('Account'),
   moment = require('moment'),
   jwt = require('jwt-simple'),
   config = require('meanio').loadConfig(),
   mandrill = require('mandrill-api/mandrill'),
   mandrill_client = new mandrill.Mandrill(config.mandrill.key)
 ;
+
+/**
+ * Send logged in User account
+ */
+exports.user = function(req, res) {
+  console.log('returning user', req.user);
+  return res.json(req.user || null);
+};
 
 
 exports.passwordlessLogin = function(req,res,next){
@@ -139,35 +148,6 @@ exports.signout = function(req, res) {
 };
 
 
-/**
- * Get a user's profile
- */
-exports.getProfile = function(req,res){
-  User.findBySlug(req.params.slug, function(err,p){
-    if (err) return res.json({status: 'error'});
-    return res.json({
-      status:'success',
-      profile: p
-    });
-  });
-};
-
-
-/**
- * Update an existing user's profile
- */
-exports.updateProfile = function(req,res){
-  var update = { $set: req.body.updated };
-  console.log('update', update);
-  User.update(req.body._id, update, function(err,p){
-    if (err) return res.json({status: 'error'});
-    return res.json({
-      status:'success',
-      statusMessage: 'Profile updated'
-    });
-  });
-};
-
 
 /**
  * Create user
@@ -244,6 +224,16 @@ exports.create = function(req, res, next) {
         token.save();
         console.log('token created', token);
 
+        // Create a new Account
+        var account = new Account({
+          owner: user._id,
+          name: req.body.name,
+          primary: true
+        });
+
+        account.save();
+        console.log('account created', account);
+
         //sendmail
         mandrill_client.messages.send({
           'message': {
@@ -282,23 +272,3 @@ exports.create = function(req, res, next) {
     });
   }
 };
-
-
-
-/**
- * Find user by id
- */
-/*
-exports.user = function(req, res, next, id) {
-  User
-    .findOne({
-      _id: id
-    })
-    .exec(function(err, user) {
-      if (err) return next(err);
-      if (!user) return next(new Error('Failed to load User ' + id));
-      req.profile = user;
-      next();
-    });
-};
-*/

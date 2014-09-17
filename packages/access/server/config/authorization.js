@@ -13,7 +13,7 @@ var mean = require('meanio'),
 exports.jwtCheckAccount = function(req, res, next){
 
   if (!req.user){
-    console.log('no user present. Fetching user based on JWT. ');
+
     var token;
 
     if (req.headers && req.headers.authorization){
@@ -39,7 +39,7 @@ exports.jwtCheckAccount = function(req, res, next){
       }
 
 
-      UserModel.getAccount({ '_id': decoded.iss }, function(user,err){
+      UserModel.findOne({ '_id': decoded.iss }, function(err,user){
         console.log('userfind error',err);
         console.log('user',user);
         if (!err) {

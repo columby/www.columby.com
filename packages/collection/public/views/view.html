@@ -1,0 +1,75 @@
+<div class="collection item edit" ng-controller="CollectionViewCtrl">
+
+  <div class="loader" ng-show="contentLoading">Loading collection</div>
+
+  <!-- Editor Sidebar -->
+  <div class="editorSidebar" ng-show="editMode">
+    <div class="editorSidebarContent">
+      <a ng-click="toggleEditMode()">cancel</a>
+      <button class="btn dbt-default" ng-show="contentEdited && collection.publishStatus!=='unpublished'" ng-click="update()">Update</button>
+      <button class="btn dbt-default" ng-show="collection.publishStatus==='unpublished'" ng-click="create()">Create</button>
+
+      <h3>Publication status</h3>
+      <p><strong>{{collection.publishStatus}}</strong></p>
+
+      <h3>Publication account</h3>
+      <img src="collection.publisher.avatar"/>
+      <p>{{collection.publisher.name}}</p>
+
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="collection-content" ng-hide="contentLoading">
+
+    <div class="collection-header-wrapper">
+      <div class="collection-header container">
+        <div class="title" ng-switch="editMode">
+          <h1 ng-switch-default ng-bind-html="collection.title || 'no title yet'"></h1>
+          <h1 ng-switch-when="true"
+            contenteditable
+            name="title"
+            ng-model="collection.title"
+            htmlFormat="plain">
+          </h1>
+        </div>
+        <div class="avatar">
+          <img src="{{collection.publisher.avatar.url}}"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="collection-description-wrapper">
+      <div class="collection-description container">
+        <div class="col-md-12" ng-switch="editMode">
+          <div ng-switch-default ng-bind-html="collection.description || 'The publisher of this collection has not yet provided a description yet.'"></div>
+          <div ng-switch-when="true"
+            ng-model="collection.description"
+            text-angular
+            placeholder="please enter your description"
+            ta-toolbar="[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="collection-id-wrapper" ng-show="collection._id && !editMode">
+      <div class="container">
+        <div class="collection-id content">
+          <h4>UUID: {{collection._id}}</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="collection-publisher-wrapper" ng-hide="editMode">
+      <div class="container">
+        <div class="collection-publisher-content">
+            <h3>About the publisher: <a ui-sref="profile({slug: collection.publisher.slug})">{{collection.publisher.name}}</a></h3>
+            <div ng-bind-html="collection.publisher.description"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

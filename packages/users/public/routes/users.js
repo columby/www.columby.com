@@ -5,9 +5,26 @@ angular.module('mean.users').config(['$stateProvider', '$locationProvider',
 
     $stateProvider
 
-    .state('profile', {
-      url:'/:slug',
-      templateUrl: 'users/views/profile.html'
+    .state('signin', {
+      url: '/u/signin',
+      templateUrl: 'users/views/signin.html',
+      authorization: {
+        anonymousOnly: true
+      }
+    })
+
+
+    // Edit user settings
+    .state('settings', {
+      url:'/u/settings',
+      templateUrl: 'users/views/view.html',
+      authorization: {
+        authorizedRoles: ['authenticated'],
+        permissions:[
+          'can edit own account',
+          'can edit accounts'
+        ]
+      }
     });
   }
 ]);

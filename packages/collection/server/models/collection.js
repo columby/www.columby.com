@@ -4,37 +4,29 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+  Schema = mongoose.Schema,
+  ObjectId = Schema.ObjectId;
 
 
 var CollectionSchema = new Schema({
 
-  name: { type: String, unique: true },
+  account: { type: ObjectId, ref: 'Account', required: true },
 
-  slug: { type: String, unique: true },
+  title: { type: String },
 
-  description: { type: String, required: false },
-
-  owner: { type: String, ref: 'User' },
+  description: { type: String },
 
   headerImage: { type: String },
 
   headerPattern: { type: String },
 
-  datasets:[{ type: String, ref: 'Dataset' }],
+  datasets :[{ type: ObjectId, ref: 'Dataset' }],
+
+  createdAt : { type: Date, default: Date.now() },
+
+  updatedAt : { type: Date}
 
 });
-
-
-CollectionSchema.statics.findBySlug = function(slug, cb) {
-  var Collection = mongoose.model('Collection');
-
-  Collection
-    .findOne({slug: slug})
-    .exec(function(err,p){
-      cb(err, p);
-    });
-};
 
 
 mongoose.model('Collection', CollectionSchema);

@@ -29,12 +29,9 @@ var DatasetSchema = new Schema({
   description: { type: String, trim: true },
 
   // Publication account (user/organisation)
-  publisherType: {
-    type: String
-  },
-  publisher: {
-    type: String,
-    ref:  'User'
+  account: {
+    type: Schema.ObjectId,
+    ref:  'Account'
   },
 
   // Status of the publication

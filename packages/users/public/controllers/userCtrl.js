@@ -2,105 +2,131 @@
 angular.module('mean.users')
 
 /***
- * Controller a user's profile page
+ * Controller for the Signin page
  *
  ***/
-.controller('ColumbyProfileCtrl', [
-  '$scope', '$rootScope', '$location', '$state', '$stateParams', 'AUTH_EVENTS', 'AuthSrv', 'UserSrv', 'FlashSrv', 'MetabarSrv',
-  function ($scope, $rootScope, $location, $state, $stateParams, AUTH_EVENTS, AuthSrv, UserSrv, FlashSrv, MetabarSrv) {
+.controller('LoginCtrl', [
+  '$scope', '$rootScope', '$location', '$http','$state', 'AUTH_EVENTS', 'AuthSrv', 'toaster',
+  function ($scope, $rootScope, $location, $http, $state, AUTH_EVENTS, AuthSrv, toaster) {
 
-  /* ---------- SETUP ----------------------------------------------------------------------------- */
-  var editWatcher;               // Watch for model changes in editmode
+  /* ----- SETUP ------------------------------------------------------------ */
+  $scope.loginInProgress = false;
+  $scope.credentials = {
+    name: '',
+    email: ''
+  };
 
-  $scope.contentLoading = true;
-  $scope.editMode = false;       // edit mode is on or off
-  $scope.contentEdited = false;  // models is changed or not during editmode
+
+  /* ----- FUNCTIONS -------------------------------------------------------- */
+  // Check if a request is a login token request
+  function verify(token) {
+    $scope.verificationInProgress = true;
+    AuthSrv.verify(params.token).then(function(response){
+      console.log(response);
+      if (response.status === 'success'){
+        // save JWT token
+        console.log('Save JWT to local storage:',response.token );
+        localStorage.setItem('auth_token', JSON.stringify(response.token));
+        // set header with the received token
+        console.log('Set Authorization header with received JWT');
+        $http.defaults.headers.common.Authorization = 'Bearer ' + response.token;
+        // Let the app know
+        $rootScope.user = {
+          account: AuthSrv.user(),
+          isAuthenticated: AuthSrv.isAuthenticated()
+        };
+        $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, response.user);
+        console.log('Logged in.');
+        toaster.pop('success', 'success', 'You have succesfully signed in.');
+
+        // Redirect back to frontpage
+        $state.go('home');
+      } else {
+        toaster.pop('success', 'error', 'There was an error verifying the login. Please try again.');
+      }
+      $scope.verificationInProgress = true;
+    });
+  }
 
 
-  /*** ROOTSCOPE EVENTS ***/
-  // Turn on or off editMode for a dataset
-  $scope.$on('metabar::editMode', function(evt,mode){
-    $scope.editMode = mode;
-    if (mode === true){
-      // turn edit mode on
-      editWatcher = $scope.$watchCollection('profile', function (newval, oldval) {
-        if (!angular.equals(oldval, newval)) {
-          $scope.contentEdited = true;
+  /* ----- ROOTSCOPE EVENTS -------------------------------------------------------- */
+
+  /* ----- SCOPE FUNCTIONS -------------------------------------------------------- */
+  // Handle passwordless login
+  $scope.login = function(){
+    $scope.loginInProgress = true;
+    var credentials = $scope.credentials;
+
+    AuthSrv.login(credentials).then(function(response){
+      $scope.loginInProgress = false;
+      console.log(response);
+      if (response.status === 'success') {
+        $scope.signinSuccess = true;
+
+      } else if (response.error === 'User not found') {
+
+        $scope.loginError = 'The email address ' + credentials.email + ' does not exist. Would you like to register for a new account?';
+        $scope.showRegister = true;
+        $scope.newuser={};
+        $scope.newuser.email = $scope.credentials.email;
+
+        var newmail = $scope.credentials.email.replace(/@.*$/,'').substring(0,20);
+        var c=0;
+        while (newmail.length < 3) {
+          newmail = newmail + c;
+          c++;
         }
-      });
-    } else {
-      // turn watching off.
-      editWatcher();
-    }
-  });
+        $scope.newuser.name = newmail;
 
-
-  /***   FUNCTIONS   ***/
-  function getProfile(){
-    // get profile information of user by userSlug
-    UserSrv.getProfile($stateParams.slug).then(function(result){
-      $scope.profile = result.profile;
-      $scope.contentLoading = false;
-
-      // send metadata to the metabar
-      var item = result.profile;
-      item.postType = 'profile';
-      var meta = {
-        postType: 'profile',
-        _id: result.profile._id,
-        canEdit: AuthSrv.canEdit(item)
-      };
-      MetabarSrv.setPostMeta(meta);
-
-      updateHeaderImage();
-
-    });
-  }
-
-  function updateHeaderImage(){
-    $scope.headerStyle={
-      'background-image': 'url(' + $scope.profile.headerPattern + '), url(' + $scope.profile.headerImage + ')',
-      '-webkit-filter': 'hue-rotate(90deg)',
-      'background-blend-mode': 'multiply'
-    };
-  }
-
-  /***   SCOPE FUNCTIONS   ***/
-  $scope.toggleEditMode = function(){
-    $scope.editMode = !$scope.editMode;
-    // send closed message to metabar
-    if ($scope.editMode === false) {
-      $rootScope.$broadcast('editMode::false');
-    }
-  };
-
-  $scope.updateProfile = function(){
-    console.log('updating profile');
-    var updated = {
-      _id: $scope.profile._id,
-      updated: {
-        description: $scope.profile.description,
-        headerImage: $scope.profile.headerImage,
-        headerPattern: $scope.profile.headerPattern
-      }
-    };
-
-    UserSrv.updateProfile(updated).then(function(res){
-      if (res.status === 'success'){
-
-        updateHeaderImage();
-
-        FlashSrv.setMessage({
-          value: 'Profile updated!',
-          status: 'info'
-        });
-        $scope.toggleEditMode();
+        //$scope.credentials.email = null;
       }
     });
   };
 
-  /*** INIT ***/
-  getProfile();
+  $scope.register = function(){
+    localStorage.removeItem('auth_token');
+    $scope.registrationInProgress = true;
+    $scope.loginError = null;
+    AuthSrv.register($scope.newuser).then(function(response){
+      if (response.error === 'Error registering user.') {
+        $scope.registrationError = response.error;
+      }
+      $scope.registrationSuccess = true;
+      $scope.registrationInProgress = false;
+    });
+  };
+
+
+  /* ----- INIT ------------------------------------------------------------ */
+  var params = $location.search();
+  if (params.token) {
+    verify(params.token);
+  }
+}])
+
+.controller('UserCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'AuthSrv', 'toaster',
+function ($scope, $rootScope, $location, $state, AUTH_EVENTS, AuthSrv, toaster) {
+
+  /* --- FUNCTIONS ------------------------------------------------------------- */
+  function getUser(){
+    AuthSrv.getUser().then(function(result){
+      $scope.user = result;
+    });
+  }
+
+  $scope.logout = function(){
+    console.log('logging out');
+    AuthSrv.logout().then(function(result){
+      localStorage.removeItem('auth_token');
+      $rootScope.user = {};
+      toaster.pop('success', 'Signed out', 'You are now signed out.');
+
+      $state.go('home');
+    });
+  };
+
+  /* --- INIT ------------------------------------------------------------- */
+  getUser();
 
 }])
 
