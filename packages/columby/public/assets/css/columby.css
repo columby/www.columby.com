@@ -518,17 +518,50 @@ body .metabar-wrapper .actions {
   font-size: 14px;
   color: #c8c8c8;
 }
-/*** ---- TERMS ---------------------------- ***/
-.terms h1 {
-  font-weight: 700;
-  margin-top: 80px;
-  margin-bottom: 60px;
+/*** ---- TERMS/ABOUT ---------------------------- ***/
+.terms .page-header,
+.about .page-header {
+  text-align: center;
+  min-height: 260px;
+  color: #FFF;
+  background-color: #eee;
+  background-image: url('/columby/assets/img/page-header.png');
+  background-position: 50% 50%;
 }
-.terms p,
-.terms ol {
+.terms .page-header img,
+.about .page-header img {
+  margin-top: 100px;
+}
+.terms .page-header h1,
+.about .page-header h1 {
+  margin-top: 100px;
+  font-size: 4em;
+  font-weight: 900;
+  color: #fff;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+}
+.terms .page-header h2.page-subtitle,
+.about .page-header h2.page-subtitle {
+  font-family: "merriweather", serif;
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.6px;
+  opacity: 0.7;
+}
+.terms .page-content,
+.about .page-content {
+  margin-top: 50px;
+}
+.terms .page-content p,
+.about .page-content p,
+.terms .page-content ol,
+.about .page-content ol {
   line-height: 2em;
   margin-bottom: 40px;
 }
-.terms ol > li {
+.terms .page-content ol > li,
+.about .page-content ol > li {
   margin-bottom: 40px;
 }
