@@ -56,12 +56,11 @@
 
     <div class="container">
       <div class="col-md-12">
-        <div class="organisations" ng-show="organisations">
+        <div class="organisations" ng-show="profile.organisations">
           <div class="col-md-12">
             <h3>Organisations</h3>
-            <p ng-show="!organisations">No orgnisations for this user</p>
             <ul>
-              <li ng-repeat="organisation in organisations">
+              <li ng-repeat="organisation in profile.organisations">
                 {{organisation.name}}
               </li>
             </ul>
@@ -71,7 +70,7 @@
         <div class="recent-publications">
           <div class="col-md-12">
             <h3>Publications</h3>
-            <p ng-show="!profile.datasets">No publications for this user</p>
+            <p ng-show="!profile.datasets || profile.dataset.length===0">No publications for this user</p>
             <ul>
               <li ng-repeat="dataset in profile.datasets">
                 <a ui-sref="dataset.view({datasetId: dataset._id})">{{dataset.title}}</a>

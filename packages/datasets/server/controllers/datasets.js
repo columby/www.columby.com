@@ -53,7 +53,7 @@ exports.create = function(req, res) {
         }
       );
     }
-    
+
     console.log('Dataset created', dataset);
     res.json(dataset);
   });
@@ -118,7 +118,6 @@ exports.all = function(req, res) {
     .sort('-created')
     .exec(function(err, datasets) {
       if (err) { return res.json(500, { error: 'Cannot list the datasets' }); }
-        console.log('datasets', datasets);
       var opts = [{ path:'publisher', model:datasets.publisherType, select: 'name slug avatar plan'}];
       Dataset.populate(datasets, opts, function(err, pop){
         res.json(datasets);
