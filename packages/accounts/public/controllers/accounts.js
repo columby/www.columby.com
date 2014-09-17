@@ -41,15 +41,15 @@ angular.module('mean.accounts')
   function getAccount(){
     // get account information of user by userSlug
     AccountSrv.getAccount($stateParams.slug).then(function(result){
-      $scope.account = result;
+      $scope.account = result.account;
       $scope.contentLoading = false;
 
       // send metadata to the metabar
-      var item = result;
+      var item = $scope.account;
       item.postType = 'account';
       var meta = {
         postType: 'account',
-        _id: result._id,
+        _id: $scope.account._id,
         canEdit: AuthSrv.canEdit(item)
       };
       MetabarSrv.setPostMeta(meta);

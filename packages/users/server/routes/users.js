@@ -13,7 +13,7 @@ module.exports = function(MeanUser, app, auth, database) {
     .get(auth.jwtCheckAccount, users.user);
 
   app.route('/api/v2/user/login')
-    .post(users.passwordlessLogin);
+    .post(users.login);
 
   app.route('/api/v2/user/register')
     .post(users.create);

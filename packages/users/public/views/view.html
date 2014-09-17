@@ -19,10 +19,10 @@
     <div class="row accounts">
       <div class="col-md-offset-2 col-md-8">
         <h3>Accounts</h3>
-        <p ng-show="!user.accounts || user.accounts.length===0">No organisations for this user</p>
+        <p ng-show="!user.accounts || user.accounts.length===0">No account for this user</p>
         <ul>
           <li ng-repeat="account in user.accounts | orderBy:account.primary">
-            <h4><a ui-sref="account.view({accountSlug:account.slug})">{{account.name}}</a><span ng-show="account.primary">Primary</span></h4>
+            <h4><a ui-sref="account.view({slug:account.slug})">{{account.name}}</a><span ng-show="account.primary">Primary</span></h4>
             <p>{{account.datasets.length}} datasets</p>
           </li>
           <li>

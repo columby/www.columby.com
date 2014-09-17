@@ -4,7 +4,9 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+  Schema = mongoose.Schema
+  //User = mongoose.model('User')
+;
 
 
 function slugify(text) {
@@ -52,7 +54,9 @@ var AccountSchema = new Schema({
 
   owner       : { type: Schema.ObjectId, ref: 'User' },
 
-  datasets    : [{ type: Schema.ObjectId, ref: 'Dataset' }]
+  datasets    : [{ type: Schema.ObjectId, ref: 'Dataset' }],
+
+  collections : [{ type: Schema.ObjectId, ref: 'Collection' }]
 
 });
 
@@ -70,10 +74,11 @@ AccountSchema.pre('save', function(next) {
   next();
 });
 
+
+
 /**
  * Methods
  */
-
 
 AccountSchema.statics.findBySlug = function(slug, cb) {
   var Account = mongoose.model('Account');

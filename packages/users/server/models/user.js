@@ -40,7 +40,7 @@ var UserSchema = new Schema({
 
   verified  : { type: Boolean, default: false },
 
-  accounts  : [{ type: Schema.Types.ObjectId, ref: 'Account' }],
+  accounts  : [{ type: Schema.ObjectId, ref: 'Account' }],
 
   roles     : { type: Array, default: ['authenticated'] },
 

@@ -8,9 +8,10 @@ angular.module('mean.users')
 
     return {
       getAccount: function(slug) {
+        console.log('slug',slug);
         var promise = $http.get('/api/v2/account/' + slug)
           .then(function(response){
-            console.log('account', response.data);
+            console.log('account srv', response.data);
             return response.data;
           });
         return promise;

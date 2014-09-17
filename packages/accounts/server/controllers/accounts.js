@@ -12,9 +12,18 @@ var mongoose = require('mongoose'),
  */
 exports.account = function(req, res) {
 
-  Account.findOne({slug: req.params.slug}, function(err, account){
-    return res.json(account || err);
-  });
+  if (!req.params.slug) {
+    return res.json({err:'No slug provided'});
+  } else {
+    Account
+      .findOne({slug: req.params.slug})
+      //.populate('datasets')
+      .populate('collections')
+      .exec(function(err, account) {
+        console.log('a', account);
+        return res.json({account:account} || {error:err});
+      });
+  }
 };
 
 

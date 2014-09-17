@@ -70,11 +70,9 @@ angular.module('mean.collection').controller('CollectionViewCtrl', ['$rootScope'
       $scope.collection = {
         title: 'New collection',
         description: 'Description of the collection',
-        publishStatus: 'unpublished',
-        draft:{},
-        publisherType: 'User',
-        publisher: $rootScope.user.account._id
+        account: $scope.accountId
       };
+      console.log('collection initiated', $scope.collection);
     }
 
 

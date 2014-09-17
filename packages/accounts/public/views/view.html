@@ -14,7 +14,7 @@
     <div class="page-header" ng-style="headerStyle">
       <h1>{{account.name}}</h1>
       <div class="avatar">
-        <img src="/columby/assets/img/avatar.png">
+        <img src="account.avatar.url || '/columby/assets/img/avatar.png'">
       </div>
     </div>
 
@@ -48,13 +48,13 @@
           </ul>
         </div>
       </div>
-      
+
       <div class="collections col-md-12">
         <h3>Collections</h3>
         <p ng-show="account.collections.length === 0">No collections for this user</p>
         <ul>
           <li ng-repeat="collection in account.collections">
-              {{collection.name}}
+              <strong>{{collection.title}}</strong> - {{collection.description}}
           </li>
 					<li>
 						<h4><a ui-sref="collection.create({accountId: account._id})" class="new">+ Create a collection</a></h4>

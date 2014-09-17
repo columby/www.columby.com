@@ -4,14 +4,14 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  User = mongoose.model('User'),
-  Token = mongoose.model('LoginToken'),
-  Account = mongoose.model('Account'),
-  moment = require('moment'),
-  jwt = require('jwt-simple'),
-  config = require('meanio').loadConfig(),
-  mandrill = require('mandrill-api/mandrill'),
-  mandrill_client = new mandrill.Mandrill(config.mandrill.key)
+    User = mongoose.model('User'),
+    Token = mongoose.model('LoginToken'),
+    Account = mongoose.model('Account'),
+    moment = require('moment'),
+    jwt = require('jwt-simple'),
+    config = require('meanio').loadConfig(),
+    mandrill = require('mandrill-api/mandrill'),
+    mandrill_client = new mandrill.Mandrill(config.mandrill.key)
 ;
 
 /**
@@ -22,11 +22,11 @@ exports.user = function(req, res) {
   // get user
   if (req.user && req.user._id) {
     User
-      .findOne({_id: req.user._id})
+      .findById(req.user._id)
       .populate('accounts')
       .exec(function(err,user) {
-        console.log(user);
-        console.log(err);
+        console.log('user', user);
+        console.log('err', err);
 
         return res.json(user);
       });
@@ -37,35 +37,24 @@ exports.user = function(req, res) {
 };
 
 
-exports.passwordlessLogin = function(req,res,next){
+/**
+ * Login a user with an email-address and send a token
+ */
+exports.login = function(req,res,next){
 
   var email = req.body.email;
   // Check if email-address is registered
   User.findOne({'email': email}, function(err,user){
     if (err) {
-      res.json(200, {
-        status: 'error',
-        error: err
-      });
-      console.log('error: ', err);
+      res.json({ status: 'error', error: err });
     } else if(!user){
-      res.json({
-        status: 'error',
-        error: 'User not found'
-      });
-      console.log('User not found.');
+      res.json({ status: 'error', error: 'User not found' });
     } else {
-      console.log('User found: ', user);
+
       // User found, create a new token
       var token = new Token();
       token.user = user._id;
-      token.save(function(err){
-        if (err){
-          console.log('error',err);
-          res.json(401,{'error': err});
-        }
-      });
-      console.log('token created', token);
+      token.save(function(err) { if (err) { res.json({ status: 'error', error: err }); } });
 
       // Send the new token by email
       mandrill_client.messages.send({
@@ -86,19 +75,10 @@ exports.passwordlessLogin = function(req,res,next){
         }
       }, function(result){
         if (result[0].status === 'sent') {
-          res.json({
-            status: 'success',
-            statusMessage: 'VerificationToken sent.'
-          });
+          res.json({ status: 'success', statusMessage: 'VerificationToken sent.' });
         } else {
-          res.json({
-            status: 'error',
-            statusCode: 400,
-            statusMessage: 'Error sending mail.',
-            error: result
-          });
+          res.json({ status: 'error', err: 'Error sending mail.' });
         }
-
       });
     }
   });
@@ -153,8 +133,6 @@ exports.verify = function(req,res,next) {
  * Logout
  */
 exports.signout = function(req, res) {
-  //req.logout();
-  //res.redirect('/');
   res.json(200,{
     status: 'success',
     statusMessage: 'Successfully logged out. '
@@ -164,10 +142,10 @@ exports.signout = function(req, res) {
 
 
 /**
- * Create user
+ * Create a new user
  */
 exports.create = function(req, res, next) {
-  console.log('user check', req.body);
+  console.log('Creating new user with specs: ', req.body);
 
   var user = new User(req.body);
       user.roles = ['authenticated'];
@@ -177,80 +155,32 @@ exports.create = function(req, res, next) {
 
   var errors = req.validationErrors();
   if (errors) {
-    res.json({
-      status: 'error',
-      statusCode: 400,
-      statusMessage: errors
-    });
+    res.json({ status: 'error', err: errors });
   } else {
 
     user.save(function(err) {
-      console.log('user after save', user);
       if (err) {
-        console.log('Saving user error:', err);
-        switch (err.code) {
-          case 11000:
-            res.json({
-              status: 'error',
-              statusCode: 400,
-              statusMessage: [{
-                msg: 'Email already taken',
-                param: 'email'
-              }]
-            });
-            break;
-          case 11001:
-            res.json({
-              status: 'error',
-              statusCode: 400,
-              statusMessage: [{
-                msg: 'Name already taken',
-                param: 'name'
-              }]
-            });
-            break;
-          default:
-            var modelErrors = [];
-
-            if (err.errors) {
-
-              for (var x in err.errors) {
-                modelErrors.push({
-                  param: x,
-                  msg: err.errors[x].message,
-                  value: err.errors[x].value
-                });
-              }
-              res.json({
-                status: 'error',
-                statusCode: 400,
-                statusMessage: modelErrors
-              });
-            }
-        }
-
+        res.json({ status: 'error', err: err });
       } else {
 
-        // Create a new loginToken
-        var token = new Token({
-          user: user._id
-        });
-        token.save();
-        console.log('token created', token);
+        console.log('Creating token');
+        var token = new Token({user: user._id});
+            token.save();
+            console.log('Token created.', token);
 
-        // Create a new Account
+        console.log('Creating publication account');
         var account = new Account({
-          owner: user._id,
-          name: req.body.name,
-          primary: true
-        });
+              owner: user._id,
+              name: req.body.name,
+              primary: true
+            });
+            account.save();
+            console.log('Account created.', account);
 
-        account.save();
-        console.log('account created', account);
-
-        user.accounts.push(account._id);
-        user.save();
-        console.log('user after save', user);
+        console.log('Adding account to user');
+            user.accounts.push(account._id);
+            user.save();
+            console.log('User saved.',user);
 
         //sendmail
         mandrill_client.messages.send({
@@ -283,9 +213,7 @@ exports.create = function(req, res, next) {
               error: result
             });
           }
-
         });
-
       }
     });
   }
