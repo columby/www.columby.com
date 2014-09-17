@@ -113,7 +113,7 @@ function ($scope, $rootScope, $location, $state, AUTH_EVENTS, AuthSrv, toaster) 
       $scope.user = result;
     });
   }
-
+  
   $scope.logout = function(){
     console.log('logging out');
     AuthSrv.logout().then(function(result){

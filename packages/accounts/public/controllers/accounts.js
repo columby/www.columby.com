@@ -2,20 +2,12 @@
 
 angular.module('mean.accounts')
 
-.controller('AccountsController', ['$scope', 'Global', 'Accounts',
-  function($scope, Global, Accounts) {
-    $scope.global = Global;
-    $scope.package = {
-      name: 'accounts'
-    };
-  }
-])
 
 /***
- * Controller a user's profile page
+ * Controller a user's account page
  *
  ***/
-.controller('ColumbyAccountCtrl', [
+.controller('AccountCtrl', [
   '$scope', '$rootScope', '$location', '$state', '$stateParams', 'AUTH_EVENTS', 'AuthSrv', 'AccountSrv', 'MetabarSrv',
   function ($scope, $rootScope, $location, $state, $stateParams, AUTH_EVENTS, AuthSrv, AccountSrv, MetabarSrv) {
 
@@ -33,7 +25,7 @@ angular.module('mean.accounts')
     $scope.editMode = mode;
     if (mode === true){
       // turn edit mode on
-      editWatcher = $scope.$watchCollection('profile', function (newval, oldval) {
+      editWatcher = $scope.$watchCollection('account', function (newval, oldval) {
         if (!angular.equals(oldval, newval)) {
           $scope.contentEdited = true;
         }
@@ -47,17 +39,17 @@ angular.module('mean.accounts')
 
   /***   FUNCTIONS   ***/
   function getAccount(){
-    // get profile information of user by userSlug
+    // get account information of user by userSlug
     AccountSrv.getAccount($stateParams.slug).then(function(result){
-      $scope.profile = result.profile;
+      $scope.account = result;
       $scope.contentLoading = false;
 
       // send metadata to the metabar
-      var item = result.profile;
-      item.postType = 'profile';
+      var item = result;
+      item.postType = 'account';
       var meta = {
-        postType: 'profile',
-        _id: result.profile._id,
+        postType: 'account',
+        _id: result._id,
         canEdit: AuthSrv.canEdit(item)
       };
       MetabarSrv.setPostMeta(meta);
@@ -69,7 +61,7 @@ angular.module('mean.accounts')
 
   function updateHeaderImage(){
     $scope.headerStyle={
-      'background-image': 'url(' + $scope.profile.headerPattern + '), url(' + $scope.profile.headerImage + ')',
+      'background-image': 'url(' + $scope.account.headerPattern + '), url(' + $scope.account.headerImage + ')',
       '-webkit-filter': 'hue-rotate(90deg)',
       'background-blend-mode': 'multiply'
     };

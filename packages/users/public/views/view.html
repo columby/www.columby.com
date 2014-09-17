@@ -17,14 +17,18 @@
     <hr/>
 
     <div class="row accounts">
-		  <div class="col-md-offset-2 col-md-8">
-        <h2>Accounts</h2>
-        <div class="accounts" ng-repeat="account in user.accounts">
-          {{account}}
-        </div>
-      <div>
-      <h3><a ui-sref="account.create({userId: user._id})" class="new-account">&#43; Add a new publication account</a></h3>
-        </div>
+      <div class="col-md-offset-2 col-md-8">
+        <h3>Accounts</h3>
+        <p ng-show="!user.accounts || user.accounts.length===0">No organisations for this user</p>
+        <ul>
+          <li ng-repeat="account in user.accounts | orderBy:account.primary">
+            <h4><a ui-sref="account.view({accountSlug:account.slug})">{{account.name}}</a><span ng-show="account.primary">Primary</span></h4>
+            <p>{{account.datasets.length}} datasets</p>
+          </li>
+          <li>
+            <h4><a ui-sref="account.create" class="new">+ Create a new publication account</a></h4>
+          </li>
+        </ul>
       </div>
     </div>
   </div>

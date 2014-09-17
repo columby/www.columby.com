@@ -18,8 +18,22 @@ var mongoose = require('mongoose'),
  * Send logged in User account
  */
 exports.user = function(req, res) {
-  console.log('returning user', req.user);
-  return res.json(req.user || null);
+
+  // get user
+  if (req.user && req.user._id) {
+    User
+      .findOne({_id: req.user._id})
+      .populate('accounts')
+      .exec(function(err,user) {
+        console.log(user);
+        console.log(err);
+
+        return res.json(user);
+      });
+  } else {
+    console.log('returning user', req.user);
+    return res.json(req.user || null);
+  }
 };
 
 
@@ -233,6 +247,10 @@ exports.create = function(req, res, next) {
 
         account.save();
         console.log('account created', account);
+
+        user.accounts.push(account._id);
+        user.save();
+        console.log('user after save', user);
 
         //sendmail
         mandrill_client.messages.send({

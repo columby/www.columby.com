@@ -1,9 +1,19 @@
 'use strict';
 
-angular.module('mean.accounts').factory('Accounts', [
-  function() {
+angular.module('mean.users')
+
+.factory('AccountSrv', [
+  '$http',
+  function ($http) {
+
     return {
-      name: 'accounts'
+      getAccount: function(slug) {
+        var promise = $http.get('/api/v2/account/' + slug)
+          .then(function(response){
+            console.log('account', response.data);
+            return response.data;
+          });
+        return promise;
+      }
     };
-  }
-]);
+}]);

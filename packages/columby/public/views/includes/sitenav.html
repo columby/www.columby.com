@@ -17,7 +17,11 @@
       </li>
 
       <li ng-show="$root.user.isAuthenticated">
-        <a ui-sref='profile({slug: $root.user.slug})'><i class="fa fa-user"></i> {{$root.user.name}}</a>
+        <ul>
+          <li ng-repeat="account in user.accounts">
+            <a ui-sref='account.view({slug: account.slug})'><i class="fa fa-user"></i> {{account.name}}</a>
+          </li>
+        </ul>
         <span class="settings">
           <a ui-sref='settings'><i class="fa fa-cog"></i></a>
         </span>
