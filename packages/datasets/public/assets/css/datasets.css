@@ -11,6 +11,14 @@
   -webkit-box-shadow: 0 0;
   box-shadow: 0 0;
 }
+.datasetMeta {
+  font-weight: 100;
+}
+.datasetMeta a.avatar,
+.datasetMeta .post-date {
+  color: #fff;
+  font-weight: 800;
+}
 .dataset.item .loader {
   display: block;
   text-align: center;
@@ -34,6 +42,8 @@
   -moz-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   -o-transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
+  line-height: 2em;
+  color: #A7A7A7;
 }
 .dataset.item .dataset-content.show {
   opacity: 1;
@@ -56,11 +66,7 @@
   font-size: 14px;
   line-height: 28px;
 }
-.dataset.item .dataset-content .dataset-sources h3,
-.dataset.item .dataset-content .dataset-use h3,
-.dataset.item .dataset-content .dataset-references h3,
-.dataset.item .dataset-content .dataset-editor-content h3,
-.dataset.item .dataset-content .dataset-organisation-content h3 {
+.dataset.item .dataset-content h3 {
   font-size: 24px;
   line-height: 40px;
   border-bottom: 1px solid #d9d9d9;
@@ -68,6 +74,12 @@
   font-weight: bold;
   color: #7a7a7a;
   padding: 6px;
+}
+.dataset.item .dataset-content .dataset-info-content p {
+  margin: 0;
+}
+.dataset.item .dataset-content .more-about {
+  float: right;
 }
 .dataset.item .dataset-content .dataset-id {
   background: #7a7a7a;

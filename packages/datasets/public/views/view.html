@@ -76,7 +76,7 @@
     <div class="dataset-sources-wrapper" ng-hide="dataset.publishStatus==='unpublished'">
       <div class="dataset-sources container">
         <h3>Sources</h3>
-        <ul>
+        <ul ng-hide="!dataset.sources || dataset.sources.length===0">
           <li ng-repeat="source in dataset.sources">
 						<h4><a href="#">{{source.title}}</a></h4>
 						<div class="date-size">{{source.createdAt}} - {{source.size}}</div>
@@ -136,8 +136,9 @@
     <div class="dataset-publisher-wrapper" ng-hide="editMode">
       <div class="container">
         <div class="dataset-publisher-content">
-            <h3>About the publisher: <a ui-sref="profile({slug: dataset.publisher.slug})">{{dataset.publisher.name}}</a></h3>
+            <h3>About {{dataset.publisher.name}}</h3>
             <div ng-bind-html="dataset.publisher.description"></div>
+						<p class="more-about"><a ui-sref="profile({slug: dataset.publisher.slug})">more about {{dataset.publisher.name}}</a></p>
           </div>
         </div>
       </div>
