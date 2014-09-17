@@ -14,7 +14,7 @@
   </div>
 
   <div class="page-header" ng-style="headerStyle">
-    <h1>{{profile.username}}</h1>
+    <h1>{{profile.name}}</h1>
     <div class="avatar">
       <img src="/columby/assets/img/avatar.png">
     </div>
@@ -59,24 +59,54 @@
         <div class="organisations" ng-show="organisations">
           <div class="col-md-12">
             <h3>Organisations</h3>
-            <p ng-show="!organisations">No orgnisations for this user</p>
+            <p ng-show="!organisations">No organisations for this user</p>
             <ul>
               <li ng-repeat="organisation in organisations">
-                {{organisation.name}}
+                <h4><a href="#">{{organisation.name}}</a></h4>
+								<p>3 datasets</p>
               </li>
+							<li>
+								<h4><a href="#" class="new">+ Create a organisation</a></h4>
+							</li>
+            </ul>
+          </div>
+        </div>
+				
+        <div class="collections">
+          <div class="col-md-12">
+            <h3>Collections</h3>
+            <!-- <p>No collections for this user</p> -->
+            <ul>
+              <!-- <li ng-repeat="collection in organisations">
+                {{organisation.name}}
+              </li> -->
+								<li>
+									<h4><a href="#">Dutch Datasets</a></h4>
+									<p>3 datasets</p>
+								</li>
+								<li>
+									<h4><a href="#">Governmental</a></h4>
+									<p>31 datasets</p>
+								</li>
+								<li>
+									<h4><a href="#" class="new">+ Create a collection</a></h4>
+								</li>
             </ul>
           </div>
         </div>
 
         <div class="recent-publications">
           <div class="col-md-12">
-            <h3>Publications</h3>
+            <h3>Recently published datasets</h3>
             <p ng-show="!profile.datasets">No publications for this user</p>
             <ul>
               <li ng-repeat="dataset in profile.datasets">
-                <a ui-sref="dataset.view({datasetId: dataset._id})">{{dataset.title}}</a>
+                <h4><a ui-sref="dataset.view({datasetId: dataset._id})">{{dataset.title}}</a></h4>
                 <date>{{dataset.created | date:'short'}}</date>
               </li>
+							<li>
+								<h4><a ui-sref="dataset.create" class="new">+ Create a dataset</a></h4>
+							</li>
             </ul>
           </div>
         </div>
