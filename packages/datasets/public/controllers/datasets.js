@@ -37,7 +37,7 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
         }
 
         // create summary
-        var summary = '<h3>Summary</h3><p>';
+        var summary = '<p>';
         // check for file source
         if (!dataset.sources) {
           summary += 'There is no data for this dataset available yet. ';

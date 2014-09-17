@@ -9,9 +9,7 @@
       <div class="datasetMeta" ng-show="postMeta.postType === 'dataset'">
         <a class="avatar" ui-sref="profile({slug: postMeta.publisher.slug })">
           <img class="avatar" src="{{postMeta.publisher.avatar}}"/>
-          <span class="postMetaInline">{{postMeta.publisher.name}}</span>
-        </a>
-        &nbsp;on&nbsp;<time class="post-date">{{postMeta.created | date:'d MMMM yyyy'}}</time>
+          <span class="postMetaInline">{{postMeta.publisher.name}}</span></a> on <time class="post-date">{{postMeta.created | date:'d MMMM yyyy'}}</time>
       </div>
     </div>
 
