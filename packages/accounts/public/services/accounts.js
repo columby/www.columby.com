@@ -1,3 +1,4 @@
+/*
 'use strict';
 
 angular.module('mean.users')
@@ -18,3 +19,22 @@ angular.module('mean.users')
       }
     };
 }]);
+*/
+
+'use strict';
+
+//Articles service used for articles REST endpoint
+angular.module('mean.users').factory('AccountSrv', ['$resource',
+
+  function($resource) {
+
+    return $resource('api/v2/account/:slug', {
+      slug: '@slug'
+    }, {
+      update: {
+        method: 'PUT'
+      }
+    }
+    );
+  }
+]);

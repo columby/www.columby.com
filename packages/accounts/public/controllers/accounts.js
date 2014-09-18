@@ -8,18 +8,23 @@ angular.module('mean.accounts')
  *
  ***/
 .controller('AccountCtrl', [
-  '$scope', '$rootScope', '$location', '$state', '$stateParams', 'AUTH_EVENTS', 'AuthSrv', 'AccountSrv', 'MetabarSrv',
-  function ($scope, $rootScope, $location, $state, $stateParams, AUTH_EVENTS, AuthSrv, AccountSrv, MetabarSrv) {
+  '$scope', '$rootScope', '$location', '$state', '$stateParams', 'AUTH_EVENTS', 'AuthSrv', 'AccountSrv', 'MetabarSrv', 'toaster',
+  function ($scope, $rootScope, $location, $state, $stateParams, AUTH_EVENTS, AuthSrv, AccountSrv, MetabarSrv, toaster) {
 
   /* ---------- SETUP ----------------------------------------------------------------------------- */
   var editWatcher;               // Watch for model changes in editmode
 
-  $scope.contentLoading = true;
-  $scope.editMode = false;       // edit mode is on or off
-  $scope.contentEdited = false;  // models is changed or not during editmode
+  $scope.editMode        = false;       // edit mode is on or off
+  $scope.contentLoading  = true;
+  $scope.contentEdited   = false;  // models is changed or not during editmode
+  $scope.userId          = $stateParams.userId;
+  $scope.accountSlug     = $stateParams.slug;
 
+  if ($state.current.data && $state.current.data.editMode) {
+    $scope.editMode = true;
+  }
 
-  /*** ROOTSCOPE EVENTS ***/
+  /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
   // Turn on or off editMode for a dataset
   $scope.$on('metabar::editMode', function(evt,mode){
     $scope.editMode = mode;
@@ -37,10 +42,11 @@ angular.module('mean.accounts')
   });
 
 
-  /***   FUNCTIONS   ***/
+  /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
   function getAccount(){
     // get account information of user by userSlug
-    AccountSrv.getAccount($stateParams.slug).then(function(result){
+    AccountSrv.get({slug: $stateParams.slug}, function(result){
+
       $scope.account = result.account;
       $scope.contentLoading = false;
 
@@ -59,6 +65,16 @@ angular.module('mean.accounts')
     });
   }
 
+  function initiateNewAccount(){
+    $scope.account = {
+      name        : 'New account',
+      description : 'Description of the account',
+      owner       : $scope.userId
+    };
+    $scope.contentLoading = false;
+    console.log('account initiated', $scope.account);
+  }
+
   function updateHeaderImage(){
     $scope.headerStyle={
       'background-image': 'url(' + $scope.account.headerPattern + '), url(' + $scope.account.headerImage + ')',
@@ -67,7 +83,8 @@ angular.module('mean.accounts')
     };
   }
 
-  /***   SCOPE FUNCTIONS   ***/
+
+  /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
   $scope.toggleEditMode = function(){
     $scope.editMode = !$scope.editMode;
     // send closed message to metabar
@@ -76,8 +93,43 @@ angular.module('mean.accounts')
     }
   };
 
-  /*** INIT ***/
-  getAccount();
+  $scope.create = function(){
+    console.log('Creating new account');
+    AccountSrv.save($scope.account, function(res){
+      console.log('Account result', res);
+      if (res.err){
+        if (res.code === 11000) {
+          toaster.pop('danger', 'Sorry, that account name already exists. Please chose a different name. ');
+        }
+      }
+      if (res._id) {
+        console.log('Account result', res);
+        toaster.pop('success', 'Created', 'Collection created.');
+        $state.go('account.view', {slug: res.slug});
+      }
+    });
+  };
+
+
+  /* ---------- INIT ----------------------------------------------------------------------------- */
+  // View existing account
+  if ($scope.accountSlug && !$scope.editMode) {
+    // Get account for the provided slug
+    console.log('getting account');
+    getAccount();
+  // Edit existing account
+} else if($scope.slug && $scope.editMode) {
+    console.log('accountfor ');
+    getAccount();
+    // make sure edit mode is turned on
+    $rootScope.$broadcast('metabar::editMode', true);
+  } else if ($scope.editMode){
+    console.log('new acccount');
+    // Create a new base collection
+    initiateNewAccount();
+    // make sure edit mode is turned on
+    $rootScope.$broadcast('metabar::editMode', true);
+  }
 
 }])
 ;

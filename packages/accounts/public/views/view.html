@@ -1,39 +1,51 @@
-<section class="account" data-ng-controller="AccountCtrl">
+<section class="account" data-ng-controller="AccountCtrl" ng-cloak>
 
   <!-- Editor Sidebar -->
   <div class="editorSidebar" ng-show="editMode">
     <div class="editorSidebarContent">
       <a ng-click="toggleEditMode()">cancel</a>
-      <button class="btn dbt-default" ng-show="contentEdited" ng-click="updateAccount()">Update</button>
-      <h3>Update you account</h3>
+      <button class="btn dbt-default" ng-show="contentEdited && account._id" ng-click="update()">Update</button>
+      <button class="btn dbt-default" ng-show="!account._id" ng-click="create()">Create</button>
     </div>
   </div>
 
   <!-- Content -->
-  <div class="container">
-    <div class="page-header" ng-style="headerStyle">
-      <h1>{{account.name}}</h1>
-      <div class="avatar">
-        <img src="account.avatar.url || '/columby/assets/img/avatar.png'">
+  <div class="loader" ng-show="contentLoading">Loading account</div>
+  <div class="content" ng-hide="contentLoading">
+
+    <div class="header wrapper" ng-style="headerStyle">
+      <div class="container">
+        <div class="col-md-12 title" ng-switch="editMode">
+          <h1 ng-switch-default ng-bind-html="account.name || 'No name yet'"></h1>
+          <h1 ng-switch-when="true"
+            contenteditable
+            name="title"
+            ng-model="account.name"
+            htmlFormat="plain">
+          </h1>
+        </div>
+        <div class="avatar">
+          <img src="{{collection.publisher.avatar.url}}"/>
+        </div>
       </div>
     </div>
 
-    <div class="page-content">
-      <div class="description-wrapper">
-        <div class="description container">
-          <div class="col-md-12" ng-switch="editMode">
-            <div class="description" ng-switch-default ng-bind-html="account.description || 'This account has no description yet!'"></div>
-            <div class="description" ng-switch-when="true"
-              ng-model="account.description"
-              text-angular
-              placeholder="Please enter your description"
-              ta-toolbar="[['bold','italics','underline'],['insertLink']]"
-            ></div>
-          </div>
+    <div class="description wrapper">
+      <div class="container">
+        <div class="col-md-12" ng-switch="editMode">
+          <div class="description" ng-switch-default ng-bind-html="account.description || 'This account has no description yet!'"></div>
+          <div class="description" ng-switch-when="true"
+            ng-model="account.description"
+            text-angular
+            placeholder="Please enter your description"
+            ta-toolbar="[['bold','italics','underline'],['insertLink']]"
+          ></div>
         </div>
       </div>
+    </div>
 
-      <div class="datasets wrapper">
+    <div class="datasets wrapper" ng-hide="editMode">
+      <div class="container">
         <div class="col-md-12">
           <h3>Datasets</h3>
           <p ng-show="!account.datasets">No datasets for this user</p>
@@ -48,18 +60,22 @@
           </ul>
         </div>
       </div>
+    </div>
 
-      <div class="collections col-md-12">
-        <h3>Collections</h3>
-        <p ng-show="account.collections.length === 0">No collections for this user</p>
-        <ul>
-          <li ng-repeat="collection in account.collections">
-              <strong>{{collection.title}}</strong> - {{collection.description}}
-          </li>
-					<li>
-						<h4><a ui-sref="collection.create({accountId: account._id})" class="new">+ Create a collection</a></h4>
-					</li>
-        </ul>
+    <div class="collections wrapper" ng-hide="editMode">
+      <div class="container">
+        <div class="col-md-12">
+          <h3>Collections</h3>
+          <p ng-show="account.collections.length === 0">No collections for this user</p>
+          <ul>
+            <li ng-repeat="collection in account.collections">
+                <strong>{{collection.title}}</strong> - {{collection.description}}
+            </li>
+    				<li>
+    					<h4><a ui-sref="collection.create({accountId: account._id})" class="new">+ Create a collection</a></h4>
+    				</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

@@ -5,7 +5,6 @@
  */
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema
-  //User = mongoose.model('User')
 ;
 
 
@@ -72,6 +71,20 @@ AccountSchema.pre('save', function(next) {
   self.set('slug', slug);
 
   next();
+});
+
+AccountSchema.post('save', function(account){
+  var User = mongoose.model('User');
+  console.log('action after save, updating user accounts list');
+  User.findOne({_id: account.owner}, function(err,user){
+    console.log(err);
+    console.log('user findone:', user);
+    if (user){
+      user.accounts.push(account._id);
+      user.save();
+      console.log('user updated:', user);
+    }
+  });
 });
 
 

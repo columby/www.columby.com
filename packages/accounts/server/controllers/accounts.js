@@ -17,8 +17,8 @@ exports.account = function(req, res) {
   } else {
     Account
       .findOne({slug: req.params.slug})
-      //.populate('datasets')
-      .populate('collections')
+      .populate('datasets')
+      .populate('collections', 'title description datasets')
       .exec(function(err, account) {
         console.log('a', account);
         return res.json({account:account} || {error:err});
@@ -26,13 +26,13 @@ exports.account = function(req, res) {
   }
 };
 
-
+/**
+ * Update an account
+ */
 exports.update = function(req, res) {
   var id = req.body.update.id ;
-  console.log('id', id);
 
   var update = { $set: req.body.update.account };
-  console.log('update', update);
 
   Account.update({_id: id}, update, function(err, account){
     console.log('error', err);
@@ -76,6 +76,8 @@ exports.index = function(req, res) {
     })
   ;
 };
+
+
 /**
  * Create account
  */
@@ -87,6 +89,9 @@ exports.create = function(req, res, next) {
     console.log('account after save', account);
     if (err) {
       console.log('Saving account error:', err);
+      return res.json(err);
     }
+
+    return res.json(account);
   });
 };
