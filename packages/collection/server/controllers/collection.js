@@ -15,7 +15,10 @@ var mongoose = require('mongoose'),
 exports.collection = function(req, res, next, id) {
 
   Collection
-    .findOne({_id: id}, function(err,collection){
+    .findOne({_id: id})
+    .populate('account', 'name description slug')
+    .exec(function(err,collection){
+      
       if (err) return next(err);
       if (!collection) return res.json({error:'Failed to load collection ' + id, err:err});
 

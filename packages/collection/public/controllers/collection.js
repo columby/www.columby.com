@@ -8,7 +8,7 @@ angular.module('mean.collection').controller('CollectionViewCtrl', ['$rootScope'
 
     $scope.editMode = false;       // edit mode is on or off
     $scope.contentEdited = false;  // models is changed or not during editmode
-    $scope.accountId = $stateParams.accountId;
+    $scope.collectionId  = $stateParams.id;
 
     if ($state.current.data && $state.current.data.editMode) {
       $scope.editMode = true;
@@ -18,35 +18,9 @@ angular.module('mean.collection').controller('CollectionViewCtrl', ['$rootScope'
     function getCollection(){
       $scope.contentLoading = true;  // show loading message while loading collection
 
-      CollectionSrv.get({
-        collectionId: $stateParams.collectionId
-      }, function(collection) {
-
+      CollectionSrv.get({ id: $scope.collectionId }, function(collection) {
         $scope.collection = collection;
         $scope.contentLoading = false;
-        if (!$scope.collection.draft){
-          $scope.collection.draft={};
-        }
-
-        // create summary
-        var summary = '<h3>Summary</h3><p>';
-        // check for file source
-        if (!collection.sources) {
-          summary += 'There is no data for this collection available yet. ';
-        } else if (!collection.sources.primary) {
-          summary += 'There is no primary source for this collection yet. ';
-        } else if (collection.sources.primary.type) {
-          summary += 'This collection if of the type <strong>' + collection.sources.primary.type + '</strong>.';
-        }
-        // check for license
-        if (!collection.license) {
-          summary += 'There is no license defined. ';
-        } else {
-          summary += 'The licens for this collection is <strong>' + collection.license.name + '</strong>';
-        }
-        $scope.summary = summary + '</p>';
-
-        console.log(summary);
         // send metadata to the metabar
         var meta = {
           postType: 'collection',
@@ -57,7 +31,6 @@ angular.module('mean.collection').controller('CollectionViewCtrl', ['$rootScope'
         };
         meta.canEdit = AuthSrv.canEdit(meta);
         MetabarSrv.setPostMeta(meta);
-
       });
     }
 
@@ -109,7 +82,7 @@ angular.module('mean.collection').controller('CollectionViewCtrl', ['$rootScope'
         if (res._id) {
           console.log('Collection result', res);
           toaster.pop('success', 'Created', 'Collection created.');
-          $state.go('collection.view', {accountSlug: $scope.accountSlug, collectionSlug:res.slug});
+          $state.go('collection.view', {id: res._id});
         }
       });
     };

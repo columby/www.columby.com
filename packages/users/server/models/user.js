@@ -25,6 +25,7 @@ var validateUniqueEmail = function(value, callback) {
   });
 };
 
+// Validate not in accounts array
 
 /* --- SCHEMA ------------------------------------------------------------------ */
 
@@ -53,6 +54,14 @@ var UserSchema = new Schema({
 /* --- METHODS ---------------------------------------------------------------- */
 
 UserSchema.methods = {
+  addAccountReference: function(accountId){
+    if (this.accounts.indexOf(accountId) !== -1) {
+      this.accounts.push(accountId);
+      return true;
+    } else {
+      return false;
+    }
+  },
 
   // HasRole - check if the user has required role
   hasRole: function(role) {

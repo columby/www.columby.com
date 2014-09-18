@@ -177,11 +177,6 @@ exports.create = function(req, res, next) {
             account.save();
             console.log('Account created.', account);
 
-        console.log('Adding account to user');
-            user.accounts.push(account._id);
-            user.save();
-            console.log('User saved.',user);
-
         //sendmail
         mandrill_client.messages.send({
           'message': {

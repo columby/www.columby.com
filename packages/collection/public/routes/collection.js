@@ -20,7 +20,7 @@ angular.module('mean.collection').config(['$stateProvider',
       })
 
       .state('collection.view', {
-        url: '/c/:collectionId',
+        url: '/c/:id',
         templateUrl: 'collection/views/view.html',
       })
 

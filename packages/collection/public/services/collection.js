@@ -5,8 +5,8 @@ angular.module('mean.collection').factory('CollectionSrv', ['$resource',
 
   function($resource) {
 
-    return $resource('api/v2/collection/:collectionId', {
-      datasetId: '@_id'
+    return $resource('api/v2/collection/:id', {
+      id: '@_id'
     }, {
       update: {
         method: 'PUT'

@@ -1,4 +1,4 @@
-<div class="collection item edit" ng-controller="CollectionViewCtrl">
+<div class="collection view" ng-controller="CollectionViewCtrl">
 
   <div class="loader" ng-show="contentLoading">Loading collection</div>
 
@@ -17,10 +17,10 @@
   </div>
 
   <!-- Content -->
-  <div class="collection-content" ng-hide="contentLoading">
+  <div class="content" ng-hide="contentLoading">
 
-    <div class="collection-header-wrapper">
-      <div class="collection-header container">
+    <div class="header wrapper">
+      <div class="container">
         <div class="title" ng-switch="editMode">
           <h1 ng-switch-default ng-bind-html="collection.title || 'no title yet'"></h1>
           <h1 ng-switch-when="true"
@@ -36,8 +36,8 @@
       </div>
     </div>
 
-    <div class="collection-description-wrapper">
-      <div class="collection-description container">
+    <div class="description wrapper">
+      <div class="container">
         <div class="col-md-12" ng-switch="editMode">
           <div ng-switch-default ng-bind-html="collection.description || 'The publisher of this collection has not yet provided a description yet.'"></div>
           <div ng-switch-when="true"
@@ -50,7 +50,7 @@
       </div>
     </div>
 
-    <div class="collection-id-wrapper" ng-show="collection._id && !editMode">
+    <div class="collection-id wrapper" ng-show="collection._id && !editMode">
       <div class="container">
         <div class="collection-id content">
           <h4>UUID: {{collection._id}}</h4>
@@ -58,11 +58,24 @@
       </div>
     </div>
 
+    <div class="datasets wrapper">
+      <div class="container">
+        <div class="col-md-12">
+          <h3>Datasets</h3>
+          <ul>
+            <li ng-repeat="dataset in collection.datasets">
+              {{dataset.title}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <div class="collection-publisher-wrapper" ng-hide="editMode">
       <div class="container">
         <div class="collection-publisher-content">
-            <h3>About the publisher: <a ui-sref="profile({slug: collection.publisher.slug})">{{collection.publisher.name}}</a></h3>
-            <div ng-bind-html="collection.publisher.description"></div>
+            <h3>About the publisher: <a ui-sref="account.view({slug: collection.account.slug})">{{collection.account.name}}</a></h3>
+            <div ng-bind-html="collection.account.description"></div>
           </div>
         </div>
       </div>

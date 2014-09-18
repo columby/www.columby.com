@@ -80,9 +80,11 @@ AccountSchema.post('save', function(account){
     console.log(err);
     console.log('user findone:', user);
     if (user){
-      user.accounts.push(account._id);
-      user.save();
-      console.log('user updated:', user);
+      if (user.accounts.indexOf(account._id) === -1) {
+        user.accounts.push(account._id);
+        user.save();
+        console.log('user updated:', user);
+      }
     }
   });
 });
