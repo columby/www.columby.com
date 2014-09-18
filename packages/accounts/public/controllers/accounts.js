@@ -103,6 +103,8 @@ angular.module('mean.accounts')
         }
       }
       if (res._id) {
+        // add to local user
+        $rootScope.user.accounts.push(res);
         console.log('Account result', res);
         toaster.pop('success', 'Created', 'Collection created.');
         $state.go('account.view', {slug: res.slug});
