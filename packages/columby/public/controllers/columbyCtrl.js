@@ -47,7 +47,10 @@ angular.module('mean.columby')
       // account was already fetched before angular init
       // We assume this is already processed.
       $rootScope.user = window.user;
-      
+      $rootScope.selectedAccount = $rootScope.user.accounts[0];
+      console.log($rootScope.selectedAccount);
+
+
       if ($rootScope.user.isAuthenticated){
         toaster.pop('success', 'Welcome', 'Welcome back ' + $rootScope.user.email);
       }
@@ -120,6 +123,11 @@ angular.module('mean.columby')
       // function to send a message to the rootscope to toggle the sitenav
       $scope.toggleSiteNav = function(e) {
         $rootScope.$broadcast('sitenav::toggle');
+      };
+
+      $scope.changeSelectedAccount = function(index) {
+        $scope.status.isopen = !$scope.status.isopen;
+        $rootScope.selectedAccount = $rootScope.user.accounts[ index];
       };
 
     }

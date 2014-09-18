@@ -94,9 +94,7 @@ angular.module('mean.accounts')
   };
 
   $scope.create = function(){
-    console.log('Creating new account');
     AccountSrv.save($scope.account, function(res){
-      console.log('Account result', res);
       if (res.err){
         if (res.code === 11000) {
           toaster.pop('danger', 'Sorry, that account name already exists. Please chose a different name. ');
@@ -105,8 +103,7 @@ angular.module('mean.accounts')
       if (res._id) {
         // add to local user
         $rootScope.user.accounts.push(res);
-        console.log('Account result', res);
-        toaster.pop('success', 'Created', 'Collection created.');
+        toaster.pop('success', 'Created', 'Account created.');
         $state.go('account.view', {slug: res.slug});
       }
     });

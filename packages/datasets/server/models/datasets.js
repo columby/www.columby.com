@@ -16,40 +16,26 @@ var mean = require('meanio'),
  */
 var DatasetSchema = new Schema({
 
-  _id: {
-    type: String,
-    unique: true,
-    'default': shortId.generate
-  },
-
   // Dataset properties
-  created: { type: Date, default: Date.now },
-  updated: { type: Date },
-  title: { type: String, trim: true },
-  description: { type: String, trim: true },
+  created         : { type: Date, default: Date.now },
+  updated         : { type: Date },
+  title: { type   : String, trim: true },
+  description     : { type: String, trim: true },
 
-  // Publication account (user/organisation)
-  account: {
-    type: Schema.ObjectId,
-    ref:  'Account'
+  account         : { type: Schema.ObjectId, ref:  'Account' },
+
+  publishStatus   : { type: String, default: 'draft' },
+  draft : {
+      title         : { type:String, trim:true },
+      description   : { type: String, trim: true },
   },
 
-  // Status of the publication
-  publishStatus: { type: String, default: 'draft' },
-  draft: {
-    title: { type:String, trim:true },
-    description: { type: String, trim: true },
-  },
-
-  // publication activity
   history: [{
-    date: {
-      type: Date,
-      default: Date.now
-    },
+    date: { type: Date, default: Date.now },
     acitvity: { type: String }
   }]
 });
+
 
 
 // Elasticsearch

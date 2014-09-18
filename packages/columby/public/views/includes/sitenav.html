@@ -32,6 +32,17 @@
       </li>
     </ul>
 
+    <div class="btn-group" dropdown is-open="status.isopen">
+      <button type="button" class="btn btn-primary dropdown-toggle" ng-disabled="disabled">{{$root.selectedAccount.name}}<span class="caret"></span>
+      </button>
+
+      <ul class="dropdown-menu" role="menu">
+        <li ng-repeat="account in $root.user.accounts">
+          <a href="#" ng-click="changeSelectedAccount($index)">{{account.name}}</a>
+        </li>
+      </ul>
+    </div>
+
     <div class="logo"><img src="/columby/assets/img/logo-transparant-white.png"></div>
   </div>
 

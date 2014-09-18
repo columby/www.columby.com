@@ -59,7 +59,7 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
         var meta = {
           postType: 'dataset',
           _id: dataset._id,
-          publisher: dataset.publisher,
+          account: dataset.account,
           created: dataset.created,
           updated: dataset.updated,
         };
@@ -75,9 +75,10 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
         description: 'Description',
         publishStatus: 'unpublished',
         draft:{},
-        publisherType: 'User',
-        publisher: $rootScope.user.account._id
+        account: $rootScope.selectedAccount._id
       };
+
+      console.log($scope.dataset);
     }
 
 
