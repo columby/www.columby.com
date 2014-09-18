@@ -73,9 +73,12 @@
 
     <div class="collection-publisher-wrapper" ng-hide="editMode">
       <div class="container">
-        <div class="collection-publisher-content">
-            <h3>About the publisher: <a ui-sref="account.view({slug: collection.account.slug})">{{collection.account.name}}</a></h3>
-            <div ng-bind-html="collection.account.description"></div>
+        <div class="col-md-12">
+          <div class="collection-publisher-content">
+              <h3>About {{collection.account.name}}</h3>
+              <div ng-bind-html="collection.account.description"></div>
+              <p class="more-about"><a ui-sref="account.view({slug: collection.account.slug})">more about {{collection.account.name}}</a></p>
+            </div>
           </div>
         </div>
       </div>
