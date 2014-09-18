@@ -584,6 +584,16 @@ body .metabar-wrapper .actions {
   text-align: center;
   width: 100%;
 }
+.header.wrapper .page-subtitle {
+  text-align: center;
+  font-family: "merriweather", serif;
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0.6px;
+  opacity: 0.9;
+  color: #fff;
+  margin-top: 3px;
+}
 .header.wrapper .avatar {
   -ms-transform: translate(0, 30px);
   -webkit-transform: translate(0, 30px);
@@ -611,4 +621,30 @@ body .metabar-wrapper .actions {
   font-weight: bold;
   color: #7a7a7a;
   padding: 6px;
+}
+.content ul {
+  padding: 0;
+}
+.content ul li {
+  list-style: none;
+  padding: 6px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.content ul li h4 a {
+  font-family: "lato", sans-serif;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0;
+}
+.content ul li date,
+.content ul li p {
+  padding: 0;
+  color: #c8c8c8;
+  font-size: 1em;
+}
+.content ul li .new {
+  color: #ccc;
+  font-size: 1em;
 }

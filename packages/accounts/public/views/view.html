@@ -69,7 +69,8 @@
           <p ng-show="account.collections.length === 0">No collections for this user</p>
           <ul>
             <li ng-repeat="collection in account.collections">
-                <a ui-sref="collection.view({id: collection._id})"<strong>{{collection.title}}</strong> - {{collection.description}}
+                <h4><a ui-sref="collection.view({id: collection._id})">{{collection.title}}</a></h4>
+                <p>{{collection.description}}</p>
             </li>
     				<li>
     					<h4><a ui-sref="collection.create({accountId: account._id})" class="new">+ Create a collection</a></h4>
