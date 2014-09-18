@@ -5,7 +5,6 @@
  */
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
-  Account = mongoose.model('Account'),
   ObjectId = Schema.ObjectId;
 
 
@@ -33,6 +32,9 @@ var CollectionSchema = new Schema({
 
 // When saving a new collection, add the reference to the appropriate Account
 CollectionSchema.post('save', function (collection) {
+
+  var Account = mongoose.model('Account');
+
   Account.findOne({_id: collection.account}, function(err,account){
     if (account._id){
       account.collections.push(collection._id);
