@@ -6,9 +6,10 @@ angular.module('mean.collection').controller('CollectionViewCtrl', ['$rootScope'
     /***   INITIALISATION   ***/
     var editWatcher;               // Watch for model changes in editmode
 
-    $scope.editMode = false;       // edit mode is on or off
-    $scope.contentEdited = false;  // models is changed or not during editmode
-    $scope.collectionId  = $stateParams.id;
+    $scope.editMode       = false;       // edit mode is on or off
+    $scope.contentEdited  = false;  // models is changed or not during editmode
+    $scope.collectionId   = $stateParams.id;
+    $scope.accountId      = $stateParams.accountId;
 
     if ($state.current.data && $state.current.data.editMode) {
       $scope.editMode = true;
