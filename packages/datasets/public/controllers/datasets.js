@@ -77,7 +77,6 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
         draft:{},
         account: $rootScope.selectedAccount._id
       };
-
       console.log($scope.dataset);
     }
 

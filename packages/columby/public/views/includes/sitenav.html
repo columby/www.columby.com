@@ -32,7 +32,7 @@
       </li>
     </ul>
 
-    <div class="btn-group" dropdown is-open="status.isopen">
+    <div class="btn-group" dropdown is-open="status.isopen" ng-hide="!$root.user.isAuthenticated">
       <button type="button" class="btn btn-primary dropdown-toggle" ng-disabled="disabled">{{$root.selectedAccount.name}}<span class="caret"></span>
       </button>
 

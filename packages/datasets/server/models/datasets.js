@@ -7,8 +7,8 @@ var mean = require('meanio'),
     config = mean.loadConfig(),
     mongoose = require('mongoose'),
     mongoosastic = require('mongoosastic'),
-    Schema = mongoose.Schema,
-    shortId = require('shortid');
+    Schema = mongoose.Schema
+;
 
 
 /**

@@ -47,8 +47,10 @@ angular.module('mean.columby')
       // account was already fetched before angular init
       // We assume this is already processed.
       $rootScope.user = window.user;
-      $rootScope.selectedAccount = $rootScope.user.accounts[0];
-      console.log($rootScope.selectedAccount);
+      if ($rootScope.user && $rootScope.user.accounts && $rootScope.user[0]) {
+        $rootScope.selectedAccount = $rootScope.user.accounts[0];
+        console.log($rootScope.selectedAccount);
+      }
 
 
       if ($rootScope.user.isAuthenticated){
