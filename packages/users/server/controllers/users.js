@@ -56,8 +56,16 @@ exports.login = function(req,res,next){
       token.user = user._id;
       token.save(function(err) { if (err) { res.json({ status: 'error', error: err }); } });
 
+      //create token url
+      var tokenurl = req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token;
+
       // Send the new token by email
-      mandrill_client.messages.send({
+      mandrill_client.messages.sendTemplate({
+        'template_name': 'columby-notice-template',
+        'template_content' : [{
+          'name' : 'example name',
+          'content' : 'example content'
+        }],
         'message': {
           'html': req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token,
           'text': req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token,
@@ -72,6 +80,16 @@ exports.login = function(req,res,next){
           'headers': {
             'Reply-To': 'admin@columby.com'
           },
+          'merge_vars': [{
+            'rcpt' : user.email,
+            'vars': [{
+              'name':'TITLE',
+              'content':'Your login token',
+            },{
+              'name':'message',
+              'content':'Hi, ' + user.name + '!<br/>There was a request to login. Please use this url to login<br><br>' + tokenurl + '<br><br>If you did not make this request, just ignore this email.'
+            }],
+          }],
         }
       }, function(result){
         if (result[0].status === 'sent') {
