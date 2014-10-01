@@ -95,19 +95,23 @@ angular.module('mean.users')
 
         // Define access based on content type
         switch (item.postType) {
-          case 'profile':
+          case 'account':
             // edit own content
-            if (item._id === user._id) {
-              allowEdit = true;
+            for (var i=0; i<user.accounts.length; i++){
+              if (item._id === user.accounts[ i]._id) {
+                allowEdit = true;
+              }
             }
           break;
 
           case 'dataset':
-            // check if logged in user is author
-            if (item.publisher) {
-              if (item.publisher.hasOwnProperty('_id')) {
-                if (item.publisher._id === user._id) {
-                  allowEdit = true;
+            // check if logged in user is publisher of the account
+            if (item.hasOwnProperty('account')) {
+              if (item.account.hasOwnProperty('_id')) {
+                for (var k=0; k<user.accounts.length; k++){
+                  if (item.account._id === user.accounts[ k]._id) {
+                    allowEdit = true;
+                  }
                 }
               }
             }

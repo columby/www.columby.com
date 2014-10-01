@@ -5,24 +5,27 @@
   <!-- Editor Sidebar -->
   <div class="editorSidebar" ng-show="editMode">
     <div class="editorSidebarContent">
-      <a ng-click="toggleEditMode()">cancel</a>
+      <a href="" ng-click="toggleEditMode()">cancel</a>
       <button class="btn dbt-default" ng-show="contentEdited && dataset.publishStatus!=='unpublished'" ng-click="update()">Update</button>
       <button class="btn dbt-default" ng-show="dataset.publishStatus==='unpublished'" ng-click="create()">Create</button>
 
+
+      <!--
       <h3>Publication settings</h3>
 
       <div class="autosave-status">
-        <span ng-show="isEmpty(dataset.draft)">No changes. </span>
-        <span ng-hide="isEmpty(dataset.draft) || dataset.publishStatus==='unpublished'">{{isEmpty(dataset.draft)}} Your dataset has unpublished changes. </span>
+        <span ng-show="!dataset.draft[0]">No changes. </span>
+        <span ng-show="dataset.draft[0]">Your dataset has unpublished changes. </span>
         <span ng-show="autosaveInProgress">Saving...</span>
       </div>
+      -->
 
       <h3>Status</h3>
       <strong>{{dataset.publishStatus}}</strong>
 
       <h3>Publication account</h3>
-      <img src="dataset.publisher.avatar"/>
-      <a ui-sref="profile({slug:dataset.publisher.slug})">{{dataset.publisher.name}}</a>
+      <img src="$root.selectedAccount.avatar.url"/>
+      <a ui-sref="account.view({slug:dataset.account.slug})">{{$root.selectedAccount.name}}</a>
 
     </div>
   </div>
@@ -45,7 +48,7 @@
         </div>
 
         <div class="avatar">
-          <img src="{{dataset.publisher.avatar.url}}"/>
+          <img src="{{dataset.account.avatar.url}}"/>
         </div>
       </div>
     </div>
@@ -133,12 +136,12 @@
       </div>
     </div>
 
-    <div class="dataset-publisher-wrapper" ng-hide="editMode">
+    <div class="account wrapper" ng-hide="editMode">
       <div class="container">
-        <div class="dataset-publisher-content">
-            <h3>About {{dataset.publisher.name}}</h3>
-            <div ng-bind-html="dataset.publisher.description"></div>
-						<p class="more-about"><a ui-sref="profile({slug: dataset.publisher.slug})">more about {{dataset.publisher.name}}</a></p>
+        <div class="content">
+            <h3>About {{dataset.account.name}}</h3>
+            <div ng-bind-html="dataset.account.description"></div>
+						<p class="more-about"><a ui-sref="account({slug: dataset.account.slug})">more about {{dataset.account.name}}</a></p>
           </div>
         </div>
       </div>

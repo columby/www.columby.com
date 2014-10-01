@@ -109,6 +109,18 @@ angular.module('mean.accounts')
     });
   };
 
+  $scope.update = function(){
+    console.log('updating', $scope.account);
+    AccountSrv.update($scope.account, function(result){
+      console.log('result', result);
+      if (result.status === 'success') {
+        toaster.pop('success', 'Updated', 'Account updated.');
+        $scope.toggleEditMode();
+      } else {
+        toaster.pop('warning', 'Updated', 'Account There was an error updating.');
+      }
+    });
+  };
 
   /* ---------- INIT ----------------------------------------------------------------------------- */
   // View existing account

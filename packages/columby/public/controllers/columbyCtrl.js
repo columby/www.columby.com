@@ -47,9 +47,9 @@ angular.module('mean.columby')
       // account was already fetched before angular init
       // We assume this is already processed.
       $rootScope.user = window.user;
-      if ($rootScope.user && $rootScope.user.accounts && $rootScope.user[0]) {
+      if ($rootScope.user && $rootScope.user.accounts && $rootScope.user.accounts[0]) {
         $rootScope.selectedAccount = $rootScope.user.accounts[0];
-        console.log($rootScope.selectedAccount);
+        console.log('selected account', $rootScope.selectedAccount);
       }
 
 
@@ -127,9 +127,15 @@ angular.module('mean.columby')
         $rootScope.$broadcast('sitenav::toggle');
       };
 
+      $scope.toggleAccountSelector = function(){
+        $scope.showAccountSelector = !$scope.showAccountSelector;
+      };
+
       $scope.changeSelectedAccount = function(index) {
-        $scope.status.isopen = !$scope.status.isopen;
+        console.log('changing account', index);
+        //$scope.status.isopen = !$scope.status.isopen;
         $rootScope.selectedAccount = $rootScope.user.accounts[ index];
+        $scope.toggleAccountSelector();
       };
 
     }

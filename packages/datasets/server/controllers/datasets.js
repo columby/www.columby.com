@@ -34,7 +34,7 @@ exports.create = function(req, res) {
 
   var Account = mongoose.model('Account');
   var dataset = new Dataset(req.body);
-  dataset.publishStatus = 'draft';
+  dataset.publishStatus = 'public';
 
   dataset.save(function(err) {
     if (err) { return res.json({error: err }); }

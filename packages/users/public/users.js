@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('mean.users', ['textAngular']);
+angular.module('mean.users', ['textAngular','toaster']);

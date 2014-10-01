@@ -30,13 +30,14 @@ exports.account = function(req, res) {
  * Update an account
  */
 exports.update = function(req, res) {
-  var id = req.body.update.id ;
-
-  var update = { $set: req.body.update.account };
+  var id = req.body._id ;
+  var account = {
+    name: req.body.name,
+    description: req.body.description
+  };
+  var update = { $set: account };
 
   Account.update({_id: id}, update, function(err, account){
-    console.log('error', err);
-    console.log('account', account);
     if (err) return res.json({
       status:'error',
       err: err

@@ -29,7 +29,7 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
       DatasetSrv.get({
         datasetId: $stateParams.datasetId
       }, function(dataset) {
-
+        // add acquired dataset to the scope
         $scope.dataset = dataset;
         $scope.contentLoading = false;
         if (!$scope.dataset.draft){
@@ -54,7 +54,6 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
         }
         $scope.summary = summary + '</p>';
 
-        console.log(summary);
         // send metadata to the metabar
         var meta = {
           postType: 'dataset',
@@ -63,7 +62,9 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
           created: dataset.created,
           updated: dataset.updated,
         };
+
         meta.canEdit = AuthSrv.canEdit(meta);
+
         MetabarSrv.setPostMeta(meta);
 
       });
@@ -90,7 +91,7 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
         $rootScope.$broadcast('editMode::false');
       }
     };
-
+    
     $scope.update = function(){
 
       var dataset = {

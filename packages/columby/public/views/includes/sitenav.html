@@ -17,13 +17,24 @@
       </li>
 
       <li ng-show="$root.user.isAuthenticated">
-        <ul>
-          <li ng-repeat="account in user.accounts">
-            <a ui-sref='account.view({slug: account.slug})'><i class="fa fa-user"></i> {{account.name}}</a>
-          </li>
-        </ul>
+        <!-- Simple dropdown -->
+        <span class="dropdown" on-toggle="toggled(open)">
+          <a ui-sref="account.view({slug: $root.selectedAccount.slug})">
+            <i class="fa fa-user"></i> {{$root.selectedAccount.name}}
+          </a>
+          <a href ng-click="toggleAccountSelector()"><i class="fa fa-cog"></i> Switch</a>
+
+          <ul class="account-selector" ng-show="showAccountSelector">
+            <li ng-repeat="account in $root.user.accounts">
+              <a href="" ng-click="changeSelectedAccount($index)">{{account.name}}</a>
+            </li>
+          </ul>
+        </span>
+      </li>
+
+      <li>
         <span class="settings">
-          <a ui-sref='settings'><i class="fa fa-cog"></i></a>
+          <a ui-sref='settings'><i class="fa fa-cog"></i> Settings</a>
         </span>
       </li>
 
@@ -31,17 +42,6 @@
         <a ui-sref='signin'>Login</a>
       </li>
     </ul>
-
-    <div class="btn-group" dropdown is-open="status.isopen" ng-hide="!$root.user.isAuthenticated">
-      <button type="button" class="btn btn-primary dropdown-toggle" ng-disabled="disabled">{{$root.selectedAccount.name}}<span class="caret"></span>
-      </button>
-
-      <ul class="dropdown-menu" role="menu">
-        <li ng-repeat="account in $root.user.accounts">
-          <a href="#" ng-click="changeSelectedAccount($index)">{{account.name}}</a>
-        </li>
-      </ul>
-    </div>
 
     <div class="logo"><img src="/columby/assets/img/logo-transparant-white.png"></div>
   </div>

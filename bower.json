@@ -17,6 +17,7 @@
     "trianglify": "latest",
     "textAngular": "latest",
     "font-awesome": "latest",
-    "angularjs-toaster": "latest"
+    "angularjs-toaster": "latest",
+    "angular-loading-bar": "~0.6.0"
   }
 }

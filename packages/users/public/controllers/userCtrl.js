@@ -104,8 +104,9 @@ angular.module('mean.users')
   }
 }])
 
-.controller('UserCtrl', ['$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'AuthSrv', 'toaster',
-function ($scope, $rootScope, $location, $state, AUTH_EVENTS, AuthSrv, toaster) {
+.controller('UserCtrl', [
+  '$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'AuthSrv', 'toaster',
+  function ($scope, $rootScope, $location, $state, AUTH_EVENTS, AuthSrv, toaster) {
 
   /* --- FUNCTIONS ------------------------------------------------------------- */
   function getUser(){
@@ -113,7 +114,7 @@ function ($scope, $rootScope, $location, $state, AUTH_EVENTS, AuthSrv, toaster) 
       $scope.user = result;
     });
   }
-  
+
   $scope.logout = function(){
     console.log('logging out');
     AuthSrv.logout().then(function(result){
