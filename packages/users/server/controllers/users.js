@@ -171,14 +171,18 @@ exports.signout = function(req, res) {
 exports.create = function(req, res, next) {
   console.log('Creating new user with specs: ', req.body);
 
-  var user = new User(req.body);
-      user.roles = ['authenticated'];
+  var user = new User({
+        email: req.body.email,
+        name: req.body.name,
+        roles: ['authenticated']
+      });
 
   req.assert('email', 'You must enter a valid email address').isEmail();
   req.assert('name', 'Name cannot be more than 20 characters').len(1, 20);
 
   var errors = req.validationErrors();
   if (errors) {
+    console.log('Error saving', errors);
     res.json({ status: 'error', err: errors });
   } else {
 
@@ -219,9 +223,9 @@ exports.create = function(req, res, next) {
         //     },
         //   }
         // }
-        
+
         var tokenurl = req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token;
-        
+
         mandrill_client.messages.sendTemplate({
           'template_name': 'columby-notice-template',
           'template_content' : [{

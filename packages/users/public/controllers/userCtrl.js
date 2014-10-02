@@ -88,11 +88,13 @@ angular.module('mean.users')
     $scope.registrationInProgress = true;
     $scope.loginError = null;
     AuthSrv.register($scope.newuser).then(function(response){
-      if (response.error === 'Error registering user.') {
-        $scope.registrationError = response.error;
+      console.log('register response', response);
+      if (response.status === 'error') {
+        $scope.registrationError = response.err[0].msg;
+      } else {
+        $scope.registrationSuccess = true;
+        $scope.registrationInProgress = false;
       }
-      $scope.registrationSuccess = true;
-      $scope.registrationInProgress = false;
     });
   };
 

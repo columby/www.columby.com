@@ -39,6 +39,8 @@ var UserSchema = new Schema({
     validate: [validateUniqueEmail, 'E-mail address is already in-use']
   },
 
+  name      : { type: String },
+    
   verified  : { type: Boolean, default: false },
 
   accounts  : [{ type: Schema.ObjectId, ref: 'Account' }],
