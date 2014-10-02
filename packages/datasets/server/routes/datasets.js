@@ -4,9 +4,13 @@ var datasets = require('../controllers/datasets');
 
 module.exports = function(Dataset, app, auth, database) {
 
-  // Article authorization helpers
+  // Check if the logged in user has an account that can edit the desired dataset
   var hasAuthorization = function(req, res, next) {
-    if (req.dataset.publisher.id !== req.user.account.id) {
+    console.log(req.user.accounts);
+    console.log(req.dataset.account._id);
+    console.log(req.user.accounts.indexOf(req.dataset.account._id));
+
+    if (req.user.accounts.indexOf(req.dataset.account._id) === -1) {
       console.log('User not authorized to edit this dataset');
       return res.status(401).send('User is not authorized');
     }

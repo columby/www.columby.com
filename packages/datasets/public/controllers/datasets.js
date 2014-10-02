@@ -14,14 +14,17 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
   function($rootScope, $scope, $state, $stateParams, DatasetSrv, MetabarSrv, AuthSrv, toaster) {
 
     /***   INITIALISATION   ***/
-    var editWatcher;               // Watch for model changes in editmode
+    //var editWatcher;               // Watch for model changes in editmode
 
     $scope.editMode = false;       // edit mode is on or off
     $scope.contentEdited = false;  // models is changed or not during editmode
 
+    // check if request is for edit mode
     if ($state.current.data && $state.current.data.editMode) {
       $scope.editMode = true;
     }
+
+
     /***   FUNCTIONS   ***/
     function getDataset(){
       $scope.contentLoading = true;  // show loading message while loading dataset
@@ -54,18 +57,7 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
         }
         $scope.summary = summary + '</p>';
 
-        // send metadata to the metabar
-        var meta = {
-          postType: 'dataset',
-          _id: dataset._id,
-          account: dataset.account,
-          created: dataset.created,
-          updated: dataset.updated,
-        };
-
-        meta.canEdit = AuthSrv.canEdit(meta);
-
-        MetabarSrv.setPostMeta(meta);
+        $scope.dataset.canEdit = (dataset.account._id === $rootScope.selectedAccount._id);
 
       });
     }
@@ -73,25 +65,64 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
     function initiateNewDataset(){
       $scope.dataset = {
         title: 'New title',
-        description: 'Description',
+        description: '<p>Description</p>',
         publishStatus: 'unpublished',
         draft:{},
         account: $rootScope.selectedAccount._id
       };
-      console.log($scope.dataset);
     }
 
+    function toggleEditMode(mode){
+      if (!mode){
+        $scope.editMode = !$scope.editMode;
+      } else if (mode===true) {
+        $scope.editMode = mode;
+        // watch title change
+        $scope.$watch('dataset.title', function(newVal, oldVal) {
+          if (newVal !== oldVal){
+            var dataset = {
+              _id: $scope.dataset._id,
+              title: newVal
+            };
 
-    /***   SCOPE FUNCTIONS   ***/
-    $scope.toggleEditMode = function(){
+            DatasetSrv.update(dataset,function(res){
+              if (res._id){
+                toaster.pop('success', 'Updated', 'Dataset updated.');
+              }
+            });
+          }
+        });
 
-      $scope.editMode = !$scope.editMode;
-      // send closed message to metabar
-      if ($scope.editMode === false) {
+      } else if (mode===false) {
+        $scope.editMode = mode;
+        // turn watching off.
+        //editWatcher();
         $rootScope.$broadcast('editMode::false');
       }
+    }
+
+    /***   SCOPE FUNCTIONS   ***/
+    $scope.edit = function(){
+      toggleEditMode(true);
     };
-    
+
+    $scope.cancelEdit = function(){
+      toggleEditMode(false);
+    };
+
+    $scope.updateDescription = function() {
+      var dataset = {
+        _id: $scope.dataset._id,
+        description: $scope.dataset.description
+      };
+
+      DatasetSrv.update(dataset,function(res){
+        if (res._id){
+          toaster.pop('success', 'Updated', 'Dataset description updated.');
+        }
+      });
+    };
+
     $scope.update = function(){
 
       var dataset = {
@@ -104,7 +135,7 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
         if (res._id){
           $scope.dataset = res;
           toaster.pop('success', 'Updated', 'Dataset updated.');
-          $scope.toggleEditMode();
+          toggleEditMode();
         }
       });
     };
@@ -118,32 +149,54 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
       });
     };
 
-    /*** ROOTSCOPE EVENTS ***/
-    // Turn on or off editMode for a dataset
-    $scope.$on('metabar::editMode', function(evt,mode){
-      $scope.editMode = mode;
+    $scope.openDatasourceModal = function() {
+      $scope.addDatasource = true;
+    };
 
-      if (mode === true){
-        // turn edit mode on
-        editWatcher = $scope.$watchCollection('dataset', function (newval, oldval) {
-          if (!angular.equals(oldval, newval)) {
-            $scope.contentEdited = true;
+    $scope.closeDatasourceModal = function() {
+      $scope.addDatasource = false;
+    };
+
+    $scope.attachDatasourceLink = function() {
+      //$scope.newDatasetSource = null;
+      // validate link
+
+      // add link to model
+      if (!$scope.dataset.hasOwnProperty('sources')) {
+        $scope.dataset.sources = [];
+      }
+      if ($scope.newDatasetSource){
+        console.log('new', typeof($scope.dataset.sources));
+        $scope.dataset.sources.push({
+          uploader    : 'user_id',
+          sourceType  : 'link',
+          source      : $scope.newDatasetSource,
+          status      : 'public'
+        });
+
+        DatasetSrv.update($scope.dataset,function(res){
+          if (res._id){
+            $scope.dataset = res;
+            toaster.pop('success', 'Updated', 'Dataset updated.');
+            //toggleEditMode();
+            $scope.addDatasource = false;
           }
         });
-      } else {
-        // turn watching off.
-        editWatcher();
+
+        //$scope.newDatasetSource = null;
+        //$scope.addDatasource = false;
       }
-    });
 
+    };
 
+    /*** ROOTSCOPE EVENTS ***/
 
     /*** INIT ***/
     if (!$scope.editMode) {
       getDataset();
     } else {
       initiateNewDataset();
-      $rootScope.$broadcast('metabar::editMode', true);
+      toggleEditMode(true);
     }
   }
 ]);

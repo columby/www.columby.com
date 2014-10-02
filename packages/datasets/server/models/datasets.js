@@ -19,20 +19,23 @@ var DatasetSchema = new Schema({
   // Dataset properties
   created         : { type: Date, default: Date.now },
   updated         : { type: Date },
-  title: { type   : String, trim: true },
+  title           : { type   : String, trim: true },
   description     : { type: String, trim: true },
 
   account         : { type: Schema.ObjectId, ref:  'Account' },
 
   publishStatus   : { type: String, default: 'draft' },
+
   draft : {
       title         : { type:String, trim:true },
       description   : { type: String, trim: true },
   },
 
+  sources         : [],
+
   history: [{
-    date: { type: Date, default: Date.now },
-    acitvity: { type: String }
+    date            : { type: Date, default: Date.now },
+    acitvity        : { type: String }
   }]
 });
 

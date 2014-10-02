@@ -7,6 +7,18 @@ var mongoose = require('mongoose'),
   Dataset = mongoose.model('Dataset')
 ;
 
+function canEdit(req){
+
+  // check if user is owner of the dataset's account.
+  if (req.user && req.user.hasOwnProperty('_id')){
+    if ( String(req.dataset.account.owner) === String(req.user._id)) {
+      return 'true';
+    } else {
+      return 'false';
+    }
+  }
+
+}
 
 /**
  * Find dataset by id
@@ -15,11 +27,12 @@ exports.dataset = function(req, res, next, id) {
 
   Dataset
     .findOne({_id: id})
-    .populate('account', 'slug name description')
+    .populate('account', 'slug name description owner')
     .exec(function(err,dataset){
       if (err) return next(err);
       if (!dataset) return res.json({error:'Failed to load dataset ' + id, err:err});
 
+      // Attach dataset to request
       req.dataset = dataset;
 
       next();
@@ -62,8 +75,19 @@ exports.update = function(req, res) {
 
   Dataset.findOne({ _id: req.dataset.id }, function (err, dataset){
 
-    dataset.title = req.body.title;
-    dataset.description = req.body.description;
+    console.log('updating dataset', req.body);
+
+    if (req.body.title){
+      dataset.title   = req.body.title;
+    }
+
+    if (req.body.description) {
+      dataset.description = req.body.description;
+    }
+    if (dataset.sources) {
+      dataset.sources = req.body.sources;
+    }
+
     dataset.updated = new Date();
 
     dataset.save(function(err){
@@ -99,6 +123,9 @@ exports.destroy = function(req, res) {
  * Show an dataset
  */
 exports.show = function(req, res) {
+  // determine if user can edit the dataset
+  req.dataset.canEdit = canEdit(req);
+
   res.json(req.dataset);
 };
 

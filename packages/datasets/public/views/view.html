@@ -1,11 +1,9 @@
-<div class="dataset item edit" ng-controller="DatasetViewCtrl">
-
-  <div class="loader" ng-class="{noshow:!contentLoading}">Loading dataset</div>
+<div class="dataset view" ng-controller="DatasetViewCtrl">
 
   <!-- Editor Sidebar -->
   <div class="editorSidebar" ng-show="editMode">
     <div class="editorSidebarContent">
-      <a href="" ng-click="toggleEditMode()">cancel</a>
+      <a href="" ng-click="cancelEdit()">Exit edit mode</a>
       <button class="btn dbt-default" ng-show="contentEdited && dataset.publishStatus!=='unpublished'" ng-click="update()">Update</button>
       <button class="btn dbt-default" ng-show="dataset.publishStatus==='unpublished'" ng-click="create()">Create</button>
 
@@ -20,7 +18,7 @@
       </div>
       -->
 
-      <h3>Status</h3>
+      <h3>Publication status</h3>
       <strong>{{dataset.publishStatus}}</strong>
 
       <h3>Publication account</h3>
@@ -30,13 +28,13 @@
     </div>
   </div>
 
-  <div class="dataset-content" ng-class="{show:!contentLoading}">
+  <div class="content" ng-class="{show:!contentLoading}">
 
-    <div class="dataset-header-wrapper">
-      <div class="dataset-header container">
+    <div class="header wrapper">
+      <div class="container">
 
+        <!-- Editable title -->
         <div class="title" ng-switch="editMode">
-
           <h1 ng-switch-default ng-bind-html="dataset.title || 'no title yet'"></h1>
           <h1 ng-switch-when="true"
             contenteditable
@@ -44,52 +42,87 @@
             ng-model="dataset.title"
             htmlFormat="plain">
           </h1>
-
         </div>
 
+        <!-- Meta -->
+        <div class="meta">
+          <p>A dataset by <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name}}</a>, published on <time class="post-date">{{dataset.created | date:'d MMMM yyyy'}}</time> <span class="edit" ng-show="dataset.canEdit && !editMode"><a href="" ng-click="edit()">edit</a></span></p>
+        </div>
+
+        <!-- Editable avatar -->
         <div class="avatar">
           <img src="{{dataset.account.avatar.url}}"/>
         </div>
       </div>
     </div>
 
-    <div class="dataset-description-wrapper">
-
-      <div class="dataset-description container">
-        <div class="col-md-12" ng-switch="editMode">
-          <div ng-switch-default ng-bind-html="dataset.description || 'The publisher of this dataset has not yet provided a description yet.'"></div>
-          <div ng-switch-when="true"
-            ng-model="dataset.description"
-            text-angular
-            placeholder="please enter your description"
-            ta-toolbar="[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"
-          ></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="dataset-info-wrapper" ng-hide="editMode">
+    <!-- Dataset Description -->
+    <div class="description wrapper">
+      <!-- Editable description -->
       <div class="container">
-        <div class="dataset-info">
-          <div class="dataset-info-content" ng-bind-html="summary"></div>
+        <div class="col-md-12" ng-switch="editMode">
+          <div ng-switch-default ng-bind-html="dataset.description || '<p>The publisher of this dataset has not yet provided a description yet.</p>'"></div>
+          <div
+            ng-switch-when = "true">
+            <div
+              ng-model = "dataset.description"
+              ng-blur = "updateDescription()"
+              text-angular
+              ta-toolbar = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"
+          ></div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="dataset-sources-wrapper" ng-hide="dataset.publishStatus==='unpublished'">
-      <div class="dataset-sources container">
+    <!-- Dataset Info -->
+    <div class="info wrapper" ng-hide="editMode">
+      <div class="container">
+        <div class="content" ng-bind-html="summary"></div>
+      </div>
+    </div>
+
+    <!-- Dataset Sources -->
+    <div class="sources wrapper" ng-hide="dataset.publishStatus==='unpublished'">
+      <div class="container">
         <h3>Sources</h3>
         <ul ng-hide="!dataset.sources || dataset.sources.length===0">
           <li ng-repeat="source in dataset.sources">
-						<h4><a href="#">{{source.title}}</a></h4>
-						<div class="date-size">{{source.createdAt}} - {{source.size}}</div>
+						<h4><a href="{{source.source}}" target="_blank">{{source.source}}</a></h4>
+						<div class="date-size">{{source.sourceType}} - {{source.createdAt}} - {{source.size}}</div>
 					</li>
         </ul>
         <p ng-show="!dataset.sources || dataset.sources.length===0">No sources added yet</p>
+        <h4 ng-show="editMode"><a href="" ng-click="openDatasourceModal()" class="new">+ Add a new datasource</a></h4>
+
+        <div class="addDatasourceModal" ng-show="addDatasource">
+          <button class="modal-close" ng-click="closeDatasourceModal()">×</button>
+          <div class="container add-source-content">
+            <h2>Add a datasource</h2>
+            <fileUpload />
+
+            <form class="form-horizontal novalidate" role="form" name="linkUploadForm" ng-submit="attachDatasourceLink()" >
+              <div class="form-group">
+                <div class="col-sm-12">
+                  <label>Enter your url</label>
+                  <input type="url" placeholder="http://yourlink.url" class="form-control" ng-model="newDatasetSource" name="link" required />
+                </div>
+                <div class="col-sm-12">
+                  <div ng-show="linkUploadForm.$invalid && !loginForm.$pristine" class="alert alert-warning" role="alert">
+                    <span ng-show="linkUploadForm.link.$invalid && !loginForm.link.$pristine">Enter a valid url (don't forget http://).</span>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-default" ng-disabled="linkUploadForm.$invalid">Attach</button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="dataset-preview-wrapper" ng-hide="editMode || !dataset.preview">
+    <!-- Dataset Preview -->
+    <div class="preview wrapper" ng-hide="editMode || !dataset.preview">
       <div class="content">
         <table class="table">
           <thead>
@@ -104,7 +137,8 @@
       </div>
     </div>
 
-    <div class="dataset-use-wrapper" ng-hide="editMode">
+    <!-- Dataset Use -->
+    <div class="use wrapper" ng-hide="editMode">
       <div class="container">
         <div class="content">
           <h3>Use this dataset</h3>
@@ -113,17 +147,19 @@
       </div>
     </div>
 
-    <div class="dataset-id-wrapper" ng-show="dataset._id && !editMode">
+    <!-- Dataset UUID -->
+    <div class="uuid wrapper" ng-show="dataset._id && !editMode">
       <div class="container">
-        <div class="dataset-id content">
+        <div class="content">
           <h4>UUID: {{dataset._id}}</h4>
         </div>
       </div>
     </div>
 
-    <div class="dataset-references-wrapper" ng-show="dataset.references">
+    <!-- Dataset references -->
+    <div class="references wrapper" ng-show="dataset.references">
       <div class="container">
-        <div class="dataset-references content">
+        <div class="content">
           <h3>References</h3>
           <ul>
             <li ng-repeat="reference in dataset.references">
@@ -136,12 +172,13 @@
       </div>
     </div>
 
+    <!-- Dataset Account -->
     <div class="account wrapper" ng-hide="editMode">
       <div class="container">
         <div class="content">
             <h3>About {{dataset.account.name}}</h3>
             <div ng-bind-html="dataset.account.description"></div>
-						<p class="more-about"><a ui-sref="account({slug: dataset.account.slug})">more about {{dataset.account.name}}</a></p>
+						<p class="more-about"><a ui-sref="account.view({slug: dataset.account.slug})">more about {{dataset.account.name}}</a></p>
           </div>
         </div>
       </div>
