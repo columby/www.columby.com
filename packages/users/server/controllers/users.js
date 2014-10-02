@@ -63,22 +63,22 @@ exports.login = function(req,res,next){
       mandrill_client.messages.sendTemplate({
         'template_name': 'columby-notice-template',
         'template_content' : [{
-          'name' : 'example name',
-          'content' : 'example content'
+          'name' : 'Your login token',
+          'content' : 'Hi!<br/>There was a request to login. Please click the button below to login. <br>Or copy and paste this url:<br>' + tokenurl + '<br><br>If you did not make this request, just ignore this email.'
         }],
         'message': {
           'html': req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token,
           'text': req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token,
           'subject': 'Login at Columby',
-          'from_email': 'admin@columby.com',
-          'from_name': 'Columby Admin',
+          'from_email': 'noreply@columby.com',
+          'from_name': 'Columby',
           'to': [{
             'email': user.email,
             'name': user.name,
             'type': 'to'
           }],
           'headers': {
-            'Reply-To': 'admin@columby.com'
+            'Reply-To': 'noreply@columby.com'
           },
           'merge_vars': [{
             'rcpt' : user.email,
@@ -86,8 +86,14 @@ exports.login = function(req,res,next){
               'name':'TITLE',
               'content':'Your login token',
             },{
-              'name':'message',
-              'content':'Hi, ' + user.name + '!<br/>There was a request to login. Please use this url to login<br><br>' + tokenurl + '<br><br>If you did not make this request, just ignore this email.'
+              'name':'MESSAGE',
+              'content':'Hi!<br/>There was a request to login. Please click the button below to login. <br>Or copy and paste this url:<br>' + tokenurl + '<br><br>If you did not make this request, just ignore this email.'
+            },{
+              'name':'LINK',
+              'content': tokenurl
+            },{
+              'name':'LINKTITLE',
+              'content': 'Login at Columby'
             }],
           }],
         }
@@ -196,23 +202,65 @@ exports.create = function(req, res, next) {
             console.log('Account created.', account);
 
         //sendmail
-        mandrill_client.messages.send({
+        // mandrill_client.messages.send({
+        //   'message': {
+        //     'html': req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token,
+        //     'text': req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token,
+        //     'subject': 'Login at Columby',
+        //     'from_email': 'admin@columby.com',
+        //     'from_name': 'Columby Admin',
+        //     'to': [{
+        //       'email': user.email,
+        //       'name': user.name,
+        //       'type': 'to'
+        //     }],
+        //     'headers': {
+        //       'Reply-To': 'admin@columby.com'
+        //     },
+        //   }
+        // }
+        
+        var tokenurl = req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token;
+        
+        mandrill_client.messages.sendTemplate({
+          'template_name': 'columby-notice-template',
+          'template_content' : [{
+            'name' : 'Welcome to Columby!',
+            'content' : 'Hi!<br/>You can log in right away and start using your new account. Please click the button below to login. <br>Or copy and paste this url:<br>' + tokenurl + '<br><br>If you don\'t know what this is about, then someone has probably entered your email address by mistake. Sorry about that.'
+          }],
           'message': {
             'html': req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token,
             'text': req.protocol + '://' + req.get('host') + '/#!/u/signin?token=' + token.token,
             'subject': 'Login at Columby',
-            'from_email': 'admin@columby.com',
-            'from_name': 'Columby Admin',
+            'from_email': 'noreply@columby.com',
+            'from_name': 'Columby',
             'to': [{
               'email': user.email,
               'name': user.name,
               'type': 'to'
             }],
             'headers': {
-              'Reply-To': 'admin@columby.com'
+              'Reply-To': 'noreply@columby.com'
             },
+            'merge_vars': [{
+              'rcpt' : user.email,
+              'vars': [{
+                'name':'TITLE',
+                'content':'Welcome to Columby!',
+              },{
+                'name':'MESSAGE',
+                'content':'Hi!<br/>You can log in right away and start using your new account. Please click the button below to login. <br>Or copy and paste this url:<br>' + tokenurl + '<br><br>If you don\'t know what this is about, then someone has probably entered your email address by mistake. Sorry about that.<br><br>Thank you,<br>The Columby team'
+              },{
+                'name':'LINK',
+                'content': tokenurl
+              },{
+                'name':'LINKTITLE',
+                'content': 'Login at Columby'
+              }],
+            }],
           }
         }, function(result){
+          console.log('res',result);
           if (result[0].status === 'sent') {
             res.json({
               status: 'success',
