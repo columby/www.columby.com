@@ -90,6 +90,9 @@
           <li ng-repeat="source in dataset.sources">
 						<h4><a href="{{source.source}}" target="_blank">{{source.source}}</a></h4>
 						<div class="date-size">{{source.sourceType}} - {{source.createdAt}} - {{source.size}}</div>
+            <div class="actions">
+              <a href="" ng-click="deleteSource($index)"><i class="fa fa-trash"></i></a>
+            </div>
 					</li>
         </ul>
         <p ng-show="!dataset.sources || dataset.sources.length===0">No sources added yet</p>

@@ -1,12 +1,14 @@
 'use strict';
 
 //Articles service used for articles REST endpoint
-angular.module('mean.datasets').factory('DatasetSrv', ['$resource',
+angular.module('mean.datasets')
+
+.factory('DatasetSrv', ['$resource',
 
   function($resource) {
 
     return $resource('api/v2/dataset/:datasetId', {
-      datasetId: '@_id'
+      datasetId: '@datasetId'
     }, {
       update: {
         method: 'PUT'
@@ -14,4 +16,22 @@ angular.module('mean.datasets').factory('DatasetSrv', ['$resource',
     }
     );
   }
-]);
+])
+
+.factory('DatasetSourcesSrv', ['$resource',
+
+  function($resource) {
+
+    return $resource('api/v2/dataset/:datasetId/source/:sourceId', {
+      datasetId: '@datasetId',
+      sourceId: '@sourceId',
+    }, {
+      update: {
+        method: 'PUT'
+      }
+    }
+    );
+  }
+])
+
+;

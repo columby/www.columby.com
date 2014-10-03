@@ -10,8 +10,8 @@ angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$st
 ]);
 
 
-angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'MetabarSrv', 'AuthSrv', 'toaster',
-  function($rootScope, $scope, $state, $stateParams, DatasetSrv, MetabarSrv, AuthSrv, toaster) {
+angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'DatasetSourcesSrv', 'MetabarSrv', 'AuthSrv', 'toaster',
+  function($rootScope, $scope, $state, $stateParams, DatasetSrv, DatasetSourcesSrv, MetabarSrv, AuthSrv, toaster) {
 
     /***   INITIALISATION   ***/
     //var editWatcher;               // Watch for model changes in editmode
@@ -158,7 +158,6 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
     };
 
     $scope.attachDatasourceLink = function() {
-      //$scope.newDatasetSource = null;
       // validate link
 
       // add link to model
@@ -166,28 +165,42 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
         $scope.dataset.sources = [];
       }
       if ($scope.newDatasetSource){
-        console.log('new', typeof($scope.dataset.sources));
-        $scope.dataset.sources.push({
-          uploader    : 'user_id',
+        var s = {
+          uploader    : $rootScope.user._id,
           sourceType  : 'link',
           source      : $scope.newDatasetSource,
           status      : 'public'
-        });
+        };
 
-        DatasetSrv.update($scope.dataset,function(res){
-          if (res._id){
-            $scope.dataset = res;
+        DatasetSourcesSrv.save({datasetId:$scope.dataset._id, source: s}, function(res){
+          console.log(res);
+          if (res.status === 'success'){
+            $scope.dataset.sources.push(res.source);
             toaster.pop('success', 'Updated', 'Dataset updated.');
-            //toggleEditMode();
+            $scope.newDatasetSource = null;
             $scope.addDatasource = false;
+          } else {
+            toaster.pop('danger', 'Error', 'Something went wrong.');
           }
         });
-
-        //$scope.newDatasetSource = null;
-        //$scope.addDatasource = false;
       }
+    };
+
+
+    $scope.deleteSource = function(index){
+      console.log(index);
+      var datasetId = $scope.dataset._id;
+      var sourceId = $scope.dataset.sources[ index]._id;
+
+      DatasetSourcesSrv.delete({datasetId:datasetId, sourceId:sourceId}, function(res){
+        console.log(res);
+        if (res.status === 'success') {
+          $scope.dataset.sources.splice(index,1);
+        }
+      });
 
     };
+
 
     /*** ROOTSCOPE EVENTS ***/
 

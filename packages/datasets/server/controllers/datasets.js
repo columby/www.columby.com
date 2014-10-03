@@ -4,7 +4,9 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  Dataset = mongoose.model('Dataset')
+  Dataset = mongoose.model('Dataset'),
+  Schema = mongoose.Schema,
+  ObjectId = Schema.ObjectId
 ;
 
 function canEdit(req){
@@ -150,6 +152,65 @@ exports.all = function(req, res) {
   ;
 };
 
+
+
+
+/*-------------- SOURCES -------------------*/
+exports.listSources = function(req, res) {
+  console.log(req.params);
+  var datasetId = req.params.datasetId;
+  console.log(datasetId);
+};
+
+exports.getSource = function(req,res,id){
+  console.log(req.params);
+};
+
+exports.createSource = function(req, res) {
+  var datasetId = req.params.datasetId;
+  var source = req.body.source;
+  source._id = mongoose.Types.ObjectId();
+  Dataset
+    .findOne({_id: datasetId})
+    .exec(function(err,dataset){
+      if (err) return res.json({status:'error', err:err});
+      if (!dataset) return res.json({error:'Failed to load dataset', err:err});
+      if (!dataset.sources) {
+        dataset.sources = [ ];
+      }
+      dataset.sources.push(source);
+      dataset.save(function(err){
+        res.json({status:'success', source: source});
+      });
+    })
+  ;
+};
+
+exports.updateSource = function(req, res, id) {
+  console.log(req.params);
+};
+
+/**
+ * Delete a source attached to a dataset
+ *
+ **/
+exports.destroySource = function(req, res, id) {
+
+  var datasetId = String(req.params.datasetId);
+  var sourceId = String(req.params.sourceId);
+
+  Dataset.findOne({_id:datasetId},function(err,dataset){
+    if (err) return res.json({status:'error', err:err});
+    if (!dataset) return res.json({error:'Failed to load dataset', err:err});
+    for (var i=0; i < dataset.sources.length; i++){
+      if (String(dataset.sources[ i]._id) === sourceId){
+        dataset.sources.splice(i,1);
+      }
+    }
+    dataset.save();
+    res.json({status:'success'});
+  });
+};
 
 // Update draft of a dataset.
 exports.autosave = function(req,res) {

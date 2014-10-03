@@ -27,9 +27,16 @@ module.exports = function(Dataset, app, auth, database) {
   app.route('/api/v2/dataset/:datasetId')
     .get(datasets.show)
     .put(auth.jwtCheckAccount, hasAuthorization, datasets.update)
-    .delete(hasAuthorization, datasets.destroy);
+    .delete(auth.jwtCheckAccount, hasAuthorization, datasets.destroy);
 
+  app.route('/api/v2/dataset/:datasetId/source')
+    .get(datasets.listSources)
+    .post(auth.jwtCheckAccount, datasets.createSource);
 
+  app.route('/api/v2/dataset/:datasetId/source/:sourceId')
+    .get(datasets.getSource)
+    .put(auth.jwtCheckAccount, hasAuthorization, datasets.updateSource)
+    .delete(auth.jwtCheckAccount, hasAuthorization, datasets.destroySource);
 
   app.param('datasetId', datasets.dataset);
 };
