@@ -19,6 +19,11 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
       url: '/about',
       templateUrl: 'columby/views/about.html',
     })
+    
+    .state('features', {
+      url: '/features',
+      templateUrl: 'columby/views/features.html',
+    })
 
     .state('publish', {
       url: '/publish',
