@@ -106,8 +106,17 @@ angular.module('mean.datasets')
 
     function addReference(ref){
 
+      // construct the reference
+      var reference = {
+        description: ref.description,
+        image: ref.images[0].url,
+        url: ref.url,
+        title: ref.title,
+        provider_name: ref.provider_name,
+        provider_display: ref.provider_display
+      };
       // save reference
-      DatasetReferencesSrv.save({datasetId:$scope.dataset._id, reference: ref}, function(res){
+      DatasetReferencesSrv.save({datasetId:$scope.dataset._id, reference: reference}, function(res){
         console.log(res);
       });
       // add to scope
