@@ -4,9 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  Dataset = mongoose.model('Dataset'),
-  Schema = mongoose.Schema,
-  ObjectId = Schema.ObjectId
+  Dataset = mongoose.model('Dataset')
 ;
 
 function canEdit(req){
@@ -211,6 +209,68 @@ exports.destroySource = function(req, res, id) {
     res.json({status:'success'});
   });
 };
+
+
+/*-------------- REFERENCES --------------------------------------------------------------*/
+exports.listReferences = function(req, res) {
+  console.log(req.params);
+  var datasetId = req.params.datasetId;
+  console.log(datasetId);
+};
+
+exports.getReference = function(req,res,id){
+  console.log(req.params);
+};
+
+exports.createReference = function(req, res) {
+  var datasetId = req.params.datasetId;
+  var reference = req.body.reference;
+  reference._id = mongoose.Types.ObjectId();
+  Dataset
+    .findOne({_id: datasetId})
+    .exec(function(err,dataset){
+      if (err) return res.json({status:'error', err:err});
+      if (!dataset) return res.json({error:'Failed to load dataset', err:err});
+      if (!dataset.references) {
+        dataset.sources = [ ];
+      }
+      dataset.references.push(reference);
+      dataset.save(function(err){
+        res.json({status:'success', reference: reference});
+      });
+    })
+  ;
+};
+
+exports.updateReference = function(req, res, id) {
+  console.log(req.params);
+};
+
+/**
+ * Delete a source attached to a dataset
+ *
+ **/
+exports.destroyReference = function(req, res, id) {
+
+  var datasetId = String(req.params.datasetId);
+  var referenceId = String(req.params.referenceId);
+
+  Dataset.findOne({_id:datasetId},function(err,dataset){
+    if (err) return res.json({status:'error', err:err});
+    if (!dataset) return res.json({error:'Failed to load dataset', err:err});
+    for (var i=0; i < dataset.references.length; i++){
+      if (String(dataset.references[ i]._id) === referenceId){
+        dataset.references.splice(i,1);
+      }
+    }
+    dataset.save();
+    res.json({status:'success'});
+  });
+};
+
+
+
+
 
 // Update draft of a dataset.
 exports.autosave = function(req,res) {

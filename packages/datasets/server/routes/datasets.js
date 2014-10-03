@@ -38,5 +38,14 @@ module.exports = function(Dataset, app, auth, database) {
     .put(auth.jwtCheckAccount, hasAuthorization, datasets.updateSource)
     .delete(auth.jwtCheckAccount, hasAuthorization, datasets.destroySource);
 
+  app.route('/api/v2/dataset/:datasetId/reference')
+    .get(datasets.listReferences)
+    .post(auth.jwtCheckAccount, datasets.createReference);
+
+  app.route('/api/v2/dataset/:datasetId/reference/:referenceId')
+    .get(datasets.getReference)
+    .put(auth.jwtCheckAccount, hasAuthorization, datasets.updateReference)
+    .delete(auth.jwtCheckAccount, hasAuthorization, datasets.destroyReference);
+
   app.param('datasetId', datasets.dataset);
 };

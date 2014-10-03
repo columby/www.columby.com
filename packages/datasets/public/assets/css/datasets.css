@@ -1,3 +1,31 @@
+.fullscreenPopup {
+  position: fixed;
+  overflow: auto;
+  text-align: center;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 920;
+  background-color: #FFF;
+  background-color: rgba(255, 255, 255, 0.97);
+}
+.fullscreenPopup .modal-close {
+  border: 0;
+  background: #000;
+  background: rgba(0, 0, 0, 0);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px 20px;
+  font-size: 28px;
+  color: #000;
+  color: rgba(0, 0, 0, 0.3);
+  font-family: "jaf-bernino-sans", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+  letter-spacing: -0.02em;
+  font-weight: 300;
+  font-style: normal;
+}
 .ta-scroll-window.form-control,
 .ta-scroll-window > .ta-bind {
   min-height: 0;
@@ -96,34 +124,6 @@
 }
 .dataset.view .content .sources li.primary {
   border-left: 4px green solid;
-}
-.dataset.view .content .sources .addDatasourceModal {
-  position: fixed;
-  overflow: auto;
-  text-align: center;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 920;
-  background-color: #FFF;
-  background-color: rgba(255, 255, 255, 0.97);
-}
-.dataset.view .content .sources .addDatasourceModal .modal-close {
-  border: 0;
-  background: #000;
-  background: rgba(0, 0, 0, 0);
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 10px 20px;
-  font-size: 28px;
-  color: #000;
-  color: rgba(0, 0, 0, 0.3);
-  font-family: "jaf-bernino-sans", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
-  letter-spacing: -0.02em;
-  font-weight: 300;
-  font-style: normal;
 }
 .dataset.view .content .sources .addDatasourceModal .add-source-content {
   display: inline-block;

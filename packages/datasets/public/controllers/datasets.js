@@ -10,8 +10,11 @@ angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$st
 ]);
 
 
-angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'DatasetSourcesSrv', 'MetabarSrv', 'AuthSrv', 'toaster',
-  function($rootScope, $scope, $state, $stateParams, DatasetSrv, DatasetSourcesSrv, MetabarSrv, AuthSrv, toaster) {
+angular.module('mean.datasets')
+
+.controller('DatasetViewCtrl', [
+  '$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'DatasetSourcesSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster',
+  function($rootScope, $scope, $state, $stateParams, DatasetSrv, DatasetSourcesSrv, DatasetReferencesSrv, MetabarSrv, AuthSrv, toaster) {
 
     /***   INITIALISATION   ***/
     //var editWatcher;               // Watch for model changes in editmode
@@ -100,6 +103,23 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
         $rootScope.$broadcast('editMode::false');
       }
     }
+
+    function addReference(ref){
+
+      // save reference
+      DatasetReferencesSrv.save({datasetId:$scope.dataset._id, reference: ref}, function(res){
+        console.log(res);
+      });
+      // add to scope
+      if (!$scope.dataset.references) {
+        $scope.dataset.references = [];
+      }
+      $scope.dataset.references.push(ref);
+
+      // close popup
+      $scope.addReference = false;
+    }
+
 
     /***   SCOPE FUNCTIONS   ***/
     $scope.edit = function(){
@@ -202,9 +222,38 @@ angular.module('mean.datasets').controller('DatasetViewCtrl', ['$rootScope', '$s
     };
 
 
-    /*** ROOTSCOPE EVENTS ***/
+    $scope.openReferenceModal = function() {
+      $scope.addReference = true;
+    };
 
-    /*** INIT ***/
+    $scope.closeReferenceModal = function() {
+      $scope.addReference = false;
+    };
+    $scope.deleteReference = function(index){
+      console.log(index);
+      var datasetId = $scope.dataset._id;
+      var referenceId = $scope.dataset.references[ index]._id;
+
+      DatasetReferencesSrv.delete({datasetId:datasetId, referenceId:referenceId}, function(res){
+        console.log(res);
+        if (res.status === 'success') {
+          $scope.dataset.references.splice(index,1);
+        }
+      });
+
+    };
+
+
+
+    /* --------- ROOTSCOPE EVENTS ------------------------------------------------------------ */
+    $rootScope.$on('embedly::new', function(a,b){
+      console.log('a',a);
+      console.log('b',b);
+      addReference(b);
+    });
+
+
+    /* --------- INIT ------------------------------------------------------------------------ */
     if (!$scope.editMode) {
       getDataset();
     } else {

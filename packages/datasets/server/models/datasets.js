@@ -33,6 +33,8 @@ var DatasetSchema = new Schema({
 
   sources         : [],
 
+  references      : [],
+  
   history: [{
     date            : { type: Date, default: Date.now },
     acitvity        : { type: String }

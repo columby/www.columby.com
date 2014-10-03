@@ -34,4 +34,20 @@ angular.module('mean.datasets')
   }
 ])
 
+.factory('DatasetReferencesSrv', ['$resource',
+
+  function($resource) {
+
+    return $resource('api/v2/dataset/:datasetId/reference/:referenceId', {
+      datasetId: '@datasetId',
+      sourceId: '@referenceId',
+    }, {
+      update: {
+        method: 'PUT'
+      }
+    }
+    );
+  }
+])
+
 ;
