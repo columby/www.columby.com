@@ -1,5 +1,8 @@
 'use strict';
 
+
+var request = require('request');
+
 /**
  * Module dependencies.
  */
@@ -20,6 +23,39 @@ function canEdit(req){
 
 }
 
+
+exports.extractlink = function(req,res) {
+  console.log(req.params);
+  console.log(req.query);
+  var uri = req.query.uri;
+  console.log(uri);
+
+  // get link properties
+  if (uri){
+    request.head(uri, function(err, result, body){
+      if (res.statusCode !== 200) {
+        console.log('invalid url');
+      } else {
+        // check for file
+        console.log('valid url');
+        // check for arcgis
+
+      }
+
+
+      res.json({
+        headers: result,
+        body: body
+      });
+      console.log('content-type:', result.headers['content-type']);
+      console.log('content-length:', result.headers['content-length']);
+    });
+  } else {
+    res.json({err:'no uri'});
+  }
+};
+
+/*-------------- DATASET ---------------------------------------------------------------*/
 /**
  * Find dataset by id
  */
@@ -153,38 +189,38 @@ exports.all = function(req, res) {
 
 
 
-/*-------------- SOURCES -------------------*/
-exports.listSources = function(req, res) {
+/*-------------- DISTRIBUTIONS ---------------------------------------------------------------*/
+exports.listDistributions = function(req, res) {
   console.log(req.params);
   var datasetId = req.params.datasetId;
   console.log(datasetId);
 };
 
-exports.getSource = function(req,res,id){
+exports.getDistribution = function(req,res,id){
   console.log(req.params);
 };
 
-exports.createSource = function(req, res) {
+exports.createDistribution = function(req, res) {
   var datasetId = req.params.datasetId;
-  var source = req.body.source;
-  source._id = mongoose.Types.ObjectId();
+  var distribution = req.body.distribution;
+  distribution._id = mongoose.Types.ObjectId();
   Dataset
     .findOne({_id: datasetId})
     .exec(function(err,dataset){
       if (err) return res.json({status:'error', err:err});
       if (!dataset) return res.json({error:'Failed to load dataset', err:err});
-      if (!dataset.sources) {
-        dataset.sources = [ ];
+      if (!dataset.distributions) {
+        dataset.distributions = [ ];
       }
-      dataset.sources.push(source);
+      dataset.distributions.push(distribution);
       dataset.save(function(err){
-        res.json({status:'success', source: source});
+        res.json({status:'success', distribution: distribution});
       });
     })
   ;
 };
 
-exports.updateSource = function(req, res, id) {
+exports.updateDistribution = function(req, res, id) {
   console.log(req.params);
 };
 
@@ -192,7 +228,7 @@ exports.updateSource = function(req, res, id) {
  * Delete a source attached to a dataset
  *
  **/
-exports.destroySource = function(req, res, id) {
+exports.destroyDistribution = function(req, res, id) {
 
   var datasetId = String(req.params.datasetId);
   var sourceId = String(req.params.sourceId);

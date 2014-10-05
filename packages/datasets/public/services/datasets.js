@@ -18,13 +18,13 @@ angular.module('mean.datasets')
   }
 ])
 
-.factory('DatasetSourcesSrv', ['$resource',
+.factory('DatasetDistributionSrv', ['$resource',
 
   function($resource) {
 
-    return $resource('api/v2/dataset/:datasetId/source/:sourceId', {
+    return $resource('api/v2/dataset/:datasetId/distribution/:distributionId', {
       datasetId: '@datasetId',
-      sourceId: '@sourceId',
+      sourceId: '@distributionId',
     }, {
       update: {
         method: 'PUT'

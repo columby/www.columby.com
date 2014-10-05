@@ -3,7 +3,7 @@
   <!-- Editor Sidebar -->
   <div class="editorSidebar" ng-show="editMode">
     <div class="editorSidebarContent">
-      <a href="" ng-click="cancelEdit()">Exit edit mode</a>
+      <a href="" ng-click="exitEditmode()">Exit edit mode</a>
       <button class="btn dbt-default" ng-show="contentEdited && dataset.publishStatus!=='unpublished'" ng-click="update()">Update</button>
       <button class="btn dbt-default" ng-show="dataset.publishStatus==='unpublished'" ng-click="create()">Create</button>
 
@@ -46,7 +46,7 @@
 
         <!-- Meta -->
         <div class="meta">
-          <p>A dataset by <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name}}</a>, published on <time class="post-date">{{dataset.created | date:'d MMMM yyyy'}}</time> <span class="edit" ng-show="dataset.canEdit && !editMode"><a href="" ng-click="edit()">edit</a></span></p>
+          <p>A dataset by <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name}}</a>, published on <time class="post-date">{{dataset.created | date:'d MMMM yyyy'}}</time> <span class="edit" ng-show="dataset.canEdit && !editMode"><a href="" ng-click="enterEditmode()">edit</a></span></p>
         </div>
 
         <!-- Editable avatar -->
@@ -66,7 +66,7 @@
             ng-switch-when = "true">
             <div
               ng-model = "dataset.description"
-              ng-blur = "updateDescription()"
+              ng-blur = "updateDatasetDescription()"
               text-angular
               ta-toolbar = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"
           ></div>
@@ -83,32 +83,44 @@
     </div>
 
     <!-- Dataset Sources -->
-    <div class="sources wrapper" ng-hide="dataset.publishStatus==='unpublished'">
+    <div class="distributions wrapper" ng-hide="dataset.publishStatus==='unpublished'">
       <div class="container">
         <h3>Sources</h3>
-        <ul ng-hide="!dataset.sources || dataset.sources.length===0">
-          <li ng-repeat="source in dataset.sources">
-						<h4><a href="{{source.source}}" target="_blank">{{source.source}}</a></h4>
-						<div class="date-size">{{source.sourceType}} - {{source.createdAt}} - {{source.size}}</div>
+        <ul ng-hide="!dataset.distributions || dataset.distributions.length===0">
+          <li ng-repeat="distribution in dataset.distributions">
+						<h4><a href="{{distribution.accessUrl}}" target="_blank">{{distribution.accessUrl}}</a></h4>
+						<div class="date-size">{{distribution.distributionType}} - {{distribution.createdAt}} - {{distribution.size}}</div>
             <div class="actions" ng-show="editMode">
-              <a href="" ng-click="deleteSource($index)"><i class="fa fa-trash"></i></a>
+              <a href="" ng-click="editDistribution($index)"><i class="fa fa-edit"></i></a>
+              <a href="" ng-click="deleteDistribution($index)"><i class="fa fa-trash"></i></a>
             </div>
 					</li>
         </ul>
-        <p ng-show="!dataset.sources || dataset.sources.length===0">No sources added yet</p>
-        <h4 ng-show="editMode"><a href="" ng-click="openDatasourceModal()" class="new">+ Add a new datasource</a></h4>
+        <p ng-show="!dataset.distributions || dataset.distributions.length===0">No sources added yet</p>
+        <h4 ng-show="editMode"><a href="" ng-click="openDistributionPopup()" class="new">+ Add a new datasource</a></h4>
 
-        <div class="addDatasourceModal" ng-show="addDatasource">
-          <button class="modal-close" ng-click="closeDatasourceModal()">×</button>
-          <div class="container add-source-content">
-            <h2>Add a datasource</h2>
+        <!-- Datasource Modal -->
+        <div class="addDistributionModal fullscreenPopup" ng-show="addDistribution">
+          <button class="modal-close" ng-click="closeDistributionModal()">×</button>
+          <div class="container add-distribution-content">
+            <h2>Add a datasource (distribution)</h2>
+            <div ng-bind-html="addDistribution.statusText"></div>
+            <!-- File Upload -->
             <fileUpload />
 
-            <form class="form-horizontal novalidate" role="form" name="linkUploadForm" ng-submit="attachDatasourceLink()" >
+            <!-- URL reference -->
+            <form class="form-horizontal novalidate" role="form" name="linkUploadForm">
+              <h3>Enter your url</h3>
               <div class="form-group">
-                <div class="col-sm-12">
-                  <label>Enter your url</label>
-                  <input type="url" placeholder="http://yourlink.url" class="form-control" ng-model="newDatasetSource" name="link" required />
+                <div class="col-sm-10">
+                  <input type="url" placeholder="http://yourlink.url" class="form-control" ng-model="newDistribution.link" name="link" required />
+                </div>
+                <div class="col-sm-2">
+                  <button class="btn btn-default" ng-click="checkDistributionLink()" ng-disabled="!newDistribution.link">Check</button>
+                </div>
+                <div class="warning col-md-12">
+                  {{newDistribution.validationMessage}}
+                  {{errorMessage}}
                 </div>
                 <div class="col-sm-12">
                   <div ng-show="linkUploadForm.$invalid && !loginForm.$pristine" class="alert alert-warning" role="alert">
@@ -117,7 +129,7 @@
                 </div>
               </div>
 
-              <button type="submit" class="btn btn-default" ng-disabled="linkUploadForm.$invalid">Attach</button>
+              <button class="btn btn-default" ng-click="createDistribution()" ng-disabled="!newDistribution.valid">Attach distribution</button>
             </form>
           </div>
         </div>
@@ -170,7 +182,7 @@
               <div class="col-sm-10">
                 <h4><a href="{{reference.url}}">{{reference.title}}</a></h4>
                 <p>{{reference.description}}</p>
-							  <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></div>
+							  <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
               </div>
               <div class="actions" ng-show="editMode">
                 <a href="" ng-click="deleteReference($index)"><i class="fa fa-trash"></i></a>

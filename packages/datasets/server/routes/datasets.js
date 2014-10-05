@@ -20,24 +20,30 @@ module.exports = function(Dataset, app, auth, database) {
   app.route('/api/v2/dataset/autosave')
     .put(datasets.autosave);
 
+  app.route('/api/v2/dataset/extractlink')
+    .get(datasets.extractlink);
+
   app.route('/api/v2/dataset')
     .get(datasets.all)
     .post(auth.jwtCheckAccount, datasets.create);
+
 
   app.route('/api/v2/dataset/:datasetId')
     .get(datasets.show)
     .put(auth.jwtCheckAccount, hasAuthorization, datasets.update)
     .delete(auth.jwtCheckAccount, hasAuthorization, datasets.destroy);
 
-  app.route('/api/v2/dataset/:datasetId/source')
-    .get(datasets.listSources)
-    .post(auth.jwtCheckAccount, datasets.createSource);
+  /*** DISTRIBUTIONS ***/
+  app.route('/api/v2/dataset/:datasetId/distribution')
+    .get(datasets.listDistributions)
+    .post(auth.jwtCheckAccount, datasets.createDistribution);
 
-  app.route('/api/v2/dataset/:datasetId/source/:sourceId')
-    .get(datasets.getSource)
-    .put(auth.jwtCheckAccount, hasAuthorization, datasets.updateSource)
-    .delete(auth.jwtCheckAccount, hasAuthorization, datasets.destroySource);
+  app.route('/api/v2/dataset/:datasetId/distribution/:distributionId')
+    .get(datasets.getDistribution)
+    .put(auth.jwtCheckAccount, hasAuthorization, datasets.updateDistribution)
+    .delete(auth.jwtCheckAccount, hasAuthorization, datasets.destroyDistribution);
 
+  /*** REFERENCES ***/
   app.route('/api/v2/dataset/:datasetId/reference')
     .get(datasets.listReferences)
     .post(auth.jwtCheckAccount, datasets.createReference);

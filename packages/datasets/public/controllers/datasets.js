@@ -13,8 +13,8 @@ angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$st
 angular.module('mean.datasets')
 
 .controller('DatasetViewCtrl', [
-  '$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'DatasetSourcesSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster',
-  function($rootScope, $scope, $state, $stateParams, DatasetSrv, DatasetSourcesSrv, DatasetReferencesSrv, MetabarSrv, AuthSrv, toaster) {
+  '$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster',
+  function($rootScope, $scope, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, MetabarSrv, AuthSrv, toaster) {
 
     /***   INITIALISATION   ***/
     //var editWatcher;               // Watch for model changes in editmode
@@ -88,7 +88,7 @@ angular.module('mean.datasets')
               title: newVal
             };
 
-            DatasetSrv.update(dataset,function(res){
+            DatasetSrv.update({datasetId: dataset._id}, dataset,function(res){
               if (res._id){
                 toaster.pop('success', 'Updated', 'Dataset updated.');
               }
@@ -113,8 +113,9 @@ angular.module('mean.datasets')
         url: ref.url,
         title: ref.title,
         provider_name: ref.provider_name,
-        provider_display: ref.provider_display
+        provider_display: ref.provider_dis
       };
+
       // save reference
       DatasetReferencesSrv.save({datasetId:$scope.dataset._id, reference: reference}, function(res){
         console.log(res);
@@ -131,21 +132,23 @@ angular.module('mean.datasets')
 
 
     /***   SCOPE FUNCTIONS   ***/
-    $scope.edit = function(){
+
+    /*** Editmode functions */
+    $scope.enterEditmode = function(){
       toggleEditMode(true);
     };
-
-    $scope.cancelEdit = function(){
+    $scope.exitEditMode = function(){
       toggleEditMode(false);
     };
 
+    /* dataset functions */
     $scope.updateDescription = function() {
       var dataset = {
         _id: $scope.dataset._id,
         description: $scope.dataset.description
       };
 
-      DatasetSrv.update(dataset,function(res){
+      DatasetSrv.update({datasetId:dataset._id},dataset,function(res){
         if (res._id){
           toaster.pop('success', 'Updated', 'Dataset description updated.');
         }
@@ -160,7 +163,7 @@ angular.module('mean.datasets')
         description: $scope.dataset.description
       };
 
-      DatasetSrv.update(dataset,function(res){
+      DatasetSrv.update({datasetId: dataset._id}, dataset,function(res){
         if (res._id){
           $scope.dataset = res;
           toaster.pop('success', 'Updated', 'Dataset updated.');
@@ -178,59 +181,72 @@ angular.module('mean.datasets')
       });
     };
 
-    $scope.openDatasourceModal = function() {
-      $scope.addDatasource = true;
+    /*** Distribution functions */
+    $scope.openDistributionPopup = function() {
+      $scope.addDistribution = true;
     };
 
-    $scope.closeDatasourceModal = function() {
-      $scope.addDatasource = false;
+    $scope.closeDistributionPopup = function() {
+      $scope.addDistribution = false;
     };
 
-    $scope.attachDatasourceLink = function() {
+    $scope.checkDistributionLink = function(){
+      console.log('checking distribution');
+      $scope.newDistribution.validationMessage = 'The link was validated!';
+      $scope.newDistribution.distributionType = 'link';
+      $scope.newDistribution.valid = true;
+    };
+
+    $scope.createDistribution = function() {
+      console.log('Creating ditribution');
       // validate link
+      if ($scope.newDistribution.valid) {
+        // add link to model
+        if (!$scope.dataset.hasOwnProperty('distributions')) { $scope.dataset.distributions = []; }
+        if ($scope.newDistribution){
+          var distribution = {
+            // Columby Stuff
+            uploader          : $rootScope.user._id,
+            distributionType  : $scope.newDistribution.distributionType,
+            publicationStatus : 'public',
+            // DCAT stuff
+            accessUrl         : $scope.newDistribution.link
+          };
+          console.log('attaching distribution', distribution);
 
-      // add link to model
-      if (!$scope.dataset.hasOwnProperty('sources')) {
-        $scope.dataset.sources = [];
-      }
-      if ($scope.newDatasetSource){
-        var s = {
-          uploader    : $rootScope.user._id,
-          sourceType  : 'link',
-          source      : $scope.newDatasetSource,
-          status      : 'public'
-        };
-
-        DatasetSourcesSrv.save({datasetId:$scope.dataset._id, source: s}, function(res){
-          console.log(res);
-          if (res.status === 'success'){
-            $scope.dataset.sources.push(res.source);
-            toaster.pop('success', 'Updated', 'Dataset updated.');
-            $scope.newDatasetSource = null;
-            $scope.addDatasource = false;
-          } else {
-            toaster.pop('danger', 'Error', 'Something went wrong.');
-          }
-        });
+          DatasetDistributionSrv.save({
+            datasetId:$scope.dataset._id,
+            distribution: distribution}, function(res){
+              console.log(res);
+              if (res.status === 'success'){
+                $scope.dataset.distributions.push(res.source);
+                toaster.pop('success', 'Updated', 'Dataset updated.');
+                $scope.newDistribution = null;
+                $scope.addDistribution = false;
+              } else {
+                toaster.pop('danger', 'Error', 'Something went wrong.');
+              }
+            }
+          );
+        }
+      } else {
+        toaster.pop('danger', 'Error', 'No new distribution');
       }
     };
 
 
-    $scope.deleteSource = function(index){
-      console.log(index);
+    $scope.deleteDistribution = function(index){
       var datasetId = $scope.dataset._id;
       var sourceId = $scope.dataset.sources[ index]._id;
 
-      DatasetSourcesSrv.delete({datasetId:datasetId, sourceId:sourceId}, function(res){
-        console.log(res);
+      DatasetDistributionSrv.delete({datasetId:datasetId, sourceId:sourceId}, function(res){
         if (res.status === 'success') {
           $scope.dataset.sources.splice(index,1);
         }
       });
-
     };
 
-
+    /*** Reference functions */
     $scope.openReferenceModal = function() {
       $scope.addReference = true;
     };
