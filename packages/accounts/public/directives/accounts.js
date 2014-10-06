@@ -2,7 +2,7 @@
 
 angular.module('mean.accounts')
 
-.directive('accountSwitcher', function($rootScope, $state){
+.directive('accountSwitcher', function($rootScope, ngDialog, $state){
   return {
 
     restrict: 'EA',
@@ -12,24 +12,22 @@ angular.module('mean.accounts')
 
     controller: function($scope){
 
-      $scope.showSelector = false;
-
       $scope.showPopup = function (){
-        $scope.showSelector = true;
-      };
-
-      $scope.closePopup = function() {
-        $scope.showSelector = false;
+        ngDialog.open({
+          template: 'accounts/views/includes/accountSwitcherModal.html',
+          className: 'ngdialog-theme-default',
+          scope: $scope
+        });
       };
 
       $scope.addAccount = function() {
-        $scope.showSelector = false;
+        ngDialog.closeAll();
         $state.go('account.create');
       };
 
       $scope.switchAccount = function(index){
         $rootScope.selectedAccount =  $scope.accounts[ index];
-        $scope.showSelector = false;
+        ngDialog.closeAll();
       };
     },
 

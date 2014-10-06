@@ -3,7 +3,9 @@
     "css": {
       "bower_components/build/css/dist.min.css": [
         "bower_components/angularjs-toaster/toaster.css",
-        "bower-components/angular-loading-bar/build/loading-bar.css"
+        "bower-components/angular-loading-bar/build/loading-bar.css",
+        "bower_components/ngDialog/css/ngDialog.css",
+        "bower_components/ngDialog/css/ngDialog-theme-default.min.css"
       ]
     },
     "js": {
@@ -20,7 +22,8 @@
         "bower_components/angular-bootstrap/ui-bootstrap.js",
         "bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
         "bower_components/angularjs-toaster/toaster.js",
-        "bower_components/angular-loading-bar/build/loading-bar.js"
+        "bower_components/angular-loading-bar/build/loading-bar.js",
+        "bower_components/ngDialog/js/ngDialog.js"
       ]
     }
   }
