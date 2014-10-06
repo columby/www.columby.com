@@ -126,16 +126,12 @@ angular.module('mean.accounts')
   // View existing account
   if ($scope.accountSlug && !$scope.editMode) {
     // Get account for the provided slug
-    console.log('getting account');
     getAccount();
-  // Edit existing account
-} else if($scope.slug && $scope.editMode) {
-    console.log('accountfor ');
+  } else if($scope.slug && $scope.editMode) {
     getAccount();
     // make sure edit mode is turned on
     $rootScope.$broadcast('metabar::editMode', true);
   } else if ($scope.editMode){
-    console.log('new acccount');
     // Create a new base collection
     initiateNewAccount();
     // make sure edit mode is turned on

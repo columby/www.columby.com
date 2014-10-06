@@ -1,0 +1,14 @@
+<div class="accountSwitcher">
+  <a ng-click="showPopup()">Switch Account</a>
+  <div class="switcher fullscreenPopup" ng-show="showSelector">
+    <button class="modal-close" ng-click="closePopup()">×</button>
+    <h3>Change Account</h3>
+    <ul>
+      <li ng-repeat="account in accounts">
+        <img src="account.avatar.url"/>
+        <a href="" ng-click="switchAccount($index)">{{account.name}}</a>
+      </li>
+      <li><a href="" ng-click="addAccount()">+ Create a new account</a></li>
+    </ul>
+  </div>
+</div>
