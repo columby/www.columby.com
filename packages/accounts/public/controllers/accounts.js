@@ -122,6 +122,7 @@ angular.module('mean.accounts')
     });
   };
 
+  
   /* ---------- INIT ----------------------------------------------------------------------------- */
   // View existing account
   if ($scope.accountSlug && !$scope.editMode) {

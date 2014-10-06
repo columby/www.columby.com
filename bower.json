@@ -19,6 +19,7 @@
     "font-awesome": "latest",
     "angularjs-toaster": "latest",
     "angular-loading-bar": "~0.6.0",
-    "ngDialog": "~0.3.0"
+    "ngDialog": "~0.3.0",
+    "angular-slugify": "~1.0.0"
   }
 }

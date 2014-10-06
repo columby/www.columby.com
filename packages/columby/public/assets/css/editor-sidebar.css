@@ -31,10 +31,6 @@ body.editorSidebarOpen .metabar-wrapper {
   border-bottom: solid 1px;
   padding-bottom: 8px;
 }
-.editorSidebar .btn {
-  background: #8dc63f;
-  margin: 5px;
-}
 .editorSidebar .close {
   color: #fff;
   text-shadow: none;

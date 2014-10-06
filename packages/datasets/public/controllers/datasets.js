@@ -13,8 +13,8 @@ angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$st
 angular.module('mean.datasets')
 
 .controller('DatasetViewCtrl', [
-  '$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster',
-  function($rootScope, $scope, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, MetabarSrv, AuthSrv, toaster) {
+  '$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster', 'Slug',
+  function($rootScope, $scope, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, MetabarSrv, AuthSrv, toaster, Slug) {
 
     /***   INITIALISATION   ***/
     //var editWatcher;               // Watch for model changes in editmode
@@ -137,7 +137,7 @@ angular.module('mean.datasets')
     $scope.enterEditmode = function(){
       toggleEditMode(true);
     };
-    $scope.exitEditMode = function(){
+    $scope.exitEditmode = function(){
       toggleEditMode(false);
     };
 
@@ -178,6 +178,19 @@ angular.module('mean.datasets')
           toaster.pop('success', 'Created', 'Dataset created.');
           $state.go('dataset.view', {datasetId:res._id});
         }
+      });
+    };
+
+    $scope.updateSlug = function(){
+      var slug = Slug.slugify($scope.dataset.slug);
+      var d={
+        _id: $scope.dataset._id,
+        slug: slug
+      };
+      DatasetSrv.update({datasetId: d._id}, d, function(res){
+        console.log(res);
+        $scope.dataset.slug = res.slug;
+        toaster.pop('success', 'Updated', 'Dataset custom URL updated.');
       });
     };
 
@@ -268,6 +281,40 @@ angular.module('mean.datasets')
 
     };
 
+
+    $scope.publishDataset = function(){
+      if ($scope.dataset.publicationStatus !== 'published') {
+        var dataset = {
+          _id: $scope.dataset._id,
+          publicationStatus: 'published'
+        };
+
+        DatasetSrv.update({datasetId: dataset._id}, dataset,function(res){
+          console.log(res);
+          if (res._id){
+            $scope.dataset.publicationStatus = 'published';
+            toaster.pop('success', 'Updated', 'Your dataset is now published! ');
+          }
+        });
+      }
+    };
+
+    $scope.toggleVisibilityStatus = function(status){
+      if (status !== $scope.dataset.visibilityStatus) {
+        $scope.visibilityStatusMessage = 'updating';
+        var dataset = {
+          _id: $scope.dataset._id,
+          visibilityStatus: status
+        };
+        DatasetSrv.update({datasetId: dataset._id}, dataset,function(res){
+          $scope.visibilityStatusMessage = 'updated';
+          if (res._id){
+            $scope.dataset.visibilityStatus = status;
+            toaster.pop('success', 'Updated', 'Dataset visibility status updated to  ' + status);
+          }
+        });
+      }
+    };
 
 
     /* --------- ROOTSCOPE EVENTS ------------------------------------------------------------ */

@@ -16,6 +16,8 @@ Accounts.register(function(app, auth, database) {
   //We enable routing. By default the Package Object is passed to the routes
   Accounts.routes(app, auth, database);
 
+  Accounts.angularDependencies(['ngDialog']);
+
 	Accounts.aggregateAsset('css', 'accounts.css');
 
   return Accounts;

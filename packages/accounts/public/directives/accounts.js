@@ -27,6 +27,8 @@ angular.module('mean.accounts')
 
       $scope.switchAccount = function(index){
         $rootScope.selectedAccount =  $scope.accounts[ index];
+        console.log($rootScope.selectedAccount.slug);
+        $state.go('account.view', {slug:$rootScope.selectedAccount.slug });
         ngDialog.closeAll();
       };
     },

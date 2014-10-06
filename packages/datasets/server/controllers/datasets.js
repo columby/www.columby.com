@@ -113,17 +113,16 @@ exports.update = function(req, res) {
 
     console.log('updating dataset', req.body);
 
-    if (req.body.title){
-      dataset.title   = req.body.title;
-    }
+    if (req.body.title){ dataset.title   = req.body.title; }
 
-    if (req.body.description) {
-      dataset.description = req.body.description;
-    }
-    if (dataset.sources) {
-      dataset.sources = req.body.sources;
-    }
+    if (req.body.description) { dataset.description = req.body.description; }
 
+    if (req.body.publicationStatus) { dataset.publicationStatus = req.body.publicationStatus; }
+
+    if (req.body.visibilityStatus) { dataset.visibilityStatus = req.body.visibilityStatus; }
+
+    if (req.body.slug) { dataset.slug = req.body.slug; }
+      
     dataset.updated = new Date();
 
     dataset.save(function(err){

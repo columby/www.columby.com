@@ -21,10 +21,12 @@ var DatasetSchema = new Schema({
   updated         : { type: Date },
   title           : { type   : String, trim: true },
   description     : { type: String, trim: true },
+  slug            : {type: String },
 
   account         : { type: Schema.ObjectId, ref:  'Account' },
 
-  publishStatus   : { type: String, default: 'draft' },
+  visibilityStatus    : { type: String, default: 'public' },
+  publicationStatus   : { type: String, default: 'draft' },
 
   draft : {
     title           : { type:String, trim:true },
@@ -34,20 +36,20 @@ var DatasetSchema = new Schema({
   distributions    : [{
     // Columby stuff
     uploader          : {type: Schema.ObjectId, ref: 'User' },
-    distributionType  : {type:String},      // external link, internal storage, internal api
-    publicationStatus : {type:String},      // private, public
+    distributionType  : {type: String},      // external link, internal storage, internal api
+    publicationStatus : {type: String},      // private, public
 
     // DCAT stuff
-    title           : { type:String },
-    description     : { type:String },
-    issued          : { type:Date },
-    modified        : { type:Date },
+    title           : { type: String },
+    description     : { type: String },
+    issued          : { type: Date },
+    modified        : { type: Date },
     license         : { type: String },
-    rights          : { type:String },
-    accessUrl       : { type:String },
-    downloadUrl     : { type:String },
-    mediaType       : { type:String },
-    format          : { type:String },
+    rights          : { type: String },
+    accessUrl       : { type: String },
+    downloadUrl     : { type: String },
+    mediaType       : { type: String },
+    format          : { type: String },
     byteSize        : { type: Number }
 
   }],

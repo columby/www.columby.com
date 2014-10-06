@@ -18,8 +18,51 @@
       </div>
       -->
 
-      <h3>Publication status</h3>
-      <strong>{{dataset.publishStatus}}</strong>
+      <h3>Publication settings</h3>
+      <div class="status">
+        <label>Status</label>
+        <p>{{dataset.publicationStatus}}</p>
+        <button
+          ng-show="dataset.publicationStatus !== 'published'"
+          ng-click="publishDataset()"
+          class="btn btn-xs btn-default">Publish!</button>
+      </div>
+
+      <div class="visibility">
+        <label>Visiblity</label>
+        <ul class="list-inline">
+          <li>
+            <div class="btn-group btn-toggle">
+          	<button
+              ng-click="toggleVisibilityStatus('public')"
+              class="btn btn-xs btn-default"
+              ng-class="{active: dataset.visibilityStatus === 'public'}"
+              ng-disabled="dataset.visibilityStatus === 'public'">Public</button>
+          	<button
+              ng-click="toggleVisibilityStatus('private')"
+              class="btn btn-xs btn-default"
+              ng-class="{active: dataset.visibilityStatus === 'private'}"
+              ng-disabled="dataset.visibilityStatus === 'private'">Private</button>
+          	</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="slug">
+        <label>Custom URL</label>
+        Create a custom URL for this video that is more memorable than a random string of numbers. Many people create a URL that matches the video title.
+        <form class="form-horizontal novalidate" role="form" name="slugForm">
+          <div class="form-group">
+            <input
+              ng-model="dataset.slug"/>
+            <button
+              class="btn btn-xs btn-default"
+              ng-click="updateSlug()"
+              placeholder="dataset-name">update slug</button>
+          </div>
+        </form>
+        Preview: <span>https://columby.com/d/{{dataset.slug | slugify}}</span>
+      </div>
 
       <h3>Publication account</h3>
       <img src="$root.selectedAccount.avatar.url"/>
