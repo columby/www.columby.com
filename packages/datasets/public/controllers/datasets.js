@@ -13,8 +13,8 @@ angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$st
 angular.module('mean.datasets')
 
 .controller('DatasetViewCtrl', [
-  '$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster', 'Slug',
-  function($rootScope, $scope, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, MetabarSrv, AuthSrv, toaster, Slug) {
+  '$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster', 'Slug', 'ngDialog',
+  function($rootScope, $scope, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, MetabarSrv, AuthSrv, toaster, Slug, ngDialog) {
 
     /***   INITIALISATION   ***/
     //var editWatcher;               // Watch for model changes in editmode
@@ -31,13 +31,22 @@ angular.module('mean.datasets')
     /***   FUNCTIONS   ***/
     function getDataset(){
       $scope.contentLoading = true;  // show loading message while loading dataset
-
       DatasetSrv.get({
         datasetId: $stateParams.datasetId
       }, function(dataset) {
         // add acquired dataset to the scope
         $scope.dataset = dataset;
+
+        // transition the url from slug to id
+        $state.transitionTo ('dataset.view', { datasetId: dataset._id}, {
+          location: true,
+          inherit: true,
+          relative: $state.$current,
+          notify: false
+        });
+
         $scope.contentLoading = false;
+
         if (!$scope.dataset.draft){
           $scope.dataset.draft={};
         }
@@ -52,12 +61,6 @@ angular.module('mean.datasets')
         } else if (dataset.sources.primary.type) {
           summary += 'This dataset if of the type <strong>' + dataset.sources.primary.type + '</strong>.';
         }
-        // check for license
-        if (!dataset.license) {
-          summary += 'There is no license defined. ';
-        } else {
-          summary += 'The licens for this dataset is <strong>' + dataset.license.name + '</strong>';
-        }
         $scope.summary = summary + '</p>';
 
         $scope.dataset.canEdit = (dataset.account._id === $rootScope.selectedAccount._id);
@@ -69,7 +72,7 @@ angular.module('mean.datasets')
       $scope.dataset = {
         title: 'New title',
         description: '<p>Description</p>',
-        publishStatus: 'unpublished',
+        publicationStatus: 'draft',
         draft:{},
         account: $rootScope.selectedAccount._id
       };
@@ -195,66 +198,32 @@ angular.module('mean.datasets')
     };
 
     /*** Distribution functions */
-    $scope.openDistributionPopup = function() {
-      $scope.addDistribution = true;
+    $scope.newDistribution = function (){
+      console.log('new distribution');
+      ngDialog.open({
+        template: 'datasets/views/includes/addDistributionModal.html',
+        className: 'ngdialog-theme-default',
+        scope: $scope
+      });
     };
 
-    $scope.closeDistributionPopup = function() {
-      $scope.addDistribution = false;
-    };
-
-    $scope.checkDistributionLink = function(){
+    $scope.checkLink = function(){
       console.log('checking distribution');
-      $scope.newDistribution.validationMessage = 'The link was validated!';
-      $scope.newDistribution.distributionType = 'link';
-      $scope.newDistribution.valid = true;
+      // validate
+      console.log($scope);
+      $scope.validationMessage = 'The link was validated!';
+      $scope.distributionType = 'link';
+      $scope.valid = true;
     };
-
-    $scope.createDistribution = function() {
-      console.log('Creating ditribution');
-      // validate link
-      if ($scope.newDistribution.valid) {
-        // add link to model
-        if (!$scope.dataset.hasOwnProperty('distributions')) { $scope.dataset.distributions = []; }
-        if ($scope.newDistribution){
-          var distribution = {
-            // Columby Stuff
-            uploader          : $rootScope.user._id,
-            distributionType  : $scope.newDistribution.distributionType,
-            publicationStatus : 'public',
-            // DCAT stuff
-            accessUrl         : $scope.newDistribution.link
-          };
-          console.log('attaching distribution', distribution);
-
-          DatasetDistributionSrv.save({
-            datasetId:$scope.dataset._id,
-            distribution: distribution}, function(res){
-              console.log(res);
-              if (res.status === 'success'){
-                $scope.dataset.distributions.push(res.source);
-                toaster.pop('success', 'Updated', 'Dataset updated.');
-                $scope.newDistribution = null;
-                $scope.addDistribution = false;
-              } else {
-                toaster.pop('danger', 'Error', 'Something went wrong.');
-              }
-            }
-          );
-        }
-      } else {
-        toaster.pop('danger', 'Error', 'No new distribution');
-      }
-    };
-
 
     $scope.deleteDistribution = function(index){
       var datasetId = $scope.dataset._id;
-      var sourceId = $scope.dataset.sources[ index]._id;
+      var distributionId = $scope.dataset.distributions[ index]._id;
 
-      DatasetDistributionSrv.delete({datasetId:datasetId, sourceId:sourceId}, function(res){
+      DatasetDistributionSrv.delete({datasetId:datasetId, distributionId:distributionId}, function(res){
         if (res.status === 'success') {
-          $scope.dataset.sources.splice(index,1);
+          $scope.dataset.distributions.splice(index,1);
+          toaster.pop('success', 'Done', 'Distribution deleted.');
         }
       });
     };

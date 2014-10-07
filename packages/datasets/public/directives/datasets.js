@@ -55,7 +55,7 @@ angular.module('mean.datasets')
         });
 
         // Set the element's value in the scope when moving away from the element
-        element.on('blur', function() {          
+        element.on('blur', function() {
           scope.$apply(read);
         });
 
@@ -92,19 +92,4 @@ angular.module('mean.datasets')
 )
 
 
-.directive('datasetSource', function($http){
-
-  return {
-
-    restrict:'A',
-
-    templateUrl: 'datasets/views/includes/sourcesPopup.html',
-
-    link: function(scope,element,attrs) {
-      // attach to model
-
-      //element.fineUploaderS3();
-    }
-  };
-})
 ;

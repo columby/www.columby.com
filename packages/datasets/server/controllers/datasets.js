@@ -60,14 +60,26 @@ exports.extractlink = function(req,res) {
  * Find dataset by id
  */
 exports.dataset = function(req, res, next, id) {
+  // id can be objectId or slug. Cast the id to objectId,
+  // if this works then use it, otherwise treat it as a slug.
+  var i;
+  try {
+    i = new mongoose.Types.ObjectId(id);
+  } catch (e) {
+    console.log('Error casting param to objectID', e);
+  }
 
   Dataset
-    .findOne({_id: id})
+    .findOne({
+      $or: [
+        { _id: i },
+        { slug: id },
+      ]
+    })
     .populate('account', 'slug name description owner')
     .exec(function(err,dataset){
       if (err) return next(err);
       if (!dataset) return res.json({error:'Failed to load dataset ' + id, err:err});
-
       // Attach dataset to request
       req.dataset = dataset;
 
@@ -122,7 +134,7 @@ exports.update = function(req, res) {
     if (req.body.visibilityStatus) { dataset.visibilityStatus = req.body.visibilityStatus; }
 
     if (req.body.slug) { dataset.slug = req.body.slug; }
-      
+
     dataset.updated = new Date();
 
     dataset.save(function(err){
@@ -230,14 +242,14 @@ exports.updateDistribution = function(req, res, id) {
 exports.destroyDistribution = function(req, res, id) {
 
   var datasetId = String(req.params.datasetId);
-  var sourceId = String(req.params.sourceId);
+  var distributionId = String(req.params.distributionId);
 
   Dataset.findOne({_id:datasetId},function(err,dataset){
     if (err) return res.json({status:'error', err:err});
     if (!dataset) return res.json({error:'Failed to load dataset', err:err});
-    for (var i=0; i < dataset.sources.length; i++){
-      if (String(dataset.sources[ i]._id) === sourceId){
-        dataset.sources.splice(i,1);
+    for (var i=0; i < dataset.distributions.length; i++){
+      if (String(dataset.distributions[ i]._id) === distributionId){
+        dataset.distributions.splice(i,1);
       }
     }
     dataset.save();

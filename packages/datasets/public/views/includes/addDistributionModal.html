@@ -1,0 +1,38 @@
+<h2>Add a distribution</h2>
+
+<div ng-bind-html="statusText"></div>
+
+<!-- File Upload -->
+<fileUpload />
+
+<!-- URL reference -->
+<form class="form-horizontal novalidate" role="form" name="linkUploadForm">
+  <h3>Enter your url</h3>
+  <div class="form-group">
+    <input
+      type="url"
+      placeholder="http://yourlink.url"
+      class="form-control"
+      ng-model="newDistribution.link"
+      name="link"
+      required />
+  </div>
+  <button
+    class="btn btn-default"
+    ng-click="checkLink()"
+    ng-disabled="!newDistribution.link">Check
+  </button>
+  <div class="warning">
+    {{validationMessage}}
+    {{errorMessage}}
+  </div>
+  <div ng-show="linkUploadForm.$invalid && !loginForm.$pristine" class="alert alert-warning" role="alert">
+    <span ng-show="linkUploadForm.link.$invalid && !loginForm.link.$pristine">Enter a valid url (don't forget http://).</span>
+  </div>
+
+  <button
+    class="btn btn-default"
+    ng-click="createDistribution()"
+    ng-show="valid">Attach distribution
+  </button>
+</form>

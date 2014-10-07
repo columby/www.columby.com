@@ -21,7 +21,7 @@ var DatasetSchema = new Schema({
   updated         : { type: Date },
   title           : { type   : String, trim: true },
   description     : { type: String, trim: true },
-  slug            : {type: String },
+  slug            : {type: String, unique: true },
 
   account         : { type: Schema.ObjectId, ref:  'Account' },
 
@@ -90,9 +90,16 @@ DatasetSchema.path('title').validate(function(title) {
  * Statics
  */
 DatasetSchema.statics.load = function(id, cb) {
+  console.log('loading dataset ', id);
+
   var Dataset = mongoose.model('Dataset');
   Dataset
-    .findOne({_id: id}, function(err,dataset){
+    .findOne(
+      { $or: [
+        { _id: id },
+        { slug: id }
+        ]
+      }, function(err,dataset){
       var opts = [{ path:'publisher', model:dataset.publisherType, select: 'name slug description avatar plan'}];
       Dataset.populate(dataset, opts, cb);
     });
