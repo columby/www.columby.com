@@ -84,7 +84,7 @@ DatasetSchema.plugin(mongoosastic, {
 
 DatasetSchema.path('title').validate(function(title) {
   return !!title;
-}, 'Title cannot be blank');
+}, 'Title can\'t be blank');
 
 function uniqueFieldInsensitive(modelName,field) {
   return function(val, cb){
@@ -105,15 +105,27 @@ function uniqueFieldInsensitive(modelName,field) {
     }
   };
 }
+// validate unique slug
 DatasetSchema.path('slug').validate( uniqueFieldInsensitive('Dataset', 'slug' ), 'The slug already exists.' );
+// validate slug length
 DatasetSchema.path('slug').validate( function(v){
   if (v.length>4 || v.length<30) {
     return true;
   } else {
     return false;
   }
-}, 'Slug length error' );
-
+}, 'The URL is too short or too long. ');
+// Dataset blacklist custom url
+DatasetSchema.path('slug').validate( function(v){
+  var blacklist = [
+    'new','nieuw','delete','create','update','edit'
+  ];
+  if (blacklist.indexOf(v) === -1) {
+    return true;
+  } else {
+    return false;
+  }
+}, 'This custom URL can\'t be set' );
 
 /**
  * Statics

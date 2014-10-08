@@ -198,9 +198,9 @@ angular.module('mean.datasets')
           $scope.dataset.slug = res.slug;
           toaster.pop('success', 'Updated', 'Dataset custom URL updated.');
         } else if (res.err && res.err.errors.slug){
-          toaster.pop('error', 'Updated', 'The requested custom URL already exists.');
+          toaster.pop('error', 'Update error', 'There was an error setting the custom URL: ' + res.err.errors.slug.message);
         } else {
-          toaster.pop('error', 'Updated', 'There was an error updating the custom URL.');
+          toaster.pop('error', 'Update error', 'There was an error updating the custom URL.');
         }
       });
     };
