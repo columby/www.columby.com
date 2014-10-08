@@ -23,8 +23,8 @@
     ng-disabled="!newDistribution.link">Check
   </button>
   <div class="warning">
-    {{validationMessage}}
-    {{errorMessage}}
+    {{newDistribution.validationMessage}}
+    {{newDistribution.errorMessage}}
   </div>
   <div ng-show="linkUploadForm.$invalid && !loginForm.$pristine" class="alert alert-warning" role="alert">
     <span ng-show="linkUploadForm.link.$invalid && !loginForm.link.$pristine">Enter a valid url (don't forget http://).</span>
@@ -33,6 +33,6 @@
   <button
     class="btn btn-default"
     ng-click="createDistribution()"
-    ng-show="valid">Attach distribution
+    ng-show="newDistribution.valid">Attach distribution
   </button>
 </form>

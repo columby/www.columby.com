@@ -133,7 +133,7 @@
     </div>
 
     <!-- Dataset Sources -->
-    <div class="distributions wrapper" ng-hide="dataset.publishStatus==='unpublished'">
+    <div class="distributions wrapper" ng-hide="!dataset._id">
       <div class="container">
         <h3>Distributions</h3>
         <ul ng-hide="!dataset.distributions || dataset.distributions.length===0">
@@ -150,6 +150,7 @@
 
         <!-- Datasource Modal -->
         <button
+          ng-show="editMode"
           class="btn btn-default"
           type="button"
           ng-click="newDistribution()"
@@ -193,7 +194,7 @@
     </div>
 
     <!-- Dataset references -->
-    <div class="references wrapper">
+    <div class="references wrapper" ng-hide="!dataset._id">
       <div class="container">
         <div class="content">
           <h3>References</h3>

@@ -210,12 +210,51 @@ angular.module('mean.datasets')
     };
 
     $scope.checkLink = function(){
-      console.log('checking distribution');
       // validate
-      console.log($scope);
-      $scope.validationMessage = 'The link was validated!';
-      $scope.distributionType = 'link';
-      $scope.valid = true;
+      $scope.newDistribution.validationMessage = 'The link was validated!';
+      $scope.newDistribution.distributionType = 'link';
+      $scope.newDistribution.valid = true;
+    };
+
+    $scope.createDistribution = function() {
+      console.log('Creating ditribution');
+      // validate link
+      if ($scope.newDistribution){
+        if ($scope.newDistribution.valid) {
+          // add link to model
+          if (!$scope.dataset.hasOwnProperty('distributions')) {
+            $scope.dataset.distributions = [];
+          }
+
+          var distribution = {
+            // Columby Stuff
+            uploader          : $rootScope.user._id,
+            distributionType  : $scope.newDistribution.distributionType,
+            publicationStatus : 'public',
+            // DCAT stuff
+            accessUrl         : $scope.newDistribution.link
+          };
+          console.log('attaching distribution', distribution);
+
+          DatasetDistributionSrv.save({
+            datasetId:$scope.dataset._id,
+            distribution: distribution}, function(res){
+              console.log(res);
+              if (res.status === 'success'){
+                $scope.dataset.distributions.push(res.distribution);
+                toaster.pop('success', 'Updated', 'Dataset updated.');
+                $scope.newDistribution = null;
+                $scope.addDistribution = false;
+                ngDialog.closeAll();
+              } else {
+                toaster.pop('danger', 'Error', 'Something went wrong.');
+              }
+            }
+          );
+        }
+      } else {
+        toaster.pop('danger', 'Error', 'No new distribution attached');
+      }
     };
 
     $scope.deleteDistribution = function(index){
@@ -229,6 +268,7 @@ angular.module('mean.datasets')
         }
       });
     };
+
 
     /*** Reference functions */
     $scope.openReferenceModal = function() {
