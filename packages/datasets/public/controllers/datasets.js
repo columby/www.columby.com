@@ -194,8 +194,14 @@ angular.module('mean.datasets')
       };
       DatasetSrv.update({datasetId: d._id}, d, function(res){
         console.log(res);
-        $scope.dataset.slug = res.slug;
-        toaster.pop('success', 'Updated', 'Dataset custom URL updated.');
+        if (res.status==='success') {
+          $scope.dataset.slug = res.slug;
+          toaster.pop('success', 'Updated', 'Dataset custom URL updated.');
+        } else if (res.err.errors.slug){
+          toaster.pop('error', 'Updated', 'The requested custom URL already exists.');
+        } else {
+          toaster.pop('error', 'Updated', 'There was an error updating the custom URL.');
+        }
       });
     };
 
@@ -242,7 +248,7 @@ angular.module('mean.datasets')
               console.log(res);
               if (res.status === 'success'){
                 $scope.dataset.distributions.push(res.distribution);
-                toaster.pop('success', 'Updated', 'Dataset updated.');
+                toaster.pop('success', 'Updated', 'New dataset added.');
                 $scope.newDistribution = null;
                 $scope.addDistribution = false;
                 ngDialog.closeAll();

@@ -139,8 +139,11 @@ exports.update = function(req, res) {
 
     dataset.save(function(err){
       if (err) {
-        return res.json(500, {
-          error: 'Cannot update the dataset'
+        return res.json({
+          status: 'error',
+          error: 'Error updating the dataset',
+          err: err
+
         });
       }
 
