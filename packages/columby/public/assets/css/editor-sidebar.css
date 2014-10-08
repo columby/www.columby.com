@@ -24,12 +24,12 @@ body.editorSidebarOpen .metabar-wrapper {
   transform: translate3d(300px, 0, 0);
 }
 .editorSidebar h3 {
-  font-family: "merriweather", serif;
-  font-size: 18px;
+  font-family: "lato", sans-serif;
+  font-size: 1.5em;
   font-weight: 300;
   width: 100%;
   border-bottom: solid 1px;
-  padding-bottom: 8px;
+  padding-bottom: 0;
 }
 .editorSidebar .close {
   color: #fff;
@@ -44,4 +44,48 @@ body.editorSidebarOpen .metabar-wrapper {
 .editorSidebar .ng-binding {
   margin: 5px;
   font-weight: 300;
+}
+.editorSidebar .sidebarModule {
+  display: block;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+.editorSidebar .sidebarModule label {
+  width: 100px;
+}
+.editorSidebar .sidebarModule .setting {
+  margin-top: 15px;
+}
+.editorSidebar .btn-tooltip {
+  float: right;
+  display: block;
+  border-radius: 50%;
+  height: 18px;
+  width: 18px;
+  color: #333;
+  border: none;
+  border: solid 1px #b3b3b3;
+  font-size: 11px;
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Garuda, Verdana, Tahoma, sans-serif;
+  font-weight: 100;
+  background-color: #fff;
+  margin-top: 12px;
+  padding-top: 0px;
+}
+.editorSidebar .btn-tooltip:hover {
+  border-color: rgba(0, 0, 0, 0.3);
+}
+.editorSidebar .popover {
+  font-size: 0.6em;
+  line-height: 1.8em;
+  color: #000;
+}
+.editorSidebar .form-group input,
+.editorSidebar .form-group .btn {
+  color: #303030;
+  margin-left: 15px;
+  margin-top: 10px;
+}
+.editorSidebar .slug span {
+  font-size: 10px;
 }
