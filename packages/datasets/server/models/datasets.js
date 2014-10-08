@@ -19,9 +19,9 @@ var DatasetSchema = new Schema({
   // Dataset properties
   created         : { type: Date, default: Date.now },
   updated         : { type: Date },
-  title           : { type   : String, trim: true },
-  description     : { type: String, trim: true },
-  slug            : {type: String, unique: true },
+  title           : { type : String, trim: true },
+  description     : { type : String, trim: true },
+  slug            : { type : String, unique: true },
 
   account         : { type: Schema.ObjectId, ref:  'Account' },
 
@@ -81,6 +81,7 @@ DatasetSchema.plugin(mongoosastic, {
 /**
  * Validations
  */
+
 DatasetSchema.path('title').validate(function(title) {
   return !!title;
 }, 'Title cannot be blank');
@@ -104,7 +105,15 @@ function uniqueFieldInsensitive(modelName,field) {
     }
   };
 }
-DatasetSchema.path('slug').validate( uniqueFieldInsensitive('Dataset', 'slug' ), 'unique' );
+DatasetSchema.path('slug').validate( uniqueFieldInsensitive('Dataset', 'slug' ), 'The slug already exists.' );
+DatasetSchema.path('slug').validate( function(v){
+  if (v.length>4 || v.length<30) {
+    return true;
+  } else {
+    return false;
+  }
+}, 'Slug length error' );
+
 
 /**
  * Statics

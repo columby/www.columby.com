@@ -145,9 +145,9 @@ exports.update = function(req, res) {
           err: err
 
         });
+      } else {
+        res.json(dataset);
       }
-
-      res.json(dataset);
     });
   });
 };

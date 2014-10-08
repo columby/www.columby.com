@@ -70,9 +70,10 @@ body.editorSidebarOpen .metabar-wrapper {
   font-weight: 100;
   background-color: #fff;
   margin-top: 12px;
-  padding-top: 0px;
+  padding-top: 0;
 }
 .editorSidebar .btn-tooltip:hover {
+  border-color: #000000;
   border-color: rgba(0, 0, 0, 0.3);
 }
 .editorSidebar .popover {

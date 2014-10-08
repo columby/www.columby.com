@@ -3,7 +3,7 @@
   <!-- Editor Sidebar -->
   <div class="editorSidebar" ng-show="editMode">
     <div class="editorSidebarContent">
-      <button 
+      <button
 				class="btn dbt-default"
 				ng-click="exitEditmode()">Return to dataset</button>
       <button
@@ -26,9 +26,9 @@
       </div>
       -->
 
-      <h3>Publication settings</h3>							
+      <h3>Publication settings</h3>
 			<div class="sidebarModule">
-				
+
 	      <div class="status setting">
 	        <label class="left">Status</label>
 	        <span class="right">{{dataset.publicationStatus}}</span>
@@ -59,21 +59,27 @@
 	      </div>
 
 			</div>
-			
+
       <div class="slug" ng-show="dataset._id">
         <h3>Custom URL<button class="right btn-xs btn-tooltip" popover="Create a custom URL for this dataset that is more memorable than a random string of characters. Many people create a URL that matches the dataset title." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3>
 				<span>https://columby.com/d/{{dataset.slug | slugify}}</span>
-				
+
 
         <form class="form-horizontal novalidate" role="form" name="slugForm">
           <div class="form-group">
             <input
+              name="slug"
               ng-model="dataset.slug"
-              class="form-item"/><br>
+              class="form-item"
+              ng-minlength=3
+              ng-maxlength=30/>
+            <span class="error" ng-show="slugForm.slug.$error.maxlength">Too long!</span>
+            <span class="error" ng-show="slugForm.slug.$error.minlength">Too short!</span>
             <button
               class="btn btn-xs btn-default"
               ng-click="updateSlug()"
-              placeholder="dataset-name">update slug</button>
+              placeholder="dataset-name"
+              ng-show="slugForm.$valid">update slug</button>
           </div>
         </form>
 
