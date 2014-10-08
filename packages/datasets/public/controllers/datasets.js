@@ -38,12 +38,14 @@ angular.module('mean.datasets')
         $scope.dataset = dataset;
 
         // transition the url from slug to id
-        $state.transitionTo ('dataset.view', { datasetId: dataset._id}, {
-          location: true,
-          inherit: true,
-          relative: $state.$current,
-          notify: false
-        });
+        if ($stateParams.datasetId !== dataset._id) {
+          $state.transitionTo ('dataset.view', { datasetId: dataset._id}, {
+            location: true,
+            inherit: true,
+            relative: $state.$current,
+            notify: false
+          });
+        }
 
         $scope.contentLoading = false;
 

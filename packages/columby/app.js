@@ -3,7 +3,9 @@
 /*
  * Defining the Package
  */
-var Module = require('meanio').Module;
+var Module = require('meanio').Module,
+    favicon = require('serve-favicon')
+;
 
 var Columby = new Module('columby');
 
@@ -22,6 +24,9 @@ Columby.register(function(app, auth, database) {
   Columby.aggregateAsset('css','editor-sidebar.css');
 
   Columby.angularDependencies(['angular-loading-bar','ngAnimate', 'toaster', 'ngDialog']);
+
+  // Setting the favicon and static folder
+  app.use(favicon(__dirname + '/public/assets/img/favicon.png'));
 
   /*
   if (process.env.NODE_ENV === 'development') {

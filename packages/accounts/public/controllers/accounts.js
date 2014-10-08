@@ -11,6 +11,8 @@ angular.module('mean.accounts')
   '$scope', '$rootScope', '$location', '$state', '$stateParams', 'AUTH_EVENTS', 'AuthSrv', 'AccountSrv', 'MetabarSrv', 'toaster',
   function ($scope, $rootScope, $location, $state, $stateParams, AUTH_EVENTS, AuthSrv, AccountSrv, MetabarSrv, toaster) {
 
+    console.log(window.settings);
+
   /* ---------- SETUP ----------------------------------------------------------------------------- */
   var editWatcher;               // Watch for model changes in editmode
 
@@ -50,15 +52,7 @@ angular.module('mean.accounts')
       $scope.account = result.account;
       $scope.contentLoading = false;
 
-      // send metadata to the metabar
-      var item = $scope.account;
-      item.postType = 'account';
-      var meta = {
-        postType: 'account',
-        _id: $scope.account._id,
-        canEdit: AuthSrv.canEdit(item)
-      };
-      MetabarSrv.setPostMeta(meta);
+      $scope.account.canEdit= AuthSrv.canEdit({postType:'account', _id:result.account._id});
 
       updateHeaderImage();
 
@@ -85,7 +79,7 @@ angular.module('mean.accounts')
 
 
   /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
-  $scope.toggleEditMode = function(){
+  $scope.toggleEditmode = function(){
     $scope.editMode = !$scope.editMode;
     // send closed message to metabar
     if ($scope.editMode === false) {
@@ -122,7 +116,7 @@ angular.module('mean.accounts')
     });
   };
 
-  
+
   /* ---------- INIT ----------------------------------------------------------------------------- */
   // View existing account
   if ($scope.accountSlug && !$scope.editMode) {
