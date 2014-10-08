@@ -11,11 +11,9 @@ angular.module('mean.accounts')
   '$scope', '$rootScope', '$location', '$state', '$stateParams', 'AUTH_EVENTS', 'AuthSrv', 'AccountSrv', 'MetabarSrv', 'toaster',
   function ($scope, $rootScope, $location, $state, $stateParams, AUTH_EVENTS, AuthSrv, AccountSrv, MetabarSrv, toaster) {
 
-    console.log(window.settings);
+
 
   /* ---------- SETUP ----------------------------------------------------------------------------- */
-  var editWatcher;               // Watch for model changes in editmode
-
   $scope.editMode        = false;       // edit mode is on or off
   $scope.contentLoading  = true;
   $scope.contentEdited   = false;  // models is changed or not during editmode
@@ -27,21 +25,6 @@ angular.module('mean.accounts')
   }
 
   /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
-  // Turn on or off editMode for a dataset
-  $scope.$on('metabar::editMode', function(evt,mode){
-    $scope.editMode = mode;
-    if (mode === true){
-      // turn edit mode on
-      editWatcher = $scope.$watchCollection('account', function (newval, oldval) {
-        if (!angular.equals(oldval, newval)) {
-          $scope.contentEdited = true;
-        }
-      });
-    } else {
-      // turn watching off.
-      editWatcher();
-    }
-  });
 
 
   /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
@@ -62,8 +45,8 @@ angular.module('mean.accounts')
   function initiateNewAccount(){
     $scope.account = {
       name        : 'New account',
-      description : 'Description of the account',
-      owner       : $scope.userId
+      description : '<p>Account description</p>',
+      owner       : $rootScope.user._id
     };
     $scope.contentLoading = false;
     console.log('account initiated', $scope.account);
@@ -77,17 +60,41 @@ angular.module('mean.accounts')
     };
   }
 
+  function toggleEditmode(mode) {
+    if (!mode){
+      $scope.editMode = !$scope.editMode;
+    } else if (mode===true) {
+      $scope.editMode = mode;
+      // watch title change
+      if ($scope.account._id){
+        $scope.$watch('account.name', function(newVal, oldVal) {
+          if (newVal !== oldVal){
+            AccountSrv.update($scope.account, function(res){
+              if (res.status==='success'){
+                toaster.pop('success', 'Updated', 'Account name updated.');
+              } else {
+                toaster.pop('warning', 'Update error', 'Error updating account name.');
+              }
+            });
+          }
+        });
+      }
+    } else if (mode===false) {
+      $scope.editMode = mode;
+    }
+  }
+
 
   /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
-  $scope.toggleEditmode = function(){
-    $scope.editMode = !$scope.editMode;
-    // send closed message to metabar
-    if ($scope.editMode === false) {
-      $rootScope.$broadcast('editMode::false');
-    }
+  $scope.enterEditmode = function(){
+    toggleEditmode(true);
+  };
+  $scope.exitEditmode = function(){
+    toggleEditmode(false);
   };
 
-  $scope.create = function(){
+
+  $scope.createAccount = function(){
     AccountSrv.save($scope.account, function(res){
       if (res.err){
         if (res.code === 11000) {
@@ -103,17 +110,17 @@ angular.module('mean.accounts')
     });
   };
 
-  $scope.update = function(){
-    console.log('updating', $scope.account);
-    AccountSrv.update($scope.account, function(result){
-      console.log('result', result);
-      if (result.status === 'success') {
-        toaster.pop('success', 'Updated', 'Account updated.');
-        $scope.toggleEditMode();
-      } else {
-        toaster.pop('warning', 'Updated', 'Account There was an error updating.');
-      }
-    });
+  $scope.updateAccount = function(){
+    if ($scope.account._id){
+      console.log('updating account');
+      AccountSrv.update($scope.account, function(result){
+        if (result.status === 'success') {
+          toaster.pop('success', 'Updated', 'Account updated.');
+        } else {
+          toaster.pop('warning', 'Updated', 'Account There was an error updating.');
+        }
+      });
+    }
   };
 
 
@@ -124,13 +131,9 @@ angular.module('mean.accounts')
     getAccount();
   } else if($scope.slug && $scope.editMode) {
     getAccount();
-    // make sure edit mode is turned on
-    $rootScope.$broadcast('metabar::editMode', true);
   } else if ($scope.editMode){
-    // Create a new base collection
+    // Create a new account
     initiateNewAccount();
-    // make sure edit mode is turned on
-    $rootScope.$broadcast('metabar::editMode', true);
   }
 
 }])

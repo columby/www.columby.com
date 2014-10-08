@@ -51,7 +51,11 @@ var AccountSchema = new Schema({
 
   avatar      : { type: String, required: false },
 
-  owner       : { type: Schema.ObjectId, ref: 'User' },
+  owner       : {
+    type        : Schema.ObjectId,
+    ref         : 'User',
+    required    : true
+  },
 
   datasets    : [{ type: Schema.ObjectId, ref: 'Dataset' }],
 

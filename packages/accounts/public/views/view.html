@@ -3,14 +3,19 @@
   <!-- Editor Sidebar -->
   <div class="editorSidebar" ng-show="editMode">
     <div class="editorSidebarContent">
-      <a class="toggleEditmode" href="" ng-click="toggleEditmode()">Exit edit mode</a>
-      <button class="btn dbt-default" ng-show="contentEdited && account._id" ng-click="update()">Update</button>
-      <button class="btn dbt-default" ng-show="!account._id" ng-click="create()">Create</button>
+      <a
+        ng-show="account._id"
+        class="toggleEditmode btn btn-default"
+        href=""
+        ng-click="exitEditmode()">Exit edit mode</a>
+      <button
+        class="btn dbt-default"
+        ng-show="!account._id"
+        ng-click="createAccount()">Create</button>
     </div>
   </div>
 
   <!-- Content -->
-  <div class="loader" ng-show="contentLoading">Loading account</div>
   <div class="content" ng-hide="contentLoading">
 
     <div class="header wrapper" ng-style="headerStyle">
@@ -25,15 +30,18 @@
           </h1>
         </div>
         <div class="actions" ng-show="account.canEdit && !editMode">
-          <button class="btn btn-default"
-            ng-click="toggleEditmode()">
-            edit
+          <button
+          class="btn btn-default"
+            ng-click="enterEditmode()">
+            Edit
           </button>
         </div>
 
         <div class="col-md-12 avatar">
           <img src="{{collection.publisher.avatar.url}}"/>
-          <button class="btn btn-default"
+          <button
+            class="btn btn-default"
+            ng-show="editMode"
             ng-click="changeAvatar()">
             change avatar
           </button>
@@ -48,6 +56,9 @@
           <div class="description" ng-switch-when="true"
             ng-model="account.description"
             text-angular
+            ng-blur = "updateAccount()"
+            text-angular
+            ta-default-wrap='p'
             placeholder="Please enter your description"
             ta-toolbar="[['bold','italics','underline'],['insertLink']]"
           ></div>

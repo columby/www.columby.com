@@ -45,7 +45,8 @@ exports.update = function(req, res) {
     if (account === 0) {
       return res.json({
         status: 'error',
-        err: 'No account updated'
+        error: 'No account updated',
+        err: err
       });
     }
     return res.json({

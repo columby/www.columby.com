@@ -9,13 +9,8 @@ angular.module('mean.accounts').config(['$stateProvider',
       template: '<ui-view />'
     })
 
-    .state('account.view', {
-      url: '/a/:slug',
-      templateUrl: 'accounts/views/view.html'
-    })
-
     .state('account.create', {
-      url: '/new/a?userId',
+      url: '/a/new',
       templateUrl: 'accounts/views/view.html',
       authorization: {
         authorizedRoles: ['authenticated']
@@ -23,6 +18,11 @@ angular.module('mean.accounts').config(['$stateProvider',
       data: {
         editMode: true
       }
+    })
+    
+    .state('account.view', {
+      url: '/a/:slug',
+      templateUrl: 'accounts/views/view.html'
     })
 
     ;

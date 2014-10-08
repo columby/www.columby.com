@@ -4,6 +4,7 @@
   <div class="editorSidebar" ng-show="editMode">
     <div class="editorSidebarContent">
       <button
+        ng-show="dataset._id"
 				class="btn dbt-default"
 				ng-click="exitEditmode()">Return to dataset</button>
       <button
@@ -130,9 +131,10 @@
           <div
             ng-switch-when = "true">
             <div
-              ng-model = "dataset.description"
-              ng-blur = "updateDatasetDescription()"
+              ng-model = "dataset.descriptionUpdate"
+              ng-blur = "updateDescription()"
               text-angular
+              ta-default-wrap='p'
               ta-toolbar = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"
           ></div>
           </div>

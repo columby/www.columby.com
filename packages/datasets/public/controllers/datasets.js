@@ -67,6 +67,7 @@ angular.module('mean.datasets')
 
         $scope.dataset.canEdit = (dataset.account._id === $rootScope.selectedAccount._id);
 
+        $scope.dataset.descriptionUpdate = $scope.dataset.description;
       });
     }
 
@@ -95,7 +96,7 @@ angular.module('mean.datasets')
 
             DatasetSrv.update({datasetId: dataset._id}, dataset,function(res){
               if (res._id){
-                toaster.pop('success', 'Updated', 'Dataset updated.');
+                toaster.pop('success', 'Updated', 'Dataset title updated.');
               }
             });
           }
@@ -148,16 +149,19 @@ angular.module('mean.datasets')
 
     /* dataset functions */
     $scope.updateDescription = function() {
-      var dataset = {
-        _id: $scope.dataset._id,
-        description: $scope.dataset.description
-      };
+      if ($scope.dataset.descriptionUpdate !== $scope.dataset.description) {
+        var dataset = {
+          _id: $scope.dataset._id,
+          description: $scope.dataset.descriptionUpdate
+        };
 
-      DatasetSrv.update({datasetId:dataset._id},dataset,function(res){
-        if (res._id){
-          toaster.pop('success', 'Updated', 'Dataset description updated.');
-        }
-      });
+        DatasetSrv.update({datasetId:dataset._id},dataset,function(res){
+          if (res._id){
+            $scope.dataset.descriptionUpdate = res.description;
+            toaster.pop('success', 'Updated', 'Dataset description updated.');
+          }
+        });
+      }
     };
 
     $scope.update = function(){
