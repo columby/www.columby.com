@@ -56,6 +56,12 @@ body.editorSidebarOpen .metabar-wrapper {
 .editorSidebar .sidebarModule .setting {
   margin-top: 15px;
 }
+.editorSidebar .sidebarModule button.btn.btn-xs.btn-default.active {
+  background: green;
+  color: #FFF;
+  border: solid 1px green;
+  opacity: 1;
+}
 .editorSidebar .btn-tooltip {
   float: right;
   display: block;

@@ -39,6 +39,10 @@
   -webkit-box-shadow: 0 0;
   box-shadow: 0 0;
 }
+.ngdialog.ngdialog-theme-default .ngdialog-content {
+  width: 600px;
+  background: #fff;
+}
 .datasetMeta {
   font-weight: 100;
 }
@@ -209,6 +213,11 @@
 .dataset.view .dataset-description .editable-placeholder {
   position: absolute;
   width: 100%;
+}
+.dataset.view .dataset-description a {
+  color: #4d4d4d;
+  border-bottom: 1px solid #cbeefa;
+  box-shadow: inset 0 -4px 0 #cbeefa;
 }
 .dataset.view .dataset-info {
   margin-top: 3em;
