@@ -545,11 +545,6 @@ body .metabar-wrapper .actions {
   text-align: center;
   text-transform: none;
 }
-.terms .page-header .features h1,
-.about .page-header .features h1,
-.features .page-header .features h1 {
-  font-size: 5em;
-}
 .terms .page-header h2.page-subtitle,
 .about .page-header h2.page-subtitle,
 .features .page-header h2.page-subtitle {
@@ -601,6 +596,9 @@ body .metabar-wrapper .actions {
   position: absolute;
   text-align: center;
   width: 100%;
+}
+.header.wrapper p {
+  text-align: center;
 }
 .header.wrapper .page-subtitle {
   text-align: center;

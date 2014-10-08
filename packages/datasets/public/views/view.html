@@ -3,7 +3,9 @@
   <!-- Editor Sidebar -->
   <div class="editorSidebar" ng-show="editMode">
     <div class="editorSidebarContent">
-      <a href="" ng-click="exitEditmode()">Exit edit mode</a>
+      <button 
+				class="btn dbt-default"
+				ng-click="exitEditmode()">Return to dataset</button>
       <button
         class="btn dbt-default"
         ng-show="contentEdited && dataset._id"
@@ -24,54 +26,60 @@
       </div>
       -->
 
-      <h3>Publication settings</h3>
-      <div class="status">
-        <label>Status</label>
-        <p>{{dataset.publicationStatus}}</p>
-        <button
-          ng-show="dataset.publicationStatus !== 'published' && dataset._id"
-          ng-click="publishDataset()"
-          class="btn btn-xs btn-default">Publish!</button>
-      </div>
+      <h3>Publication settings</h3>							
+			<div class="sidebarModule">
+				
+	      <div class="status setting">
+	        <label class="left">Status</label>
+	        <span class="right">{{dataset.publicationStatus}}</span>
+	        <button
+	          ng-show="dataset.publicationStatus !== 'published' && dataset._id"
+	          ng-click="publishDataset()"
+	          class="btn btn-xs btn-default">Publish!</button>
+	      </div>
 
-      <div class="visibility" ng-show="dataset.publicationStatus === 'published'">
-        <label>Visiblity</label>
-        <ul class="list-inline">
-          <li>
-            <div class="btn-group btn-toggle">
-          	<button
-              ng-click="toggleVisibilityStatus('public')"
-              class="btn btn-xs btn-default"
-              ng-class="{active: dataset.visibilityStatus === 'public'}"
-              ng-disabled="dataset.visibilityStatus === 'public'">Public</button>
-          	<button
-              ng-click="toggleVisibilityStatus('private')"
-              class="btn btn-xs btn-default"
-              ng-class="{active: dataset.visibilityStatus === 'private'}"
-              ng-disabled="dataset.visibilityStatus === 'private'">Private</button>
-          	</div>
-          </li>
-        </ul>
-      </div>
+	      <div class="visibility setting" ng-show="dataset.publicationStatus === 'published'">
+	        <label class="left">Visiblity</label>
+	        <!-- <ul class="list-inline right"> -->
+	          <!-- <li> -->
+	            <div class="btn-group btn-toggle">
+	          	<button
+	              ng-click="toggleVisibilityStatus('public')"
+	              class="btn btn-xs btn-default"
+	              ng-class="{active: dataset.visibilityStatus === 'public'}"
+	              ng-disabled="dataset.visibilityStatus === 'public'">Public</button>
+	          	<button
+	              ng-click="toggleVisibilityStatus('private')"
+	              class="btn btn-xs btn-default"
+	              ng-class="{active: dataset.visibilityStatus === 'private'}"
+	              ng-disabled="dataset.visibilityStatus === 'private'">Private</button>
+	          	</div>
+	          <!-- </li> -->
+	        <!-- </ul> -->
+	      </div>
 
+			</div>
+			
       <div class="slug" ng-show="dataset._id">
-        <label>Custom URL</label>
-        Create a custom URL for this video that is more memorable than a random string of numbers. Many people create a URL that matches the video title.
+        <h3>Custom URL<button class="right btn-xs btn-tooltip" popover="Create a custom URL for this dataset that is more memorable than a random string of characters. Many people create a URL that matches the dataset title." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3>
+				<span>https://columby.com/d/{{dataset.slug | slugify}}</span>
+				
+
         <form class="form-horizontal novalidate" role="form" name="slugForm">
           <div class="form-group">
             <input
               ng-model="dataset.slug"
-              class="form-item"/>
+              class="form-item"/><br>
             <button
               class="btn btn-xs btn-default"
               ng-click="updateSlug()"
               placeholder="dataset-name">update slug</button>
           </div>
         </form>
-        Preview: <span>https://columby.com/d/{{dataset.slug | slugify}}</span>
+
       </div>
 
-      <h3>Publication account</h3>
+      <h3>Publication account<button class="right btn-xs btn-tooltip" popover="Select the account you want to publish with." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3>
       <img src="$root.selectedAccount.avatar.url"/>
       <a ui-sref="account.view({slug:dataset.account.slug})">{{$root.selectedAccount.name}}</a>
 
@@ -92,11 +100,12 @@
             ng-model="dataset.title"
             htmlFormat="plain">
           </h1>
+          <h2 class="page-subtitle">dataset</h2>
         </div>
 
         <!-- Meta -->
         <div class="meta" ng-show="dataset._id">
-          <p>A dataset by <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name}}</a>, published on <time class="post-date">{{dataset.created | date:'d MMMM yyyy'}}</time> <span class="edit" ng-show="dataset.canEdit && !editMode"><a href="" ng-click="enterEditmode()">edit</a></span></p>
+          <p>A dataset by <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name}}</a>, published on <time class="post-date">{{dataset.created | date:'d MMMM yyyy'}}</time> <span class="edit" ng-show="dataset.canEdit && !editMode"><button type="button" class="btn btn-default btn-xs"><a href="" ng-click="enterEditmode()">edit</a></button></span></p>
         </div>
 
         <!-- Editable avatar -->
