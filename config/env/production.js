@@ -29,7 +29,7 @@ module.exports = {
 
   // Search service
   elasticsearch: {
-    host: '',
-    port: ''
+    host      : process.env.ELASTICSEARCH_HOST,
+    port      : process.env.ELASTICSEARCH_PORT
   }
 };

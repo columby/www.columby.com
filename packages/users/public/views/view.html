@@ -22,8 +22,13 @@
         <p ng-show="!user.accounts || user.accounts.length===0">No account for this user</p>
         <ul>
           <li ng-repeat="account in user.accounts | orderBy:account.primary">
-            <h4><a ui-sref="account.view({slug:account.slug})">{{account.name}}</a><span ng-show="account.primary">Primary</span></h4>
+            <h4><a ui-sref="account.view({slug:account.slug})">{{account.name}}</a><span ng-show="account.primary" class="label bg-primary">Primary</span></h4>
             <p>{{account.datasets.length}} datasets</p>
+
+            <!-- <button
+              class="btn btn-default"
+              ng-hide="account.primary || account.datasets[0]"
+              ng-click="deleteAccount($index)"><i class="fa fa-trash"></i> Delete</button> -->
           </li>
           <li>
             <h4><a ui-sref="account.create({userId: user._id})" class="new">+ Create a new publication account</a></h4>

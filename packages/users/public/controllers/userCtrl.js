@@ -107,8 +107,8 @@ angular.module('mean.users')
 }])
 
 .controller('UserCtrl', [
-  '$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'AuthSrv', 'toaster',
-  function ($scope, $rootScope, $location, $state, AUTH_EVENTS, AuthSrv, toaster) {
+  '$scope', '$rootScope', '$location', '$state', 'AUTH_EVENTS', 'AuthSrv', 'AccountSrv', 'toaster',
+  function ($scope, $rootScope, $location, $state, AUTH_EVENTS, AuthSrv, AccountSrv, toaster) {
 
   /* --- FUNCTIONS ------------------------------------------------------------- */
   function getUser(){
@@ -118,7 +118,6 @@ angular.module('mean.users')
   }
 
   $scope.logout = function(){
-    console.log('logging out');
     AuthSrv.logout().then(function(result){
       localStorage.removeItem('auth_token');
       $rootScope.user = {};
@@ -126,6 +125,15 @@ angular.module('mean.users')
 
       $state.go('home');
     });
+  };
+
+  // Delete an account
+  $scope.deleteAccount = function(index){
+    console.log(index);
+    console.log($scope.user.accounts[ index].slug);
+    // AccountSrv.delete($scope.user.accounts[index ].slug, function(res){
+    //   console.log(res);
+    // });
   };
 
   /* --- INIT ------------------------------------------------------------- */

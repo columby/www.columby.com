@@ -265,5 +265,23 @@
         </div>
       </div>
     </div>
+
+    <!-- Dataset Collections -->
+    <div class="collections wrapper" ng-hide="dataset._id || !editMode">
+      <div class="container">
+        <div class="content">
+          <h3>Collections</h3>
+          List of collections
+
+          <!-- Datasource Modal -->
+          <button
+            ng-show="editMode"
+            class="btn btn-default"
+            type="button"
+            ng-click="addToCollection()"
+            >Add to collection</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

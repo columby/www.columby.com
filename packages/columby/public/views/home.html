@@ -10,7 +10,12 @@
   <div class="page-content">
     <div class="container">
       <div class="searchbox">
-        <input placeholder="Search datasets">
+        <input
+          type="text"
+          ng-model="searchTerm"
+          placeholder="Search datasets"
+          class="input-large"
+          ng-change="search()">
       </div>
 
       <div class="recent-publications col-md-12">
