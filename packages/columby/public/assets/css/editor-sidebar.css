@@ -23,6 +23,11 @@ body.editorSidebarOpen .metabar-wrapper {
   -o-transform: translate3d(300px, 0, 0);
   transform: translate3d(300px, 0, 0);
 }
+.editorSidebar .create {
+  background: green;
+  color: #FFF;
+  border: solid 1px green;
+}
 .editorSidebar h3 {
   font-family: "lato", sans-serif;
   font-size: 1.5em;
@@ -62,6 +67,12 @@ body.editorSidebarOpen .metabar-wrapper {
   border: solid 1px green;
   opacity: 1;
 }
+.editorSidebar .sidebarModule .publish {
+  margin-top: 20px;
+  background: green;
+  color: #FFF;
+  border: solid 1px green;
+}
 .editorSidebar .btn-tooltip {
   float: right;
   display: block;
@@ -92,6 +103,7 @@ body.editorSidebarOpen .metabar-wrapper {
   color: #303030;
   margin-left: 15px;
   margin-top: 10px;
+  width: auto;
 }
 .editorSidebar .slug span {
   font-size: 10px;
