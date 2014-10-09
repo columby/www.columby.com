@@ -12,7 +12,7 @@
         ng-show="contentEdited && dataset._id"
         ng-click="update()">Update</button>
       <button
-        class="btn dbt-default"
+        class="btn dbt-default create"
         ng-show="!dataset._id"
         ng-click="create()">Create</button>
 
@@ -27,17 +27,18 @@
       </div>
       -->
 
-      <h3>Publication settings</h3>
+      <h3>Publication settings<button class="right btn-xs btn-tooltip" popover="Change visibility settings for your dataset." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3>
 			<div class="sidebarModule">
 
 	      <div class="status setting">
 	        <label class="left">Status</label>
 	        <span class="right">{{dataset.publicationStatus}}</span>
-	        <button
-	          ng-show="dataset.publicationStatus !== 'published' && dataset._id"
-	          ng-click="publishDataset()"
-	          class="btn btn-xs btn-default">Publish!</button>
 	      </div>
+        
+        <button
+          ng-show="dataset.publicationStatus !== 'published' && dataset._id"
+          ng-click="publishDataset()"
+          class="btn btn-default publish">Publish!</button>
 
 	      <div class="visibility setting" ng-show="dataset.publicationStatus === 'published'">
 	        <label class="left">Visiblity</label>
@@ -113,7 +114,7 @@
 
         <!-- Meta -->
         <div class="meta" ng-show="dataset._id">
-          <p>A dataset by <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name}}</a>, published on <time class="post-date">{{dataset.created | date:'d MMMM yyyy'}}</time> <span class="edit" ng-show="dataset.canEdit && !editMode"><button type="button" class="btn btn-default btn-xs"><a href="" ng-click="enterEditmode()">edit</a></button></span></p>
+          <p>A dataset by <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name}}</a>, published on <time class="post-date">{{dataset.created | date:'d MMMM yyyy'}}</time> <span class="edit" ng-show="dataset.canEdit && !editMode"><button type="button" class="btn btn-default btn-xs" ng-click="enterEditmode()">edit</button></span></p>
         </div>
 
         <!-- Editable avatar -->
