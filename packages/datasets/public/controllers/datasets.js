@@ -204,7 +204,9 @@ angular.module('mean.datasets')
     };
 
     /*** Distribution functions */
-    $scope.newDistribution = function (){
+    $scope.initNewDistribution = function (){
+      console.log('Starting new distribution');
+      $scope.newDistribution = {};
       ngDialog.open({
         template: 'datasets/views/includes/addDistributionModal.html',
         className: 'ngdialog-theme-default fullscreenDialog',
@@ -246,9 +248,8 @@ angular.module('mean.datasets')
               if (res.status === 'success'){
                 $scope.dataset.distributions.push(res.distribution);
                 toaster.pop('success', 'Updated', 'New dataset added.');
-                $scope.newDistribution = null;
-                $scope.addDistribution = false;
                 ngDialog.closeAll();
+                $scope.newDistribution = null;
               } else {
                 toaster.pop('danger', 'Error', 'Something went wrong.');
               }
