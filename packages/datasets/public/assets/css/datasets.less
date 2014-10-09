@@ -299,25 +299,26 @@
 
     // Specific styling for dataset view page
     &.edit {
-      h1 {
-        border: 1px solid #fff;
-        border: 1px solid rgba(255, 0, 0, 0);
-        border-radius: 4px;
-        padding: 10px;
-      }
 
-      h1:hover {
-        border: 1px solid #fff;
-        border-radius: 4px;
-        padding: 10px;
-      }
-
-      h1:focus {
-        border: 1px solid #fff;
-        border-radius: 4px;
-        padding: 10px;
-      }
     }
+  }
+  h1, h1.focussed {
+    border: 1px solid #fff;
+    border: 1px solid rgba(255, 0, 0, 0);
+    border-radius: 4px;
+    padding: 10px;
+  }
+
+  h1.focussed:hover {
+    border: 1px solid #fff;
+    border-radius: 4px;
+    padding: 10px;
+  }
+
+  h1.focussed:focus {
+    border: 1px solid #fff;
+    border-radius: 4px;
+    padding: 10px;
   }
 }
 
