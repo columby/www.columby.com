@@ -102,6 +102,7 @@
         <div class="title" ng-switch="editMode">
           <h1 ng-switch-default ng-bind-html="dataset.title || 'no title yet'"></h1>
           <h1 ng-switch-when="true"
+            class="focussed"
             contenteditable
             name="title"
             ng-model="dataset.title"
@@ -229,28 +230,15 @@
 						</li>
           </ul>
           <p ng-show="!dataset.references || dataset.references.length===0">No references added yet</p>
+
+        <!-- Datasource Modal -->
+        <button
+          ng-show="editMode"
+          class="btn btn-default"
+          type="button"
+          ng-click="newReference()"
+          >Add new reference</button>
         </div>
-
-        <h4 ng-show="editMode"><a href="" ng-click="openReferenceModal()" class="new">+ Add a new Reference</a></h4>
-
-        <div class="addReferenceModal fullscreenPopup" ng-show="addReference">
-          <button class="modal-close" ng-click="closeReferenceModal()">×</button>
-          <div class="container add-refrence-content" ng-controller="EmbedlyCtrl">
-            <h2>Add a reference</h2>
-            <input type="text" ng-model="embedlyUrl">
-            <button class="btn btn-default" ng-click="checkUrl()">Check</button>
-            <div class="warning">{{errorMessage}}</div>
-            <div class="preview" ng-show="embedlyResult">
-              <a href="{{embedlyResult.original_url}}">
-                <img src="{{embedlyResult.images[0].url}}" width="50px"/>
-                <p><strong>{{embedlyResult.title}}</strong> -- {{embedlyResult.description}}</p>
-                <p class="small">on {{embedlyResult.provider_name}}</p>
-              </a>
-            </div>
-            <button type="submit" class="btn btn-default" ng-click="addReference()" ng-disabled="!embedlyResult">Add Reference</button>
-          </div>
-        </div>
-
       </div>
     </div>
 

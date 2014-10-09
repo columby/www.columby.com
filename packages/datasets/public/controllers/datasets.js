@@ -13,8 +13,8 @@ angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$st
 angular.module('mean.datasets')
 
 .controller('DatasetViewCtrl', [
-  '$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster', 'Slug', 'ngDialog',
-  function($rootScope, $scope, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, MetabarSrv, AuthSrv, toaster, Slug, ngDialog) {
+  '$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster', 'Slug', 'ngDialog','EmbedlySrv',
+  function($rootScope, $scope, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, MetabarSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv) {
 
     /***   INITIALISATION   ***/
     //var editWatcher;               // Watch for model changes in editmode
@@ -110,32 +110,6 @@ angular.module('mean.datasets')
       }
     }
 
-    function addReference(ref){
-
-      // construct the reference
-      var reference = {
-        description: ref.description,
-        image: ref.images[0].url,
-        url: ref.url,
-        title: ref.title,
-        provider_name: ref.provider_name,
-        provider_display: ref.provider_dis
-      };
-
-      // save reference
-      DatasetReferencesSrv.save({datasetId:$scope.dataset._id, reference: reference}, function(res){
-        console.log(res);
-      });
-      // add to scope
-      if (!$scope.dataset.references) {
-        $scope.dataset.references = [];
-      }
-      $scope.dataset.references.push(ref);
-
-      // close popup
-      $scope.addReference = false;
-    }
-
 
     /***   SCOPE FUNCTIONS   ***/
 
@@ -211,10 +185,9 @@ angular.module('mean.datasets')
 
     /*** Distribution functions */
     $scope.newDistribution = function (){
-      console.log('new distribution');
       ngDialog.open({
         template: 'datasets/views/includes/addDistributionModal.html',
-        className: 'ngdialog-theme-default',
+        className: 'ngdialog-theme-default fullscreenDialog',
         scope: $scope
       });
     };
@@ -279,30 +252,6 @@ angular.module('mean.datasets')
       });
     };
 
-
-    /*** Reference functions */
-    $scope.openReferenceModal = function() {
-      $scope.addReference = true;
-    };
-
-    $scope.closeReferenceModal = function() {
-      $scope.addReference = false;
-    };
-    $scope.deleteReference = function(index){
-      console.log(index);
-      var datasetId = $scope.dataset._id;
-      var referenceId = $scope.dataset.references[ index]._id;
-
-      DatasetReferencesSrv.delete({datasetId:datasetId, referenceId:referenceId}, function(res){
-        console.log(res);
-        if (res.status === 'success') {
-          $scope.dataset.references.splice(index,1);
-        }
-      });
-
-    };
-
-
     $scope.publishDataset = function(){
       if ($scope.dataset.publicationStatus !== 'published') {
         var dataset = {
@@ -319,6 +268,83 @@ angular.module('mean.datasets')
         });
       }
     };
+
+    /*** Reference functions */
+    $scope.newReference = function() {
+
+      ngDialog.open({
+        template: 'datasets/views/includes/addReferenceModal.html',
+        className: 'ngdialog-theme-default fullscreenDialog',
+        scope: $scope
+      });
+    };
+
+    $scope.checkReferenceLink = function(link){
+
+      $scope.reference = {
+        link   : link,
+        valid  : false,
+        error  : null,
+        result : null
+      };
+
+      $scope.reference.checkingLink = true;
+
+      EmbedlySrv.extract($scope.reference.link)
+        .then(function(result){
+          console.log(result);
+          $scope.reference.result = result;
+          $scope.reference.valid = true;
+          $scope.reference.checkingLink = false;
+        }, function(err){
+          $scope.reference.error = err;
+          $scope.reference.valid = null;
+          $scope.reference.checkingLink = false;
+      });
+    };
+
+    $scope.saveReference = function() {
+
+      // construct the reference
+      var reference = {
+        description      : $scope.reference.result.description,
+        url              : $scope.reference.result.url,
+        title            : $scope.reference.result.title,
+        provider_name    : $scope.reference.result.provider_name,
+        provider_display : $scope.reference.result.provider_dis
+      };
+
+      if ($scope.reference.result.images[0]){
+        reference.image = $scope.reference.result.images[0].url;
+      }
+
+      console.log('saving reference', reference);
+
+      // save reference
+      DatasetReferencesSrv.save({datasetId:$scope.dataset._id, reference: reference}, function(res){
+        if (res.status==='success') {
+          $scope.dataset.references.push(reference);
+          ngDialog.closeAll();
+        } else {
+          $scope.reference.error = 'Something went wrong.';
+        }
+      });
+    };
+
+    $scope.deleteReference = function(index){
+      console.log(index);
+      var datasetId = $scope.dataset._id;
+      var referenceId = $scope.dataset.references[ index]._id;
+
+      DatasetReferencesSrv.delete({datasetId:datasetId, referenceId:referenceId}, function(res){
+        console.log(res);
+        if (res.status === 'success') {
+          $scope.dataset.references.splice(index,1);
+        }
+      });
+
+    };
+
 
     $scope.toggleVisibilityStatus = function(status){
       if (status !== $scope.dataset.visibilityStatus) {
