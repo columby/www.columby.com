@@ -23,7 +23,7 @@
         <div class="publication-listing">
 					<ul>
           <li ng-repeat="dataset in datasets" class="publication-item">
-            <h4><a ui-sref="dataset.view({ datasetId: dataset._id })" ng-bind-html="dataset.title || 'Untitled'"></a><br/>[{{dataset._id}}]<span ng-show=""><em>{{dataset.publishStatus}}</em></h4>
+            <h4><a ui-sref="dataset.view({ datasetId: dataset._id })" ng-bind-html="dataset.title || 'Untitled'"></a><!-- <br/>[{{dataset._id}}] --><span ng-show=""><em>{{dataset.publishStatus}}</em></h4>
             <div class="user-date">{{dataset.account.name || '[Oops! No publisher found]'}} on {{dataset.created}}</div>
           </li>
         	</ul>

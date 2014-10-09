@@ -103,6 +103,31 @@
   color: #7a7a7a;
   padding: 6px;
 }
+.dataset.view .content h3 .btn-tooltip {
+  float: right;
+  display: block;
+  border-radius: 50%;
+  height: 18px;
+  width: 18px;
+  color: #333;
+  border: none;
+  border: solid 1px #b3b3b3;
+  font-size: 11px;
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Garuda, Verdana, Tahoma, sans-serif;
+  font-weight: 100;
+  background-color: #fff;
+  margin-top: 12px;
+  padding-top: 0;
+}
+.dataset.view .content h3 .btn-tooltip:hover {
+  border-color: #000000;
+  border-color: rgba(0, 0, 0, 0.3);
+}
+.dataset.view .content h3 .popover {
+  font-size: 0.6em;
+  line-height: 1.8em;
+  color: #000;
+}
 .dataset.view .content .dataset-info-content p {
   margin: 0;
 }
@@ -241,31 +266,6 @@
   border-bottom: 0;
   color: #4d4d4d;
   margin-top: 5px;
-}
-.dataset.view .info .content h3 .btn-tooltip {
-  float: right;
-  display: block;
-  border-radius: 50%;
-  height: 18px;
-  width: 18px;
-  color: #333;
-  border: none;
-  border: solid 1px #b3b3b3;
-  font-size: 11px;
-  font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Garuda, Verdana, Tahoma, sans-serif;
-  font-weight: 100;
-  background-color: #fff;
-  margin-top: 12px;
-  padding-top: 0;
-}
-.dataset.view .info .content h3 .btn-tooltip:hover {
-  border-color: #000000;
-  border-color: rgba(0, 0, 0, 0.3);
-}
-.dataset.view .info .content h3 .popover {
-  font-size: 0.6em;
-  line-height: 1.8em;
-  color: #000;
 }
 .dataset h1,
 .dataset h1.focussed {

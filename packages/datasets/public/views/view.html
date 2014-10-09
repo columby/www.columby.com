@@ -6,7 +6,7 @@
       <button
         ng-show="dataset._id"
 				class="btn dbt-default"
-				ng-click="exitEditmode()">Return to dataset</button>
+				ng-click="exitEditmode()">Exit edit mode</button>
       <button
         class="btn dbt-default"
         ng-show="contentEdited && dataset._id"
@@ -89,7 +89,7 @@
 
       <h3>Publication account<button class="right btn-xs btn-tooltip" popover="Select the account you want to publish with." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3>
       <img src="{{$root.selectedAccount.avatar.url}}"/>
-      <a ui-sref="account.view({slug:dataset.account.slug})">{{$root.selectedAccount.name}}</a>
+      <!-- <a ui-sref="account.view({slug:dataset.account.slug})"> -->{{$root.selectedAccount.name}}<!-- </a> -->
 
     </div>
   </div>
@@ -141,6 +141,7 @@
       <!-- Editable description -->
       <div class="container">
         <div class="col-md-12" ng-switch="editMode">
+          <h3 ng-show="editMode">Description<button class="right btn-xs btn-tooltip" popover="----" popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3>
           <div ng-switch-default ng-bind-html="dataset.description || '<p>The publisher of this dataset has not yet provided a description yet.</p>'"></div>
           <div
             ng-switch-when = "true">
@@ -157,18 +158,18 @@
     </div>
 
     <!-- Dataset Info -->
-    <div class="info wrapper" ng-hide="editMode">
+    <div class="info wrapper">
       <div class="container">
         <!-- <div class="content" ng-bind-html="summary"></div> -->
         <div class="content"><p>Dit is een voorbeeld van een data licentie regel die automatisch gegenereerd zal worden. Deze dataset heeft <span class="highlight">Licentie X.3.0</span>. De dataset bevat <span class="highlight">3</span> data distributions met in totaal <span class="highlight">351</span> rijen. Er zijn <span class="highlight">2</span> referenties.</p>
-          <h3>Columby score<button class="right btn-xs btn-tooltip" popover="The Columby Score meter gauges how specified your dataset is. The strength will increase as you fill in the details and add more content." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3><progressbar class="progress-striped active" max="100" value="55"><i>55%</i></progressbar></div>
+          <h3>Columby score<button class="right btn-xs btn-tooltip" popover="The Columby Score meter gauges how specified your publication is. The strength will increase as you fill in the details and add more content." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3><progressbar class="progress-striped active" max="100" value="55"><i>55%</i></progressbar></div>
       </div>
     </div>
 
     <!-- Dataset Sources -->
     <div class="distributions wrapper" ng-hide="!dataset._id">
       <div class="container">
-        <h3>Distributions</h3>
+        <h3>Data</h3>
         <ul ng-hide="!dataset.distributions || dataset.distributions.length===0">
           <li ng-repeat="distribution in dataset.distributions">
 						<h4><a href="{{distribution.accessUrl}}" target="_blank">{{distribution.accessUrl}}</a></h4>
@@ -187,7 +188,7 @@
           class="btn btn-default"
           type="button"
           ng-click="initNewDistribution()"
-          >Add new distribution</button>
+          >Add new data</button>
       </div>
     </div>
 
