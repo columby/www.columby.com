@@ -267,18 +267,19 @@
   line-height: 1.8em;
   color: #000;
 }
-.dataset.view.edit h1 {
+.dataset h1,
+.dataset h1.focussed {
   border: 1px solid #fff;
   border: 1px solid rgba(255, 0, 0, 0);
   border-radius: 4px;
   padding: 10px;
 }
-.dataset.view.edit h1:hover {
+.dataset h1.focussed:hover {
   border: 1px solid #fff;
   border-radius: 4px;
   padding: 10px;
 }
-.dataset.view.edit h1:focus {
+.dataset h1.focussed:focus {
   border: 1px solid #fff;
   border-radius: 4px;
   padding: 10px;
