@@ -49,7 +49,12 @@ var AccountSchema = new Schema({
 
   description : { type: String, required: false },
 
-  avatar      : { type: String, required: false },
+  avatar      : {
+    url         : {
+      type: String,
+      required: false,
+      default: 'columby/assets/img/avatar.png'}
+  },
 
   owner       : {
     type        : Schema.ObjectId,
