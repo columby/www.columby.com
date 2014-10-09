@@ -17,8 +17,10 @@ var mean = require('meanio'),
 var DatasetSchema = new Schema({
 
   // Dataset properties
-  created         : { type: Date, default: Date.now },
-  updated         : { type: Date },
+  createdAt       : { type: Date, default: Date.now },
+  publishedAt     : { type: Date },
+  updatedAt       : { type: Date },
+
   title           : { type : String, trim: true },
   description     : { type : String, trim: true },
   slug            : { type : String, unique: true },

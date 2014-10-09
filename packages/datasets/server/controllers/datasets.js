@@ -76,7 +76,7 @@ exports.dataset = function(req, res, next, id) {
         { slug: id },
       ]
     })
-    .populate('account', 'slug name description owner')
+    .populate('account', 'slug name description owner avatar')
     .exec(function(err,dataset){
       if (err) return next(err);
       if (!dataset) return res.json({error:'Failed to load dataset ' + id, err:err});
@@ -124,8 +124,9 @@ exports.update = function(req, res) {
   Dataset.findOne({ _id: req.dataset.id }, function (err, dataset){
 
     console.log('updating dataset', req.body);
+    if (req.body.publishedAt) { dataset.publishedAt   = req.body.publishedAt; }
 
-    if (req.body.title){ dataset.title   = req.body.title; }
+    if (req.body.title) { dataset.title   = req.body.title; }
 
     if (req.body.description) { dataset.description = req.body.description; }
 

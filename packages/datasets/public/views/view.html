@@ -34,7 +34,7 @@
 	        <label class="left">Status</label>
 	        <span class="right">{{dataset.publicationStatus}}</span>
 	      </div>
-        
+
         <button
           ng-show="dataset.publicationStatus !== 'published' && dataset._id"
           ng-click="publishDataset()"
@@ -88,7 +88,7 @@
       </div>
 
       <h3>Publication account<button class="right btn-xs btn-tooltip" popover="Select the account you want to publish with." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3>
-      <img src="$root.selectedAccount.avatar.url"/>
+      <img src="{{$root.selectedAccount.avatar.url}}"/>
       <a ui-sref="account.view({slug:dataset.account.slug})">{{$root.selectedAccount.name}}</a>
 
     </div>
@@ -114,12 +114,24 @@
 
         <!-- Meta -->
         <div class="meta" ng-show="dataset._id">
-          <p>A dataset by <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name}}</a>, published on <time class="post-date">{{dataset.created | date:'d MMMM yyyy'}}</time> <span class="edit" ng-show="dataset.canEdit && !editMode"><button type="button" class="btn btn-default btn-xs" ng-click="enterEditmode()">edit</button></span></p>
+          <p>A dataset by
+            <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name}}</a>,
+            <span class="published" ng-show="dataset.publishedAt">published on <time class="post-date">{{dataset.publishedAt | date:'d MMMM yyyy'}}</time></span>
+            <span class="unpublished" ng-hide="dataset.publishedAt">not yet published.</span>
+          </p>
+        </div>
+
+        <!-- Edit dataset -->
+        <div class="actions" ng-show="dataset.canEdit && !editMode">
+          <button
+            type="button"
+            class="btn btn-default btn-xs"
+            ng-click="enterEditmode()">edit</button>
         </div>
 
         <!-- Editable avatar -->
         <div class="avatar">
-          <img src="{{dataset.account.avatar.url}}"/>
+          <img src="{{dataset.account.avatar.url || $root.selectedAccount.avatar.url}}"/>
         </div>
       </div>
     </div>

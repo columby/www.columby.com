@@ -34,6 +34,7 @@ angular.module('mean.datasets')
       DatasetSrv.get({
         datasetId: $stateParams.datasetId
       }, function(dataset) {
+        console.log(dataset.account.avatar);
         // add acquired dataset to the scope
         $scope.dataset = dataset;
 
@@ -164,6 +165,25 @@ angular.module('mean.datasets')
       });
     };
 
+    // Change publication from draft to published
+    $scope.publishDataset = function(){
+      if ($scope.dataset.publicationStatus !== 'published') {
+        var dataset = {
+          _id: $scope.dataset._id,
+          publicationStatus: 'published',
+          publishedAt: Date.now()
+        };
+        console.log('publishing dataset: ', dataset);
+        DatasetSrv.update({datasetId: dataset._id}, dataset,function(res){
+          console.log(res);
+          if (res._id){
+            $scope.dataset.publicationStatus = 'published';
+            toaster.pop('success', 'Updated', 'Your dataset is now published! ');
+          }
+        });
+      }
+    };
+
     $scope.updateSlug = function(){
       var slug = Slug.slugify($scope.dataset.slug);
       var d={
@@ -252,22 +272,7 @@ angular.module('mean.datasets')
       });
     };
 
-    $scope.publishDataset = function(){
-      if ($scope.dataset.publicationStatus !== 'published') {
-        var dataset = {
-          _id: $scope.dataset._id,
-          publicationStatus: 'published'
-        };
 
-        DatasetSrv.update({datasetId: dataset._id}, dataset,function(res){
-          console.log(res);
-          if (res._id){
-            $scope.dataset.publicationStatus = 'published';
-            toaster.pop('success', 'Updated', 'Your dataset is now published! ');
-          }
-        });
-      }
-    };
 
     /*** Reference functions */
     $scope.newReference = function() {
