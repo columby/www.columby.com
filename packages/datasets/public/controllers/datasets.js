@@ -34,14 +34,15 @@ angular.module('mean.datasets')
         datasetId: $stateParams.datasetId
       }, function(dataset) {
 
+        console.log('dataset', dataset);
+        // add acquired dataset to the scope
+        $scope.contentLoading = false;
+        $scope.dataset = dataset;
+
         // set the avatar
         if (!dataset.account.avatar) {
           dataset.account.avatar = $rootScope.selectedAccount.avatar.url;
         }
-        console.log('dataset', dataset);
-
-        // add acquired dataset to the scope
-        $scope.dataset = dataset;
 
         // transition the url from slug to id
         if ($stateParams.datasetId !== dataset._id) {
@@ -53,21 +54,8 @@ angular.module('mean.datasets')
           });
         }
 
-        // remove editmode
-        // console.log($stateParams);
-        // if ($stateParams.datasetId && $stateParams.editMode === 'true') {
-        //   $state.transitionTo ('dataset.view', { datasetId: dataset._id}, {
-        //     location: true,
-        //     inherit: false,
-        //     relative: $state.$current,
-        //     notify: false
-        //   });
-        // }
-
-        $scope.contentLoading = false;
-
+        // set draft title and description
         if ($scope.editMode){
-          // set draft title and description
           $scope.dataset.titleUpdate = $scope.dataset.title;
           $scope.dataset.descriptionUpdate = $scope.dataset.description;
         }
@@ -88,8 +76,6 @@ angular.module('mean.datasets')
         if ($rootScope.selectedAccount && (dataset.account._id === $rootScope.selectedAccount._id)){
           $scope.dataset.canEdit = true;
         }
-
-        $scope.dataset.descriptionUpdate = $scope.dataset.description;
       });
     }
 
@@ -107,32 +93,10 @@ angular.module('mean.datasets')
     }
 
     function toggleEditMode(mode){
-      if (!mode){
-        $scope.editMode = !$scope.editMode;
-      } else if (mode===true) {
-        $scope.editMode = mode;
-        // watch title change
-        $scope.$watch('dataset.title', function(newVal, oldVal) {
-          console.log('n ' + newVal + ' - old ' + oldVal);
-          if (newVal !== oldVal){
-            var dataset = {
-              _id: $scope.dataset._id,
-              title: newVal
-            };
-
-            DatasetSrv.update({datasetId: dataset._id}, dataset,function(res){
-              if (res._id){
-                toaster.pop('success', 'Updated', 'Dataset title updated.');
-              }
-            });
-          }
-        });
-
-      } else if (mode===false) {
-        $scope.editMode = mode;
-        // turn watching off.
-        //editWatcher();
-        $rootScope.$broadcast('editMode::false');
+      $scope.editMode = mode || !$scope.editMode;
+      if ($scope.editMode) {
+        $scope.dataset.titleUpdate = $scope.dataset.title;
+        $scope.dataset.descriptionUpdate = $scope.dataset.description;
       }
     }
 
@@ -435,7 +399,6 @@ angular.module('mean.datasets')
 
     /* --------- INIT ------------------------------------------------------------------------ */
     if ($stateParams.datasetId) {
-      console.log('fetch dataset');
       getDataset();
     } else {
       initiateNewDataset();
