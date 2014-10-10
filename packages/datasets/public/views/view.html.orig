@@ -78,7 +78,11 @@
 
       <!-- <h3>Publication account<button class="right btn-xs btn-tooltip" popover="Select the account you want to publish with." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3>
       <img src="{{$root.selectedAccount.avatar.url}}"/>
+<<<<<<< HEAD
       <a ui-sref="account.view({slug:dataset.account.slug})">{{$root.selectedAccount.name}}</a> -->
+=======
+      <!-- <a ui-sref="account.view({slug:dataset.account.slug})"> -->{{$root.selectedAccount.name}}<!-- </a> -->
+>>>>>>> 6c66214b1944e4f207bce15ac3da22413c015116
 
     </div>
   </div>

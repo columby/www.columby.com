@@ -36,6 +36,11 @@ body.editorSidebarOpen .metabar-wrapper {
   border-bottom: solid 1px;
   padding-bottom: 0;
 }
+.editorSidebar span,
+.editorSidebar label,
+.editorSidebar p {
+  font-family: "lato", sans-serif;
+}
 .editorSidebar .close {
   color: #fff;
   text-shadow: none;
