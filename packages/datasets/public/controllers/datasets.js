@@ -151,22 +151,25 @@ angular.module('mean.datasets')
 
     /* dataset functions */
     $scope.updateTitle = function() {
-      if ($scope.dataset.titleUpdate !== $scope.dataset.title) {
-
-        var dataset = {
-          _id: $scope.dataset._id,
-          title: $scope.dataset.titleUpdate,
-        };
-        console.log('updating dataset title', dataset);
-
-        DatasetSrv.update({datasetId:dataset._id},dataset,function(res){
-          if (res._id){
-            $scope.dataset.titleUpdate = res.title;
-            toaster.pop('success', 'Updated', 'Dataset title updated.');
-          }
-        });
+      if (!$scope.dataset._id) {
+        console.log('Title changed, but not yet saved');
       } else {
-        console.log('Dataset title did not change.');
+        if ($scope.dataset.titleUpdate === $scope.dataset.title) {
+          console.log('Dataset saved, but no title change');
+        } else {
+          var dataset = {
+            _id: $scope.dataset._id,
+            title: $scope.dataset.titleUpdate,
+          };
+          console.log('updating dataset title', dataset);
+
+          DatasetSrv.update({datasetId:dataset._id},dataset,function(res){
+            if (res._id){
+              $scope.dataset.titleUpdate = res.title;
+              toaster.pop('success', 'Updated', 'Dataset title updated.');
+            }
+          });
+        }
       }
     };
 
@@ -203,7 +206,8 @@ angular.module('mean.datasets')
       });
     };
 
-    $scope.create = function(){
+    $scope.create = function() {
+      $scope.dataset.title = $scope.dataset.titleUpdate;
       DatasetSrv.save($scope.dataset, function(res){
         console.log('create',res);
         if (res._id) {

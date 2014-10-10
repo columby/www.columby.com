@@ -3,57 +3,54 @@
   <!-- Editor Sidebar -->
   <div class="editorSidebar" ng-show="editMode">
     <div class="editorSidebarContent">
+      <!-- exit existing set -->
       <button
         ng-show="dataset._id"
 				class="btn dbt-default"
 				ng-click="exitEditmode()">Exit edit mode</button>
-      <button
-        class="btn dbt-default btn-large"
-        ng-show="contentEdited && dataset._id"
-        ng-click="update()">Update</button>
+
+      <!-- publish new dataset -->
       <button
         class="btn dbt-default create"
         ng-show="!dataset._id"
         ng-click="create()">Publish</button>
 
 
-      <!--
-      <h3>Publication settings</h3>
-
-      <div class="autosave-status">
-        <span ng-show="!dataset.draft[0]">No changes. </span>
-        <span ng-show="dataset.draft[0]">Your dataset has unpublished changes. </span>
-        <span ng-show="autosaveInProgress">Saving...</span>
-      </div>
-      -->
-
-      <h3>Publication settings<button class="right btn-xs btn-tooltip" popover="Change visibility settings for your dataset." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3>
-			<div class="sidebarModule">
-
+      <div class="sidebarModule">
 	      <div class="visibility setting" ng-show="dataset._id">
-	        <label class="left">Visiblity</label>
-	        <!-- <ul class="list-inline right"> -->
-	          <!-- <li> -->
-	            <div class="btn-group btn-toggle">
-	          	<button
-	              ng-click="toggleVisibilityStatus('private')"
-	              class="btn btn-xs btn-default"
-	              ng-class="{active: dataset.visibilityStatus === 'private'}"
-	              ng-disabled="dataset.visibilityStatus === 'private'">Private</button>
-	          	<button
-	              ng-click="toggleVisibilityStatus('public')"
-	              class="btn btn-xs btn-default"
-	              ng-class="{active: dataset.visibilityStatus === 'public'}"
-	              ng-disabled="dataset.visibilityStatus === 'public'">Public</button>
-	          	</div>
-	          <!-- </li> -->
-	        <!-- </ul> -->
+          <h3>Visibility
+            <button
+              class="right btn-xs btn-tooltip"
+              popover="Change visibility settings for your dataset."
+              popover-trigger="mouseenter"
+              popover-placement="left"
+              class="btn btn-default"><i class="fa fa-question"></i></button>
+          </h3>
+	        <div class="btn-group btn-toggle">
+          	<button
+              ng-click="toggleVisibilityStatus('private')"
+              class="btn btn-xs btn-default"
+              ng-class="{active: dataset.visibilityStatus === 'private'}"
+              ng-disabled="dataset.visibilityStatus === 'private'">Private</button>
+          	<button
+              ng-click="toggleVisibilityStatus('public')"
+              class="btn btn-xs btn-default"
+              ng-class="{active: dataset.visibilityStatus === 'public'}"
+              ng-disabled="dataset.visibilityStatus === 'public'">Public</button>
+          	</div>
 	      </div>
-
 			</div>
 
       <div class="slug" ng-show="dataset._id">
-        <h3>Custom URL<button class="right btn-xs btn-tooltip" popover="Create a custom URL for this dataset that is more memorable than a random string of characters. Many people create a URL that matches the dataset title." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3>
+        <h3>Custom URL
+          <button
+            class="right btn-xs btn-tooltip"
+            popover="Create a custom URL for this dataset that is more memorable than a random string of characters. Many people create a URL that matches the dataset title."
+            popover-trigger="mouseenter"
+            popover-placement="left"
+            class="btn btn-default"><i class="fa fa-question"></i>
+          </button>
+        </h3>
 				<span>https://columby.com/d/{{dataset.slug | slugify}}</span>
 
 
@@ -91,12 +88,13 @@
         <!-- Editable title -->
         <div class="title" ng-switch="editMode">
           <h1 ng-switch-default ng-bind-html="dataset.title || 'No title yet'"></h1>
-          
+
           <br><br><br><input ng-switch-when="true"
-            type="text"
-            name="title"
-            ng-model="dataset.titleUpdate"
-            ng-blur="updateTitle()"
+            type        = "text"
+            name        = "title"
+            placeholder = "Your title"
+            ng-model    = "dataset.titleUpdate"
+            ng-blur     = "updateTitle()"
             />
           <h2 class="page-subtitle">dataset</h2>
         </div>
