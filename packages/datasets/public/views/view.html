@@ -89,7 +89,7 @@
         <div class="title" ng-switch="editMode">
           <h1 ng-switch-default ng-bind-html="dataset.title || 'No title yet'"></h1>
 
-          <br><br><br><input ng-switch-when="true"
+          <input ng-switch-when="true"
             type        = "text"
             name        = "title"
             placeholder = "Your title"
@@ -127,15 +127,25 @@
       <!-- Editable description -->
       <div class="container">
         <div class="col-md-12" ng-switch="editMode">
-          <h3 ng-show="editMode">Description<button class="right btn-xs btn-tooltip" popover="----" popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3>
+          <h3 ng-show="editMode">Description
+            <button
+              class="right btn-xs btn-tooltip"
+              popover="----"
+              popover-trigger="mouseenter"
+              popover-placement="left"
+              class="btn btn-default"><i class="fa fa-question"></i>
+            </button>
+          </h3>
+
           <div ng-switch-default ng-bind-html="dataset.description || '<p>The publisher of this dataset has not yet provided a description yet.</p>'"></div>
           <div
             ng-switch-when = "true">
             <div
-              ng-model = "dataset.description"
+              ng-model        = "dataset.descriptionUpdate"
               text-angular
-              ta-default-wrap='p'
-              ta-toolbar = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"
+              ta-default-wrap = "p"
+              ng-blur         = "updateDescription()"
+              ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"
           ></div>
           </div>
         </div>

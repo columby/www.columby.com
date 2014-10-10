@@ -174,18 +174,26 @@ angular.module('mean.datasets')
     };
 
     $scope.updateDescription = function() {
-      if ($scope.dataset.descriptionUpdate !== $scope.dataset.description) {
-        var dataset = {
-          _id: $scope.dataset._id,
-          description: $scope.dataset.descriptionUpdate
-        };
-
-        DatasetSrv.update({datasetId:dataset._id},dataset,function(res){
-          if (res._id){
-            $scope.dataset.descriptionUpdate = res.description;
-            toaster.pop('success', 'Updated', 'Dataset description updated.');
-          }
-        });
+      console.log('updating dataset description');
+      if (!$scope.dataset._id) {
+        console.log('Dataset not yet saved');
+      } else {
+        if ($scope.dataset.descriptionUpdate === $scope.dataset.description) {
+          console.log('Dataset saved, but no description change');
+        } else {
+          var dataset = {
+            _id         : $scope.dataset._id,
+            description : $scope.dataset.descriptionUpdate
+          };
+          DatasetSrv.update({datasetId:dataset._id},dataset,function(res){
+            if (res._id){
+              $scope.dataset.descriptionUpdate = res.description;
+              toaster.pop('success', 'Updated', 'Dataset description updated.');
+            } else {
+              console.log('error updating description', res);
+            }
+          });
+        }
       }
     };
 
