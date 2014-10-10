@@ -234,9 +234,11 @@
           <h3>References</h3>
           <ul>
             <li ng-repeat="reference in dataset.references">
-							<div class="col-sm-2"><img src="{{reference.image}}" class="img-responsive"/></div>
-              <div class="col-sm-10">
+							<div class="col-md-12">
                 <h4><a href="{{reference.url}}">{{reference.title}}</a></h4>
+              </div>
+              <div class="col-sm-12">
+                <img src="{{reference.image}}" class="preview"/>
                 <p>{{reference.description}}</p>
 							  <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
               </div>
