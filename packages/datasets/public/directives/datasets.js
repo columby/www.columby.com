@@ -24,6 +24,7 @@ angular.module('mean.datasets')
 
 // https://docs.angularjs.org/api/ng/type/ngModel.NgModelController
 // https://github.com/jakiestfu/Medium.js
+/*
 .directive('contenteditable', ['$sce', function($sce) {
 
     return {
@@ -37,6 +38,7 @@ angular.module('mean.datasets')
 
         // Specify how UI should be updated
         ngModel.$render = function() {
+
           element.html($sce.getTrustedHtml(ngModel.$viewValue || ''));
 
           read(); // initialize
@@ -68,7 +70,7 @@ angular.module('mean.datasets')
         function read() {
           // get the type of element (input, div, etc)
           var html = element.html();
-
+          console.log('html', html);
           // remove html for plain
           if (attrs.htmlformat === 'plain') {
             html=html.replace(/<br>/gi, '');
@@ -90,6 +92,6 @@ angular.module('mean.datasets')
     };
   }]
 )
-
+*/
 
 ;

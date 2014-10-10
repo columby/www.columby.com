@@ -49,9 +49,7 @@ angular.module('mean.columby')
       $rootScope.user = window.user;
       if ($rootScope.user && $rootScope.user.accounts && $rootScope.user.accounts[0]) {
         $rootScope.selectedAccount = $rootScope.user.accounts[0];
-        console.log('selected account', $rootScope.selectedAccount);
       }
-
 
       if ($rootScope.user.isAuthenticated){
         toaster.pop('success', 'Welcome', 'Welcome back ' + $rootScope.user.email);

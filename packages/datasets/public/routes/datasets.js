@@ -24,6 +24,16 @@ angular.module('mean.datasets').config(['$stateProvider',
         templateUrl: 'datasets/views/view.html',
       })
 
+      .state('dataset.edit', {
+        url: '/d/:datasetId/edit',
+        templateUrl: 'datasets/views/view.html',
+        authorization: {
+          authorizedRoles: ['authenticated']
+        },
+        data: {
+          editMode: true
+        }
+      })
     ;
   }
 ]);

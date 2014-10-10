@@ -6,15 +6,15 @@
       <button
         ng-show="dataset._id"
 				class="btn dbt-default"
-				ng-click="exitEditmode()">Return to dataset</button>
+				ng-click="exitEditmode()">Exit edit mode</button>
       <button
-        class="btn dbt-default"
+        class="btn dbt-default btn-large"
         ng-show="contentEdited && dataset._id"
         ng-click="update()">Update</button>
       <button
         class="btn dbt-default create"
         ng-show="!dataset._id"
-        ng-click="create()">Create</button>
+        ng-click="create()">Publish</button>
 
 
       <!--
@@ -30,17 +30,7 @@
       <h3>Publication settings<button class="right btn-xs btn-tooltip" popover="Change visibility settings for your dataset." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3>
 			<div class="sidebarModule">
 
-	      <div class="status setting">
-	        <label class="left">Status</label>
-	        <span class="right">{{dataset.publicationStatus}}</span>
-	      </div>
-
-        <button
-          ng-show="dataset.publicationStatus !== 'published' && dataset._id"
-          ng-click="publishDataset()"
-          class="btn btn-default publish">Publish!</button>
-
-	      <div class="visibility setting" ng-show="dataset.publicationStatus === 'published'">
+	      <div class="visibility setting" ng-show="dataset._id">
 	        <label class="left">Visiblity</label>
 	        <!-- <ul class="list-inline right"> -->
 	          <!-- <li> -->
@@ -81,15 +71,14 @@
               class="btn btn-xs btn-default"
               ng-click="updateSlug()"
               placeholder="dataset-name"
-              ng-show="slugForm.$valid">update slug</button>
+              ng-show="slugForm.$valid">update url</button>
           </div>
         </form>
-
       </div>
 
-      <h3>Publication account<button class="right btn-xs btn-tooltip" popover="Select the account you want to publish with." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3>
+      <!-- <h3>Publication account<button class="right btn-xs btn-tooltip" popover="Select the account you want to publish with." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3>
       <img src="{{$root.selectedAccount.avatar.url}}"/>
-      <a ui-sref="account.view({slug:dataset.account.slug})">{{$root.selectedAccount.name}}</a>
+      <a ui-sref="account.view({slug:dataset.account.slug})">{{$root.selectedAccount.name}}</a> -->
 
     </div>
   </div>
@@ -101,14 +90,14 @@
 
         <!-- Editable title -->
         <div class="title" ng-switch="editMode">
-          <h1 ng-switch-default ng-bind-html="dataset.title || 'no title yet'"></h1>
-          <h1 ng-switch-when="true"
-            class="focussed"
-            contenteditable
+          <h1 ng-switch-default ng-bind-html="dataset.title || 'No title yet'"></h1>
+          
+          <br><br><br><input ng-switch-when="true"
+            type="text"
             name="title"
-            ng-model="dataset.title"
-            htmlFormat="plain">
-          </h1>
+            ng-model="dataset.titleUpdate"
+            ng-blur="updateTitle()"
+            />
           <h2 class="page-subtitle">dataset</h2>
         </div>
 
@@ -116,8 +105,7 @@
         <div class="meta" ng-show="dataset._id">
           <p>A dataset by
             <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name}}</a>,
-            <span class="published" ng-show="dataset.publishedAt">published on <time class="post-date">{{dataset.publishedAt | date:'d MMMM yyyy'}}</time></span>
-            <span class="unpublished" ng-hide="dataset.publishedAt">not yet published.</span>
+            <span class="published">created on <time class="post-date">{{dataset.createdAt | date:'d MMMM yyyy'}}</time></span>
           </p>
         </div>
 
@@ -131,7 +119,7 @@
 
         <!-- Editable avatar -->
         <div class="avatar">
-          <img src="{{dataset.account.avatar.url || $root.selectedAccount.avatar.url}}"/>
+          <img src="{{$root.selectedAccount.avatar.url}}"/>
         </div>
       </div>
     </div>
@@ -145,8 +133,7 @@
           <div
             ng-switch-when = "true">
             <div
-              ng-model = "dataset.descriptionUpdate"
-              ng-blur = "updateDescription()"
+              ng-model = "dataset.description"
               text-angular
               ta-default-wrap='p'
               ta-toolbar = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"

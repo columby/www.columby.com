@@ -129,24 +129,25 @@ exports.verify = function(req,res,next) {
       });
 
       // fetch user and login
-      User.findOne({_id:t.user}, function(err,user){
+      User
+        .findById(t.user)
+        .populate('accounts')
+        .exec(function(err,user){
 
-        // Create a new JWT
-        var expires = moment().add(7, 'days').valueOf();
+          // Create a new JWT
+          var expires = moment().add(7, 'days').valueOf();
 
-				var token = jwt.encode({
+				  var token = jwt.encode({
 						iss: user._id,
 						exp: expires
-            },
-					  config.jwt.secret
-				);
+            }, config.jwt.secret);
 
-        return res.json({
-          status: 'success',
-          user: user,
-          token : token,
-          expires : expires
-        });
+          return res.json({
+            status: 'success',
+            user: user,
+            token : token,
+            expires : expires
+          });
       });
     }
   });
@@ -188,7 +189,17 @@ exports.create = function(req, res, next) {
 
     user.save(function(err) {
       if (err) {
-        res.json({ status: 'error', err: err });
+        console.log(err);
+        var e;
+        if (err.errors.email) {
+          e = err.errors.email.message;
+        }
+        res.json({
+          status: 'error',
+          error: {
+            msg: e
+          }
+        });
       } else {
 
         console.log('Creating token');

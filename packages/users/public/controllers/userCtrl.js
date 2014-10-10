@@ -35,6 +35,7 @@ angular.module('mean.users')
           account: AuthSrv.user(),
           isAuthenticated: AuthSrv.isAuthenticated()
         };
+        $rootScope.selectedAccount = $rootScope.user.account.accounts[0];
         $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, response.user);
         console.log('Logged in.');
         toaster.pop('success', 'success', 'You have succesfully signed in.');
@@ -59,13 +60,12 @@ angular.module('mean.users')
 
     AuthSrv.login(credentials).then(function(response){
       $scope.loginInProgress = false;
-      console.log(response);
+
       if (response.status === 'success') {
         $scope.signinSuccess = true;
 
       } else if (response.error === 'User not found') {
-
-        $scope.loginError = 'The email address ' + credentials.email + ' does not exist. Would you like to register for a new account?';
+        toaster.pop('warning', 'Signin error', 'The email address ' + credentials.email + ' does not exist. Would you like to register for a new account?');
         $scope.showRegister = true;
         $scope.newuser={};
         $scope.newuser.email = $scope.credentials.email;
@@ -86,14 +86,13 @@ angular.module('mean.users')
   $scope.register = function(){
     localStorage.removeItem('auth_token');
     $scope.registrationInProgress = true;
-    $scope.loginError = null;
     AuthSrv.register($scope.newuser).then(function(response){
       console.log('register response', response);
+      $scope.registrationInProgress = false;
       if (response.status === 'error') {
-        $scope.registrationError = response.err[0].msg;
+        toaster.pop('warning', 'Registration error', 'There was an error registering: ' + response.error.msg);
       } else {
         $scope.registrationSuccess = true;
-        $scope.registrationInProgress = false;
       }
     });
   };

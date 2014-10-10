@@ -23,7 +23,7 @@ var DatasetSchema = new Schema({
 
   title           : { type : String, trim: true },
   description     : { type : String, trim: true },
-  slug            : { type : String, unique: true },
+  slug            : { type : String },
 
   account         : { type: Schema.ObjectId, ref:  'Account' },
 
@@ -90,6 +90,7 @@ DatasetSchema.path('title').validate(function(title) {
 
 function uniqueFieldInsensitive(modelName,field) {
   return function(val, cb){
+    console.log('val', val);
     if (val && val.length) { // if string not empty/null
       var query = mongoose.models[modelName]
         // lookup the collection for somthing that looks like this field
@@ -102,8 +103,9 @@ function uniqueFieldInsensitive(modelName,field) {
         // false when validation fails
         cb( n < 1 );
       });
-    } else { // raise error of unique if empty // may be confusing, but is rightful
-      cb(false);
+    } else {
+      // null is allowed.
+      cb(true);
     }
   };
 }

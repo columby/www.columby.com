@@ -13,8 +13,8 @@ angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$st
 angular.module('mean.datasets')
 
 .controller('DatasetViewCtrl', [
-  '$rootScope', '$scope', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster', 'Slug', 'ngDialog','EmbedlySrv',
-  function($rootScope, $scope, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, MetabarSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv) {
+  '$rootScope', '$scope', '$location', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster', 'Slug', 'ngDialog','EmbedlySrv',
+  function($rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, MetabarSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv) {
 
     /***   INITIALISATION   ***/
     //var editWatcher;               // Watch for model changes in editmode
@@ -22,11 +22,10 @@ angular.module('mean.datasets')
     $scope.editMode = false;       // edit mode is on or off
     $scope.contentEdited = false;  // models is changed or not during editmode
 
-    // check if request is for edit mode
-    if ($state.current.data && $state.current.data.editMode) {
+    // check edit mode
+    if ($location.path().split('/')[3] === 'edit') {
       $scope.editMode = true;
     }
-
 
     /***   FUNCTIONS   ***/
     function getDataset(){
@@ -34,7 +33,13 @@ angular.module('mean.datasets')
       DatasetSrv.get({
         datasetId: $stateParams.datasetId
       }, function(dataset) {
-        console.log(dataset.account.avatar);
+
+        // set the avatar
+        if (!dataset.account.avatar) {
+          dataset.account.avatar = $rootScope.selectedAccount.avatar.url;
+        }
+        console.log('dataset', dataset);
+
         // add acquired dataset to the scope
         $scope.dataset = dataset;
 
@@ -48,10 +53,23 @@ angular.module('mean.datasets')
           });
         }
 
+        // remove editmode
+        // console.log($stateParams);
+        // if ($stateParams.datasetId && $stateParams.editMode === 'true') {
+        //   $state.transitionTo ('dataset.view', { datasetId: dataset._id}, {
+        //     location: true,
+        //     inherit: false,
+        //     relative: $state.$current,
+        //     notify: false
+        //   });
+        // }
+
         $scope.contentLoading = false;
 
-        if (!$scope.dataset.draft){
-          $scope.dataset.draft={};
+        if ($scope.editMode){
+          // set draft title and description
+          $scope.dataset.titleUpdate = $scope.dataset.title;
+          $scope.dataset.descriptionUpdate = $scope.dataset.description;
         }
 
         // create summary
@@ -66,7 +84,10 @@ angular.module('mean.datasets')
         }
         $scope.summary = summary + '</p>';
 
-        $scope.dataset.canEdit = (dataset.account._id === $rootScope.selectedAccount._id);
+        $scope.dataset.canEdit = false;
+        if ($rootScope.selectedAccount && (dataset.account._id === $rootScope.selectedAccount._id)){
+          $scope.dataset.canEdit = true;
+        }
 
         $scope.dataset.descriptionUpdate = $scope.dataset.description;
       });
@@ -74,9 +95,12 @@ angular.module('mean.datasets')
 
     function initiateNewDataset(){
       $scope.dataset = {
-        title: 'New title',
-        description: '<p>Description</p>',
-        publicationStatus: 'draft',
+        title             : 'New title',
+        description       : '<p>Add a nice description for your publication. </p>',
+        visibilityStatus  : 'private',
+        avatar :{
+          url               : 'columby/assets/img/avatar.png'
+        },
         draft:{},
         account: $rootScope.selectedAccount._id
       };
@@ -89,6 +113,7 @@ angular.module('mean.datasets')
         $scope.editMode = mode;
         // watch title change
         $scope.$watch('dataset.title', function(newVal, oldVal) {
+          console.log('n ' + newVal + ' - old ' + oldVal);
           if (newVal !== oldVal){
             var dataset = {
               _id: $scope.dataset._id,
@@ -116,13 +141,35 @@ angular.module('mean.datasets')
 
     /*** Editmode functions */
     $scope.enterEditmode = function(){
-      toggleEditMode(true);
+      //toggleEditMode(true);
+      $state.go('dataset.edit', {datasetId: $scope.dataset._id});
     };
     $scope.exitEditmode = function(){
-      toggleEditMode(false);
+      //toggleEditMode(false);
+      $state.go('dataset.view', {datasetId: $scope.dataset._id});
     };
 
     /* dataset functions */
+    $scope.updateTitle = function() {
+      if ($scope.dataset.titleUpdate !== $scope.dataset.title) {
+
+        var dataset = {
+          _id: $scope.dataset._id,
+          title: $scope.dataset.titleUpdate,
+        };
+        console.log('updating dataset title', dataset);
+
+        DatasetSrv.update({datasetId:dataset._id},dataset,function(res){
+          if (res._id){
+            $scope.dataset.titleUpdate = res.title;
+            toaster.pop('success', 'Updated', 'Dataset title updated.');
+          }
+        });
+      } else {
+        console.log('Dataset title did not change.');
+      }
+    };
+
     $scope.updateDescription = function() {
       if ($scope.dataset.descriptionUpdate !== $scope.dataset.description) {
         var dataset = {
@@ -158,9 +205,10 @@ angular.module('mean.datasets')
 
     $scope.create = function(){
       DatasetSrv.save($scope.dataset, function(res){
+        console.log('create',res);
         if (res._id) {
           toaster.pop('success', 'Created', 'Dataset created.');
-          $state.go('dataset.view', {datasetId:res._id});
+          $state.go('dataset.edit', {datasetId:res._id, editMode:true});
         }
       });
     };
@@ -374,7 +422,8 @@ angular.module('mean.datasets')
 
 
     /* --------- INIT ------------------------------------------------------------------------ */
-    if (!$scope.editMode) {
+    if ($stateParams.datasetId) {
+      console.log('fetch dataset');
       getDataset();
     } else {
       initiateNewDataset();
