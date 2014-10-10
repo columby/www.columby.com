@@ -24,7 +24,8 @@
         "bower_components/angularjs-toaster/toaster.js",
         "bower_components/angular-loading-bar/build/loading-bar.js",
         "bower_components/ngDialog/js/ngDialog.js",
-        "bower_components/angular-slugify/angular-slugify.js"
+        "bower_components/angular-slugify/angular-slugify.js",
+        "bower_components/elasticsearch/elasticsearch.angular.js"
       ]
     }
   }

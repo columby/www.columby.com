@@ -1,10 +1,17 @@
 README: columby
 
-#Elasticsearch
-## Local
+# Elasticsearch
+
+## Installation
+### Local
 Installation
     brew install elasticsearch
 Starting elasticsearch
     elasticsearch --config=/usr/local/opt/elasticsearch/config/elasticsearch.yml
-    
-## Production
+add to /usr/local/opt/elasticsearch/config/elasticsearch.yml :
+    http.cors.allow-headers: Authorization, Content-Type
+
+
+### Production
+
+## Configuration

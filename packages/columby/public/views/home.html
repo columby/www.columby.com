@@ -12,11 +12,22 @@
       <div class="searchbox">
         <input
           type="text"
-          ng-model="searchTerm"
+          ng-model="search.searchTerm"
           placeholder="Search datasets"
           class="input-large"
           ng-change="search()">
       </div>
+
+      <!-- Search result -->
+      <div class="col-md-12 results">
+        <div class="no-results" ng-hide="search.hits.length">No results</div>
+        <div class="result" ng-repeat="result in search.hits" ng-cloak>
+          <h2><a ui-sref="dataset.view({datasetId: result._id})">{{result._source.title}}</a></h2>
+        </div>
+      </div>
+
+
+
 
       <div class="recent-publications col-md-12">
         <h3>Recently published</h2>

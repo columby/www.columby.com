@@ -63,16 +63,64 @@ angular.module('mean.columby')
    *
    ***/
   .controller('ColumbyHomeCtrl',
-    function($scope, $rootScope, $location, $state, toaster, AUTH_EVENTS, AuthSrv, DatasetSrv) {
+    function($scope, $rootScope, $location, $state, toaster, AUTH_EVENTS, AuthSrv, DatasetSrv, elasticsearchSrv) {
 
+    /* ---------- SETUP ----------------------------------------------------------------------------- */
     angular.element('body').addClass('contentLoading');
     $scope.contentLoading = true;
 
-    DatasetSrv.query(function(response){
-      $scope.datasets = response;
-      $scope.contentLoading = false;
-      angular.element('body').removeClass('contentLoading');
+
+    // initiate elastic search ??
+    elasticsearchSrv.cluster.state({
+        metric: [
+          'cluster_name',
+          'nodes',
+          'master_node',
+          'version'
+        ]
+      })
+      .then(function (resp) {
+        console.log(resp);
+        $scope.clusterState = resp;
+        $scope.error = null;
+      })
+      .catch(function (err) {
+        $scope.clusterState = null;
+        $scope.error = err;
+        console.log(err);
     });
+
+    /* ---------- FUNCTIONS ------------------------------------------------------------------- */
+    function listDatasets() {
+      DatasetSrv.query(function(response){
+        $scope.datasets = response;
+        $scope.contentLoading = false;
+        angular.element('body').removeClass('contentLoading');
+      });
+    }
+
+
+    /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
+    $scope.search = function(){
+      console.log('search: ', $scope.search.searchTerm);
+      elasticsearchSrv.search({
+        index: 'datasets',
+        size: 50,
+        body: {
+          'query': {
+            'match': {
+              '_all': String($scope.search.searchTerm)
+            }
+          }
+        }
+      }).then(function (response) {
+        $scope.search.hits = response.hits.hits;
+      });
+    };
+
+    /* ---------- INIT ------------------------------------------------------------------- */
+    listDatasets();
+
   })
 
 

@@ -68,7 +68,8 @@ var DatasetSchema = new Schema({
 
 // Elasticsearch
 var url               = require('url');
-var elasticConnection = url.parse(process.env.BONSAI_URL || config.elasticsearch.url);
+var elasticConnection = url.parse(config.elasticsearch.url);
+console.log('elasticsearch conn', elasticConnection);
 
 DatasetSchema.plugin(mongoosastic, {
   host:elasticConnection.hostname,
@@ -150,13 +151,14 @@ DatasetSchema.statics.load = function(id, cb) {
     });
 };
 
-mongoose.model('Dataset', DatasetSchema);
+var Dataset = mongoose.model('Dataset', DatasetSchema);
 
-/*
+
 var stream = Dataset.synchronize();
 var count = 0;
 
 stream.on('data', function(err, doc){
+  console.log('doc', doc);
   count++;
 });
 stream.on('close', function(){
@@ -165,4 +167,3 @@ stream.on('close', function(){
 stream.on('error', function(err){
   console.log(err);
 });
-*/
