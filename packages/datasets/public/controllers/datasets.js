@@ -81,7 +81,7 @@ angular.module('mean.datasets')
 
     function initiateNewDataset(){
       $scope.dataset = {
-        title             : 'New title',
+        title             : '',
         description       : '<p>Add a nice description for your publication. </p>',
         visibilityStatus  : 'private',
         avatar :{

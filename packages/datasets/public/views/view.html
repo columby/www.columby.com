@@ -1,5 +1,16 @@
 <div class="dataset view" ng-controller="DatasetViewCtrl">
 
+  <!-- edit/meta/context bar -->
+  <div class="editbar">
+    <!-- Edit dataset -->
+    <div class="actions" ng-show="dataset.canEdit && !editMode">
+      <button
+        type="button"
+        class="btn btn-default"
+        ng-click="enterEditmode()">edit</button>
+    </div>
+  </div>
+
   <!-- Editor Sidebar -->
   <div class="editorSidebar" ng-show="editMode">
     <div class="editorSidebarContent">
@@ -80,6 +91,7 @@
     </div>
   </div>
 
+  <!-- Main dataset Content -->
   <div class="content" ng-class="{show:!contentLoading}">
 
     <div class="header wrapper">
@@ -106,14 +118,6 @@
             <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name}}</a>,
             <span class="published">created on <time class="post-date">{{dataset.createdAt | date:'d MMMM yyyy'}}</time></span>
           </p>
-        </div>
-
-        <!-- Edit dataset -->
-        <div class="actions" ng-show="dataset.canEdit && !editMode">
-          <button
-            type="button"
-            class="btn btn-default btn-xs"
-            ng-click="enterEditmode()">edit</button>
         </div>
 
         <!-- Editable avatar -->
