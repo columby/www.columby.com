@@ -3,7 +3,10 @@
 angular.module('mean.columby')
 
   // Check permission to view the page.
-  .run(function ($rootScope) {
+  .run(function ($rootScope, configuration) {
+
+    // Add configuration to the rootScope
+    $rootScope.configuration = configuration;
 
     $rootScope.$on('$stateChangeStart', function (event, next) {
       angular.element('body').addClass('isLoading');
@@ -63,12 +66,10 @@ angular.module('mean.columby')
    *
    ***/
   .controller('ColumbyHomeCtrl',
-    function($scope, $rootScope, $location, $state, toaster, AUTH_EVENTS, AuthSrv, DatasetSrv, elasticsearchSrv) {
+    function($scope, $rootScope, $location, $state, configuration, toaster, AUTH_EVENTS, AuthSrv, DatasetSrv, elasticsearchSrv) {
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
-    angular.element('body').addClass('contentLoading');
     $scope.contentLoading = true;
-
 
     // initiate elastic search ??
     elasticsearchSrv.cluster.state({

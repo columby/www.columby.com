@@ -1,8 +1,13 @@
 'use strict';
 
 //Setting up route
-angular.module('mean.system').config(['$stateProvider', '$urlRouterProvider',
-  function($stateProvider, $urlRouterProvider) {
+angular.module('mean.system')
+
+.config(['$locationProvider', '$stateProvider', '$urlRouterProvider',
+  function($locationProvider, $stateProvider, $urlRouterProvider) {
+
+    $locationProvider.hashPrefix('!');
+
     // For unmatched routes:
     $urlRouterProvider.otherwise('/');
 
@@ -15,8 +20,6 @@ angular.module('mean.system').config(['$stateProvider', '$urlRouterProvider',
       });
     */
   }
-]).config(['$locationProvider',
-  function($locationProvider) {
-    $locationProvider.hashPrefix('!');
-  }
-]);
+])
+
+;

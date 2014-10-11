@@ -1,0 +1,8 @@
+{
+  "AWS_ACCESS_KEY_ID" : "AKIAIERE7X62EYZM23HA",
+  "S3_BUCKET_NAME"    : "columby-dev",
+  "AWS_S3_ENDPOINT"   : "columby-dev.s3-us-west-2.amazonaws.com",
+
+  "ELASTICSEARCH_URL" : "http://localhost:9201",
+  "ELASTICSEARCH_LOG" : "trace"
+}

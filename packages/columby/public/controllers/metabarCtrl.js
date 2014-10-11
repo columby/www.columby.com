@@ -6,8 +6,8 @@ angular.module('mean.columby')
  * Controller for the metabar
  *
  ***/
-.controller('MetabarController', ['$rootScope', '$scope', 'Global', 'Columby', 'MetabarSrv',
-  function($rootScope, $scope, Global, Columby, MetabarSrv) {
+.controller('MetabarController', ['$rootScope', '$scope', 'Columby', 'MetabarSrv',
+  function($rootScope, $scope, Columby, MetabarSrv) {
 
     /*** INITIALISATION ***/
     $scope.editMode=false;

@@ -56,6 +56,23 @@ module.exports = function(grunt) {
         files: '<%= assets.core.js %>'
       }
     },
+
+    replace: {
+      development: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('config/public/env/development.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['config/public/config.js'],
+          dest: 'packages/system/public/config/'
+        }]
+      }
+    },
+
     csslint: {
       options: {
         csslintrc: '.csslintrc'
@@ -112,12 +129,13 @@ module.exports = function(grunt) {
 
   //Load NPM tasks
   require('load-grunt-tasks')(grunt);
+  //require('grunt-replace')(grunt);
 
   //Default task(s).
   if (process.env.NODE_ENV === 'production') {
-    grunt.registerTask('default', ['clean', 'cssmin', 'uglify', 'concurrent']);
+    grunt.registerTask('default', ['clean', 'cssmin', 'uglify', 'concurrent', 'replace:production']);
   } else {
-    grunt.registerTask('default', ['clean', 'jshint', 'csslint', 'concurrent']);
+    grunt.registerTask('default', ['replace:development', 'clean', 'jshint', 'csslint', 'concurrent']);
   }
 
   //Test task.

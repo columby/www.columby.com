@@ -12,9 +12,10 @@ angular.element(document).ready(function() {
   // Get user
   window.user={};
   var xmlHttp;
+  // get token from localstorage
   var token = JSON.parse(localStorage.getItem('auth_token'));
   if (token){
-    // console.log('init, token found', token);
+    // Request user object from server based on token
     xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange=function() {
       if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
@@ -24,8 +25,9 @@ angular.element(document).ready(function() {
         } else {
           response.authenticated = false;
         }
+        // attach user object to window so client can use it.
         window.user = response;
-
+        // initiate the client app
         initApp();
       }
     };
@@ -33,6 +35,7 @@ angular.element(document).ready(function() {
     xmlHttp.setRequestHeader('Authorization', 'Bearer ' + token);
     xmlHttp.send( null );
   } else {
+    // No token found, initiate the app with anonymous user. 
     initApp();
   }
 });
@@ -45,7 +48,7 @@ for (var index in window.modules) {
 }
 
 // Default modules
-var modules = ['ngCookies', 'ngResource', 'ngSanitize','ui.bootstrap', 'ui.router', 'ngAnimate', 'toaster', 'angular-loading-bar'];
+var modules = ['ngCookies', 'ngResource', 'ngSanitize','ui.bootstrap', 'ui.router', 'ngAnimate', 'toaster', 'angular-loading-bar', 'slugifier'];
 modules = modules.concat(packageModules);
 
 // Combined modules
