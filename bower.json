@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "dependencies": {
     "jquery": "1.x",
-    "angular": "latest",
+    "angular": "~1.2.26",
     "angular-animate": "latest",
     "angular-resource": "latest",
     "angular-cookies": "latest",
@@ -21,6 +21,9 @@
     "angular-loading-bar": "~0.6.0",
     "ngDialog": "~0.3.0",
     "angular-slugify": "~1.0.0",
-    "elasticsearch": "~2.4.3"
+    "elasticsearch": "~2.4.3",
+  },
+  "resolutions": {
+    "angular": "~1.2.26"
   }
 }
