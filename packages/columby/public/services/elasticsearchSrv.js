@@ -2,14 +2,31 @@
 
 angular.module('mean.columby')
 
-.factory('elasticsearchSrv', ['esFactory','configuration', function(esFactory,configuration) {
-    // this will actually create a "Client"-Instance which you can configure as you wish.
-    console.log('conf',configuration);
+.factory('SearchSrv', ['$http', '$q', function($http, $q) {
 
-    return esFactory({
-      host          : configuration.elasticsearch.host,
-      sniffOnStart  : true,
-      sniffInterval : 300000,
-      log           : 'trace'
-    });
+
+  function handleSuccess( response ) {
+    console.log(response);
+    return( response.data );
+  }
+
+  function handleError( response ) {
+    console.log(response);
+    return( $q.reject( response.data.error_message ) );
+  }
+
+  return {
+    query: function(query){
+      console.log('query',query);
+
+      var request = $http({
+        method: 'get',
+        url: 'api/v2/search',
+        params: {query: query}
+      });
+
+      return( request.then( handleSuccess, handleError ) );
+    }
+  };
+
 }]);

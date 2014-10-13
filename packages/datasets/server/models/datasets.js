@@ -7,7 +7,8 @@ var mean = require('meanio'),
     config = mean.loadConfig(),
     mongoose = require('mongoose'),
     mongoosastic = require('mongoosastic'),
-    Schema = mongoose.Schema
+    Schema = mongoose.Schema,
+    url    = require('url')
 ;
 
 
@@ -66,21 +67,6 @@ var DatasetSchema = new Schema({
 
 
 
-// Elasticsearch
-var url               = require('url');
-var elasticConnection = url.parse(config.elasticsearch.url);
-console.log('elasticsearch conn', elasticConnection);
-
-DatasetSchema.plugin(mongoosastic, {
-  host:elasticConnection.hostname,
-  curlDebug:true,
-  auth: elasticConnection.auth,
-  port: elasticConnection.port,
-  protocol: elasticConnection.protocol === 'https:' ? 'https' : 'http'
-});
-
-
-
 /**
  * Validations
  */
@@ -91,7 +77,6 @@ DatasetSchema.path('title').validate(function(title) {
 
 function uniqueFieldInsensitive(modelName,field) {
   return function(val, cb){
-    console.log('val', val);
     if (val && val.length) { // if string not empty/null
       var query = mongoose.models[modelName]
         // lookup the collection for somthing that looks like this field
@@ -151,7 +136,19 @@ DatasetSchema.statics.load = function(id, cb) {
     });
 };
 
+// Elasticsearch
+var connectionString = url.parse(config.elasticsearch.host);
+console.log('datasetmodel', connectionString);
+
+DatasetSchema.plugin(mongoosastic, {
+  host      : connectionString.hostname,
+  curlDebug : true,
+  port      : connectionString.port,
+  protocol  : connectionString.protocol === 'https:' ? 'https' : 'http'
+});
+
 var Dataset = mongoose.model('Dataset', DatasetSchema);
+console.log(Dataset);
 
 
 var stream = Dataset.synchronize();

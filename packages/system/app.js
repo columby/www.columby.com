@@ -30,6 +30,6 @@ System.register(function(app, auth, database) {
 
   // Adding robots and humans txt
   app.use(express.static(__dirname + '/public/assets/static'));
-
+  
   return System;
 });

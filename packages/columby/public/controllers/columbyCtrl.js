@@ -65,38 +65,19 @@ angular.module('mean.columby')
    * Controller for the Home page
    *
    ***/
-  .controller('ColumbyHomeCtrl',
-    function($scope, $rootScope, $location, $state, configuration, toaster, AUTH_EVENTS, AuthSrv, DatasetSrv, elasticsearchSrv) {
+  .controller('ColumbyHomeCtrl', ['$rootScope', '$scope', 'toaster', 'DatasetSrv', 'SearchSrv',
+    function($rootScope, $scope, toaster, DatasetSrv, SearchSrv) {
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading = true;
+    $scope.search = '';
 
-    // initiate elastic search ??
-    elasticsearchSrv.cluster.state({
-        metric: [
-          'cluster_name',
-          'nodes',
-          'master_node',
-          'version'
-        ]
-      })
-      .then(function (resp) {
-        console.log(resp);
-        $scope.clusterState = resp;
-        $scope.error = null;
-      })
-      .catch(function (err) {
-        $scope.clusterState = null;
-        $scope.error = err;
-        console.log(err);
-    });
-
-    /* ---------- FUNCTIONS ------------------------------------------------------------------- */
+    /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
     function listDatasets() {
+      console.log('listing datasets');
       DatasetSrv.query(function(response){
         $scope.datasets = response;
         $scope.contentLoading = false;
-        angular.element('body').removeClass('contentLoading');
       });
     }
 
@@ -104,7 +85,7 @@ angular.module('mean.columby')
     /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
     $scope.search = function(){
       console.log('search: ', $scope.search.searchTerm);
-      elasticsearchSrv.search({
+      SearchSrv.query({
         index: 'datasets',
         size: 50,
         body: {
@@ -115,14 +96,15 @@ angular.module('mean.columby')
           }
         }
       }).then(function (response) {
+        console.log('re', response);
         $scope.search.hits = response.hits.hits;
       });
     };
 
-    /* ---------- INIT ------------------------------------------------------------------- */
+    /* ---------- INIT ---------------------------------------------------------------------------- */
     listDatasets();
 
-  })
+  }])
 
 
 

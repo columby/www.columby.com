@@ -70,6 +70,19 @@ module.exports = function(grunt) {
           src: ['config/public/config.js'],
           dest: 'packages/system/public/config/'
         }]
+      },
+      production: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('config/public/env/production.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['config/public/config.js'],
+          dest: 'packages/system/public/config/'
+        }]
       }
     },
 
