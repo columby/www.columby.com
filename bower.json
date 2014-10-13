@@ -4,12 +4,11 @@
   "dependencies": {
     "jquery": "1.x",
     "angular": "~1.2.26",
-    "angular-animate": "latest",
-    "angular-resource": "latest",
-    "angular-cookies": "latest",
-    "angular-mocks": "latest",
-    "angular-route": "latest",
-    "angular-sanitize": "latest",
+    "angular-animate": "~1.2.26",
+    "angular-resource": "~1.2.26",
+    "angular-mocks": "~1.2.26",
+    "angular-route": "~1.2.26",
+    "angular-sanitize": "~1.2.26",
     "bootstrap": "3.1.1",
     "angular-bootstrap": "0.11.0",
     "angular-ui-router": "#master",
@@ -21,7 +20,7 @@
     "angular-loading-bar": "~0.6.0",
     "ngDialog": "~0.3.0",
     "angular-slugify": "~1.0.0",
-    "elasticsearch": "~2.4.3",
+    "elasticsearch": "~2.4.3"
   },
   "resolutions": {
     "angular": "~1.2.26"
