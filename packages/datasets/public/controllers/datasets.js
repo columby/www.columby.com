@@ -387,7 +387,7 @@ angular.module('mean.datasets')
           $scope.visibilityStatusMessage = 'updated';
           if (res._id){
             $scope.dataset.visibilityStatus = status;
-            toaster.pop('success', 'Updated', 'Dataset visibility status updated to  ' + status);
+            toaster.pop('success', null, 'Dataset visibility status updated to  ' + status);
           }
         });
       }

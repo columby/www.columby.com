@@ -93,17 +93,18 @@
       <div class="container">
 
         <!-- Editable title -->
-        <div class="title" ng-switch="editMode">
-          <h1 ng-switch-default ng-bind-html="dataset.title || 'No title yet'"></h1>
+        <div ng-switch="editMode">
+          <h1 class="title" ng-switch-default ng-bind-html="dataset.title || 'No title yet'"></h1>
 
-          <input ng-switch-when="true"
+          <textarea ng-switch-when="true"
             type        = "text"
             name        = "title"
             placeholder = "Your title"
             ng-model    = "dataset.titleUpdate"
             ng-blur     = "updateTitle()"
             focus       = "true"
-            />
+            class       = "title edit"
+            ></textarea>
           <h2 class="page-subtitle">dataset</h2>
         </div>
 
@@ -153,7 +154,7 @@
     </div>
 
     <!-- Dataset Info -->
-    <div class="info wrapper">
+    <div class="info wrapper" style="display:none;">
       <div class="container">
         <!-- <div class="content" ng-bind-html="summary"></div> -->
         <div class="content"><p>Dit is een voorbeeld van een data licentie regel die automatisch gegenereerd zal worden. Deze dataset heeft <span class="highlight">Licentie X.3.0</span>. De dataset bevat <span class="highlight">3</span> data distributions met in totaal <span class="highlight">351</span> rijen. Er zijn <span class="highlight">2</span> referenties.</p>
