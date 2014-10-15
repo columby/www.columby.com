@@ -22,10 +22,10 @@
         <button
           class    = "btn dbt-default options"
           ng-show  = "editMode"
-          ng-click = "showOptions()">Options
+          ng-click = "toggleOptions()">Options
         </button>
       </li>
-      
+
       <li>
         <button class="btn btn-default edit"
           type     = "button"
@@ -37,7 +37,7 @@
   </div>
 
   <!-- Editor Sidebar -->
-  <div class="editorSidebar" ng-show="editMode">
+  <div class="editorSidebar" ng-show="editMode && showOptions">
     <div class="editorSidebarContent">
       <div class="sidebarModule">
 	      <div class="visibility setting" ng-show="dataset._id">

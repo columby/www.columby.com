@@ -22,6 +22,7 @@ angular.module('mean.datasets')
     // check edit mode
     if ($location.path().split('/')[3] === 'edit') {
       $scope.editMode = true;
+      $scope.showOptions = false;
     }
 
     /***   FUNCTIONS   ***/
@@ -108,6 +109,10 @@ angular.module('mean.datasets')
       } else {
         $state.go('dataset.edit', {datasetId: $scope.dataset._id});
       }
+    };
+
+    $scope.toggleOptions = function(){
+      $scope.showOptions = !$scope.showOptions;
     };
 
     /* dataset functions */
