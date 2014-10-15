@@ -9,6 +9,13 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
       url:'/',
       templateUrl: 'columby/views/home.html',
     })
+    
+    .state('search', {
+      url:'/search',
+      templateUrl: 'columby/views/search.html',
+    })
+
+
 
     .state('terms', {
       url: '/terms',
@@ -19,7 +26,7 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
       url: '/about',
       templateUrl: 'columby/views/about.html',
     })
-    
+
     .state('features', {
       url: '/features',
       templateUrl: 'columby/views/features.html',

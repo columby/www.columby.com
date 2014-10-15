@@ -22,6 +22,7 @@ Columby.register(function(app, auth, database) {
   Columby.aggregateAsset('css','fontello/animation.css');
   Columby.aggregateAsset('css','columby.css');
   Columby.aggregateAsset('css','editor-sidebar.css');
+  Columby.aggregateAsset('css','search.css');
 
   Columby.angularDependencies(['elasticsearch', 'angular-loading-bar','ngAnimate', 'toaster', 'ngDialog']);
 
