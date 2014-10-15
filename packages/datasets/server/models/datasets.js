@@ -138,7 +138,6 @@ DatasetSchema.statics.load = function(id, cb) {
 
 // Elasticsearch
 var connectionString = url.parse(config.elasticsearch.host);
-console.log('datasetmodel', connectionString);
 
 DatasetSchema.plugin(mongoosastic, {
   host      : connectionString.hostname,
