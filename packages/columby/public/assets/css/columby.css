@@ -130,6 +130,7 @@ body .sitenav ul li .settings {
 body .sitenav .logo img {
   width: 180px;
   margin-bottom: 20px;
+  margin-left: 20px;
 }
 body .sitenav .stat-nav {
   width: 100%;

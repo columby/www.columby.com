@@ -27,10 +27,10 @@
     <div class="header wrapper" ng-style="headerStyle">
       <div class="container">
 
-        <div class="title" ng-switch="editMode">
+        <div ng-switch="editMode">
           <h1 ng-switch-default ng-bind-html="account.name || 'No name yet'"></h1>
           <textarea ng-switch-when="true"
-            class       = "input-noborder name"
+            class       = "input-noborder name title edit"
             type        = 'text'
             name        = "title"
             placeholder = 'Your account name'
