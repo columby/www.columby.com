@@ -3,13 +3,12 @@
   <div class="sitenav-content">
     <ul>
       <li>
-        <a ui-sref="home"><div class="logo"><img src="/columby/assets/img/logo-transparant-white.png"></div></a>
         <a ui-sref="home"><i class="fa fa-home"></i> Home</a>
         <a ui-sref="search" class="search"><i class="fa fa-search"></i></a>
       </li>
 
       <li ng-show="$root.user.isAuthenticated">
-        <a ui-sref="dataset.create" ng-class="{active: $state.includes('dataset.create')}">Create new dataset</a>
+        <a ui-sref="dataset.create" ng-class="{active: $state.includes('dataset.create')}">Publish new dataset</a>
       </li>
 
       <!-- <li ng-show="$root.user.isAuthenticated">
@@ -33,7 +32,7 @@
       </li>
       
       <li ng-hide="$root.user.isAuthenticated">
-        <a ui-sref='signin'>Login</a>
+        <a ui-sref='signin' class="highlight">Login or Signup</a>
       </li>
     </ul>
 
@@ -44,6 +43,7 @@
       <li><a ui-sref="features">Features &amp; Pricing</a></li>
       <li><a href="//columby.uservoice.com" target="_blank">Support</a></li>
     </ul>
+    <a ui-sref="home"><div class="logo"><img src="/columby/assets/img/logo-transparant-white.png"></div></a>
 		</div>
     <!-- <div class="logo"><img src="/columby/assets/img/logo-transparant-white.png"></div> -->
   </div>
