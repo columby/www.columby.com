@@ -24,6 +24,7 @@ Columby.register(function(app, auth, database) {
   Columby.aggregateAsset('css','editor-sidebar.css');
   Columby.aggregateAsset('css','search.css');
   Columby.aggregateAsset('css','notices.css');
+  Columby.aggregateAsset('css','elements.css');
 
   Columby.angularDependencies(['elasticsearch', 'angular-loading-bar','ngAnimate', 'toaster', 'ngDialog']);
 
