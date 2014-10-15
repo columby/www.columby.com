@@ -209,6 +209,32 @@ body .metabar-wrapper .logo:hover {
 body .metabar-wrapper .actions {
   text-align: right;
 }
+/*** ---- ACTIONS BAR ----------------------------- ***/
+.actions-bar {
+  position: absolute;
+  top: 0;
+  height: 60px;
+  z-index: 900;
+  padding: 20px;
+  right: 0;
+}
+.actions-bar button {
+  background: none;
+  border: 2px solid #fff;
+  color: #fff;
+  font-weight: bolder;
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  border-radius: 4px;
+  width: auto;
+  height: auto;
+}
 /*** ---- LOADING BAR ----------------------------- ***/
 .loadingBar {
   position: fixed;
