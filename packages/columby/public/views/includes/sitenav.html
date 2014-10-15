@@ -4,6 +4,7 @@
     <ul>
       <li>
         <a ui-sref="home"><i class="fa fa-home"></i> Home</a>
+        <a ui-sref="search" class="search"><i class="fa fa-search"></i></a>
       </li>
 
       <!--
@@ -20,6 +21,9 @@
         <a ui-sref="account.view({slug: $root.selectedAccount.slug})">
           <i class="fa fa-user"></i> {{$root.selectedAccount.name}}
         </a>
+        <span class="settings">
+          <a ui-sref='settings'><i class="fa fa-cog"></i></a>
+        </span>
       </li>
 
       <!-- Account switcher -->
@@ -27,12 +31,6 @@
         <div account-switcher
           accounts="$root.user.accounts">
         </div>
-      </li>
-
-      <li ng-show="$root.user.isAuthenticated">
-        <span class="settings">
-          <a ui-sref='settings'><i class="fa fa-cog"></i> Settings</a>
-        </span>
       </li>
 
       <li ng-hide="$root.user.isAuthenticated">
