@@ -23,6 +23,7 @@ Columby.register(function(app, auth, database) {
   Columby.aggregateAsset('css','columby.css');
   Columby.aggregateAsset('css','editor-sidebar.css');
   Columby.aggregateAsset('css','search.css');
+  Columby.aggregateAsset('css','notices.css');
 
   Columby.angularDependencies(['elasticsearch', 'angular-loading-bar','ngAnimate', 'toaster', 'ngDialog']);
 
