@@ -3,22 +3,20 @@
   <div class="sitenav-content">
     <ul>
       <li>
-        <a ui-sref="home"><i class="fa fa-home"></i> Home</a>
-      </li>
-
-      <!--
-      <li ng-show="global.authenticated">
-        <a ui-sref='my datasets'><i class="icon-home">:m:</i> My datasets</a>
-      </li>
-      -->
-
-      <li ng-show="$root.user.isAuthenticated">
-        <a ui-sref="dataset.create"><i class="fa fa-edit"></i> Publish dataset</a>
+        <a ui-sref="home"><div class="logo"><img src="/columby/assets/img/logo-transparant-white.png"></div></a>
       </li>
 
       <li ng-show="$root.user.isAuthenticated">
-        <a ui-sref="account.view({slug: $root.selectedAccount.slug})">
-          <i class="fa fa-user"></i> {{$root.selectedAccount.name}}
+        <a ui-sref="dataset.create" ng-class="{active: $state.includes('dataset.create')}">Create new dataset</a>
+      </li>
+			
+      <!-- <li ng-show="$root.user.isAuthenticated">
+        <a ui-sref='account.view({slug: $root.selectedAccount.slug})'>My datasets</a>
+      </li> -->
+
+      <li ng-show="$root.user.isAuthenticated">
+        <a ui-sref="account.view({slug: $root.selectedAccount.slug})" ng-class="{active: $state.includes(account.view}">
+         My profile<!-- {{$root.selectedAccount.name}} -->
         </a>
       </li>
 
@@ -31,7 +29,7 @@
 
       <li ng-show="$root.user.isAuthenticated">
         <span class="settings">
-          <a ui-sref='settings'><i class="fa fa-cog"></i> Settings</a>
+          <a ui-sref='settings' ng-class="{active: $state.includes('settings')}">Settings</a>
         </span>
       </li>
 
@@ -41,7 +39,14 @@
     </ul>
 
     <div uservoice></div>
-    <div class="logo"><img src="/columby/assets/img/logo-transparant-white.png"></div>
+		<div class="stat-nav">
+    <ul>
+      <li><a ui-sref="about">About Columby</a></li>
+      <li><a ui-sref="features">Features &amp; Pricing</a></li>
+      <li><a href="//columby.uservoice.com" target="_blank">Support</a></li>
+    </ul>
+		</div>
+    <!-- <div class="logo"><img src="/columby/assets/img/logo-transparant-white.png"></div> -->
   </div>
 
 
