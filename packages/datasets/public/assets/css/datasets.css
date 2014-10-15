@@ -1,3 +1,6 @@
+.dataset .editorSidebar {
+  top: 200px;
+}
 .ngdialog.ngdialog-theme-default {
   position: fixed;
   overflow: auto;

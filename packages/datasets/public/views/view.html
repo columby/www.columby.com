@@ -1,27 +1,44 @@
 <div class="dataset view" ng-controller="DatasetViewCtrl">
 
-  <div class="actions-bar" ng-show="dataset.canEdit && !editMode">
-    <button class="btn btn-default edit"
-      type="button"
-      ng-click="enterEditmode()">edit</button>
+  <div class="actions-bar" ng-show="dataset.canEdit">
+    <ul>
+      <li>
+        <button class="btn btn-default edit"
+          type     = "button"
+          ng-hide  = "editMode"
+          ng-click = "toggleEditmode()">Edit
+        </button>
+      </li>
+
+      <li>
+        <button
+          class    = "btn dbt-default create"
+          ng-show  = "!dataset._id"
+          ng-click = "create()">Publish
+        </button>
+      </li>
+
+      <li>
+        <button
+          class    = "btn dbt-default options"
+          ng-show  = "editMode"
+          ng-click = "showOptions()">Options
+        </button>
+      </li>
+      
+      <li>
+        <button class="btn btn-default edit"
+          type     = "button"
+          ng-show  = "editMode"
+          ng-click = "toggleEditmode()">Exit edit mode
+        </button>
+      </li>
+    </ul>
   </div>
 
   <!-- Editor Sidebar -->
   <div class="editorSidebar" ng-show="editMode">
     <div class="editorSidebarContent">
-      <!-- exit existing set -->
-      <button
-        ng-show="dataset._id"
-				class="btn dbt-default"
-				ng-click="exitEditmode()">Exit edit mode</button>
-
-      <!-- publish new dataset -->
-      <button
-        class="btn dbt-default create"
-        ng-show="!dataset._id"
-        ng-click="create()">Publish</button>
-
-
       <div class="sidebarModule">
 	      <div class="visibility setting" ng-show="dataset._id">
           <h3>Visibility

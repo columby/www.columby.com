@@ -102,13 +102,12 @@ angular.module('mean.datasets')
     /***   SCOPE FUNCTIONS   ***/
 
     /*** Editmode functions */
-    $scope.enterEditmode = function(){
-      //toggleEditMode(true);
-      $state.go('dataset.edit', {datasetId: $scope.dataset._id});
-    };
-    $scope.exitEditmode = function(){
-      //toggleEditMode(false);
-      $state.go('dataset.view', {datasetId: $scope.dataset._id});
+    $scope.toggleEditmode = function(){
+      if ($scope.editMode) {
+        $state.go('dataset.view', {datasetId: $scope.dataset._id});
+      } else {
+        $state.go('dataset.edit', {datasetId: $scope.dataset._id});
+      }
     };
 
     /* dataset functions */

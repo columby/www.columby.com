@@ -3,15 +3,15 @@ body.editorSidebarOpen .metabar-wrapper {
 }
 .editorSidebar {
   position: fixed;
-  top: 0;
+  top: 100px;
   right: 300px;
-  bottom: 0;
+  bottom: 100px;
   padding: 20px;
   width: 300px;
-  height: 100%;
   border-left: 1px solid #000;
   border-left: 1px solid rgba(0, 0, 0, 0.15);
   background-color: #333;
+  background-color: rgba(0, 0, 0, 0.8);
   color: #fff;
   z-index: 910;
   -webkit-box-sizing: border-box;
