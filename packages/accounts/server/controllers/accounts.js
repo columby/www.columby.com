@@ -30,29 +30,32 @@ exports.account = function(req, res) {
  * Update an account
  */
 exports.update = function(req, res) {
-  var id = req.body._id ;
-  var account = {
-    name: req.body.name,
-    description: req.body.description
-  };
-  var update = { $set: account };
 
-  Account.update({_id: id}, update, function(err, account){
-    if (err) return res.json({
-      status:'error',
-      err: err
-      });
-    if (account === 0) {
-      return res.json({
-        status: 'error',
-        error: 'No account updated',
-        err: err
+  Account.findOne({ slug: req.body.slug }, function (err, account){
+    if (err) {
+      console.log(err);
+    }
+    if (!account) {
+      console.log('no account');
+    }
+    if (account) {
+      if (req.body.name) { account.name   = req.body.name; }
+      if (req.body.description) { account.description   = req.body.description; }
+      account.updatedAt = new Date();
+
+      account.save(function(err){
+        if (err) {
+          return res.json({
+            status: 'error',
+            error: 'Error updating the account',
+            err: err
+
+          });
+        } else {
+          res.json(account);
+        }
       });
     }
-    return res.json({
-      status: 'success',
-      statusMessage: 'Account updated'
-    });
   });
 };
 

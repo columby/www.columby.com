@@ -1,16 +1,13 @@
 'use strict';
 
-angular.module('mean.datasets').controller('DatasetsController', ['$scope', '$state', 'Global', 'DatasetSrv',
-  function($scope, $state, Global, DatasetSrv) {
-    $scope.global = Global;
-    $scope.package = {
-      name: 'datasets'
-    };
-  }
-]);
-
-
 angular.module('mean.datasets')
+
+.controller('DatasetsController', ['$scope', '$state', 'DatasetSrv',
+  function($scope, $state, DatasetSrv) {
+
+  }
+])
+
 
 .controller('DatasetViewCtrl', [
   '$rootScope', '$scope', '$location', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster', 'Slug', 'ngDialog','EmbedlySrv',
@@ -90,6 +87,7 @@ angular.module('mean.datasets')
         draft:{},
         account: $rootScope.selectedAccount._id
       };
+      toaster.pop('notice',null,'Here\'s your new dataset!');
     }
 
     function toggleEditMode(mode){

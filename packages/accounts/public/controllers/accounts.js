@@ -28,9 +28,10 @@ angular.module('mean.accounts')
 
   /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
   function getAccount(){
+
     // get account information of user by userSlug
     AccountSrv.get({slug: $stateParams.slug}, function(result){
-
+      console.log(result);
       $scope.account = result.account;
       $scope.contentLoading = false;
 
@@ -77,17 +78,17 @@ angular.module('mean.accounts')
 
   /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
   /*** Editmode functions */
-  $scope.enterEditmode = function(){
-    //toggleEditMode(true);
-    $state.go('account.edit', {slug: $stateParams.slug});
-  };
-  $scope.exitEditmode = function(){
-    //toggleEditMode(false);
-    $state.go('account.view', {slug: $stateParams.slug});
+  $scope.toggleEditmode = function(){
+    if ($scope.editMode) {
+      $state.go('account.view', {slug: $stateParams.slug});
+    } else {
+      $state.go('account.edit', {slug: $stateParams.slug});
+    }
   };
 
 
   $scope.updateName = function() {
+    console.log('updating account name');
     if (!$scope.account._id) {
       console.log('Name changed, but not yet saved');
     } else {
@@ -95,17 +96,45 @@ angular.module('mean.accounts')
         console.log('Account saved, but no name change');
       } else {
         var account = {
-          _id: $scope.account._id,
-          name: $scope.dataset.nameUpdate,
+          slug: $scope.account.slug,
+          name: $scope.account.nameUpdate,
         };
         console.log('updating account name', account);
 
         AccountSrv.update(account, function(result){
+          console.log(result);
           if (result._id){
             $scope.account.nameUpdate = result.name;
             toaster.pop('success', null, 'Account name updated.');
           } else {
             toaster.pop('warning', null, 'There was an error updating the account name.');
+          }
+        });
+      }
+    }
+  };
+
+  $scope.updateDescription = function() {
+    console.log('updating description');
+    if (!$scope.account._id) {
+      console.log('Not yet saved');
+    } else {
+      console.log($scope.account.descriptionUpdate);
+      console.log($scope.account.description);
+      if ($scope.account.descriptionUpdate === $scope.account.description) {
+        console.log('No description change');
+      } else {
+        var account = {
+          slug        : $scope.account.slug,
+          _id         : $scope.account._id,
+          description : $scope.account.descriptionUpdate
+        };
+        AccountSrv.update(account, function(res){
+          if (res._id){
+            $scope.account.descriptionUpdate = res.description;
+            toaster.pop('success', null, 'Description updated.');
+          } else {
+            toaster.pop('warning', null, 'Error updating description.');
           }
         });
       }
@@ -143,7 +172,6 @@ angular.module('mean.accounts')
 
 
   /* ---------- INIT ----------------------------------------------------------------------------- */
-  console.log($stateParams);
   if ($stateParams.slug) {
     getAccount();
   } else {

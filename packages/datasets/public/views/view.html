@@ -97,6 +97,7 @@
           <h1 class="title" ng-switch-default ng-bind-html="dataset.title || 'No title yet'"></h1>
 
           <textarea ng-switch-when="true"
+            class       = "title edit"
             auto-grow
             type        = "text"
             name        = "title"
@@ -104,7 +105,6 @@
             ng-model    = "dataset.titleUpdate"
             ng-blur     = "updateTitle()"
             focus       = "true"
-            class       = "title edit"
             ></textarea>
           <h2 class="page-subtitle">dataset</h2>
         </div>
@@ -139,7 +139,10 @@
             </button>
           </h3>
 
-          <div ng-switch-default ng-bind-html="dataset.description || '<p>The publisher of this dataset has not yet provided a description yet.</p>'"></div>
+          <div
+            ng-switch-default
+            ng-bind-html="dataset.description || '<p>The publisher of this dataset has not yet provided a description yet.</p>'">
+          </div>
           <div
             ng-switch-when = "true">
             <div

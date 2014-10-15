@@ -64,8 +64,10 @@ var AccountSchema = new Schema({
 
   datasets    : [{ type: Schema.ObjectId, ref: 'Dataset' }],
 
-  collections : [{ type: Schema.ObjectId, ref: 'Collection' }]
+  collections : [{ type: Schema.ObjectId, ref: 'Collection' }],
 
+  createdAt   : { type:Date },
+  updatedAt   : { type: Date }
 });
 
 
