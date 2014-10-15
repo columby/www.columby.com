@@ -3,18 +3,15 @@
   <div class="sitenav-content">
     <ul>
       <li>
-<<<<<<< HEAD
+        <a ui-sref="home"><div class="logo"><img src="/columby/assets/img/logo-transparant-white.png"></div></a>
         <a ui-sref="home"><i class="fa fa-home"></i> Home</a>
         <a ui-sref="search" class="search"><i class="fa fa-search"></i></a>
-=======
-        <a ui-sref="home"><div class="logo"><img src="/columby/assets/img/logo-transparant-white.png"></div></a>
->>>>>>> 57d98710845f9ec94f512f22550c6841593b0adb
       </li>
 
       <li ng-show="$root.user.isAuthenticated">
         <a ui-sref="dataset.create" ng-class="{active: $state.includes('dataset.create')}">Create new dataset</a>
       </li>
-			
+
       <!-- <li ng-show="$root.user.isAuthenticated">
         <a ui-sref='account.view({slug: $root.selectedAccount.slug})'>My datasets</a>
       </li> -->
@@ -34,16 +31,7 @@
           accounts="$root.user.accounts">
         </div>
       </li>
-
-<<<<<<< HEAD
-=======
-      <li ng-show="$root.user.isAuthenticated">
-        <span class="settings">
-          <a ui-sref='settings' ng-class="{active: $state.includes('settings')}">Settings</a>
-        </span>
-      </li>
-
->>>>>>> 57d98710845f9ec94f512f22550c6841593b0adb
+      
       <li ng-hide="$root.user.isAuthenticated">
         <a ui-sref='signin'>Login</a>
       </li>
