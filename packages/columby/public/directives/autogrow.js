@@ -35,6 +35,8 @@
  * }
  *
  * Usage: <textarea auto-grow></textarea>
+ *
+ * https://gist.github.com/thomseddon/4703968
  */
 'use strict';
 
