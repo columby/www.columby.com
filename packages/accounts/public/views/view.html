@@ -1,4 +1,11 @@
-<section class="account" data-ng-controller="AccountCtrl" ng-cloak>
+<div class="account view" ng-controller="AccountCtrl" ng-cloak>
+
+  <!-- Actions -->
+  <div class="actions-bar" ng-show="account.canEdit && !editMode">
+    <button class="btn btn-default"
+      type="button"
+      ng-click="enterEditmode()">edit</button>
+  </div>
 
   <!-- Editor Sidebar -->
   <div class="editorSidebar" ng-show="editMode">
@@ -20,15 +27,20 @@
 
     <div class="header wrapper" ng-style="headerStyle">
       <div class="container">
-        <div class="col-md-12 title" ng-switch="editMode">
+
+        <div class="title" ng-switch="editMode">
           <h1 ng-switch-default ng-bind-html="account.name || 'No name yet'"></h1>
-          <h1 ng-switch-when="true"
-            contenteditable
-            name="title"
-            ng-model="account.name"
-            htmlFormat="plain">
-          </h1>
+          <textarea ng-switch-when="true"
+            class       = "input-noborder name"
+            type        = 'text'
+            name        = "title"
+            placeholder = 'Your account name'
+            ng-model    = 'account.nameUpdate'
+            ng-blur     = 'updateTitle'
+            focus       = 'true'
+           />
         </div>
+
         <div class="actions" ng-show="account.canEdit && !editMode">
           <button
           class="btn btn-default"
@@ -39,12 +51,12 @@
 
         <div class="col-md-12 avatar">
           <img src="{{account.avatar.url}}"/>
-          <button
-            class="btn btn-default"
+          <a href=""
+            class="change-avatar"
             ng-show="editMode"
             ng-click="changeAvatar()">
-            change avatar
-          </button>
+            <i class="fa fa-cog"></i>
+          </a>
         </div>
       </div>
     </div>
@@ -52,16 +64,20 @@
     <div class="description wrapper">
       <div class="container">
         <div class="col-md-12" ng-switch="editMode">
-          <div class="description" ng-switch-default ng-bind-html="account.description || 'This account has no description yet!'"></div>
+          <div
+            class="description"
+            ng-switch-default ng-bind-html="account.description || 'This account has no description yet!'">
+          </div>
           <div class="description" ng-switch-when="true"
-            ng-model="account.description"
+            ng-model        = "dataset.descriptionUpdate"
             text-angular
-            ng-blur = "updateAccount()"
-            text-angular
-            ta-default-wrap='p'
-            placeholder="Please enter your description"
-            ta-toolbar="[['bold','italics','underline'],['insertLink']]"
-          ></div>
+            ta-default-wrap = "p"
+            ng-blur         = "updateDescription()"
+            ta-toolbar      = "[
+              ['quote','bold','italics','underline'],
+              ['ul','ol','indent','outdent'],
+              ['insertLink','insertVideo']]">
+          </div>
         </div>
       </div>
     </div>

@@ -1,14 +1,9 @@
 <div class="dataset view" ng-controller="DatasetViewCtrl">
 
-  <!-- edit/meta/context bar -->
-  <div class="editbar">
-    <!-- Edit dataset -->
-    <div class="actions" ng-show="dataset.canEdit && !editMode">
-      <button
-        type="button"
-        class="btn btn-default"
-        ng-click="enterEditmode()">edit</button>
-    </div>
+  <div class="actions-bar" ng-show="dataset.canEdit && !editMode">
+    <button class="btn btn-default edit"
+      type="button"
+      ng-click="enterEditmode()">edit</button>
   </div>
 
   <!-- Editor Sidebar -->

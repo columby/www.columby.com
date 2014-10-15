@@ -17,10 +17,9 @@ angular.module('mean.accounts')
   $scope.editMode        = false;       // edit mode is on or off
   $scope.contentLoading  = true;
   $scope.contentEdited   = false;  // models is changed or not during editmode
-  $scope.userId          = $stateParams.userId;
-  $scope.accountSlug     = $stateParams.slug;
 
-  if ($state.current.data && $state.current.data.editMode) {
+  // check edit mode
+  if ($location.path().split('/')[3] === 'edit') {
     $scope.editMode = true;
   }
 
@@ -34,6 +33,12 @@ angular.module('mean.accounts')
 
       $scope.account = result.account;
       $scope.contentLoading = false;
+
+      // set draft title and description
+      if ($scope.editMode){
+        $scope.account.nameUpdate = $scope.account.name;
+        $scope.account.descriptionUpdate = $scope.account.description;
+      }
 
       $scope.account.canEdit= AuthSrv.canEdit({postType:'account', _id:result.account._id});
 
@@ -52,6 +57,14 @@ angular.module('mean.accounts')
     console.log('account initiated', $scope.account);
   }
 
+  function toggleEditMode(mode){
+    $scope.editMode = mode || !$scope.editMode;
+    if ($scope.editMode) {
+      $scope.account.nameUpdate = $scope.account.name;
+      $scope.account.descriptionUpdate = $scope.account.description;
+    }
+  }
+
   function updateHeaderImage(){
     $scope.headerStyle={
       'background-image': 'url(' + $scope.account.headerPattern + '), url(' + $scope.account.headerImage + ')',
@@ -60,39 +73,44 @@ angular.module('mean.accounts')
     };
   }
 
-  function toggleEditmode(mode) {
-    if (!mode){
-      $scope.editMode = !$scope.editMode;
-    } else if (mode===true) {
-      $scope.editMode = mode;
-      // watch title change
-      if ($scope.account._id){
-        $scope.$watch('account.name', function(newVal, oldVal) {
-          if (newVal !== oldVal){
-            AccountSrv.update($scope.account, function(res){
-              if (res.status==='success'){
-                toaster.pop('success', 'Updated', 'Account name updated.');
-              } else {
-                toaster.pop('warning', 'Update error', 'Error updating account name.');
-              }
-            });
-          }
-        });
-      }
-    } else if (mode===false) {
-      $scope.editMode = mode;
-    }
-  }
 
 
   /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
+  /*** Editmode functions */
   $scope.enterEditmode = function(){
-    toggleEditmode(true);
+    //toggleEditMode(true);
+    $state.go('account.edit', {slug: $stateParams.slug});
   };
   $scope.exitEditmode = function(){
-    toggleEditmode(false);
+    //toggleEditMode(false);
+    $state.go('account.view', {slug: $stateParams.slug});
   };
 
+
+  $scope.updateName = function() {
+    if (!$scope.account._id) {
+      console.log('Name changed, but not yet saved');
+    } else {
+      if ($scope.account.nameUpdate === $scope.account.title) {
+        console.log('Account saved, but no name change');
+      } else {
+        var account = {
+          _id: $scope.account._id,
+          name: $scope.dataset.nameUpdate,
+        };
+        console.log('updating account name', account);
+
+        AccountSrv.update(account, function(result){
+          if (result._id){
+            $scope.account.nameUpdate = result.name;
+            toaster.pop('success', null, 'Account name updated.');
+          } else {
+            toaster.pop('warning', null, 'There was an error updating the account name.');
+          }
+        });
+      }
+    }
+  };
 
   $scope.createAccount = function(){
     AccountSrv.save($scope.account, function(res){
@@ -125,15 +143,12 @@ angular.module('mean.accounts')
 
 
   /* ---------- INIT ----------------------------------------------------------------------------- */
-  // View existing account
-  if ($scope.accountSlug && !$scope.editMode) {
-    // Get account for the provided slug
+  console.log($stateParams);
+  if ($stateParams.slug) {
     getAccount();
-  } else if($scope.slug && $scope.editMode) {
-    getAccount();
-  } else if ($scope.editMode){
-    // Create a new account
+  } else {
     initiateNewAccount();
+    toggleEditMode(true);
   }
 
 }])

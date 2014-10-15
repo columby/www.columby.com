@@ -19,10 +19,21 @@ angular.module('mean.accounts').config(['$stateProvider',
         editMode: true
       }
     })
-    
+
     .state('account.view', {
       url: '/a/:slug',
       templateUrl: 'accounts/views/view.html'
+    })
+
+    .state('account.edit', {
+      url: '/a/:slug/edit',
+      templateUrl: 'accounts/views/view.html',
+      authorization: {
+        authorizedRoles: ['authenticated']
+      },
+      data: {
+        editMode: true
+      }
     })
 
     ;
