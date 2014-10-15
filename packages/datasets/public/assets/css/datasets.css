@@ -27,16 +27,22 @@
 .editbar {
   position: absolute;
   top: 0;
-  left: 50px;
-  right: 20px;
+  right: 0;
   /*border-bottom: 1px solid #eee;*/
   height: 60px;
-  line-height: 60px;
+  padding: 20px;
   /*background: rgba(255,255,255,0.97);*/
   z-index: 900;
 }
 .editbar .actions {
   text-align: right;
+}
+.editbar .actions .btn-default {
+  font-family: "lato", sans-serif;
+  background: none;
+  border: 2px solid #fff;
+  color: #fff;
+  font-weight: bolder;
 }
 .ta-scroll-window.form-control,
 .ta-scroll-window > .ta-bind {

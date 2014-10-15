@@ -21,3 +21,6 @@
 .edit:hover {
   border: 1px solid #fff;
 }
+.btn {
+  font-family: "lato", sans-serif;
+}
