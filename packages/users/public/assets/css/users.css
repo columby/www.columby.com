@@ -1,4 +1,11 @@
-.profile .page-content .description {
+.settings.view .actions-bar li {
+  margin: 0;
+  padding: 0;
+}
+.settings.view .content .header.wrapper {
+  min-height: 260px;
+}
+.settings.view .content .description {
   padding: 0 30px;
   font-size: 1.2em;
   line-height: 2;
@@ -6,7 +13,7 @@
   text-align: center;
   margin-bottom: 20px;
 }
-.profile .page-content h3 {
+.settings.view .content h3 {
   font-size: 24px;
   line-height: 40px;
   border-bottom: 1px solid #d9d9d9;
@@ -16,26 +23,23 @@
   color: #7a7a7a;
   padding: 6px;
 }
-.profile .page-content ul {
+.settings.view .content ul {
   padding: 0;
 }
-.profile .page-content ul li {
+.settings.view .content ul li {
   list-style: none;
-  padding: 6px;
-  margin-top: 15px;
-  margin-bottom: 15px;
 }
-.profile .page-content ul li h4 a {
+.settings.view .content ul li h4 a {
   font-family: "lato", sans-serif;
   font-size: 1.5em;
   font-weight: 700;
   color: #222;
 }
-.profile .page-content ul li date,
-.profile .page-content ul li p {
+.settings.view .content ul li date,
+.settings.view .content ul li p {
   color: #c8c8c8;
 }
-.profile .page-content ul li .new {
+.settings.view .content ul li .new {
   color: #ccc;
   font-size: 1em;
 }

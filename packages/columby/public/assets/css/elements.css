@@ -29,3 +29,8 @@
 .btn {
   font-family: "lato", sans-serif;
 }
+button.logout {
+  background: #df3f3f;
+  border: 2px solid #FFFFFF;
+  color: #fff;
+}
