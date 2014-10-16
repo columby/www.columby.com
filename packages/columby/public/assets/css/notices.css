@@ -46,3 +46,18 @@
 #toast-container > div.ng-enter {
   opacity: 1;
 }
+#toast-container > .toast-info {
+  background-image: none !important;
+}
+#toast-container > .toast-wait {
+  background-image: none !important;
+}
+#toast-container > .toast-error {
+  background-image: none !important;
+}
+#toast-container > .toast-success {
+  background-image: none !important;
+}
+#toast-container > .toast-warning {
+  background-image: none !important;
+}
