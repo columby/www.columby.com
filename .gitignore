@@ -1,4 +1,5 @@
 config/env/development.js
+config/public/env/development.json
 
 
 # --------------------

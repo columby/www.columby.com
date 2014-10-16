@@ -27,7 +27,7 @@ function getExpiryTime() {
 
 function createS3Policy(contentType, callback) {
   var s3Policy = {
-    'expiration': getExpiryTime,
+    'expiration': getExpiryTime(),
     'conditions': [
       ['starts-with', '$key', 's3UploadExample/'],
       {'bucket': config.aws.bucket},
