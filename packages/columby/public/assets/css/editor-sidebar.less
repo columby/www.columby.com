@@ -8,9 +8,8 @@ body.editorSidebarOpen {
 
 .editorSidebar {
   position: fixed;
-  top: 100px;
-  right: 300px;
-  bottom: 100px;
+  top: 70px;
+  right: 340px;
   padding: 20px;
   width: 300px;
   border-left: 1px solid #000;
@@ -27,6 +26,21 @@ body.editorSidebarOpen {
   -ms-transform: translate3d(300px, 0, 0);
   -o-transform: translate3d(300px, 0, 0);
   transform: translate3d(300px, 0, 0);
+  border-radius: 8px;
+  .arrow{
+    content: " ";
+    display: block;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 0 5px 5px 5px;
+    border-color: transparent transparent #000000 transparent;
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    margin-left: -5px;
+    opacity:0.8;
+  }
   .create{
   	background: green;
 		color: #FFF;
@@ -39,16 +53,23 @@ body.editorSidebarOpen {
     width: 100%;
     border-bottom: solid 1px;
     padding-bottom: 0;
+    margin-top: 0;
+    color: #fff;
   }
   span, label, p{
     font-family: "lato", sans-serif;
   }
   .btn {
 		border: 2px solid #fff;
-		color: #fff;
+		color: #333;
 		font-weight: bolder;
-		background-color: #333;
+		background-color: #fff;
     font-family: "lato", sans-serif;
+    &:hover{
+      background-color: green;
+      border: 2px solid green;
+      color: #fff;
+    }
   }
   .close{
     color: #fff;
@@ -67,30 +88,30 @@ body.editorSidebarOpen {
 	.sidebarModule{
 		display: block;
 		padding-bottom: 20px;
-		margin-bottom: 20px;
 		label{
 			width: 100px;
 		}
-		.setting{
-			margin-top: 15px;
-		}
-		.btn {
-			color: #333;
-			background-color: #fff;
-			border-color: #ccc;
-			border: 1px solid transparent;
-		}
-		button.btn.btn-xs.btn-default.active {
-			background: green;
-			color: #FFF;
-			border: solid 1px green;
-			opacity: 1;
-		}
-    .publish{
-		  margin-top: 20px;
-    	background: green;
-			color: #FFF;
-			border: solid 1px green;
+    .btn-group{
+      width: 100%;
+  		.btn {
+  			color: #333;
+  			background-color: #fff;
+  			border-color: #ccc;
+  			border: 1px solid transparent;
+        width: 50%
+  		}
+  		button.btn-public.active {
+  			background: green;
+  			color: #FFF;
+  			border: solid 1px green;
+  			opacity: 1;
+  		}
+      button.btn-private.active{
+        background: #428bca;
+  			color: #FFF;
+  			border: solid 1px #428bca;
+  			opacity: 1;
+      }
     }
 	}
 	.btn-tooltip{
@@ -125,6 +146,11 @@ body.editorSidebarOpen {
 			margin-top: 10px;
       width: auto;
 		}
+    .input-slug{
+      width: 260px;
+      font-family: "lato", sans-serif;
+      font-size: 1.2em;
+    }
 	}
 	.slug{
 		span{

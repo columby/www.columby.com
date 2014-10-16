@@ -21,6 +21,11 @@
 .edit:hover {
   border: 1px solid #fff;
 }
+.label {
+  vertical-align: top;
+  line-height: 2.3em;
+  margin-left: 5px;
+}
 .btn {
   font-family: "lato", sans-serif;
 }
