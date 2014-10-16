@@ -44,7 +44,8 @@ angular.module('mean.columby')
       // get token from localstorage and put it in header
       if ($window.localStorage.getItem('auth_token')) {
         var token = angular.fromJson($window.localStorage.getItem('auth_token'));
-        $http.defaults.headers.common.Authorization = 'Bearer ' + token;
+        AuthSrv.setColumbyJWT(token);
+        //$http.defaults.headers.common.Authorization = 'Bearer ' + token;
       }
       // Get account with token
       // account was already fetched before angular init

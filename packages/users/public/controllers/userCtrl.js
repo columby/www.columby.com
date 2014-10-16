@@ -22,14 +22,12 @@ angular.module('mean.users')
   function verify(token) {
     $scope.verificationInProgress = true;
     AuthSrv.verify(params.token).then(function(response){
-      console.log(response);
       if (response.status === 'success'){
-        // save JWT token
-        console.log('Save JWT to local storage:',response.token );
+        // save JWT token in local storage (browser)
         localStorage.setItem('auth_token', JSON.stringify(response.token));
-        // set header with the received token
-        console.log('Set Authorization header with received JWT');
-        $http.defaults.headers.common.Authorization = 'Bearer ' + response.token;
+        // save JWT token in auth Service so we can use it with each request to the Columby API
+        AuthSrv.setColumbyJWT = 'Bearer ' + response.token;
+
         // Let the app know
         $rootScope.user = {
           account: AuthSrv.user(),
@@ -37,13 +35,13 @@ angular.module('mean.users')
         };
         $rootScope.selectedAccount = $rootScope.user.account.accounts[0];
         $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, response.user);
-        console.log('Logged in.');
-        toaster.pop('success', 'success', 'You have succesfully signed in.');
+
+        toaster.pop('success', null, 'You have succesfully signed in.');
 
         // Redirect back to frontpage
         $state.go('home');
       } else {
-        toaster.pop('success', 'error', 'There was an error verifying the login. Please try again.');
+        toaster.pop('warning', 'error', 'There was an error verifying the login. Please try again.');
       }
       $scope.verificationInProgress = true;
     });

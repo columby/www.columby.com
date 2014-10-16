@@ -8,10 +8,21 @@ angular.module('mean.users')
     // user object
     var user = (window.hasOwnProperty('user')) ? window.user : {};
 
+    var columbyJWT;
+
     return {
 
+      setColumbyJWT: function(token){
+        columbyJWT = 'Bearer ' + token;
+      },
+
+      getColumbyJWT: function(){
+        return columbyJWT;
+      },
+
       login: function(credentials){
-        var promise = $http.post('/api/v2/user/login', credentials)
+        //https://docs.angularjs.org/api/ng/service/$http#post
+        var promise = $http.post('/api/v2/user/login', credentials, {headers: {'Authorization': columbyJWT}})
           .then(function (response) {
             if (response.data.user){
               user = response.data.user;
@@ -46,7 +57,7 @@ angular.module('mean.users')
       },
 
       logout: function(){
-        var promise = $http.get('/api/v2/user/logout')
+        var promise = $http.get('/api/v2/user/logout', {headers: {'Authorization': columbyJWT}})
           .then(function(response){
             user = {};
             return response.data;
@@ -56,7 +67,7 @@ angular.module('mean.users')
 
       // Get account of currently logged in user, and save it as the main user object
       getUser: function(){
-        var promise = $http.get('/api/v2/user')
+        var promise = $http.get('/api/v2/user', {headers: {'Authorization': columbyJWT}})
           .then(function(result){
             console.log('fetched user', result.data);
             user = result.data;
@@ -125,12 +136,8 @@ angular.module('mean.users')
         return user;
       },
 
-      setJWT: function(token){
-        $http.defaults.headers.common.Authorization = token;
-      },
-
       getProfile: function(slug) {
-        var promise = $http.get('/api/v2/user/profile/' + slug)
+        var promise = $http.get('/api/v2/user/profile/' + slug, {headers: {'Authorization': columbyJWT}})
           .then(function(response){
             console.log('profile', response);
             return response.data;
@@ -140,7 +147,7 @@ angular.module('mean.users')
 
       updateProfile: function(profile) {
         console.log('profile', profile);
-        var promise = $http.put('/api/v2/user/profile', profile)
+        var promise = $http.put('/api/v2/user/profile', profile, {headers: {'Authorization': columbyJWT}})
           .then(function(result){
             return result.data;
           });
