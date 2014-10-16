@@ -1,34 +1,44 @@
-<section class="account-settings" data-ng-controller="UserCtrl">
-  <div class="container">
-    <div class="row">
+<div class="settings view" ng-controller="UserCtrl">
+
+  <div class="actions-bar">
+    <ul>
+      <li>
+        <button class="btn btn-default logout"
+          type     = "button"
+          ng-click = "logout()">Logout
+        </button>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- Main dataset Content -->
+  <div class="content">
+    
+    <div class="header wrapper">
+      <div class="container">
+        <div>
+          <h1 class="title">Settings</h1>
+          <h2 class="page-subtitle">View your details and accounts</h2>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container">
       <div class="col-md-offset-2 col-md-8">
-				<h2>Your login details</h2>
+				<h3>Your login details</h3>
 	      <p><strong>Email: </strong>{{user.email}}</p>
         <p><strong>Account id: </strong>{{user._id}}</p>
 			</div>
     </div>
-    <hr />
-
-    <div class="row">
-      <div class="col-md-offset-2 col-md-8">
-        <a class="btn btn-default" ng-click="logout()">Logout</a>
-      </div>
-    </div>
-    <hr/>
-
-    <div class="row accounts">
-      <div class="col-md-offset-2 col-md-8">
+    
+    <div class="container">
+      <div class="col-md-offset-2 col-md-8 row accounts">
         <h3>Your accounts</h3>
         <p ng-show="!user.accounts || user.accounts.length===0">No account for this user</p>
         <ul>
           <li ng-repeat="account in user.accounts | orderBy:account.primary">
             <h4><a ui-sref="account.view({slug:account.slug})">{{account.name}}</a><span ng-show="account.primary" class="label bg-primary">Primary</span></h4>
             <p>{{account.datasets.length}} datasets</p>
-
-            <!-- <button
-              class="btn btn-default"
-              ng-hide="account.primary || account.datasets[0]"
-              ng-click="deleteAccount($index)"><i class="fa fa-trash"></i> Delete</button> -->
           </li>
           <li>
             <h4><a ui-sref="account.create({userId: user._id})" class="new">+ Create a new publication account</a></h4>
@@ -36,5 +46,7 @@
         </ul>
       </div>
     </div>
+    
   </div>
-</section>
+</div>
+    

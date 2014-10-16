@@ -91,7 +91,10 @@
           <p ng-show="!account.datasets">No datasets for this user</p>
           <ul>
             <li ng-repeat="dataset in account.datasets">
-              <h4><a ui-sref="dataset.view({datasetId: dataset._id})">{{dataset.title}}</a></h4>
+              <h4>
+                <a ui-sref="dataset.view({datasetId: dataset._id})">{{dataset.title}}</a>
+                <span ng-show="dataset.visibilityStatus === 'private'" class="label bg-primary">private</span>
+              </h4>
               <date>{{dataset.created | date:'short'}}</date>
             </li>
             <li>
