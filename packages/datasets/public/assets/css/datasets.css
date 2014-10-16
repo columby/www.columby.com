@@ -1,5 +1,10 @@
-.dataset .editorSidebar {
-  top: 200px;
+.dataset textarea {
+  resize: none;
+  word-wrap: break-word;
+  transition: 0.05s;
+  -moz-transition: 0.05s;
+  -webkit-transition: 0.05s;
+  -o-transition: 0.05s;
 }
 .ngdialog.ngdialog-theme-default {
   position: fixed;

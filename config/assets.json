@@ -10,7 +10,7 @@
     },
     "js": {
       "bower_components/build/js/dist.min.js": [
-
+        "bower_components/ng-file-upload/angular-file-upload-html5-shim.js",
         "bower_components/jquery/dist/jquery.min.js",
         "bower_components/angular/angular.js",
         "bower_components/angular-animate/angular-animate.min.js",
@@ -25,7 +25,8 @@
         "bower_components/angular-loading-bar/build/loading-bar.js",
         "bower_components/ngDialog/js/ngDialog.js",
         "bower_components/angular-slugify/angular-slugify.js",
-        "bower_components/elasticsearch/elasticsearch.angular.js"
+        "bower_components/elasticsearch/elasticsearch.angular.js",
+        "bower_components/ng-file-upload/angular-file-upload.js"
       ]
     }
   }

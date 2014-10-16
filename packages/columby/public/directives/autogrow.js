@@ -43,12 +43,11 @@
 // Common directive for Focus
 angular.module('mean.columby')
 
-.directive('autoGrow', function() {
+.directive('autoGrow', function($timeout) {
   return function(scope, element, attr){
     var minHeight = element[0].offsetHeight,
       paddingLeft = element.css('paddingLeft'),
       paddingRight = element.css('paddingRight');
-
     var $shadow = angular.element('<div></div>').css({
       position: 'absolute',
       top: -10000,
@@ -62,6 +61,7 @@ angular.module('mean.columby')
     angular.element(document.body).append($shadow);
 
     var update = function() {
+      console.log('update');
       var times = function(string, number) {
         for (var i = 0, r = ''; i < number; i++) {
           r += string;
@@ -80,7 +80,10 @@ angular.module('mean.columby')
       element.css('height', Math.max($shadow[0].offsetHeight + 10 /* the "threshold" */, minHeight) + 'px');
     };
 
-    element.bind('keyup keydown keypress change', update);
-    update();
+    element.bind('focus keyup keydown keypress change', update);
+
+    $timeout(function(){
+      update();
+    });
   };
 });

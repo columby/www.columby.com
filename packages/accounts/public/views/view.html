@@ -42,12 +42,11 @@
 
         <div class="avatar">
           <img src="{{account.avatar.url}}"/>
-          <a href=""
-            class="change-avatar"
-            ng-show="editMode"
-            ng-click="changeAvatar()">
+          <div class="button"
+            ng-file-select="onFileSelect($files)"
+            data-multiple="true">
             <i class="fa fa-cog"></i>
-          </a>
+          </div>
         </div>
       </div>
     </div>

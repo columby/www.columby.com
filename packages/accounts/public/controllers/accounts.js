@@ -8,9 +8,8 @@ angular.module('mean.accounts')
  *
  ***/
 .controller('AccountCtrl', [
-  '$scope', '$rootScope', '$location', '$state', '$stateParams', 'AUTH_EVENTS', 'AuthSrv', 'AccountSrv', 'MetabarSrv', 'toaster',
-  function ($scope, $rootScope, $location, $state, $stateParams, AUTH_EVENTS, AuthSrv, AccountSrv, MetabarSrv, toaster) {
-
+  'configuration', '$scope', '$rootScope', '$location', '$state', '$stateParams', '$http', 'AUTH_EVENTS', 'AuthSrv', 'AccountSrv', 'MetabarSrv', 'toaster', '$upload',
+  function (configuration, $scope, $rootScope, $location, $state, $stateParams, $http, AUTH_EVENTS, AuthSrv, AccountSrv, MetabarSrv, toaster, $upload) {
 
 
   /* ---------- SETUP ----------------------------------------------------------------------------- */
@@ -168,6 +167,58 @@ angular.module('mean.accounts')
         }
       });
     }
+  };
+
+  $scope.onFileSelect = function($files) {
+    console.log('file select', $files);
+    $scope.upload=[];
+    var file = $files[0];
+    file.progress = parseInt(0);
+    $http.get('api/v2/files/sign?mimeType=' + file.type).success(function(response){
+      console.log('response', response);
+      var s3Params = response;
+
+      $scope.upload = $upload.upload({
+        url: 'https://s3.amazonaws.com/' + configuration.aws.bucket,
+        method: 'POST',
+        data: {
+          'key' : 's3UploadExample/'+ Math.round(Math.random()*10000) + '$$' + file.name,
+          'acl' : 'public-read',
+          'Content-Type' : file.type,
+          'AWSAccessKeyId': s3Params.AWSAccessKeyId,
+          'success_action_status' : '201',
+          'Policy' : s3Params.s3Policy,
+          'Signature' : s3Params.s3Signature
+        },
+        file: file,
+      });
+
+      $scope.upload
+        .then(function(response) {
+          console.log(response);
+          file.progress = parseInt(100);
+          if (response.status === 201) {
+            console.log('success');
+              // var data = xml2json.parser(response.data),
+              // parsedData;
+              // parsedData = {
+              //     location: data.postresponse.location,
+              //     bucket: data.postresponse.bucket,
+              //     key: data.postresponse.key,
+              //     etag: data.postresponse.etag
+              // };
+              // $scope.imageUploads.push(parsedData);
+
+          } else {
+              alert('Upload Failed');
+          }
+        }, function(e){
+          console.log(e);
+        }, function(evt) {
+          console.log(evt);
+            file.progress =  parseInt(100.0 * evt.loaded / evt.total);
+        });
+    });
   };
 
 

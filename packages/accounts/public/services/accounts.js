@@ -24,17 +24,31 @@ angular.module('mean.users')
 'use strict';
 
 //Articles service used for articles REST endpoint
-angular.module('mean.users').factory('AccountSrv', ['$resource',
+angular.module('mean.users')
 
-  function($resource) {
+.factory('AccountSrv', ['$resource', 'AuthSrv',
+
+  function($resource, AuthSrv) {
 
     return $resource('api/v2/account/:slug', {
       slug: '@slug'
     }, {
       update: {
-        method: 'PUT'
-      }
+        method: 'PUT',
+        headers: {
+          Authorization: AuthSrv.getColumbyJWT
+        }
+      },
+      get: {
+        headers: {
+          Authorization: AuthSrv.getColumbyJWT
+        }
+      },
+        save: {
+        headers: {
+          Authorization: AuthSrv.getColumbyJWT
+        }
+      },
     }
-    );
-  }
-]);
+  );
+}]);

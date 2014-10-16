@@ -1,8 +1,16 @@
 // out:datasets.css
 
-.dataset .editorSidebar {
-  top:200px;
+.dataset {
+  textarea {
+    resize: none;
+    word-wrap: break-word;
+    transition: 0.05s;
+    -moz-transition: 0.05s;
+    -webkit-transition: 0.05s;
+    -o-transition: 0.05s;
+  }
 }
+
 //ngDialog
 .ngdialog.ngdialog-theme-default {
   position: fixed;
@@ -317,7 +325,6 @@
 
     // Specific styling for dataset view page
     &.edit {
-
     }
   }
   h1, h1.focussed {

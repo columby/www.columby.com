@@ -9,111 +9,58 @@ var mongoose = require('mongoose'),
     config    = require('meanio').loadConfig(),
     AWS = require('aws-sdk');
 
+// Set the right credentials for aws.
+// currently only needed for delete
 AWS.config.update({
   accessKeyId: config.aws.publicKey,
   secretAccessKey: config.aws.secretKey
 });
 
-var expectedBucket = config.aws.bucket,
-    expectedMinSize = null,
-    expectedMaxSize = null;
 
 /* ------ FUNCTIONS ------------------------------------------------------- */
-// Ensures the REST request is targeting the correct bucket.
-// Omit if you don't want to support chunking.
-function isValidRestRequest(headerStr) {
-    return new RegExp('\/' + expectedBucket + '\/.+$').exec(headerStr) !== null;
+
+function getExpiryTime() {
+  var _date = new Date();
+  return '' + (_date.getFullYear()) + '-' + (_date.getMonth() + 1) + '-' +
+    (_date.getDate() + 1) + 'T' + (_date.getHours() + 3) + ':' + '00:00.000Z';
 }
 
-function isPolicyValid(policy) {
-    var bucket, parsedMaxSize, parsedMinSize, isValid;
-
-    policy.conditions.forEach(function(condition) {
-        if (condition.bucket) {
-            bucket = condition.bucket;
-        }
-        else if (condition instanceof Array && condition[0] === 'content-length-range') {
-            parsedMinSize = condition[1];
-            parsedMaxSize = condition[2];
-        }
-    });
-
-    isValid = bucket === expectedBucket;
-
-    // If expectedMinSize and expectedMax size are not null (see above), then
-    // ensure that the client and server have agreed upon the exact same
-    // values.
-    if (expectedMinSize !== null && expectedMaxSize !== null) {
-        isValid = isValid && (parsedMinSize === expectedMinSize.toString()) && (parsedMaxSize === expectedMaxSize.toString());
-    }
-
-    return isValid;
-}
-
-function signPolicy(req,res){
-  console.log(req.body);
-  var base64Policy = new Buffer(JSON.stringify(req.body)).toString('base64'),
-      signature = crypto.createHmac('sha1', config.aws.secretKey)
-      .update(base64Policy)
-      .digest('base64');
-  var jsonResponse = {
-    policy: base64Policy,
-    signature: signature
+function createS3Policy(contentType, callback) {
+  var s3Policy = {
+    'expiration': getExpiryTime,
+    'conditions': [
+      ['starts-with', '$key', 's3UploadExample/'],
+      {'bucket': config.aws.bucket},
+      {'acl': 'public-read'},
+      ['starts-with', '$Content-Type', contentType],
+      {'success_action_status' : '201'}
+    ]
   };
-  if (isPolicyValid(req.body)){
-    res.json(jsonResponse);
-  } else {
-    res.json({invalid: true});
-  }
-}
+  console.log('s3policy', s3Policy);
 
-function signRestRequest(req,res) {
-  console.log('signRestRequest');
-  var stringToSign = req.body.headers,
-      signature = crypto.createHmac('sha1', config.aws.publicKey)
-      .update(stringToSign)
-      .digest('base64');
-  var jsonResponse = {
-    signature: signature
+  // stringify and encode the policy
+  var stringPolicy = JSON.stringify(s3Policy);
+  var base64Policy = new Buffer(stringPolicy, 'utf-8').toString('base64');
+
+  // sign the base64 encoded policy
+  var signature = crypto.createHmac('sha1', config.aws.secretKey)
+    .update(new Buffer(base64Policy, 'utf-8')).digest('base64');
+
+  // build the results object
+  var s3Credentials = {
+      s3Policy: base64Policy,
+      s3Signature: signature,
+      AWSAccessKeyId: config.aws.publicKey
   };
 
-  res.setHeader('Content-Type', 'application/json');
-
-  if (isValidRestRequest(stringToSign)) {
-    res.end(JSON.stringify(jsonResponse));
-  } else {
-    res.status(400);
-    res.end(JSON.stringify({invalid:true}));
-  }
+  callback(s3Credentials);
 }
-
-// Sign any request
-function signRequest(req,res){
-  if (req.body.headers) {
-    // multipart upload
-    signRestRequest(req,res);
-  } else {
-    // single upload
-    signPolicy(req,res);
-  }
-}
-
-function handleFileSuccess(req,res){
-  console.log('s3 succes!', req.body);
-
-  File.findOne({s3_key: req.body.key}, function(err, file){
-    if (err){ res.json({err: err});}
-    if (file) {
-      file.status = 'Public';
-      file.save();
-      res.json(file);
-    }
-  });
-}
-
 
 /* ------ ROUTES ---------------------------------------------------------- */
-// Get a file by id
+
+/**
+ * Get a file by id
+ **/
 exports.file = function(req,res,next,id){
   File.findOne({_id:id}, function(err,file) {
     if (err) return next(err);
@@ -123,7 +70,9 @@ exports.file = function(req,res,next,id){
   });
 };
 
-// Get a listing of files
+/**
+ * Get a listing of files
+ **/
 exports.all = function(req,res){
   File
     .find()
@@ -134,7 +83,9 @@ exports.all = function(req,res){
     });
 };
 
-// Create a new file
+/**
+ * Create a new file
+ **/
 exports.create = function(req,res){
   if (!req.user) {
     res.json({err:'No user id'});
@@ -188,43 +139,17 @@ exports.destroy = function(req,res){
 
 
 // Sign a request
-exports.handleS3 = function(req,res,next) {
+exports.sign = function(req,res,next) {
 
-  console.log('handling S3 sign');
-
-  // check if user can publish
-
-
-  //convert conditions to object
-  var a = req.body.conditions;
-  var b = {};
-  for (var i = 0; i < a.length; i=i+1) {
-    var k = Object.keys(a[i])[0];
-    var v = a[i][k];
-    b[k] = v;
-  }
-
-  // Create a file slot
-  var file = new File({
-    s3_key    : b.key,
-    filename  : b['x-amz-meta-qqfilename'],
-    title     : b['x-amz-meta-qqfilename'],
-    status    : 'uploading',
-    type      : b['Content-Type'],
-    size      : b.size,
-    owner     : req.user._id,
+  createS3Policy(req.query.mimeType, function(creds, err) {
+    if (!err){
+      return res.json(creds);
+    } else {
+      return res.status(500).json(err);
+    }
   });
-  file.save();
-  console.log('file', file);
-
-  // check request type
-  if (req.query.success !== undefined) {
-    handleFileSuccess(req, res);
-  } else {
-    signRequest(req,res);
-  }
 };
 
 exports.handleS3success = function(req,res,next) {
-  handleFileSuccess(req,res);
+  res.send('success');
 };
