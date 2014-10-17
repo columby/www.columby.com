@@ -587,7 +587,8 @@ body .metabar-wrapper .actions {
 /*** ---- TERMS/ABOUT ---------------------------- ***/
 .terms .page-header,
 .about .page-header,
-.features .page-header {
+.features .page-header,
+.search .page-header {
   text-align: center;
   min-height: 260px;
   color: #FFF;
@@ -597,12 +598,14 @@ body .metabar-wrapper .actions {
 }
 .terms .page-header img,
 .about .page-header img,
-.features .page-header img {
+.features .page-header img,
+.search .page-header img {
   margin-top: 100px;
 }
 .terms .page-header h1,
 .about .page-header h1,
-.features .page-header h1 {
+.features .page-header h1,
+.search .page-header h1 {
   margin-top: 100px;
   font-size: 4em;
   font-weight: 900;
@@ -613,7 +616,8 @@ body .metabar-wrapper .actions {
 }
 .terms .page-header h2.page-subtitle,
 .about .page-header h2.page-subtitle,
-.features .page-header h2.page-subtitle {
+.features .page-header h2.page-subtitle,
+.search .page-header h2.page-subtitle {
   font-family: "merriweather", serif;
   font-size: 14px;
   font-weight: 300;
@@ -622,26 +626,31 @@ body .metabar-wrapper .actions {
 }
 .terms .page-content,
 .about .page-content,
-.features .page-content {
+.features .page-content,
+.search .page-content {
   margin-top: 50px;
 }
 .terms .page-content img.intro,
 .about .page-content img.intro,
-.features .page-content img.intro {
+.features .page-content img.intro,
+.search .page-content img.intro {
   margin: 80px 0 80px 0;
 }
 .terms .page-content p,
 .about .page-content p,
 .features .page-content p,
+.search .page-content p,
 .terms .page-content ol,
 .about .page-content ol,
-.features .page-content ol {
+.features .page-content ol,
+.search .page-content ol {
   line-height: 2em;
   margin-bottom: 40px;
 }
 .terms .page-content ol > li,
 .about .page-content ol > li,
-.features .page-content ol > li {
+.features .page-content ol > li,
+.search .page-content ol > li {
   margin-bottom: 40px;
 }
 .header.wrapper {
