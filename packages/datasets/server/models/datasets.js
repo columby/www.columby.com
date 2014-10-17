@@ -147,7 +147,7 @@ DatasetSchema.plugin(mongoosastic, {
 });
 
 var Dataset = mongoose.model('Dataset', DatasetSchema);
-console.log(Dataset);
+
 
 
 var stream = Dataset.synchronize();

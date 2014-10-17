@@ -51,4 +51,6 @@ angular.module('mean.users')
       },
     }
   );
-}]);
+}])
+
+;

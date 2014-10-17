@@ -27,7 +27,7 @@ function getExpiryTime() {
 
 function createS3Policy(contentType, callback) {
   var s3Policy = {
-    'expiration': getExpiryTime,
+    'expiration': getExpiryTime(),
     'conditions': [
       ['starts-with', '$key', 's3UploadExample/'],
       {'bucket': config.aws.bucket},
@@ -138,13 +138,18 @@ exports.destroy = function(req,res){
 };
 
 
-// Sign a request
+/***
+ * Sign a request
+ *
+ ***/
 exports.sign = function(req,res,next) {
 
   createS3Policy(req.query.mimeType, function(creds, err) {
     if (!err){
       return res.json(creds);
     } else {
+
+      // Add to the database
       return res.status(500).json(err);
     }
   });

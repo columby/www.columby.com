@@ -100,7 +100,7 @@ exports.create = function(req, res) {
   dataset.save(function(err) {
     if (err) { return res.json({error: err }); }
 
-    console.log(dataset.account);
+    // console.log(dataset.account);
     // update publication account.
     Account.findByIdAndUpdate(
         { _id   : dataset.account },
@@ -334,7 +334,7 @@ exports.autosave = function(req,res) {
     .select()
     .exec(function(err,dataset){
       // If status is draft, save it directly
-      console.log(dataset);
+      //console.log(dataset);
       if (dataset.publishStatus === 'draft') {
         console.log('updating draft directly');
         if (draft.title) dataset.title = draft.title;

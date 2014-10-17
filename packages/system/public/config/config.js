@@ -4,9 +4,9 @@ angular.module('mean.system')
   .constant('configuration', {
 
     aws: {
-      publicKey : 'AKIAIERE7X62EYZM23HA',
+      publicKey : 'AKIAIA6FZGJ3WN5NKSXA',
       bucket    : 'columby-dev',
-      endpoint  : 'columby-dev.s3-us-west-2.amazonaws.com'
+      endpoint  : 's3.amazonaws.com/columby-dev'
     }
 
   })
