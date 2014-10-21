@@ -52,7 +52,7 @@ exports.jwtCheckAccount = function(req, res, next){
 
     } else {
       console.log('No Authorization header was found');
-      next();//return res.status(401).json({err: 'No Authorization header was found'});
+      return res.status(401).json({err: 'No Authorization header was found'});
     }
   }
 };
