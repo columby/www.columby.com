@@ -22,7 +22,8 @@
     "ngDialog": "~0.3.0",
     "angular-slugify": "~1.0.0",
     "elasticsearch": "~2.4.3",
-    "ng-file-upload": "~1.6.12"
+    "ng-file-upload": "~1.6.12",
+    "xml2json": "~1.1.1"
   },
   "resolutions": {
     "angular": "~1.2.26"
