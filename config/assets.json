@@ -26,8 +26,7 @@
         "bower_components/ngDialog/js/ngDialog.js",
         "bower_components/angular-slugify/angular-slugify.js",
         "bower_components/elasticsearch/elasticsearch.angular.js",
-        "bower_components/ng-file-upload/angular-file-upload.js",
-        "bower_components/xml2json/xml2json.js"
+        "bower_components/ng-file-upload/angular-file-upload.js"
       ]
     }
   }
