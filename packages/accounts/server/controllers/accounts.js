@@ -41,6 +41,7 @@ exports.update = function(req, res) {
     if (account) {
       if (req.body.name) { account.name   = req.body.name; }
       if (req.body.description) { account.description   = req.body.description; }
+      if (req.body.avatar) { account.avatar = req.body.avatar; }
       account.updatedAt = new Date();
 
       account.save(function(err){

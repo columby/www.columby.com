@@ -30,7 +30,6 @@ angular.module('mean.accounts')
 
     // get account information of user by userSlug
     AccountSrv.get({slug: $stateParams.slug}, function(result){
-      console.log(result);
       $scope.account = result.account;
       $scope.contentLoading = false;
 
@@ -91,7 +90,7 @@ angular.module('mean.accounts')
     if (!$scope.account._id) {
       console.log('Name changed, but not yet saved');
     } else {
-      if ($scope.account.nameUpdate === $scope.account.title) {
+      if ($scope.account.nameUpdate === $scope.account.name) {
         console.log('Account saved, but no name change');
       } else {
         var account = {
@@ -140,6 +139,8 @@ angular.module('mean.accounts')
     }
   };
 
+
+
   $scope.createAccount = function(){
     AccountSrv.save($scope.account, function(res){
       if (res.err){
@@ -170,19 +171,32 @@ angular.module('mean.accounts')
   };
 
   $scope.onFileSelect = function($files) {
-    console.log('file select', $files);
     $scope.upload=[];
     var file = $files[0];
     file.progress = parseInt(0);
-    $http.get('api/v2/files/sign?mimeType=' + file.type).success(function(response){
-      console.log('response', response);
-      var s3Params = response;
-
+    console.log('file', file);
+    // First get a signed request from the Columby server
+    $http({
+      method: 'GET',
+      url: 'api/v2/files/sign',
+      params: {
+        type: file.type,
+        size: file.size,
+        name: file.name,
+        accountId: $scope.account._id
+      },
+      headers: {
+        Authorization: AuthSrv.getColumbyJWT()
+      }
+    }).success(function(response){
+      var s3Params = response.credentials;
+      var fileResponse = response.file;
+      // Initiate upload
       $scope.upload = $upload.upload({
         url: 'https://s3.amazonaws.com/' + configuration.aws.bucket,
         method: 'POST',
         data: {
-          'key' : 's3UploadExample/'+ Math.round(Math.random()*10000) + '$$' + file.name,
+          'key' : $scope.account._id + '/' + response.file.filename,
           'acl' : 'public-read',
           'Content-Type' : file.type,
           'AWSAccessKeyId': s3Params.AWSAccessKeyId,
@@ -193,21 +207,51 @@ angular.module('mean.accounts')
         file: file,
       });
 
-      $scope.upload
-        .then(function(response) {
-          console.log(response);
+      $scope.upload.then(function(response) {
+          console.log(response.data);
           file.progress = parseInt(100);
           if (response.status === 201) {
-            console.log('success');
-              // var data = xml2json.parser(response.data),
-              // parsedData;
-              // parsedData = {
-              //     location: data.postresponse.location,
-              //     bucket: data.postresponse.bucket,
-              //     key: data.postresponse.key,
-              //     etag: data.postresponse.etag
-              // };
-              // $scope.imageUploads.push(parsedData);
+            // convert xml response to json
+            var data = window.xml2json.parser(response.data),
+            parsedData;
+            parsedData = {
+                location: data.postresponse.location,
+                bucket: data.postresponse.bucket,
+                key: data.postresponse.key,
+                etag: data.postresponse.etag
+            };
+
+            // upload finished, update the file reference
+            $http({
+              method: 'POST',
+              url: 'api/v2/files/s3success',
+              data: {
+                fileId: fileResponse._id,
+                url: parsedData.location
+              },
+              headers: {
+                Authorization: AuthSrv.getColumbyJWT()
+              }
+            }).success(function(response){
+              console.log('res', response);
+              $scope.account.avatar.url = response.url;
+              var a = {
+                slug: $scope.account.slug,
+                avatar: {
+                  url: response.url
+                }
+              };
+              console.log('a', a);
+              AccountSrv.update(a, function(result){
+                console.log('r',result);
+                if (result.status === 'success') {
+                  toaster.pop('success', 'Updated', 'Account updated.');
+                } else {
+                  toaster.pop('warning', 'Updated', 'Account There was an error updating.');
+                }
+              });
+            });
+            // $scope.imageUploads.push(parsedData);
 
           } else {
               alert('Upload Failed');
@@ -216,7 +260,7 @@ angular.module('mean.accounts')
           console.log(e);
         }, function(evt) {
           console.log(evt);
-            file.progress =  parseInt(100.0 * evt.loaded / evt.total);
+          file.progress =  parseInt(100.0 * evt.loaded / evt.total);
         });
     });
   };
