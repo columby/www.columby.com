@@ -2,6 +2,8 @@
   ng-controller="SiteNavController">
 
   <div class="sitenav-content">
+    <button type="button" class="close" ng-click="toggleSiteNav()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+
     <ul>
       <li>
         <a ui-sref="home"><i class="fa fa-home"></i> Home</a>
@@ -49,6 +51,4 @@
     <!-- <div class="logo"><img src="/columby/assets/img/logo-transparant-white.png"></div> -->
   </div>
 
-
-  <div class="sitenav-overlay" ng-class="{show:showSiteNav}" ng-click="toggleSiteNav($event)"></div>
 </nav>
