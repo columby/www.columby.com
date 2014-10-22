@@ -23,7 +23,7 @@ body.editorSidebarOpen .metabar-wrapper {
   transform: translate3d(300px, 0, 0);
   border-radius: 8px;
 }
-.editorSidebar .arrow {
+.editorSidebar .options-arrow {
   content: " ";
   display: block;
   width: 0px;
