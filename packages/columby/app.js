@@ -26,7 +26,7 @@ Columby.register(function(app, auth, database) {
   Columby.aggregateAsset('css','notices.css');
   Columby.aggregateAsset('css','elements.css');
 
-  Columby.angularDependencies(['elasticsearch', 'angular-loading-bar','ngAnimate', 'toaster', 'ngDialog']);
+  Columby.angularDependencies(['elasticsearch', 'angular-loading-bar','ngAnimate', 'toaster', 'ngDialog','td.easySocialShare']);
 
   // Setting the favicon and static folder
   app.use(favicon(__dirname + '/public/assets/img/favicon.png'));
