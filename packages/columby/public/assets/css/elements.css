@@ -41,8 +41,11 @@
 .btn {
   font-family: "lato", sans-serif;
 }
-button.logout {
-  background: #df3f3f;
-  border: 2px solid #FFFFFF;
+.actions-bar button.logout {
+  background: rgba(255, 66, 66, 0.6);
+  border: 3px solid rgba(255, 66, 66, 0);
+}
+.actions-bar button.logout:hover {
+  background: #F03C02;
   color: #fff;
 }
