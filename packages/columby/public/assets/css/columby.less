@@ -98,13 +98,18 @@ body {
     left: -220px;
     color: #FFF;
 		font-family: "lato", sans-serif;
-		text-transform: uppercase;
     .close {
       display: none;
     }
     &:hover {
       .close {
         display: block;
+        color: #fff;
+        opacity: 1;
+        margin-right: 8px;
+        margin-top: 3px;
+        margin-bottom: 10px;
+        text-shadow: 0 0 0;
       }
     }
 
@@ -120,7 +125,7 @@ body {
 		}
     ul {
       list-style-type: none;
-      padding: 20px;
+      padding: 30px 20px 20px 20px;
       li{
 				border-bottom: solid 1px #FFF;
         border-bottom: solid 1px rgba(255,255,255,0.08);
@@ -190,14 +195,14 @@ body {
 
   // METABAR
   .metabar-wrapper {
-    position: absolute;
+    position: fixed;
     top: 0;
     // width: 100%;
     /*border-bottom: 1px solid #eee;*/
     height: 60px;
     // line-height: 60px;
     /*background: rgba(255,255,255,0.97);*/
-    z-index: 900;
+    z-index: 1000;
     padding: 20px;
     .metabar{
     	font-family: "lato", sans-serif;

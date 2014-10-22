@@ -1,5 +1,20 @@
 // out: elements.css, compress:true
 
+// UI BLOCKS
+
+.actions-bar {
+  text-align: right;
+  position: fixed;
+  z-index: 600;
+  background: rgba(0,0,0,0.2);
+  width: 100%;
+  padding: 20px;
+  padding-bottom: 55px;
+  ul{
+    float: right;
+  }
+}
+
 // TITLES AND TEXT + EDIT
 
 .title{
@@ -14,7 +29,7 @@
   line-height: 1.2em;
 }
 
-.edit{
+textarea.edit{
   background: none;
   border-radius: 10px;
   padding: 10px;
@@ -35,12 +50,53 @@
 
 // BUTTONS
 
+button{
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  width: auto;
+}
+
 .btn{
   font-family: "lato", sans-serif
 }
 
-button.logout{
-  background: #df3f3f;
-  border: 2px solid #FFFFFF;
-  color: #fff;
+.actions-bar {
+  text-align: right;
+  button{
+    background: none;
+    border: 2px solid #fff;
+    color: #fff;
+    font-weight: bolder;
+    float: right;
+    &:hover{
+      background: none;
+      color: #000;
+      border: solid 2px #fff;
+    }
+  }
+  
+  button.logout{
+    background: RGBA(255,66,66,0.6);
+    border: 3px solid RGBA(255,66,66,0.0);
+    &:hover{
+      background: #F03C02;
+      color: #fff;
+    }
+  }
+  
 }
