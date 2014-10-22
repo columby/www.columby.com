@@ -7,6 +7,20 @@ var mongoose = require('mongoose'),
   Account = mongoose.model('Account')
 ;
 
+
+function canEdit(req){
+
+  // check if user is owner of the dataset's account.
+  if (req.user && req.user.hasOwnProperty('_id')){
+    if ( String(req.account.owner) === String(req.user._id)) {
+      return 'true';
+    } else {
+      return 'false';
+    }
+  }
+
+}
+
 /**
  * Send logged in Account account
  */
@@ -20,7 +34,8 @@ exports.account = function(req, res) {
       .populate('datasets')
       .populate('collections', 'title description datasets')
       .exec(function(err, account) {
-        console.log('a', account);
+        account.canEdit = canEdit(req);
+        console.log('account', account);
         return res.json({account:account} || {error:err});
       });
   }
@@ -42,7 +57,7 @@ exports.update = function(req, res) {
       if (req.body.name) { account.name   = req.body.name; }
       if (req.body.description) { account.description   = req.body.description; }
       if (req.body.avatar) { account.avatar = req.body.avatar; }
-      
+
       account.updatedAt = new Date();
 
       account.save(function(err){

@@ -46,6 +46,7 @@ angular.module('mean.users')
         }
       },
       save: {
+        method: 'POST',
         headers: {
           Authorization: AuthSrv.getColumbyJWT()
         }

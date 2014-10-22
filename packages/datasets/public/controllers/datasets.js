@@ -86,7 +86,8 @@ angular.module('mean.datasets')
           url               : 'columby/assets/img/avatar.png'
         },
         draft:{},
-        account: $rootScope.selectedAccount._id
+        account: $rootScope.selectedAccount._id,
+        canEdit : true
       };
       toaster.pop('notice',null,'Here\'s your new dataset!');
     }

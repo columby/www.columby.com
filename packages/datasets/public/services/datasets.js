@@ -22,6 +22,7 @@ angular.module('mean.datasets')
         }
       },
       save: {
+        method: 'POST',
         headers: {
           Authorization: AuthSrv.getColumbyJWT
         }

@@ -50,7 +50,8 @@ angular.module('mean.accounts')
     $scope.account = {
       name        : 'New account',
       description : '<p>Account description</p>',
-      owner       : $rootScope.user._id
+      owner       : $rootScope.user._id,
+      canEdit     : true
     };
     $scope.contentLoading = false;
     console.log('account initiated', $scope.account);
@@ -142,6 +143,7 @@ angular.module('mean.accounts')
 
 
   $scope.createAccount = function(){
+    console.log('creating account');
     AccountSrv.save($scope.account, function(res){
       if (res.err){
         if (res.code === 11000) {
@@ -183,7 +185,7 @@ angular.module('mean.accounts')
       toaster.pop('alert',null,'File type ' + file.type + ' is not allowed');
       return;
     }
-    
+
     // First get a signed request from the Columby server
     $http({
       method: 'GET',

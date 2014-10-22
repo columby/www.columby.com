@@ -21,7 +21,7 @@
       <li>
         <button
           class    = "btn dbt-default options"
-          ng-show  = "editMode"
+          ng-show  = "editMode && dataset._id"
           ng-click = "toggleOptions()">Options
         </button>
       </li>
@@ -29,7 +29,7 @@
       <li>
         <button class="btn btn-default edit"
           type     = "button"
-          ng-show  = "editMode"
+          ng-show  = "editMode && dataset._id"
           ng-click = "toggleEditmode()">Exit edit mode
         </button>
       </li>
@@ -289,7 +289,7 @@
         </div>
       </div>
     </div>
-		
+
     <!-- Share Dataset -->
     <div class="share wrapper" ng-hide="editMode">
       <div class="container">

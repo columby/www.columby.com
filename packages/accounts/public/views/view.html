@@ -8,9 +8,9 @@
       ng-click = "toggleEditmode()">edit
     </button>
 
-    <button class="btn btn-default edit"
+    <button class="btn btn-default editmode"
       type     = "button"
-      ng-show  = "editMode"
+      ng-show  = "editMode && account._id"
       ng-click = "toggleEditmode()">Exit edit mode
     </button>
 
@@ -106,7 +106,7 @@
       </div>
     </div>
 
-    <div class="collections wrapper" ng-hide="editMode">
+    <!-- <div class="collections wrapper" ng-hide="editMode">
       <div class="container">
         <div class="col-md-12">
           <h3>Collections</h3>
@@ -122,6 +122,6 @@
           </ul>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </section>

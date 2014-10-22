@@ -40,13 +40,9 @@ var AccountSchema = new Schema({
 
   // Account settings
   name        : { type: String, unique: true },
-
   slug        : { type: String, unique: true },
-
   primary     : { type: Boolean },
-
   plan        : { type: String, default: 'free' },
-
   description : { type: String, required: false },
 
   avatar      : {
@@ -64,6 +60,7 @@ var AccountSchema = new Schema({
 
   datasets    : [{ type: Schema.ObjectId, ref: 'Dataset' }],
 
+  apikeys     : [ ],
   collections : [{ type: Schema.ObjectId, ref: 'Collection' }],
 
   createdAt   : { type:Date },
@@ -77,9 +74,16 @@ var AccountSchema = new Schema({
  */
 AccountSchema.pre('save', function(next) {
 
+  // When saving the new account, create a slug based on the username.
   var self=this;
   var slug=slugify(self.name);
   self.set('slug', slug);
+
+  // Create a new api-key for a new publication account.
+  if (self.isNew){
+    console.log('setting the default API-key');
+    self.apikeys.push(mongoose.Types.ObjectId());
+  }
 
   next();
 });
