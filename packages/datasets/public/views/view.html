@@ -38,7 +38,7 @@
 
   <!-- Editor Sidebar -->
   <div class="editorSidebar" ng-show="editMode && showOptions">
-    <div class="arrow"></div>
+    <div class="options-arrow"></div>
     <div class="editorSidebarContent">
       <div class="sidebarModule">
 	      <div class="visibility setting" ng-show="dataset._id">
@@ -137,7 +137,7 @@
 
         <!-- Editable avatar -->
         <div class="avatar">
-          <img src="{{$root.selectedAccount.avatar.url}}"/>
+          <a ui-sref="account.view({slug:dataset.account.slug})"><img src="{{$root.selectedAccount.avatar.url}}" alt="{{dataset.account.name}}"/></a>
         </div>
       </div>
     </div>

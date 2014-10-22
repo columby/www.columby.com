@@ -27,6 +27,11 @@ angular.module('mean.columby').config(['$stateProvider', '$locationProvider',
       templateUrl: 'columby/views/about.html',
     })
 
+    .state('roadmap', {
+      url: '/roadmap',
+      templateUrl: 'columby/views/roadmap.html',
+    })
+
     .state('features', {
       url: '/features',
       templateUrl: 'columby/views/features.html',
