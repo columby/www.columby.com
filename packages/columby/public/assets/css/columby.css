@@ -160,7 +160,7 @@ body .site-main {
 }
 body.sitenav-open .sitenav {
   left: 0;
-  z-index: 9999;
+  z-index: 1200;
 }
 body.sitenav-open .metabar .logo {
   display: none;
@@ -174,7 +174,7 @@ body .metabar-wrapper {
   /*border-bottom: 1px solid #eee;*/
   height: 60px;
   /*background: rgba(255,255,255,0.97);*/
-  z-index: 1000;
+  z-index: 1250;
   padding: 20px;
 }
 body .metabar-wrapper .metabar {
