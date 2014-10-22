@@ -71,10 +71,18 @@ button {
   font-weight: bolder;
   float: right;
 }
+.actions-bar button:focus {
+  color: #fff;
+  outline: 0 !important;
+}
 .actions-bar button:hover {
   background: none;
   color: #000;
-  border: solid 2px #fff;
+  border: solid 2px #000;
+}
+.actions-bar button.active {
+  color: #000;
+  border: solid 2px #000;
 }
 .actions-bar button.logout {
   background: rgba(255, 66, 66, 0.6);

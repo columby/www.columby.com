@@ -83,10 +83,18 @@ button{
     color: #fff;
     font-weight: bolder;
     float: right;
+    &:focus {
+      color: #fff;
+      outline: 0 !important;
+    }
     &:hover{
       background: none;
       color: #000;
-      border: solid 2px #fff;
+      border: solid 2px #000;
+    }
+    &.active{
+      color: #000;
+      border: solid 2px #000;
     }
   }
   
