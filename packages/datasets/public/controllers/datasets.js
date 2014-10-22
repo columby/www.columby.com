@@ -10,8 +10,8 @@ angular.module('mean.datasets')
 
 
 .controller('DatasetViewCtrl', [
-  '$rootScope', '$scope', '$location', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster', 'Slug', 'ngDialog','EmbedlySrv',
-  function($rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, MetabarSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv) {
+  'configuration', '$rootScope', '$scope', '$location', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster', 'Slug', 'ngDialog','EmbedlySrv','$http', '$upload',
+  function(configuration, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, MetabarSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv, $http, $upload) {
 
     /***   INITIALISATION   ***/
     //var editWatcher;               // Watch for model changes in editmode
@@ -74,6 +74,9 @@ angular.module('mean.datasets')
         if ($rootScope.selectedAccount && (dataset.account._id === $rootScope.selectedAccount._id)){
           $scope.dataset.canEdit = true;
         }
+
+        updateHeaderImage();
+
       });
     }
 
@@ -100,6 +103,14 @@ angular.module('mean.datasets')
       }
     }
 
+
+    function updateHeaderImage(){
+      $scope.headerStyle={
+        'background-image': 'url(/columby/assets/img/default-header.svg), url(' + $scope.dataset.headerImage + ')',
+        '-webkit-filter': 'hue-rotate(90deg)',
+        'background-blend-mode': 'multiply'
+      };
+    }
 
     /***   SCOPE FUNCTIONS   ***/
 
@@ -300,6 +311,118 @@ angular.module('mean.datasets')
       });
     };
 
+    $scope.updateHeaderImage = function($files) {
+      $scope.upload=[];
+      var file = $files[0];
+      file.progress = parseInt(0);
+      console.log('file', file);
+
+      // check if the file is an image
+      var validTypes = [ 'image/png', 'image/jpg' ];
+
+      if (validTypes.indexOf(file.type) === -1) {
+        toaster.pop('alert',null,'File type ' + file.type + ' is not allowed');
+        return;
+      }
+
+      // First get a signed request from the Columby server
+      $http({
+        method: 'GET',
+        url: 'api/v2/files/sign',
+        params: {
+          type: file.type,
+          size: file.size,
+          name: file.name,
+          accountId: $scope.dataset.account._id
+        },
+        headers: {
+          Authorization: AuthSrv.getColumbyJWT()
+        }
+      })
+        .success(function(response){
+          var s3Params = response.credentials;
+          var fileResponse = response.file;
+          // Initiate upload
+          $scope.upload = $upload.upload({
+            url: 'https://s3.amazonaws.com/' + configuration.aws.bucket,
+            method: 'POST',
+            data: {
+              'key' : $scope.dataset.account._id + '/' + response.file.filename,
+              'acl' : 'public-read',
+              'Content-Type' : file.type,
+              'AWSAccessKeyId': s3Params.AWSAccessKeyId,
+              'success_action_status' : '201',
+              'Policy' : s3Params.s3Policy,
+              'Signature' : s3Params.s3Signature
+            },
+            file: file,
+          }).then(function(response) {
+            console.log(response.data);
+            file.progress = parseInt(100);
+            if (response.status === 201) {
+              // convert xml response to json
+              var data = window.xml2json.parser(response.data),
+              parsedData;
+              parsedData = {
+                  location: data.postresponse.location,
+                  bucket: data.postresponse.bucket,
+                  key: data.postresponse.key,
+                  etag: data.postresponse.etag
+              };
+
+              // upload finished, update the file reference
+              $http({
+                method: 'POST',
+                url: 'api/v2/files/s3success',
+                data: {
+                  fileId: fileResponse._id,
+                  url: parsedData.location
+                },
+                headers: {
+                  Authorization: AuthSrv.getColumbyJWT()
+                }
+              })
+              .success(function(response){
+                console.log('res', response);
+                $scope.dataset.headerImage = response.url;
+                var d = {
+                  datasetId: $scope.dataset._id,
+                  headerImage: response.url
+                };
+                console.log('datasetUpdate', d);
+                DatasetSrv.update(d, function(result){
+                  console.log('r',result);
+                  if (result._id) {
+                    toaster.pop('success', 'Updated', 'Account updated.');
+                    updateHeaderImage();
+                  } else {
+                    toaster.pop('warning', 'Updated', 'Account There was an error updating.');
+                  }
+                });
+              })
+              .error(function(data, status, headers, config){
+                console.log('res', data);
+                console.log(status);
+                console.log(headers);
+                console.log(config);
+              });
+              // $scope.imageUploads.push(parsedData);
+
+            } else {
+                alert('Upload Failed');
+            }
+          }, function(e){
+            console.log(e);
+          }, function(evt) {
+            console.log(evt);
+            file.progress =  parseInt(100.0 * evt.loaded / evt.total);
+          });
+        })
+        .error(function(data, status, headers, config){
+          console.log('Error message', data.err);
+          console.log(status);
+        });
+    };
 
 
     /*** Reference functions */

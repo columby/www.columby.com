@@ -136,6 +136,8 @@ exports.update = function(req, res) {
 
     if (req.body.slug) { dataset.slug = req.body.slug; }
 
+    if (req.body.headerImage) { dataset.headerImage = req.body.headerImage; }
+
     dataset.updated = new Date();
 
     dataset.save(function(err){

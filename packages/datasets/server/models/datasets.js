@@ -25,7 +25,8 @@ var DatasetSchema = new Schema({
   title           : { type : String, trim: true },
   description     : { type : String, trim: true },
   slug            : { type : String },
-
+  headerImage     : { type : String },
+  
   account         : { type: Schema.ObjectId, ref:  'Account' },
 
   visibilityStatus    : { type: String, default: 'public' },
