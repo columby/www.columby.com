@@ -175,6 +175,15 @@ angular.module('mean.accounts')
     var file = $files[0];
     file.progress = parseInt(0);
     console.log('file', file);
+
+    // check if the file is an image
+    var validTypes = [ 'image/png' ];
+
+    if (validTypes.indexOf(file.type) === -1) {
+      toaster.pop('alert',null,'File type ' + file.type + ' is not allowed');
+      return;
+    }
+    
     // First get a signed request from the Columby server
     $http({
       method: 'GET',
@@ -188,26 +197,25 @@ angular.module('mean.accounts')
       headers: {
         Authorization: AuthSrv.getColumbyJWT()
       }
-    }).success(function(response){
-      var s3Params = response.credentials;
-      var fileResponse = response.file;
-      // Initiate upload
-      $scope.upload = $upload.upload({
-        url: 'https://s3.amazonaws.com/' + configuration.aws.bucket,
-        method: 'POST',
-        data: {
-          'key' : $scope.account._id + '/' + response.file.filename,
-          'acl' : 'public-read',
-          'Content-Type' : file.type,
-          'AWSAccessKeyId': s3Params.AWSAccessKeyId,
-          'success_action_status' : '201',
-          'Policy' : s3Params.s3Policy,
-          'Signature' : s3Params.s3Signature
-        },
-        file: file,
-      });
-
-      $scope.upload.then(function(response) {
+    })
+      .success(function(response){
+        var s3Params = response.credentials;
+        var fileResponse = response.file;
+        // Initiate upload
+        $scope.upload = $upload.upload({
+          url: 'https://s3.amazonaws.com/' + configuration.aws.bucket,
+          method: 'POST',
+          data: {
+            'key' : $scope.account._id + '/' + response.file.filename,
+            'acl' : 'public-read',
+            'Content-Type' : file.type,
+            'AWSAccessKeyId': s3Params.AWSAccessKeyId,
+            'success_action_status' : '201',
+            'Policy' : s3Params.s3Policy,
+            'Signature' : s3Params.s3Signature
+          },
+          file: file,
+        }).then(function(response) {
           console.log(response.data);
           file.progress = parseInt(100);
           if (response.status === 201) {
@@ -232,7 +240,8 @@ angular.module('mean.accounts')
               headers: {
                 Authorization: AuthSrv.getColumbyJWT()
               }
-            }).success(function(response){
+            })
+            .success(function(response){
               console.log('res', response);
               $scope.account.avatar.url = response.url;
               var a = {
@@ -250,6 +259,12 @@ angular.module('mean.accounts')
                   toaster.pop('warning', 'Updated', 'Account There was an error updating.');
                 }
               });
+            })
+            .error(function(data, status, headers, config){
+              console.log('res', data);
+              console.log(status);
+              console.log(headers);
+              console.log(config);
             });
             // $scope.imageUploads.push(parsedData);
 
@@ -262,7 +277,11 @@ angular.module('mean.accounts')
           console.log(evt);
           file.progress =  parseInt(100.0 * evt.loaded / evt.total);
         });
-    });
+      })
+      .error(function(data, status, headers, config){
+        console.log('Error message', data.err);
+        console.log(status);
+      });
   };
 
 

@@ -26,20 +26,20 @@ function getExpiryTime() {
     (_date.getDate() + 1) + 'T' + (_date.getHours() + 3) + ':' + '00:00.000Z';
 }
 
-function createS3Policy(params) {
+function createS3Policy(file) {
 
   var s3Policy = {
     'expiration': getExpiryTime(),
     'conditions': [
-      ['starts-with', '$key', params.accountId+'/'],
+      ['starts-with', '$key', file.owner+'/'],
       {'bucket': config.aws.bucket},
       {'acl': 'public-read'},
-      ['starts-with', '$Content-Type', params.type],
+      ['starts-with', '$Content-Type', file.type],
       {'success_action_status' : '201'},
-      ['content-length-range', 0, params.size]
+      ['content-length-range', 0, file.size]
     ]
   };
-  console.log('s3policy', s3Policy);
+  // console.log('s3policy', s3Policy);
 
   // stringify and encode the policy
   var stringPolicy = JSON.stringify(s3Policy);
@@ -155,41 +155,43 @@ exports.sign = function(req,res,next) {
   //   3. Create a policy for upload
 
   // Handle the supplied query parameters
-  var params = {
+  var file = {
     type      : req.query.type,
     size      : req.query.size,
     filename  : req.query.name,
-    accountId : req.query.accountId
+    owner     : req.query.accountId
   };
 
   // Slugify name
-  var ext = path.extname(params.filename);
-  var basename = path.basename(params.filename, ext);
-  basename = basename.toString().toLowerCase()
+  var ext = path.extname(file.filename);
+  var basename = path.basename(file.filename, ext).toString().toLowerCase()
       .replace(/\s+/g, '-')        // Replace spaces with -
       .replace(/[^\w\-]+/g, '')   // Remove all non-word chars
       .replace(/\-\-+/g, '-')      // Replace multiple - with single -
       .replace(/^-+/, '')          // Trim - from start of text
       .replace(/-+$/, '');         // Trim - from end of text
-  params.filename = basename+ext;
+  file.filename = basename+ext;
 
-  // Create database record
-  var file = {
-    type        : params.type,
-    size        : params.size,
-    owner       : req.user._id,
-  };
+  // Check file type validity
+  var validTypes = ['.jpg', '.png', '.jpeg'];
+  if (validTypes.indexOf(ext) === -1) {
+    res.status(400).json({err: 'File type ' + ext + ' is not allowed. '});
+  }
 
-  File.create(file, function(err,file){
+  // Check if a user can upload the filesize
+
+  // Create a File record in the database
+  File.create(file, function(err,doc){
     if (err) return res.json({err:err});
     if (!err) {
-      file.filename = file._id + '_' + params.filename;
-      file.save();
+      // update the filename, making it unique by using the _id
+      doc.filename = doc._id + '_' + file.filename;
+      doc.save();
       // Create policy
-      var credentials = createS3Policy(params);
+      var credentials = createS3Policy(file);
       // Send back the policy
       return res.json({
-        file: file,
+        file: doc,
         credentials: credentials
       });
     }

@@ -21,7 +21,7 @@ var FileSchema = new Schema({
   type          : { type: String },
   size          : { type: Number },
 
-  owner         : {type: Schema.ObjectId, ref: 'User' },
+  owner         : {type: Schema.ObjectId, ref: 'Account' },
 
   createdAt     : { type: Date, default: Date.now }
 });
