@@ -21,7 +21,7 @@
   margin-top: 1em;
   line-height: 1.2em;
 }
-.edit {
+textarea.edit {
   background: none;
   border-radius: 10px;
   padding: 10px;
@@ -30,7 +30,7 @@
   border: 1px solid rgba(255, 255, 255, 0);
   resize: none;
 }
-.edit:hover {
+textarea.edit:hover {
   border: 1px solid #fff;
 }
 .label {
@@ -38,8 +38,43 @@
   line-height: 2.3em;
   margin-left: 5px;
 }
+button {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  width: auto;
+}
 .btn {
   font-family: "lato", sans-serif;
+}
+.actions-bar {
+  text-align: right;
+}
+.actions-bar button {
+  background: none;
+  border: 2px solid #fff;
+  color: #fff;
+  font-weight: bolder;
+  float: right;
+}
+.actions-bar button:hover {
+  background: none;
+  color: #000;
+  border: solid 2px #fff;
 }
 .actions-bar button.logout {
   background: rgba(255, 66, 66, 0.6);
