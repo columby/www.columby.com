@@ -22,6 +22,7 @@
         <button
           class    = "btn dbt-default options"
           ng-show  = "editMode && dataset._id"
+          ng-class = "{active: showOptions}"
           ng-click = "toggleOptions()">Options
         </button>
       </li>
