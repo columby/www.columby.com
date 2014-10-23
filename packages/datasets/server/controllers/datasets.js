@@ -218,6 +218,7 @@ exports.getDistribution = function(req,res,id){
 };
 
 exports.createDistribution = function(req, res) {
+  console.log('creating distribution');
   var datasetId = req.params.datasetId;
   var distribution = req.body.distribution;
   distribution._id = mongoose.Types.ObjectId();

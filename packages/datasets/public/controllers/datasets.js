@@ -283,7 +283,7 @@ angular.module('mean.datasets')
           DatasetDistributionSrv.save({
             datasetId:$scope.dataset._id,
             distribution: distribution}, function(res){
-              console.log(res);
+              console.log('res', res);
               if (res.status === 'success'){
                 $scope.dataset.distributions.push(res.distribution);
                 toaster.pop('success', 'Updated', 'New dataset added.');

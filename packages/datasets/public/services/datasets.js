@@ -52,6 +52,7 @@ angular.module('mean.datasets')
         }
       },
       save: {
+        method: 'POST',
         headers: {
           Authorization: AuthSrv.columbyToken()
         }
@@ -81,6 +82,7 @@ angular.module('mean.datasets')
         }
       },
       save: {
+        method: 'POST',
         headers: {
           Authorization: AuthSrv.columbyToken()
         }
