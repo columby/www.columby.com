@@ -116,6 +116,9 @@
   font-size: 14px;
   line-height: 28px;
 }
+.dataset.view .content .uuid {
+  text-align: center;
+}
 .dataset.view .content h3 {
   font-size: 24px;
   line-height: 40px;
@@ -187,6 +190,11 @@
   -ms-animation: scale-fade 300ms forwards cubic-bezier(0.8, 0.02, 0.45, 0.91);
   -o-animation: scale-fade 300ms forwards cubic-bezier(0.8, 0.02, 0.45, 0.91);
   animation: scale-fade 300ms forwards cubic-bezier(0.8, 0.02, 0.45, 0.91);
+}
+.dataset.view .content .account.wrapper {
+  background: #eee;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 .dataset.view .content .dataset-sources h4,
 .dataset.view .content .dataset-references h4 {

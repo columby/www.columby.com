@@ -2,11 +2,13 @@
   <h3>Change Account</h3>
   <ul>
     <li ng-repeat="account in accounts">
-      <div>
-        <a href="" ng-click="switchAccount($index)"><img src="{{account.avatar.url}}"/></a>
-        <span class="account"><a href="" ng-click="switchAccount($index)">{{account.name}}</a></span>
-        <span class="currentAccount label bg-primary" ng-show="$root.selectedAccount._id === account._id">Current account</span>
-      </div>
+      <a href="" ng-click="switchAccount($index)">
+        <div>
+          <span class="currentAccount label bg-primary" ng-show="$root.selectedAccount._id === account._id">Current account</span>
+          <img src="{{account.avatar.url}}"/>
+          <span class="account">{{account.name}}</span>
+        </div>
+      </a>
     </li>
     <!-- <li><a href="" ng-click="addAccount()">+ Create a new account</a></li> -->
   </ul>
