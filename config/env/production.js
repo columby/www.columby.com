@@ -29,6 +29,7 @@ module.exports = {
 
   // Search service
   elasticsearch: {
-    host      : process.env.BONSAI_URL
+    host      : process.env.BONSAI_URL,
+    logging   : 'error'
   }
 };

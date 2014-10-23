@@ -25,7 +25,7 @@ exports.user = function(req, res) {
       .findById(req.user._id)
       .populate('accounts')
       .exec(function(err,user) {
-        console.log('user', user);
+        //console.log('user', user);
         console.log('err', err);
 
         return res.json(user);

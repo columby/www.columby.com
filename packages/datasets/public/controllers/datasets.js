@@ -33,7 +33,11 @@ angular.module('mean.datasets')
         datasetId: $stateParams.datasetId
       }, function(dataset) {
 
-        console.log('dataset', dataset);
+        if (!dataset._id){
+          toaster.pop('danger',null,'Sorry, the requested dataset was not found. ');
+          $state.go('home');
+          return;
+        }
         // add acquired dataset to the scope
         $scope.contentLoading = false;
         $scope.dataset = dataset;
