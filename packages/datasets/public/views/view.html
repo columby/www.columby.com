@@ -1,6 +1,9 @@
 <div class="dataset view" ng-controller="DatasetViewCtrl">
 
-  <div class="actions-bar" ng-show="dataset.canEdit">
+  <div class="actions-bar"
+    scroll-position="scroll"
+    ng-show="dataset.canEdit"
+    ng-class="{top: scroll<20}">
     <ul>
       <li>
         <button class="btn btn-default edit"
@@ -76,7 +79,7 @@
             class="btn btn-default"><i class="fa fa-question"></i>
           </button>
         </h3>
-				<span>https://columby.com/d/{{dataset.slug | slugify}}</span>
+				<span>{{hostname}}/d/{{dataset.slug | slugify}}</span>
 
 
         <form class="form-horizontal novalidate" role="form" name="slugForm">
@@ -140,10 +143,12 @@
             </p>
           </div>
 
-        <!-- Editable avatar -->
-        <div class="avatar">
-          <a ui-sref="account.view({slug:dataset.account.slug})"><img src="{{$root.selectedAccount.avatar.url}}" alt="{{dataset.account.name}}"/></a>
-            <img src="{{dataset.account.avatar.url || $root.user.accounts[ $root.user.selectedAccount].avatar.url}}" alt="{{dataset.account.name}}"/>
+          <!-- Editable avatar -->
+          <div class="avatar">
+            <a ui-sref="account.view({slug:dataset.account.slug})">
+              <img src="{{dataset.account.avatar.url || $root.user.accounts[ $root.user.selectedAccount].avatar.url}}" alt="{{dataset.account.name}}"/>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -197,7 +202,7 @@
     <div class="distributions wrapper" ng-hide="!dataset._id">
       <div class="container">
         <div class="col-md-12">
-          
+
           <h3>Data
             <button
               class="right btn-xs btn-tooltip"
@@ -227,7 +232,7 @@
             type="button"
             ng-click="initNewDistribution()"
             >Add new data</button>
-          
+
         </div>
       </div>
     </div>
@@ -252,12 +257,12 @@
     <div class="use wrapper" ng-hide="editMode">
       <div class="container">
         <div class="col-md-12">
-          
+
           <div class="content">
             <h3>Use this dataset</h3>
             <p>Some text about how to use this data.</p>
           </div>
-        
+
         </div>
       </div>
     </div>
@@ -266,11 +271,11 @@
     <div class="uuid wrapper" ng-show="dataset._id && !editMode">
       <div class="container">
         <div class="col-md-12">
-          
+
           <div class="content uuid">
             <h4>UUID: {{dataset._id}}</h4>
           </div>
-          
+
         </div>
       </div>
     </div>
@@ -279,7 +284,7 @@
     <div class="references wrapper" ng-hide="!dataset._id">
       <div class="container">
         <div class="col-md-12">
-          
+
           <div class="content">
             <h3>References<button
               class="right btn-xs btn-tooltip"
@@ -314,7 +319,7 @@
             ng-click="newReference()"
             >Add new reference</button>
           </div>
-        
+
         </div>
       </div>
     </div>
@@ -323,7 +328,7 @@
     <div class="account wrapper" ng-hide="editMode">
       <div class="container">
         <div class="col-md-12">
-        
+
           <div class="content">
               <h3>About {{dataset.account.name}}</h3>
               <div ng-bind-html="dataset.account.description"></div>

@@ -18,6 +18,7 @@ angular.module('mean.datasets')
 
     $scope.editMode = false;       // edit mode is on or off
     $scope.contentEdited = false;  // models is changed or not during editmode
+    $scope.hostname = $location.protocol() + '://' + $location.host();
 
     // check edit mode
     if ($location.path().split('/')[3] === 'edit') {
@@ -336,7 +337,7 @@ angular.module('mean.datasets')
           accountId: $scope.dataset.account._id
         },
         headers: {
-          Authorization: AuthSrv.getColumbyJWT()
+          Authorization: AuthSrv.columbyToken()
         }
       })
         .success(function(response){
@@ -379,7 +380,7 @@ angular.module('mean.datasets')
                   url: parsedData.location
                 },
                 headers: {
-                  Authorization: AuthSrv.getColumbyJWT()
+                  Authorization: AuthSrv.columbyToken()
                 }
               })
               .success(function(response){
