@@ -68,7 +68,6 @@ angular.module('mean.accounts')
   function updateHeaderImage(){
     $scope.headerStyle={
       'background-image': 'url(' + $scope.account.headerPattern + '), url(' + $scope.account.headerImage + ')',
-      '-webkit-filter': 'hue-rotate(90deg)',
       'background-blend-mode': 'multiply'
     };
   }

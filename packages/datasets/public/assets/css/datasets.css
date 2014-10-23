@@ -14,7 +14,7 @@
   left: 0;
   bottom: 0;
   right: 0;
-  z-index: 920;
+  z-index: 1250;
   background-color: #FFF;
   background-color: rgba(255, 255, 255, 0.97);
   -webkit-animation: ngdialog-flyin 0.5s;
@@ -96,6 +96,7 @@
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   line-height: 2em;
   color: #A7A7A7;
+  word-wrap: break-word;
 }
 .dataset.view .content .use p,
 .dataset.view .content .dataset-editor-content p,
