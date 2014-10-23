@@ -113,35 +113,38 @@
 
     <div class="header wrapper" ng-style="headerStyle">
       <div class="container">
+  			<div class="col-md-12">
 
-        <!-- Editable title -->
-        <div ng-switch="editMode">
-          <h1 class="title" ng-switch-default ng-bind-html="dataset.title || 'No title yet'"></h1>
+          <!-- Editable title -->
+          <div ng-switch="editMode">
+            <h1 class="title" ng-switch-default ng-bind-html="dataset.title || 'No title yet'"></h1>
 
-          <textarea ng-switch-when="true"
-            class       = "title edit"
-            auto-grow
-            type        = "text"
-            name        = "title"
-            placeholder = "Your title"
-            ng-model    = "dataset.titleUpdate"
-            ng-blur     = "updateTitle()"
-            focus       = "true"
-            ></textarea>
-          <h2 class="page-subtitle">dataset</h2>
-        </div>
+            <textarea ng-switch-when="true"
+              class       = "title edit"
+              auto-grow
+              type        = "text"
+              name        = "title"
+              placeholder = "Your title"
+              ng-model    = "dataset.titleUpdate"
+              ng-blur     = "updateTitle()"
+              focus       = "true"
+              ></textarea>
+            <h2 class="page-subtitle">dataset</h2>
+          </div>
 
-        <!-- Meta -->
-        <div class="meta" ng-show="dataset._id">
-          <p>A dataset by
-            <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name}}</a>,
-            <span class="published">created on <time class="post-date">{{dataset.createdAt | date:'d MMMM yyyy'}}</time></span>
-          </p>
-        </div>
+          <!-- Meta -->
+          <div class="meta" ng-show="dataset._id">
+            <p>A dataset by
+              <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name}}</a>,
+              <span class="published">created on <time class="post-date">{{dataset.createdAt | date:'d MMMM yyyy'}}</time></span>
+            </p>
+          </div>
 
-        <!-- Editable avatar -->
-        <div class="avatar">
-          <a ui-sref="account.view({slug:dataset.account.slug})"><img src="{{$root.selectedAccount.avatar.url}}" alt="{{dataset.account.name}}"/></a>
+          <!-- Editable avatar -->
+          <div class="avatar">
+            <a ui-sref="account.view({slug:dataset.account.slug})"><img src="{{$root.selectedAccount.avatar.url}}" alt="{{dataset.account.name}}"/></a>
+          </div>
+          
         </div>
       </div>
     </div>
@@ -182,35 +185,42 @@
     <!-- Dataset Info -->
     <div class="info wrapper" style="display:none;">
       <div class="container">
+        <div class="col-md-12">
         <!-- <div class="content" ng-bind-html="summary"></div> -->
-        <div class="content"><p>Dit is een voorbeeld van een data licentie regel die automatisch gegenereerd zal worden. Deze dataset heeft <span class="highlight">Licentie X.3.0</span>. De dataset bevat <span class="highlight">3</span> data distributions met in totaal <span class="highlight">351</span> rijen. Er zijn <span class="highlight">2</span> referenties.</p>
-          <h3>Columby score<button class="right btn-xs btn-tooltip" popover="The Columby Score meter gauges how specified your publication is. The strength will increase as you fill in the details and add more content." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3><progressbar class="progress-striped active" max="100" value="55"><i>55%</i></progressbar></div>
+          <div class="content"><p>Dit is een voorbeeld van een data licentie regel die automatisch gegenereerd zal worden. Deze dataset heeft <span class="highlight">Licentie X.3.0</span>. De dataset bevat <span class="highlight">3</span> data distributions met in totaal <span class="highlight">351</span> rijen. Er zijn <span class="highlight">2</span> referenties.</p>
+            <h3>Columby score<button class="right btn-xs btn-tooltip" popover="The Columby Score meter gauges how specified your publication is. The strength will increase as you fill in the details and add more content." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3><progressbar class="progress-striped active" max="100" value="55"><i>55%</i></progressbar>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Dataset Sources -->
     <div class="distributions wrapper" ng-hide="!dataset._id">
       <div class="container">
-        <h3>Data</h3>
-        <ul ng-hide="!dataset.distributions || dataset.distributions.length===0">
-          <li ng-repeat="distribution in dataset.distributions">
-						<h4><a href="{{distribution.accessUrl}}" target="_blank">{{distribution.accessUrl}}</a></h4>
-						<div class="date-size">{{distribution.distributionType}} - {{distribution.createdAt}} - {{distribution.size}}</div>
-            <div class="actions" ng-show="editMode">
-              <a href="" ng-click="editDistribution($index)"><i class="fa fa-edit"></i></a>
-              <a href="" ng-click="deleteDistribution($index)"><i class="fa fa-trash"></i></a>
-            </div>
-					</li>
-        </ul>
-        <p ng-show="!dataset.distributions || dataset.distributions.length===0">No sources added yet</p>
+        <div class="col-md-12">
+          
+          <h3>Data</h3>
+          <ul ng-hide="!dataset.distributions || dataset.distributions.length===0">
+            <li ng-repeat="distribution in dataset.distributions">
+  						<h4><a href="{{distribution.accessUrl}}" target="_blank">{{distribution.accessUrl}}</a></h4>
+  						<div class="date-size">{{distribution.distributionType}} - {{distribution.createdAt}} - {{distribution.size}}</div>
+              <div class="actions" ng-show="editMode">
+                <a href="" ng-click="editDistribution($index)"><i class="fa fa-edit"></i></a>
+                <a href="" ng-click="deleteDistribution($index)"><i class="fa fa-trash"></i></a>
+              </div>
+  					</li>
+          </ul>
+          <p ng-show="!dataset.distributions || dataset.distributions.length===0">No sources added yet</p>
 
-        <!-- Datasource Modal -->
-        <button
-          ng-show="editMode"
-          class="btn btn-default"
-          type="button"
-          ng-click="initNewDistribution()"
-          >Add new data</button>
+          <!-- Datasource Modal -->
+          <button
+            ng-show="editMode"
+            class="btn btn-default"
+            type="button"
+            ng-click="initNewDistribution()"
+            >Add new data</button>
+          
+        </div>
       </div>
     </div>
 
@@ -233,9 +243,13 @@
     <!-- Dataset Use -->
     <div class="use wrapper" ng-hide="editMode">
       <div class="container">
-        <div class="content">
-          <h3>Use this dataset</h3>
-          <p>Some text about how to use this data.</p>
+        <div class="col-md-12">
+          
+          <div class="content">
+            <h3>Use this dataset</h3>
+            <p>Some text about how to use this data.</p>
+          </div>
+        
         </div>
       </div>
     </div>
@@ -243,8 +257,12 @@
     <!-- Dataset UUID -->
     <div class="uuid wrapper" ng-show="dataset._id && !editMode">
       <div class="container">
-        <div class="content">
-          <h4>UUID: {{dataset._id}}</h4>
+        <div class="col-md-12">
+          
+          <div class="content uuid">
+            <h4>UUID: {{dataset._id}}</h4>
+          </div>
+          
         </div>
       </div>
     </div>
@@ -252,32 +270,36 @@
     <!-- Dataset references -->
     <div class="references wrapper" ng-hide="!dataset._id">
       <div class="container">
-        <div class="content">
-          <h3>References</h3>
-          <ul>
-            <li ng-repeat="reference in dataset.references">
-							<div class="col-md-12">
-                <h4><a href="{{reference.url}}">{{reference.title}}</a></h4>
-              </div>
-              <div class="col-sm-12">
-                <img src="{{reference.image}}" class="preview"/>
-                <p>{{reference.description}}</p>
-							  <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
-              </div>
-              <div class="actions" ng-show="editMode">
-                <a href="" ng-click="deleteReference($index)"><i class="fa fa-trash"></i></a>
-              </div>
-						</li>
-          </ul>
-          <p ng-show="!dataset.references || dataset.references.length===0">No references added yet</p>
+        <div class="col-md-12">
+          
+          <div class="content">
+            <h3>References</h3>
+            <ul>
+              <li ng-repeat="reference in dataset.references">
+  							<div class="col-md-12">
+                  <h4><a href="{{reference.url}}">{{reference.title}}</a></h4>
+                </div>
+                <div class="col-sm-12">
+                  <img src="{{reference.image}}" class="preview"/>
+                  <p>{{reference.description}}</p>
+  							  <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
+                </div>
+                <div class="actions" ng-show="editMode">
+                  <a href="" ng-click="deleteReference($index)"><i class="fa fa-trash"></i></a>
+                </div>
+  						</li>
+            </ul>
+            <p ng-show="!dataset.references || dataset.references.length===0">No references added yet</p>
 
-        <!-- Datasource Modal -->
-        <button
-          ng-show="editMode"
-          class="btn btn-default"
-          type="button"
-          ng-click="newReference()"
-          >Add new reference</button>
+          <!-- Datasource Modal -->
+          <button
+            ng-show="editMode"
+            class="btn btn-default"
+            type="button"
+            ng-click="newReference()"
+            >Add new reference</button>
+          </div>
+        
         </div>
       </div>
     </div>
@@ -285,11 +307,15 @@
     <!-- Dataset Account -->
     <div class="account wrapper" ng-hide="editMode">
       <div class="container">
-        <div class="content">
-            <h3>About {{dataset.account.name}}</h3>
-            <div ng-bind-html="dataset.account.description"></div>
-						<p class="more-about"><a ui-sref="account.view({slug: dataset.account.slug})">more about {{dataset.account.name}}</a></p>
+        <div class="col-md-12">
+        
+          <div class="content">
+              <h3>About {{dataset.account.name}}</h3>
+              <div ng-bind-html="dataset.account.description"></div>
+  						<p class="more-about"><a ui-sref="account.view({slug: dataset.account.slug})">more about {{dataset.account.name}}</a></p>
+            </div>
           </div>
+
         </div>
       </div>
     </div>
