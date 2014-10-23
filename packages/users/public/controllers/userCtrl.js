@@ -6,8 +6,8 @@ angular.module('mean.users')
  *
  ***/
 .controller('LoginCtrl', [
-  '$scope', '$rootScope', '$location', '$http','$state', 'AUTH_EVENTS', 'AuthSrv', 'toaster',
-  function ($scope, $rootScope, $location, $http, $state, AUTH_EVENTS, AuthSrv, toaster) {
+  '$scope', '$rootScope', '$location', '$http','$state', 'AUTH_EVENTS', 'AuthSrv', 'toaster', 'Slug',
+  function ($scope, $rootScope, $location, $http, $state, AUTH_EVENTS, AuthSrv, toaster, Slug) {
 
   /* ----- SETUP ------------------------------------------------------------ */
   $scope.loginInProgress = false;
@@ -26,17 +26,20 @@ angular.module('mean.users')
         // save JWT token in local storage (browser)
         localStorage.setItem('auth_token', JSON.stringify(response.token));
         // save JWT token in auth Service so we can use it with each request to the Columby API
-        AuthSrv.setColumbyJWT = 'Bearer ' + response.token;
+        AuthSrv.setColumbyToken = 'Bearer ' + response.token;
 
         // Let the app know
         $rootScope.user = {
           account: AuthSrv.user(),
-          isAuthenticated: AuthSrv.isAuthenticated()
+          isAuthenticated: AuthSrv.isAuthenticated(),
+          selectedAccount: 0
         };
-        $rootScope.selectedAccount = $rootScope.user.account.accounts[0];
+
         $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, response.user);
 
         toaster.pop('success', null, 'You have succesfully signed in.');
+        toaster.pop('success', null, 'Activated publication account: ' + $rootScope.user.accounts[0].username);
+
 
         // Redirect back to frontpage
         $state.go('home');
@@ -93,6 +96,18 @@ angular.module('mean.users')
         $scope.registrationSuccess = true;
       }
     });
+  };
+
+  $scope.slugifyName = function(){
+    console.log('sl', $scope.newuser.name);
+    if ($scope.newuser.name){
+      var n = Slug.slugify($scope.newuser.name);
+      console.log(n.length);
+      while(n.length<3){
+        n = n+'-';
+      }
+      $scope.newuser.name = n;
+    }
   };
 
 

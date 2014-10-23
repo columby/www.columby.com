@@ -19,7 +19,7 @@
       </li> -->
 
       <li ng-show="$root.user.isAuthenticated">
-        <a ui-sref="account.view({slug: $root.selectedAccount.slug})" ng-class="{active: $state.includes(account.view)}">
+        <a ui-sref="account.view({slug: $root.user.accounts[ $root.user.selectedAccount].slug})" ng-class="{active: $state.includes(account.view)}">
          My profile<!-- {{$root.selectedAccount.name}} -->
         </a>
         <span class="settings">

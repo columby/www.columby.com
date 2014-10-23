@@ -26,7 +26,7 @@ MeanUser.register(function(app, auth, database) {
 
   MeanUser.aggregateAsset('js', 'users.js');
 
-  MeanUser.angularDependencies(['textAngular','ngAnimate','toaster']);
+  MeanUser.angularDependencies(['textAngular','ngAnimate','toaster','slugifier']);
 	MeanUser.aggregateAsset('css','users.css');
 
   /**

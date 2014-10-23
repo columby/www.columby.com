@@ -51,7 +51,8 @@
               placeholder="name"
               ng-minlength="3"
               ng-maxlength="20"
-              ng-model="newuser.name" required>
+              ng-model="newuser.name"
+              ng-change="slugifyName()" required>
           </div>
         </div>
         <div class="form-group">

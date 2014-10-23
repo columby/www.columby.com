@@ -71,7 +71,7 @@ angular.module('mean.datasets')
         $scope.summary = summary + '</p>';
 
         $scope.dataset.canEdit = false;
-        if ($rootScope.selectedAccount && (dataset.account._id === $rootScope.selectedAccount._id)){
+        if (dataset.account._id === $rootScope.user.accounts[ $rootScope.user.selectedAccount]._id) {
           $scope.dataset.canEdit = true;
         }
 
@@ -89,7 +89,7 @@ angular.module('mean.datasets')
           url               : 'columby/assets/img/avatar.png'
         },
         draft:{},
-        account: $rootScope.selectedAccount._id,
+        account: $rootScope.user.accounts[ $rootScope.user.selectedAccount]._id,
         canEdit : true
       };
       toaster.pop('notice',null,'Here\'s your new dataset!');

@@ -30,25 +30,25 @@ angular.module('mean.users')
 
   function($resource, AuthSrv) {
 
-    console.log('a', AuthSrv.getColumbyJWT());
+    console.log('a', AuthSrv.columbyToken());
     return $resource('api/v2/account/:slug', {
       slug: '@slug'
     }, {
       update: {
         method: 'PUT',
         headers: {
-          Authorization: AuthSrv.getColumbyJWT()
+          Authorization: AuthSrv.columbyToken()
         }
       },
       get: {
         headers: {
-          Authorization: AuthSrv.getColumbyJWT()
+          Authorization: AuthSrv.columbyToken()
         }
       },
       save: {
         method: 'POST',
         headers: {
-          Authorization: AuthSrv.getColumbyJWT()
+          Authorization: AuthSrv.columbyToken()
         }
       },
     }

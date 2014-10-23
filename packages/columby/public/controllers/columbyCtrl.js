@@ -44,19 +44,17 @@ angular.module('mean.columby')
       // get token from localstorage and put it in header
       if ($window.localStorage.getItem('auth_token')) {
         var token = angular.fromJson($window.localStorage.getItem('auth_token'));
-        AuthSrv.setColumbyJWT(token);
-        //$http.defaults.headers.common.Authorization = 'Bearer ' + token;
-      }
-      // Get account with token
-      // account was already fetched before angular init
-      // We assume this is already processed.
-      $rootScope.user = window.user;
-      if ($rootScope.user && $rootScope.user.accounts && $rootScope.user.accounts[0]) {
-        $rootScope.selectedAccount = $rootScope.user.accounts[0];
+        AuthSrv.setColumbyToken(token);
       }
 
-      if ($rootScope.user.isAuthenticated){
-        toaster.pop('success', 'Welcome', 'Welcome back ' + $rootScope.user.email);
+      // Get account with token
+      $rootScope.user = AuthSrv.user();
+      $rootScope.user.isAuthenticated = AuthSrv.isAuthenticated();
+      $rootScope.user.selectedAccount = AuthSrv.selectedAccount();
+
+      if (AuthSrv.isAuthenticated){
+        console.log('Welcome back ' + AuthSrv.user().email);
+        toaster.pop('success', null, 'Welcome back ' + AuthSrv.user.email);
       }
     }
   ])
@@ -75,7 +73,6 @@ angular.module('mean.columby')
 
     /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
     function listDatasets() {
-      console.log('listing datasets');
       DatasetSrv.query(function(response){
         $scope.datasets = response;
         $scope.contentLoading = false;
@@ -117,13 +114,15 @@ angular.module('mean.columby')
     function($rootScope, $scope, $http, toaster, $location, AuthSrv, $state) {
 
       /* ---------- SETUP ----------------------------------------------------------------------------- */
-      $scope.controller = {name: 'SiteNavController'};
 
 
       /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
+
+      // State change
       $rootScope.$on('$stateChangeStart', function (event, next) {
         $rootScope.$broadcast('sitenav::toggle', 'close');
       });
+
       // Account updated
       $scope.$on('account::updated', function(e){
         //$scope.global.user = AuthSrv.user();
@@ -151,6 +150,7 @@ angular.module('mean.columby')
           }
       });
 
+
       /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
       // function to send a message to the rootscope to toggle the sitenav
       $scope.toggleSiteNav = function(e) {
@@ -162,9 +162,7 @@ angular.module('mean.columby')
       };
 
       $scope.changeSelectedAccount = function(index) {
-        console.log('changing account', index);
-        //$scope.status.isopen = !$scope.status.isopen;
-        $rootScope.selectedAccount = $rootScope.user.accounts[ index];
+        $rootScope.user.selectedAccount = index;
         $scope.toggleAccountSelector();
       };
 

@@ -16,8 +16,8 @@ angular.module('mean.users')
 })
 
 // Check permission to view the page.
-.run(['$rootScope', 'AUTH_EVENTS', '$state', 'AuthSrv',
-  function ($rootScope, AUTH_EVENTS, $state, AuthSrv) {
+.run(['$rootScope', 'AUTH_EVENTS', '$state', 'AuthSrv', 'toaster',
+  function ($rootScope, AUTH_EVENTS, $state, AuthSrv, toaster) {
 
     $rootScope.$on('$stateChangeStart', function (event, next) {
 
@@ -29,7 +29,7 @@ angular.module('mean.users')
           if (AuthSrv.isAuthenticated()){
             event.preventDefault();
             // Checking for Anonymous access only.
-            //toaster.pop('success', 'Logged in', 'You are already logged in.');
+            toaster.pop('success', null, 'Anonymous access only.');
             // Redirect back to account page
             $state.go('home');
           }
@@ -43,7 +43,7 @@ angular.module('mean.users')
           if (!AuthSrv.isAuthorized(authorizedRoles)) {
 
             event.preventDefault();
-            //toaster.pop('success', 'Not authorized', 'You are not authorized to access the requested page');
+            toaster.pop('danger', null, 'You are not authorized to access the requested page');
 
             //If no previous state, go to home
             $state.go('home');

@@ -13,18 +13,18 @@ angular.module('mean.datasets')
       update: {
         method: 'PUT',
         headers: {
-          Authorization: AuthSrv.getColumbyJWT
+          Authorization: AuthSrv.columbyToken()
         }
       },
       get: {
         headers: {
-          Authorization: AuthSrv.getColumbyJWT
+          Authorization: AuthSrv.columbyToken()
         }
       },
       save: {
         method: 'POST',
         headers: {
-          Authorization: AuthSrv.getColumbyJWT
+          Authorization: AuthSrv.columbyToken()
         }
       },
     }
@@ -43,17 +43,17 @@ angular.module('mean.datasets')
       update: {
         method: 'PUT',
         headers: {
-          Authorization: AuthSrv.getColumbyJWT
+          Authorization: AuthSrv.columbyToken()
         }
       },
       get: {
         headers: {
-          Authorization: AuthSrv.getColumbyJWT
+          Authorization: AuthSrv.columbyToken()
         }
       },
       save: {
         headers: {
-          Authorization: AuthSrv.getColumbyJWT
+          Authorization: AuthSrv.columbyToken()
         }
       },
     }
@@ -72,17 +72,17 @@ angular.module('mean.datasets')
       update: {
         method: 'PUT',
         headers: {
-          Authorization: AuthSrv.getColumbyJWT
+          Authorization: AuthSrv.columbyToken()
         }
       },
       get: {
         headers: {
-          Authorization: AuthSrv.getColumbyJWT
+          Authorization: AuthSrv.columbyToken()
         }
       },
       save: {
         headers: {
-          Authorization: AuthSrv.getColumbyJWT
+          Authorization: AuthSrv.columbyToken()
         }
       }
     }

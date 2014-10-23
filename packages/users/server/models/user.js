@@ -39,13 +39,9 @@ var UserSchema = new Schema({
     validate: [validateUniqueEmail, 'E-mail address is already in-use']
   },
 
-  name      : { type: String },
-    
   verified  : { type: Boolean, default: false },
 
   accounts  : [{ type: Schema.ObjectId, ref: 'Account' }],
-
-  roles     : { type: Array, default: ['authenticated'] },
 
   createdAt : { type: Date, default: new Date() }
 
@@ -63,17 +59,6 @@ UserSchema.methods = {
     } else {
       return false;
     }
-  },
-
-  // HasRole - check if the user has required role
-  hasRole: function(role) {
-    var roles = this.roles;
-    return roles.indexOf('admin') !== -1 || roles.indexOf(role) !== -1;
-  },
-
-  // IsAdmin - check if the user is an administrator
-  isAdmin: function() {
-    return this.roles.indexOf('administrator') !== -1;
   }
 };
 

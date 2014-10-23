@@ -2,27 +2,34 @@
 
 angular.module('mean.users')
 
-.factory('AuthSrv', [
-  '$http',
-  function ($http) {
+.factory('AuthSrv', [ '$http', function ($http) {
+
     // user object
     var user = (window.hasOwnProperty('user')) ? window.user : {};
-
-    var columbyJWT;
+    // selected publication account
+    var selectedAccount = 0;
+    // Token token for api access
+    var columbyToken;
 
     return {
 
-      setColumbyJWT: function(token){
-        columbyJWT = 'Bearer ' + token;
+      // Getters and setters
+      setColumbyToken: function(token) {
+        columbyToken = 'Bearer ' + token;
+      },
+      columbyToken: function(){
+        return columbyToken;
       },
 
-      getColumbyJWT: function(){
-        return columbyJWT;
-      },
+      setUser: function(u) { user = u;    },
+      user: function()  { return user; },
 
-      login: function(credentials){
-        //https://docs.angularjs.org/api/ng/service/$http#post
-        var promise = $http.post('/api/v2/user/login', credentials, {headers: {'Authorization': columbyJWT}})
+      setSelectedAccount: function(a) { selectedAccount = a;    },
+      selectedAccount: function()  { return selectedAccount; },
+
+
+      login: function(credentials) {
+        var promise = $http.post('/api/v2/user/login', credentials, {headers: {'Authorization': columbyToken}})
           .then(function (response) {
             if (response.data.user){
               user = response.data.user;
@@ -32,7 +39,7 @@ angular.module('mean.users')
         return promise;
       },
 
-      register: function(credentials){
+      register: function(credentials) {
         var promise = $http.post('/api/v2/user/register', credentials)
           .then(function (response) {
             if (response.data.user){
@@ -56,8 +63,9 @@ angular.module('mean.users')
         return promise;
       },
 
+      // Logout a current user
       logout: function(){
-        var promise = $http.get('/api/v2/user/logout', {headers: {'Authorization': columbyJWT}})
+        var promise = $http.get('/api/v2/user/logout', {headers: {'Authorization': columbyToken}})
           .then(function(response){
             user = {};
             return response.data;
@@ -67,7 +75,7 @@ angular.module('mean.users')
 
       // Get account of currently logged in user, and save it as the main user object
       getUser: function(){
-        var promise = $http.get('/api/v2/user', {headers: {'Authorization': columbyJWT}})
+        var promise = $http.get('/api/v2/user', {headers: {'Authorization': columbyToken}})
           .then(function(result){
             console.log('fetched user', result.data);
             user = result.data;
@@ -86,10 +94,11 @@ angular.module('mean.users')
           authorizedRoles = [authorizedRoles];
         }
         var trustedRole = false;
-        if (user.roles) {
-          console.log('user roles,', user.roles);
+        var accountRoles = user.accounts[ selectedAccount].roles;
+        if (accountRoles) {
+          console.log('user roles,', accountRoles);
           trustedRole = authorizedRoles.every(function(v,i) {
-            return user.roles.indexOf(v) !== -1;
+            return accountRoles.indexOf(v) !== -1;
           });
         }
 
@@ -132,12 +141,9 @@ angular.module('mean.users')
         return allowEdit;
       },
 
-      user: function() {
-        return user;
-      },
 
       getProfile: function(slug) {
-        var promise = $http.get('/api/v2/user/profile/' + slug, {headers: {'Authorization': columbyJWT}})
+        var promise = $http.get('/api/v2/user/profile/' + slug, {headers: {'Authorization': columbyToken}})
           .then(function(response){
             console.log('profile', response);
             return response.data;
@@ -147,7 +153,7 @@ angular.module('mean.users')
 
       updateProfile: function(profile) {
         console.log('profile', profile);
-        var promise = $http.put('/api/v2/user/profile', profile, {headers: {'Authorization': columbyJWT}})
+        var promise = $http.put('/api/v2/user/profile', profile, {headers: {'Authorization': columbyToken}})
           .then(function(result){
             return result.data;
           });

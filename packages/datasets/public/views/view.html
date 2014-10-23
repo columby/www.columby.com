@@ -141,7 +141,9 @@
 
         <!-- Editable avatar -->
         <div class="avatar">
-          <a ui-sref="account.view({slug:dataset.account.slug})"><img src="{{$root.selectedAccount.avatar.url}}" alt="{{dataset.account.name}}"/></a>
+          <a ui-sref="account.view({slug:dataset.account.slug})">
+            <img src="{{dataset.account.avatar.url || $root.user.accounts[ $root.user.selectedAccount].avatar.url}}" alt="{{dataset.account.name}}"/>
+          </a>
         </div>
       </div>
     </div>

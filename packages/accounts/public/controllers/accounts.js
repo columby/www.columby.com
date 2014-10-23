@@ -196,7 +196,7 @@ angular.module('mean.accounts')
         accountId: $scope.account._id
       },
       headers: {
-        Authorization: AuthSrv.getColumbyJWT()
+        Authorization: AuthSrv.columbyToken()
       }
     })
       .success(function(response){
@@ -239,7 +239,7 @@ angular.module('mean.accounts')
                 url: parsedData.location
               },
               headers: {
-                Authorization: AuthSrv.getColumbyJWT()
+                Authorization: AuthSrv.columbyToken()
               }
             })
             .success(function(response){
