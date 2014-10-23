@@ -57,6 +57,9 @@
 .dataset .actions-bar ul li button.ng-hide {
   margin: 0;
 }
+.switcher h3 {
+  margin-bottom: 40px;
+}
 .switcher ul li {
   list-style: none;
 }
@@ -64,10 +67,10 @@
   display: block;
   margin: 0 auto;
   width: 450px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
+  border-top: 1px solid #ABABAB;
+  padding: 10px;
   margin-bottom: 11px;
-  height: 110px;
+  height: 120px;
 }
 .switcher ul li div img {
   width: 100px;
@@ -76,10 +79,11 @@
   float: left;
   display: block;
 }
-.switcher ul li div a {
+.switcher ul li div span.account {
   float: left;
   font-size: 2em;
   margin-top: 40px;
+  color: #444;
 }
 .switcher ul li div .label {
   vertical-align: top;

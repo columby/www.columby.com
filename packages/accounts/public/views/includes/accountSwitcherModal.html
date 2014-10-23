@@ -3,8 +3,8 @@
   <ul>
     <li ng-repeat="account in accounts">
       <div>
-        <img src="{{account.avatar.url}}"/>
-        <a href="" ng-click="switchAccount($index)">{{account.name}}</a>
+        <a href="" ng-click="switchAccount($index)"><img src="{{account.avatar.url}}"/></a>
+        <span class="account"><a href="" ng-click="switchAccount($index)">{{account.name}}</a></span>
         <span class="currentAccount label bg-primary" ng-show="$root.selectedAccount._id === account._id">Current account</span>
       </div>
     </li>

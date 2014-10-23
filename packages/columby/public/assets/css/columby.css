@@ -695,6 +695,7 @@ body .metabar-wrapper .actions {
   margin-bottom: 4.5em;
   background-image: url('/columby/assets/img/default-header.svg');
   background-position: 50% 50%;
+  background-size: cover;
 }
 .header.wrapper h1 {
   font-size: 70px;
@@ -704,6 +705,7 @@ body .metabar-wrapper .actions {
   position: relative;
   text-align: center;
   text-transform: none;
+  text-shadow: 1px 1px #323232;
 }
 .header.wrapper h1.editable-placeholder {
   opacity: 0.5;
@@ -723,6 +725,11 @@ body .metabar-wrapper .actions {
   opacity: 0.9;
   color: #fff;
   margin-top: 3px;
+  text-shadow: 1px 1px #323232;
+}
+.header.wrapper .meta p {
+  color: #fff;
+  text-shadow: 1px 1px #323232;
 }
 .header.wrapper .avatar {
   -ms-transform: translate(0, 30px);

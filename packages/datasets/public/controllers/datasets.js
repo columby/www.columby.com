@@ -106,8 +106,7 @@ angular.module('mean.datasets')
 
     function updateHeaderImage(){
       $scope.headerStyle={
-        'background-image': 'url(/columby/assets/img/default-header.svg), url(' + $scope.dataset.headerImage + ')',
-        '-webkit-filter': 'hue-rotate(90deg)',
+        'background-image': 'url(/columby/assets/img/bg.png), url(' + $scope.dataset.headerImage + ')',
         'background-blend-mode': 'multiply'
       };
     }
@@ -318,7 +317,7 @@ angular.module('mean.datasets')
       console.log('file', file);
 
       // check if the file is an image
-      var validTypes = [ 'image/png', 'image/jpg' ];
+      var validTypes = [ 'image/png', 'image/jpg', 'image/jpeg' ];
 
       if (validTypes.indexOf(file.type) === -1) {
         toaster.pop('alert',null,'File type ' + file.type + ' is not allowed');
