@@ -194,6 +194,7 @@ angular.module('mean.datasets')
 
     $scope.create = function() {
       $scope.dataset.title = $scope.dataset.titleUpdate;
+      $scope.dataset.description = $scope.dataset.descriptionUpdate;
       DatasetSrv.save($scope.dataset, function(res){
         console.log('create',res);
         if (res._id) {
