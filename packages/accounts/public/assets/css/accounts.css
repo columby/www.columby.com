@@ -67,10 +67,13 @@
   display: block;
   margin: 0 auto;
   width: 450px;
-  border-top: 1px solid #ABABAB;
+  background: #EEE;
   padding: 10px;
   margin-bottom: 11px;
   height: 120px;
+}
+.switcher ul li div:hover {
+  background: #ABABAB;
 }
 .switcher ul li div img {
   width: 100px;
@@ -87,9 +90,7 @@
 }
 .switcher ul li div .label {
   vertical-align: top;
-  margin-left: 10px;
-  float: left;
-  margin-top: 40px;
+  float: right;
   height: 21px;
   line-height: 1.4em;
 }
