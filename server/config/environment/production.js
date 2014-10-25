@@ -19,5 +19,13 @@ module.exports = {
             process.env.MONGOHQ_URL ||
             process.env.OPENSHIFT_MONGODB_DB_URL+process.env.OPENSHIFT_APP_NAME ||
             'mongodb://localhost/columby'
-  }
+  },
+
+  jwt: {
+    secret: process.env.JWT_SECRET
+  },
+
+  mandrill : {
+    key:    process.env.MANDRILL_KEY
+  },
 };
