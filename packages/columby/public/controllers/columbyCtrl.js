@@ -3,7 +3,8 @@
 angular.module('mean.columby')
 
   // Check permission to view the page.
-  .run(function ($rootScope, configuration) {
+  .run(['$rootScope', 'configuration', '$state', '$stateParams',
+    function ($rootScope, configuration,$state, $stateParams) {
 
     // Add configuration to the rootScope
     $rootScope.configuration = configuration;
@@ -16,7 +17,7 @@ angular.module('mean.columby')
     $rootScope.$on('$stateChangeSuccess', function (event, next) {
       angular.element('body').removeClass('isLoading');
     });
-  })
+  }])
 
 
   /***

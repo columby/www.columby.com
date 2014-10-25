@@ -5,13 +5,12 @@ var mean = require('meanio'),
 ;
 
 exports.render = function(req, res) {
-
+  console.log('rendering');
   var settings = {
     aws : {
       publicKey: config.aws.publicKey,
       endpoint: config.aws.endpoint
-    },
-    elasticsearch: config.elasticsearch
+    }
   };
 
   var modules = [];
@@ -23,11 +22,6 @@ exports.render = function(req, res) {
       angularDependencies: mean.modules[name].angularDependencies
     });
   }
-
-  function isAdmin() {
-    return req.user && req.user.roles.indexOf('admin') !== -1;
-  }
-
 
   // Send some basic starting info to the view
   res.render('index', {
@@ -43,8 +37,8 @@ exports.render = function(req, res) {
 
     modules: modules,
 
-    isAdmin: isAdmin,
+    //isAdmin: isAdmin,
 
-    adminEnabled: isAdmin() && mean.moduleEnabled('mean-admin')
+    //adminEnabled: isAdmin() && mean.moduleEnabled('mean-admin')
   });
 };
