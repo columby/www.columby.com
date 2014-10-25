@@ -1,5 +1,0 @@
-{
-  "AWS_ACCESS_KEY_ID" : "AKIAIA6FZGJ3WN5NKSXA",
-  "S3_BUCKET_NAME"    : "columby-dev",
-  "AWS_S3_ENDPOINT"   : "s3.amazonaws.com/columby-dev"  
-}

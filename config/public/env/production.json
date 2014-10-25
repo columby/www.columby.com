@@ -1,5 +1,0 @@
-{
-  "AWS_ACCESS_KEY_ID" : "AKIAIERE7X62EYZM23HA",
-  "S3_BUCKET_NAME"    : "columby",
-  "AWS_S3_ENDPOINT"   : "columby.s3-us-west-2.amazonaws.com"
-}

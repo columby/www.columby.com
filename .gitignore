@@ -57,3 +57,5 @@ test/coverage/
 modules/public/
 modules/views/
 /public/build/
+
+/server/config/local.env.js

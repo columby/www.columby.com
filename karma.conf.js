@@ -1,58 +1,66 @@
-'use strict';
-
 // Karma configuration
+// http://karma-runner.github.io/0.10/config/configuration-file.html
+
 module.exports = function(config) {
-  var _ = require('lodash'),
-    basePath = '.',
-    assets = require(basePath + '/config/assets.json');
-
   config.set({
-
     // base path, that will be used to resolve files and exclude
-    basePath: basePath,
+    basePath: '',
 
-    // frameworks to use
+    // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
 
     // list of files / patterns to load in the browser
-    files: _.flatten(_.values(assets.core.js)).concat([
-      'packages/*/public/*.js',
-      'packages/*/public/*/*.js'
-    ]),
+    files: [
+      'client/bower_components/jquery/dist/jquery.js',
+      'client/bower_components/angular/angular.js',
+      'client/bower_components/angular-mocks/angular-mocks.js',
+      'client/bower_components/angular-resource/angular-resource.js',
+      'client/bower_components/angular-cookies/angular-cookies.js',
+      'client/bower_components/angular-sanitize/angular-sanitize.js',
+      'client/bower_components/angular-route/angular-route.js',
+      'client/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      'client/bower_components/lodash/dist/lodash.compat.js',
+      'client/bower_components/angular-ui-router/release/angular-ui-router.js',
+      'client/app/app.js',
+      'client/app/app.coffee',
+      'client/app/**/*.js',
+      'client/app/**/*.coffee',
+      'client/components/**/*.js',
+      'client/components/**/*.coffee',
+      'client/app/**/*.jade',
+      'client/components/**/*.jade',
+      'client/app/**/*.html',
+      'client/components/**/*.html'
+    ],
 
-    // list of files to exclude
+    preprocessors: {
+      '**/*.jade': 'ng-jade2js',
+      '**/*.html': 'html2js',
+      '**/*.coffee': 'coffee',
+    },
+
+    ngHtml2JsPreprocessor: {
+      stripPrefix: 'client/'
+    },
+
+    ngJade2JsPreprocessor: {
+      stripPrefix: 'client/'
+    },
+
+    // list of files / patterns to exclude
     exclude: [],
 
-    // test results reporter to use
-    // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['progress', 'coverage'],
-
-    // coverage
-    preprocessors: {
-      // source files that you want to generate coverage for
-      // do not include tests or libraries
-      // (these files will be instrumented by Istanbul)
-      'packages/*/public/controllers/*.js': ['coverage'],
-      'packages/*/public/services/*.js': ['coverage']
-    },
-
-    coverageReporter: {
-      type: 'html',
-      dir: 'test/coverage/'
-    },
-
     // web server port
-    port: 9876,
-
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
+    port: 8080,
 
     // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
     logLevel: config.LOG_INFO,
 
+
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+    autoWatch: false,
+
 
     // Start these browsers, currently available:
     // - Chrome
@@ -64,11 +72,9 @@ module.exports = function(config) {
     // - IE (only Windows)
     browsers: ['PhantomJS'],
 
-    // If browser does not capture in given timeout [ms], kill it
-    captureTimeout: 60000,
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: true
+    singleRun: false
   });
 };
