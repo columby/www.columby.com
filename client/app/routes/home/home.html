@@ -35,12 +35,13 @@
 
 
 
-      <div class="recent-publications col-md-12" ng-hide="search.hits.length">
+      <div class="col-md-12 recent-publications" ng-hide="search.hits.length">
         <h3>Recently published</h2>
         <div class="publication-listing">
 					<ul>
-          <li ng-repeat="dataset in datasets" class="publication-item">
-            <h4><a ui-sref="dataset.view({ datasetId: dataset._id })" ng-bind-html="dataset.title || 'Untitled'"></a><!-- <br/>[{{dataset._id}}] --><span ng-show=""><em>{{dataset.publishStatus}}</em></h4>
+            <li ng-repeat="dataset in datasets" class="publication-item">
+            {{dataset}}
+            <h4><a ui-sref="dataset.view({ id: dataset._id })" ng-bind-html="dataset.title || 'Untitled'"></a><!-- <br/>[{{dataset._id}}] --><span ng-show=""><em>{{dataset.publishStatus}}</em></h4>
             <div class="user-date"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.createdAt | date:'MMMM d, yyyy'}}</time></div>
           </li>
         	</ul>
