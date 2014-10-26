@@ -52,26 +52,26 @@ exports.extractlink = function(req,res) {
 
 // Get list of datasets
 exports.index = function(req, res) {
-  Dataset.find(function (err, datasets) {
-    if(err) { return handleError(res, err); }
-    return res.json(200, datasets);
-  });
 
-  // var filter;
-  // if (req.query.userId) { filter = {publisher: req.query.userId}; }
-  //
-  // Dataset
-  //   .find(filter)
-  //   .sort('-created')
-  //   .populate('account')
-  //   .exec(function(err, datasets) {
-  //     if (err) { return res.json(500, { error: 'Cannot list the datasets' }); }
-  //     var opts = [{ path:'publisher', model:datasets.publisherType, select: 'name slug avatar plan'}];
-  //     Dataset.populate(datasets, opts, function(err, pop){
-  //       res.json(datasets);
-  //     });
-  //   })
-  // ;
+  // Dataset.find(function (err, datasets) {
+  //   if(err) { return handleError(res, err); }
+  //   return res.json(200, datasets);
+  // });
+
+  var filter;
+  if (req.query.userId) { filter = {publisher: req.query.userId}; }
+
+  Dataset
+    .find(filter)
+    .limit(15)
+    .sort('-createdAt')
+    .populate('account', 'slug')
+    .exec(function(err, datasets) {
+      console.log(datasets);
+      if (err) { return res.json(500, { error: 'Cannot list the datasets' }); }
+      return res.json(datasets);
+    })
+  ;
 };
 
 // Get a single dataset

@@ -13,11 +13,14 @@ exports.index = function(req, res) {
 
 // Get a single account
 exports.show = function(req, res) {
-  Account.findById(req.params.id, function (err, account) {
-    if(err) { return handleError(res, err); }
-    if(!account) { return res.send(404); }
-    return res.json(account);
-  });
+  Account.findOne({slug: req.params.id})
+    .populate('datasets')
+    //.populate('collections', 'title description datasets')
+    .exec(function(err, account) {
+      if(err) { return handleError(res, err); }
+      console.log(account);
+      return res.json(account);
+    });
 };
 
 // Creates a new account in the DB.

@@ -20,11 +20,8 @@ angular.module('columbyApp')
         AuthSrv.setColumbyToken = 'Bearer ' + response.token;
 
         // Let the app know
-        $rootScope.user = {
-          account: AuthSrv.user(),
-          isAuthenticated: AuthSrv.isAuthenticated(),
-          selectedAccount: 0
-        };
+        $rootScope.user AuthSrv.user(),
+        $rootScope.selectedAccount: 0
 
         toaster.pop('success', null, 'You have succesfully signed in.');
 

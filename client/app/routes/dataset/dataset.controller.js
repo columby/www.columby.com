@@ -68,10 +68,7 @@ angular.module('columbyApp')
         }
         $scope.summary = summary + '</p>';
 
-        $scope.dataset.canEdit = false;
-        if (dataset.account._id === $rootScope.user.accounts[ $rootScope.selectedAccount]._id) {
-          $scope.dataset.canEdit = true;
-        }
+        $scope.dataset.canEdit= AuthSrv.canEdit({postType:'dataset', _id:dataset.account._id});
 
         updateHeaderImage();
 

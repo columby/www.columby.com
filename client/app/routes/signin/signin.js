@@ -5,7 +5,7 @@ angular.module('columbyApp')
     $stateProvider
       .state('signin', {
         url: '/u/signin',
-        templateUrl: 'app/routes/signin/signin.html',
+        templateUrl: 'app/routes/signin/views/signin.html',
         controller: 'SigninCtrl'
       });
   });

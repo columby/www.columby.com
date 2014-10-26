@@ -4,12 +4,14 @@ angular.module('columbyApp')
 
   .controller('MetabarCtrl', function ($rootScope, $scope) {
 
-    $scope.showToggle = true;
+    $scope.showSitenav = $rootScope.showSitenav;
 
-    $rootScope.$on('sitenav::toggle', function() {
-      $scope.showToggle = !$scope.showToggle;
-    });
-    
+    // $rootScope.$on('sitenav::toggle', function(evt, action) {
+    //   console.log('s', action);
+    //   $scope.showSitenav = !$scope.showSitenav;
+    //   console.log('show sitenav: ', $scope.showSitenav);
+    // });
+
 
     /* ----- SCOPE FUNCTIONS ---------------------------------------------------------- */
     // Send a message to the rootscope to toggle the sitenav

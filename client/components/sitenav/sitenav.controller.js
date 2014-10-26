@@ -11,12 +11,15 @@ angular.module('columbyApp')
       switch (action){
         case 'close':
           $scope.showSitenav = false;
+          $rootScope.showSitenav = false;
           break;
         case 'open':
           $scope.showSitenav = true;
+          $rootScope.showSitenav = true;
           break;
         default:
           $scope.showSitenav = !$scope.showSitenav;
+          $rootScope.showSitenav = !$rootScope.showSitenav;
       }
     }
 
