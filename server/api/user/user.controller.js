@@ -14,6 +14,42 @@ var _ = require('lodash'),
 var mandrill_client = new mandrill.Mandrill(config.mandrill.key);
 
 
+// Provide the currently logged in user details
+exports.me = function(req,res,id){
+
+  // check jwt
+  if (req.headers && req.headers.authorization){
+    var token;
+    console.log('auth', req.headers.authorization);
+    var parts = req.headers.authorization.split(' ');
+    if (parts.length === 2) {
+      var scheme = parts[0],
+        credentials = parts[1];
+      if (/^Bearer$/i.test(scheme)) {
+        token = credentials;
+      }
+    } else {
+      console.log('Format is Authorization: Bearer [token]');
+      //return res.status(401).json({err: 'Format is Authorization: Bearer [token]'});
+    }
+
+    var decoded = jwt.decode(token, config.jwt.secret);
+    console.log('jwt token', decoded);
+
+    if (decoded.exp <= Date.now()) {
+      console.log('Access token has expired');
+      //res.status(401).json('Access token has expired');
+    }
+
+    // get id from jwt
+    console.log('user id is ', decoded.iss);
+    User.findById(decoded.iss, function(err, user) {
+      if(err) { return handleError(res,err); }
+      return res.json(user);
+    });
+  }
+}
+
 // Get list of users
 exports.index = function(req, res) {
   User.find(function (err, users) {
@@ -24,6 +60,8 @@ exports.index = function(req, res) {
 
 // Get a single user
 exports.show = function(req, res) {
+  console.log('fetching user');
+  console.log(req.params);
   User.findById(req.params.id, function (err, user) {
     if(err) { return handleError(res, err); }
     if(!user) { return res.send(404); }
@@ -32,7 +70,7 @@ exports.show = function(req, res) {
 };
 
 // Creates a new user in the DB.
-exports.create = function(req, res) {
+exports.register = function(req, res) {
   User.create(req.body, function(err, user) {
     if(err) { return handleError(res, err); }
 

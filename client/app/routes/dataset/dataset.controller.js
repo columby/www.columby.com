@@ -2,9 +2,9 @@
 
 angular.module('columbyApp')
 
-  .controller('DatasetViewCtrl', [
-  'configuration', '$rootScope', '$scope', '$location', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'MetabarSrv', 'AuthSrv', 'toaster', 'Slug', 'ngDialog','EmbedlySrv','$http', '$upload',
-  function(configuration, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, MetabarSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv, $http, $upload) {
+  .controller('DatasetCtrl', [
+  'configuration', '$rootScope', '$scope', '$location', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'AuthSrv', 'toaster', 'Slug', 'ngDialog','EmbedlySrv','$http', '$upload',
+  function(configuration, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv, $http, $upload) {
 
     /***   INITIALISATION   ***/
     //var editWatcher;               // Watch for model changes in editmode
@@ -69,7 +69,7 @@ angular.module('columbyApp')
         $scope.summary = summary + '</p>';
 
         $scope.dataset.canEdit = false;
-        if (dataset.account._id === $rootScope.user.accounts[ $rootScope.user.selectedAccount]._id) {
+        if (dataset.account._id === $rootScope.user.accounts[ $rootScope.selectedAccount]._id) {
           $scope.dataset.canEdit = true;
         }
 
@@ -87,7 +87,7 @@ angular.module('columbyApp')
           url               : 'columby/assets/img/avatar.png'
         },
         draft:{},
-        account: $rootScope.user.accounts[ $rootScope.user.selectedAccount]._id,
+        account: $rootScope.user.accounts[ $rootScope.selectedAccount]._id,
         canEdit : true
       };
       toaster.pop('notice',null,'Here\'s your new dataset!');
@@ -332,9 +332,6 @@ angular.module('columbyApp')
           size: file.size,
           name: file.name,
           accountId: $scope.dataset.account._id
-        },
-        headers: {
-          Authorization: AuthSrv.columbyToken()
         }
       })
         .success(function(response){
@@ -375,9 +372,6 @@ angular.module('columbyApp')
                 data: {
                   fileId: fileResponse._id,
                   url: parsedData.location
-                },
-                headers: {
-                  Authorization: AuthSrv.columbyToken()
                 }
               })
               .success(function(response){

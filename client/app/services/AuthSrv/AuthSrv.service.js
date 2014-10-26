@@ -4,7 +4,7 @@ angular.module('columbyApp')
   .service('AuthSrv', function ($http) {
 
     // user object
-    var user = (window.hasOwnProperty('user')) ? window.user : {};
+    var user = {};
     // selected publication account
     var selectedAccount = 0;
     // Token token for api access
@@ -27,8 +27,9 @@ angular.module('columbyApp')
       selectedAccount: function()  { return selectedAccount; },
 
 
+      // Login a user using an email-address
       login: function(credentials) {
-        var promise = $http.post('/api/v2/user/login', credentials, {headers: {'Authorization': columbyToken}})
+        var promise = $http.post('/api/v2/user/login', credentials)
           .then(function (response) {
             if (response.data.user){
               user = response.data.user;
@@ -38,6 +39,7 @@ angular.module('columbyApp')
         return promise;
       },
 
+      // Register a new user with email and username
       register: function(credentials) {
         var promise = $http.post('/api/v2/user/register', credentials)
           .then(function (response) {
@@ -49,7 +51,7 @@ angular.module('columbyApp')
         return promise;
       },
 
-      // Verify a login token.
+      // Verify a login token at the server and receive a JWT.
       verify: function(token){
         var promise = $http.get('/api/v2/user/verify?token='+token)
           .then(function (response) {
@@ -71,12 +73,20 @@ angular.module('columbyApp')
         return promise;
       },
 
-      // Get account of currently logged in user, and save it as the main user object
+      // Check the currently logged in user and save the response
+      me: function() {
+        var promise = $http.post('api/v2/user/me').then(function(result){
+          user = result.data;
+          return result.data;
+        })
+        return promise;
+      },
+
+      // Get information about a given user by user-id
       getUser: function(){
-        var promise = $http.get('/api/v2/user', {headers: {'Authorization': columbyToken}})
+        var promise = $http.get('/api/v2/user')
           .then(function(result){
             console.log('fetched user', result.data);
-            user = result.data;
             return result.data;
           });
         return promise;

@@ -24,9 +24,14 @@
     <link rel="stylesheet" href="app/app.css">
       <!-- injector:css -->
       <link rel="stylesheet" href="app/app.css">
-      <link rel="stylesheet" href="app/routes/about/about.css">
+      <link rel="stylesheet" href="app/css/app.css">
+      <link rel="stylesheet" href="app/css/editor-sidebar.css">
+      <link rel="stylesheet" href="app/css/elements.css">
+      <link rel="stylesheet" href="app/css/notices.css">
+      <link rel="stylesheet" href="app/directives/test/test.css">
       <link rel="stylesheet" href="app/routes/dataset/dataset.css">
       <link rel="stylesheet" href="app/routes/home/home.css">
+      <link rel="stylesheet" href="app/routes/pages/css/pages.css">
       <link rel="stylesheet" href="app/routes/search/search.css">
       <link rel="stylesheet" href="app/routes/signin/signin.css">
       <link rel="stylesheet" href="components/metabar/metabar.css">
@@ -54,6 +59,8 @@
       <div ui-view=""></div>
     </div>
 
+    <div uservoice></div>
+    
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -92,26 +99,32 @@
       <script src="bower_components/xml2json/xml2json.js"></script>
       <script src="bower_components/angular-easy-social-share/easy-social-share.js"></script>
       <script src="bower_components/angular-slugify/angular-slugify.js"></script>
+      <script src="bower_components/angular-jwt/dist/angular-jwt.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
           <!-- injector:js -->
-          <script src="app/routes/about/about.controller.js"></script>
-          <script src="app/routes/about/about.js"></script>
+          <script src="app/directives/autogrow/autogrow.directive.js"></script>
+          <script src="app/directives/embedly/embedly.directive.js"></script>
+          <script src="app/directives/scrollPosition/scrollPosition.directive.js"></script>
+          <script src="app/directives/test/test.directive.js"></script>
+          <script src="app/directives/uservoice/uservoice.directive.js"></script>
           <script src="app/routes/dataset/dataset.controller.js"></script>
           <script src="app/routes/dataset/dataset.js"></script>
           <script src="app/routes/home/home.controller.js"></script>
           <script src="app/routes/home/home.js"></script>
+          <script src="app/routes/pages/pages.controller.js"></script>
+          <script src="app/routes/pages/pages.js"></script>
           <script src="app/routes/search/search.controller.js"></script>
           <script src="app/routes/search/search.js"></script>
           <script src="app/routes/signin/signin.controller.js"></script>
           <script src="app/routes/signin/signin.js"></script>
           <script src="app/services/AuthSrv/AuthSrv.service.js"></script>
           <script src="app/services/DatasetSrv/DatasetSrv.service.js"></script>
+          <script src="app/services/EmbedlySrv/EmbedlySrv.service.js"></script>
           <script src="app/services/SearchSrv/SearchSrv.service.js"></script>
-          <script src="app/templates.js"></script>
           <script src="components/metabar/metabar.controller.js"></script>
           <script src="components/modal/modal.service.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>

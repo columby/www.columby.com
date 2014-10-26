@@ -1,6 +1,6 @@
 'use strict';
 
 angular.module('columbyApp')
-  .controller('AboutCtrl', function ($scope) {
+  .controller('PagesCtrl', function ($scope) {
     $scope.message = 'Hello';
   });

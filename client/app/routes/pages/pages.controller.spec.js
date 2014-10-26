@@ -1,16 +1,16 @@
 'use strict';
 
-describe('Controller: AboutCtrl', function () {
+describe('Controller: PagesCtrl', function () {
 
   // load the controller's module
   beforeEach(module('columbyApp'));
 
-  var AboutCtrl, scope;
+  var PagesCtrl, scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    AboutCtrl = $controller('AboutCtrl', {
+    PagesCtrl = $controller('PagesCtrl', {
       $scope: scope
     });
   }));
