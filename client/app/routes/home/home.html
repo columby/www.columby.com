@@ -1,0 +1,53 @@
+<section class="page page-home">
+
+  <div class="page-header">
+    <div class="container">
+			<img src="/assets/images/logo-transparant-white.png">
+      <h2 class="page-subtitle">publish and discover data</p>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <div class="container">
+
+      <div class="searchbox">
+        <input
+          type="text"
+          ng-model="search.searchTerm"
+          placeholder="Search datasets"
+          class="input-large"
+          ng-change="search()">
+      </div>
+
+      <!-- Search result -->
+      <div class="col-md-12 results recent-publications">
+        <h3 ng-show="search.hits.length">Search results</h2>
+        <div class="result publication-listing" ng-cloak>
+					<ul>
+            <li ng-repeat="result in search.hits" class="publication-item">
+              <h4><a ui-sref="dataset.view({datasetId: result._id})">{{result._source.title}}</a><em>{{result._source.publishStatus}}</em></h4>
+              <div class="user-date"><!-- {{result._source.account.name || '[Oops! No publisher found]'}} on  --><time class="post-date">{{result._source.createdAt | date:'d MMMM yyyy'}}</time></div>
+            </li>
+        	</ul>
+        </div>
+      </div>
+
+
+
+
+      <div class="col-md-12 recent-publications" ng-hide="search.hits.length">
+        <h3>Recently published</h2>
+        <div class="publication-listing">
+					<ul>
+            <li ng-repeat="dataset in datasets" class="publication-item">
+            {{dataset}}
+            <h4><a ui-sref="dataset.view({ id: dataset._id })" ng-bind-html="dataset.title || 'Untitled'"></a><!-- <br/>[{{dataset._id}}] --><span ng-show=""><em>{{dataset.publishStatus}}</em></h4>
+            <div class="user-date"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.createdAt | date:'MMMM d, yyyy'}}</time></div>
+          </li>
+        	</ul>
+				</div>
+      </div>
+
+    </div>
+  </div>
+</section>

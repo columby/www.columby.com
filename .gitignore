@@ -1,59 +1,7 @@
-config/env/development.js
-config/public/env/development.json
-
-# --------------------
-# OSX Files
-# --------------------
-.DS_Store
-.AppleDouble
-.LSOverride
-Icon
-._*
-.Spotlight-V100
-.Trashes
-.com.apple.timemachine.supported
-
-# --------------------
-# IntelliJ Files
-# --------------------
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# --------------------
-# Netbeans Files
-# --------------------
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-nbactions.xml
-nb-configuration.xml
-
-# --------------------
-# Node Files
-# --------------------
-.nodemonignore
-npm-debug.log
-node_modules/
-
-# --------------------
-# SASS Files
-# --------------------
-.sass-cache/
-
-# --------------------
-# Bower Files
-# --------------------
-.bower-*/
-bower_components
-
-# --------------------
-# App Files
-# --------------------
-test/coverage/
-modules/public/
-modules/views/
-/public/build/
+node_modules
+public
+.tmp
+.idea
+client/bower_components
+dist
+/server/config/local.env.js
