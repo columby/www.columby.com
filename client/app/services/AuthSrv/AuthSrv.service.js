@@ -135,8 +135,10 @@ angular.module('columbyApp')
 
           case 'dataset':
             // check if logged in user is publisher of the account
-            if (item._id.indexOf(user.accounts.length) !== -1){
-              allowEdit = true;
+            for (i = 0; i < user.accounts.length; i++) {
+              if (user.accounts[ i]._id === item._id) {
+                allowEdit = true;
+              }
             }
           break;
         }

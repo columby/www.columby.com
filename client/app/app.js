@@ -11,7 +11,8 @@ angular.module('columbyApp', [
   'slugifier',
   'ngDialog',
   'angularFileUpload',
-  'textAngular'
+  'textAngular',
+  'td.easySocialShare'
 ])
 
   .constant('configuration', {
