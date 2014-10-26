@@ -92,7 +92,6 @@ angular.module('columbyApp')
       };
 
       toaster.pop('notice',null,'Here\'s your new dataset!');
-      toaster.pop('notice',null,$scope.dataset);
     }
 
     function toggleEditMode(mode){
@@ -246,7 +245,7 @@ angular.module('columbyApp')
       console.log('Starting new distribution');
       $scope.newDistribution = {};
       ngDialog.open({
-        template: 'datasets/views/includes/addDistributionModal.html',
+        template: 'app/routes/dataset/views/addDistributionModal.html',
         className: 'ngdialog-theme-default fullscreenDialog',
         scope: $scope
       });

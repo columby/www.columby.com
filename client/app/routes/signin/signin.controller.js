@@ -18,7 +18,7 @@ angular.module('columbyApp')
         localStorage.setItem('columby_token', JSON.stringify(response.token));
         // save JWT token in auth Service so we can use it with each request to the Columby API
         AuthSrv.setColumbyToken = 'Bearer ' + response.token;
-        
+
         // Let the app know
         $rootScope.user = {
           account: AuthSrv.user(),
@@ -47,6 +47,8 @@ angular.module('columbyApp')
 
     AuthSrv.login({email:$scope.email}).then(function(response){
 
+      $scope.loginInProgress = false;
+
       if (response) {
         // handle valid response
         $scope.signinSuccess = true;
@@ -61,7 +63,7 @@ angular.module('columbyApp')
         }
         $scope.newuser.name = newmail;
       }
-      $scope.loginInProgress = false;
+
     });
   };
 
@@ -69,7 +71,7 @@ angular.module('columbyApp')
     localStorage.removeItem('auth_token');
     $scope.registrationInProgress = true;
     AuthSrv.register($scope.newuser).then(function(response){
-      console.log('register response', response);
+      //console.log('register response', response);
       $scope.registrationInProgress = false;
       if (response.status === 'error') {
         toaster.pop('warning', 'Registration error', 'There was an error registering: ' + response.error.msg);
@@ -80,10 +82,8 @@ angular.module('columbyApp')
   };
 
   $scope.slugifyName = function(){
-    console.log('sl', $scope.newuser.name);
     if ($scope.newuser.name){
       var n = Slug.slugify($scope.newuser.name);
-      console.log(n.length);
       while(n.length<3){
         n = n+'-';
       }
