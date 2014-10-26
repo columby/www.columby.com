@@ -59,17 +59,16 @@ exports.index = function(req, res) {
 
 // Get a single user
 exports.show = function(req, res) {
-  console.log('fetching user');
-  console.log(req.params);
-  User.findById(req.params.id, function (err, user) {
+  User.findOne({_id: req.params.id}, function (err, user) {
+    console.log('user', user);
     if(err) { return handleError(res, err); }
-    if(!user) { return res.send(404); }
     return res.json(user);
   });
 };
 
 // Creates a new user in the DB.
 exports.register = function(req, res) {
+  console.log('creating user', req.body);
   User.create(req.body, function(err, user) {
     if(err) { return handleError(res, err); }
 
@@ -81,7 +80,7 @@ exports.register = function(req, res) {
     console.log('creating new primary publication account');
     var account = new Account({
       owner   : user._id,
-      name    : user.name,
+      name    : req.body.name,
       slug    : user.email,
       primary : true
     });

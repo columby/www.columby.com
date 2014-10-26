@@ -84,10 +84,11 @@ angular.module('columbyApp')
 
       // Get information about a given user by user-id
       getUser: function(){
+        console.log('getting the user srv')
         var promise = $http.get('/api/v2/user')
           .then(function(result){
             console.log('fetched user', result.data);
-            return result.data;
+            return result.data[0];
           });
         return promise;
       },

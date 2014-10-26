@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('columbyApp')
-  .controller('SigninCtrl', function ($scope, $rootScope, $location, $http, $state, AuthSrv, toaster, Slug) {
+
+.controller('SigninCtrl', function ($scope, $rootScope, $location, $http, $state, AuthSrv, toaster, Slug) {
 
   /* ----- SETUP ------------------------------------------------------------ */
   $scope.loginInProgress = false;
@@ -20,8 +21,8 @@ angular.module('columbyApp')
         AuthSrv.setColumbyToken = 'Bearer ' + response.token;
 
         // Let the app know
-        $rootScope.user AuthSrv.user(),
-        $rootScope.selectedAccount: 0
+        $rootScope.user = AuthSrv.user();
+        $rootScope.selectedAccount= 0
 
         toaster.pop('success', null, 'You have succesfully signed in.');
 
@@ -67,6 +68,7 @@ angular.module('columbyApp')
   $scope.register = function(){
     localStorage.removeItem('auth_token');
     $scope.registrationInProgress = true;
+    console.log('registering new user', $scope.newuser);
     AuthSrv.register($scope.newuser).then(function(response){
       //console.log('register response', response);
       $scope.registrationInProgress = false;
@@ -94,4 +96,40 @@ angular.module('columbyApp')
   if (params.token) {
     verify(params.token);
   }
-});
+})
+
+.controller('UserCtrl', function ($scope, $rootScope, $location, $state, AuthSrv, AccountSrv, toaster) {
+
+  /* --- FUNCTIONS ------------------------------------------------------------- */
+  function getUser(){
+    console.log('getting the user');
+    AuthSrv.me().then(function(result){
+      console.log('user', result);
+      $scope.user = result;
+    });
+  }
+
+  $scope.logout = function(){
+    AuthSrv.logout().then(function(result){
+      localStorage.removeItem('auth_token');
+      $rootScope.user = {};
+      toaster.pop('success', 'Signed out', 'You are now signed out.');
+
+      $state.go('home');
+    });
+  };
+
+  // Delete an account
+  $scope.deleteAccount = function(index){
+    console.log(index);
+    console.log($scope.user.accounts[ index].slug);
+    // AccountSrv.delete($scope.user.accounts[index ].slug, function(res){
+    //   console.log(res);
+    // });
+  };
+
+  /* --- INIT ------------------------------------------------------------- */
+  getUser();
+
+})
+;
