@@ -4,8 +4,8 @@ angular.module('columbyApp')
 
   .service('DatasetSrv', function ($resource) {
 
-    return $resource('api/v2/dataset/:datasetId', {
-      datasetId: '@datasetId'
+    return $resource('api/v2/dataset/:id', {
+      id: '@id'
     }, {
       update: {
         method: 'PUT',
@@ -17,9 +17,9 @@ angular.module('columbyApp')
 
   .service('DatasetDistributionSrv', function($resource) {
 
-    return $resource('api/v2/dataset/:datasetId/distribution/:distributionId', {
-      datasetId: '@datasetId',
-      sourceId: '@distributionId',
+    return $resource('api/v2/dataset/:id/distribution/:did', {
+      id: '@id',
+      did: '@did',
     }, {
       update: {
         method: 'PUT',
@@ -30,9 +30,9 @@ angular.module('columbyApp')
 
   .service('DatasetReferencesSrv', function($resource) {
 
-    return $resource('api/v2/dataset/:datasetId/reference/:referenceId', {
-      datasetId: '@datasetId',
-      sourceId: '@referenceId',
+    return $resource('api/v2/dataset/:id/reference/:rid', {
+      id: '@id',
+      rid: '@rid',
     }, {
       update: {
         method: 'PUT',

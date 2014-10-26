@@ -1,7 +1,9 @@
 'use strict';
 
-var _ = require('lodash');
-var Dataset = require('./dataset.model');
+var _ = require('lodash'),
+    mongoose = require('mongoose'),
+    Dataset = require('./dataset.model'),
+    Account = mongoose.model('Account');
 
 
 function canEdit(req){
@@ -74,11 +76,12 @@ exports.index = function(req, res) {
 
 // Get a single dataset
 exports.show = function(req, res) {
+  console.log('show dataset');
   // id can be objectId or slug. Cast the id to objectId,
   // if this works then use it, otherwise treat it as a slug.
-  var i;
+  var id,slug;
   try {
-    i = new mongoose.Types.ObjectId(req.params.id);
+    id = new mongoose.Types.ObjectId(req.params.id);
   } catch (e) {
     console.log('Error casting param to objectID', e);
   }
@@ -86,8 +89,8 @@ exports.show = function(req, res) {
   Dataset
     .findOne({
       $or: [
-        { _id: i },
-        { slug: id },
+        { _id: id },
+        { slug: slug },
       ]
     })
     .populate('account', 'slug name description owner avatar')
@@ -147,8 +150,8 @@ exports.destroy = function(req, res) {
 /*-------------- DISTRIBUTIONS ---------------------------------------------------------------*/
 exports.listDistributions = function(req, res) {
   console.log(req.params);
-  var datasetId = req.params.datasetId;
-  console.log(datasetId);
+  var id = req.params.id;
+  console.log(id);
 };
 
 exports.getDistribution = function(req,res,id){
@@ -157,11 +160,11 @@ exports.getDistribution = function(req,res,id){
 
 exports.createDistribution = function(req, res) {
   console.log('creating distribution');
-  var datasetId = req.params.datasetId;
+  var id = req.params.id;
   var distribution = req.body.distribution;
   distribution._id = mongoose.Types.ObjectId();
   Dataset
-    .findOne({_id: datasetId})
+    .findOne({_id: id})
     .exec(function(err,dataset){
       if (err) return res.json({status:'error', err:err});
       if (!dataset) return res.json({error:'Failed to load dataset', err:err});
@@ -183,10 +186,10 @@ exports.updateDistribution = function(req, res, id) {
 // Delete a source attached to a dataset
 exports.destroyDistribution = function(req, res, id) {
 
-  var datasetId = String(req.params.datasetId);
+  var id = String(req.params.id);
   var distributionId = String(req.params.distributionId);
 
-  Dataset.findOne({_id:datasetId},function(err,dataset){
+  Dataset.findOne({_id:id},function(err,dataset){
     if (err) return res.json({status:'error', err:err});
     if (!dataset) return res.json({error:'Failed to load dataset', err:err});
     for (var i=0; i < dataset.distributions.length; i++){
@@ -203,8 +206,8 @@ exports.destroyDistribution = function(req, res, id) {
 /*-------------- REFERENCES --------------------------------------------------------------*/
 exports.listReferences = function(req, res) {
   console.log(req.params);
-  var datasetId = req.params.datasetId;
-  console.log(datasetId);
+  var id = req.params.id;
+  console.log(id);
 };
 
 exports.getReference = function(req,res,id){
@@ -212,11 +215,11 @@ exports.getReference = function(req,res,id){
 };
 
 exports.createReference = function(req, res) {
-  var datasetId = req.params.datasetId;
+  var id = req.params.id;
   var reference = req.body.reference;
   reference._id = mongoose.Types.ObjectId();
   Dataset
-    .findOne({_id: datasetId})
+    .findOne({_id: id})
     .exec(function(err,dataset){
       if (err) return res.json({status:'error', err:err});
       if (!dataset) return res.json({error:'Failed to load dataset', err:err});
@@ -238,10 +241,10 @@ exports.updateReference = function(req, res, id) {
 // Delete a source attached to a dataset
 exports.destroyReference = function(req, res, id) {
 
-  var datasetId = String(req.params.datasetId);
+  var id = String(req.params.id);
   var referenceId = String(req.params.referenceId);
 
-  Dataset.findOne({_id:datasetId},function(err,dataset){
+  Dataset.findOne({_id:id},function(err,dataset){
     if (err) return res.json({status:'error', err:err});
     if (!dataset) return res.json({error:'Failed to load dataset', err:err});
     for (var i=0; i < dataset.references.length; i++){

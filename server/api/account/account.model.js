@@ -51,7 +51,7 @@ var AccountSchema = new Schema({
     url         : {
       type: String,
       required: false,
-      default: 'columby/assets/img/avatar.png'}
+      default: 'assets/images/avatar.png'}
   },
 
   owner       : {

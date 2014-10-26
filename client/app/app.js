@@ -10,7 +10,8 @@ angular.module('columbyApp', [
   'toaster',
   'slugifier',
   'ngDialog',
-  'angularFileUpload'
+  'angularFileUpload',
+  'textAngular'
 ])
 
   .constant('configuration', {

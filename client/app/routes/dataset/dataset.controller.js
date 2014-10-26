@@ -12,6 +12,7 @@ angular.module('columbyApp')
     $scope.editMode = false;       // edit mode is on or off
     $scope.contentEdited = false;  // models is changed or not during editmode
     $scope.hostname = $location.protocol() + '://' + $location.host();
+    $scope.datasetUpdate = {};
 
     // check edit mode
     if ($location.path().split('/')[3] === 'edit') {
@@ -23,9 +24,8 @@ angular.module('columbyApp')
     function getDataset(){
       $scope.contentLoading = true;  // show loading message while loading dataset
       DatasetSrv.get({
-        datasetId: $stateParams.datasetId
+        id: $stateParams.id
       }, function(dataset) {
-
         if (!dataset._id){
           toaster.pop('danger',null,'Sorry, the requested dataset was not found. ');
           $state.go('home');
@@ -37,12 +37,12 @@ angular.module('columbyApp')
 
         // set the avatar
         if (!dataset.account.avatar) {
-          dataset.account.avatar = $rootScope.selectedAccount.avatar.url;
+          dataset.account.avatar = $rootScope.user.accounts[ $rootScope.selectedAccount].avatar.url;
         }
 
         // transition the url from slug to id
-        if ($stateParams.datasetId !== dataset._id) {
-          $state.transitionTo ('dataset.view', { datasetId: dataset._id}, {
+        if ($stateParams.id !== dataset._id) {
+          $state.transitionTo ('dataset.view', { id: dataset._id}, {
             location: true,
             inherit: true,
             relative: $state.$current,
@@ -52,8 +52,8 @@ angular.module('columbyApp')
 
         // set draft title and description
         if ($scope.editMode){
-          $scope.dataset.titleUpdate = $scope.dataset.title;
-          $scope.dataset.descriptionUpdate = $scope.dataset.description;
+          $scope.datasetUpdate.title = $scope.dataset.title;
+          $scope.datasetUpdate.description = $scope.dataset.description;
         }
 
         // create summary
@@ -80,31 +80,33 @@ angular.module('columbyApp')
 
     function initiateNewDataset(){
       $scope.dataset = {
-        title             : '',
+        title             : null,
         description       : '<p>Add a nice description for your publication. </p>',
         visibilityStatus  : 'private',
         avatar :{
-          url               : 'columby/assets/img/avatar.png'
+          url               : 'assets/images/avatar.png'
         },
         draft:{},
         account: $rootScope.user.accounts[ $rootScope.selectedAccount]._id,
         canEdit : true
       };
+
       toaster.pop('notice',null,'Here\'s your new dataset!');
+      toaster.pop('notice',null,$scope.dataset);
     }
 
     function toggleEditMode(mode){
       $scope.editMode = mode || !$scope.editMode;
       if ($scope.editMode) {
-        $scope.dataset.titleUpdate = $scope.dataset.title;
-        $scope.dataset.descriptionUpdate = $scope.dataset.description;
+        $scope.datasetUpdate.title       = $scope.dataset.title;
+        $scope.datasetUpdate.description = $scope.dataset.description;
       }
     }
 
 
     function updateHeaderImage(){
       $scope.headerStyle={
-        'background-image': 'url(/columby/assets/img/bg.png), url(' + $scope.dataset.headerImage + ')',
+        'background-image': 'url(/assets/images/bg.png), url(' + $scope.dataset.headerImage + ')',
         'background-blend-mode': 'multiply'
       };
     }
@@ -114,9 +116,9 @@ angular.module('columbyApp')
     /*** Editmode functions */
     $scope.toggleEditmode = function(){
       if ($scope.editMode) {
-        $state.go('dataset.view', {datasetId: $scope.dataset._id});
+        $state.go('dataset.view', {id: $scope.dataset._id});
       } else {
-        $state.go('dataset.edit', {datasetId: $scope.dataset._id});
+        $state.go('dataset.edit', {id: $scope.dataset._id});
       }
     };
 
@@ -129,18 +131,18 @@ angular.module('columbyApp')
       if (!$scope.dataset._id) {
         console.log('Title changed, but not yet saved');
       } else {
-        if ($scope.dataset.titleUpdate === $scope.dataset.title) {
+        if ($scope.datasetUpdate.title === $scope.dataset.title) {
           console.log('Dataset saved, but no title change');
         } else {
           var dataset = {
             _id: $scope.dataset._id,
-            title: $scope.dataset.titleUpdate,
+            title: $scope.datasetUpdate.title,
           };
           console.log('updating dataset title', dataset);
 
-          DatasetSrv.update({datasetId:dataset._id},dataset,function(res){
+          DatasetSrv.update({id:dataset._id},dataset,function(res){
             if (res._id){
-              $scope.dataset.titleUpdate = res.title;
+              $scope.datasetUpdate.title = res.title;
               toaster.pop('success', 'Updated', 'Dataset title updated.');
             }
           });
@@ -153,16 +155,16 @@ angular.module('columbyApp')
       if (!$scope.dataset._id) {
         console.log('Dataset not yet saved');
       } else {
-        if ($scope.dataset.descriptionUpdate === $scope.dataset.description) {
+        if ($scope.datasetUpdate.description === $scope.dataset.description) {
           console.log('Dataset saved, but no description change');
         } else {
           var dataset = {
             _id         : $scope.dataset._id,
-            description : $scope.dataset.descriptionUpdate
+            description : $scope.datasetUpdate.description
           };
-          DatasetSrv.update({datasetId:dataset._id},dataset,function(res){
+          DatasetSrv.update({id:dataset._id},dataset,function(res){
             if (res._id){
-              $scope.dataset.descriptionUpdate = res.description;
+              $scope.datasetUpdate.description = res.description;
               toaster.pop('success', 'Updated', 'Dataset description updated.');
             } else {
               console.log('error updating description', res);
@@ -180,7 +182,7 @@ angular.module('columbyApp')
         description: $scope.dataset.description
       };
 
-      DatasetSrv.update({datasetId: dataset._id}, dataset,function(res){
+      DatasetSrv.update({id: dataset._id}, dataset,function(res){
         if (res._id){
           $scope.dataset = res;
           toaster.pop('success', 'Updated', 'Dataset updated.');
@@ -190,13 +192,13 @@ angular.module('columbyApp')
     };
 
     $scope.create = function() {
-      $scope.dataset.title = $scope.dataset.titleUpdate;
-      $scope.dataset.description = $scope.dataset.descriptionUpdate;
+      $scope.dataset.title = $scope.datasetUpdate.title;
+      $scope.dataset.description = $scope.datasetUpdate.description;
       DatasetSrv.save($scope.dataset, function(res){
         console.log('create',res);
         if (res._id) {
           toaster.pop('success', 'Created', 'Dataset created.');
-          $state.go('dataset.edit', {datasetId:res._id, editMode:true});
+          $state.go('dataset.edit', {id:res._id, editMode:true});
         }
       });
     };
@@ -210,7 +212,7 @@ angular.module('columbyApp')
           publishedAt: Date.now()
         };
         console.log('publishing dataset: ', dataset);
-        DatasetSrv.update({datasetId: dataset._id}, dataset,function(res){
+        DatasetSrv.update({id: dataset._id}, dataset,function(res){
           console.log(res);
           if (res._id){
             $scope.dataset.publicationStatus = 'published';
@@ -226,7 +228,7 @@ angular.module('columbyApp')
         _id: $scope.dataset._id,
         slug: slug
       };
-      DatasetSrv.update({datasetId: d._id}, d, function(res){
+      DatasetSrv.update({id: d._id}, d, function(res){
         console.log(res);
         if (res._id) {
           $scope.dataset.slug = res.slug;
@@ -278,7 +280,7 @@ angular.module('columbyApp')
           console.log('attaching distribution', distribution);
 
           DatasetDistributionSrv.save({
-            datasetId:$scope.dataset._id,
+            id:$scope.dataset._id,
             distribution: distribution}, function(res){
               console.log('res', res);
               if (res.status === 'success'){
@@ -298,10 +300,10 @@ angular.module('columbyApp')
     };
 
     $scope.deleteDistribution = function(index){
-      var datasetId = $scope.dataset._id;
+      var id = $scope.dataset._id;
       var distributionId = $scope.dataset.distributions[ index]._id;
 
-      DatasetDistributionSrv.delete({datasetId:datasetId, distributionId:distributionId}, function(res){
+      DatasetDistributionSrv.delete({id:id, distributionId:distributionId}, function(res){
         if (res.status === 'success') {
           $scope.dataset.distributions.splice(index,1);
           toaster.pop('success', 'Done', 'Distribution deleted.');
@@ -378,7 +380,7 @@ angular.module('columbyApp')
                 console.log('res', response);
                 $scope.dataset.headerImage = response.url;
                 var d = {
-                  datasetId: $scope.dataset._id,
+                  id: $scope.dataset._id,
                   headerImage: response.url
                 };
                 console.log('datasetUpdate', d);
@@ -421,7 +423,7 @@ angular.module('columbyApp')
     $scope.newReference = function() {
 
       ngDialog.open({
-        template: 'datasets/views/includes/addReferenceModal.html',
+        template: 'app/routes/dataset/views/addReferenceModal.html',
         className: 'ngdialog-theme-default fullscreenDialog',
         scope: $scope
       });
@@ -469,7 +471,7 @@ angular.module('columbyApp')
       console.log('saving reference', reference);
 
       // save reference
-      DatasetReferencesSrv.save({datasetId:$scope.dataset._id, reference: reference}, function(res){
+      DatasetReferencesSrv.save({id:$scope.dataset._id, reference: reference}, function(res){
         if (res.status==='success') {
           $scope.dataset.references.push(reference);
           ngDialog.closeAll();
@@ -481,10 +483,10 @@ angular.module('columbyApp')
 
     $scope.deleteReference = function(index){
       console.log(index);
-      var datasetId = $scope.dataset._id;
+      var id = $scope.dataset._id;
       var referenceId = $scope.dataset.references[ index]._id;
 
-      DatasetReferencesSrv.delete({datasetId:datasetId, referenceId:referenceId}, function(res){
+      DatasetReferencesSrv.delete({id:id, referenceId:referenceId}, function(res){
         console.log(res);
         if (res.status === 'success') {
           $scope.dataset.references.splice(index,1);
@@ -501,7 +503,7 @@ angular.module('columbyApp')
           _id: $scope.dataset._id,
           visibilityStatus: status
         };
-        DatasetSrv.update({datasetId: dataset._id}, dataset,function(res){
+        DatasetSrv.update({id: dataset._id}, dataset,function(res){
           $scope.visibilityStatusMessage = 'updated';
           if (res._id){
             $scope.dataset.visibilityStatus = status;
@@ -516,7 +518,9 @@ angular.module('columbyApp')
 
 
     /* --------- INIT ------------------------------------------------------------------------ */
-    if ($stateParams.datasetId) {
+    console.log('stateparams', $stateParams);
+    if ($stateParams.id) {
+      console.log('fetching dataset', $stateParams.id);
       getDataset();
     } else {
       initiateNewDataset();

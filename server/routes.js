@@ -9,9 +9,9 @@ var errors = require('./components/errors');
 module.exports = function(app) {
 
   // Insert routes below
-  app.use('/api/v2/dataset', require('./api/dataset'));
   app.use('/api/v2/account', require('./api/account'));
   app.use('/api/v2/user', require('./api/user'));
+  app.use('/api/v2/dataset', require('./api/dataset'));
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')

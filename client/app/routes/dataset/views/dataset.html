@@ -1,4 +1,4 @@
-<div class="dataset view">
+<div class="dataset view" ng-cloak>
 
   <div class="actions-bar"
     scroll-position="scroll"
@@ -16,7 +16,7 @@
       <li>
         <button
           class    = "btn dbt-default create"
-          ng-show  = "!dataset._id"
+          ng-hide  = "dataset._id || !datasetUpdate.title"
           ng-click = "create()">Publish
         </button>
       </li>
@@ -84,12 +84,11 @@
 
         <form class="form-horizontal novalidate" role="form" name="slugForm">
           <div class="form-group">
-            <input
+            <input class="form-control input-slug"
               name="slug"
               ng-model="dataset.slug"
-              class="form-control input-slug"
-              ng-minlength=3
-              ng-maxlength=30/>
+              ng-minlength="3"
+              ng-maxlength="30"/>
             <span class="error" ng-show="slugForm.slug.$error.maxlength">Too long!</span>
             <span class="error" ng-show="slugForm.slug.$error.minlength">Too short!</span>
             <button
@@ -128,7 +127,7 @@
               type        = "text"
               name        = "title"
               placeholder = "Your title"
-              ng-model    = "dataset.titleUpdate"
+              ng-model    = "datasetUpdate.title"
               ng-blur     = "updateTitle()"
               focus       = "true"
               ></textarea>
@@ -144,9 +143,12 @@
           </div>
 
           <!-- Editable avatar -->
-          <div class="avatar">
-            <a ui-sref="account.view({slug:dataset.account.slug})">
-              <img src="{{dataset.account.avatar.url || $root.user.accounts[ $root.user.selectedAccount].avatar.url}}" alt="{{dataset.account.name}}"/>
+          <div class="avatar" ng-switch="editMode">
+            <a ng-switch-default ui-sref="account.view({slug:dataset.account.slug})">
+              <img src="{{dataset.account.avatar.url}}" alt="{{dataset.account.name}}"/>
+            </a>
+            <a ng-switch-when="true" ui-sref="account.view({slug:dataset.account.slug})">
+              <img src="{{$root.user.accounts[ $root.selectedAccount].avatar.url}}" alt="new"/>
             </a>
           </div>
         </div>
@@ -175,7 +177,7 @@
           <div
             ng-switch-when = "true">
             <div
-              ng-model        = "dataset.descriptionUpdate"
+              ng-model        = "datasetUpdate.description"
               text-angular
               ta-default-wrap = "p"
               ng-blur         = "updateDescription()"
@@ -187,7 +189,7 @@
     </div>
 
     <!-- Dataset Info -->
-    <div class="info wrapper" style="display:none;">
+    <div class="info wrapper" ng-hide="true">
       <div class="container">
         <div class="col-md-12">
         <!-- <div class="content" ng-bind-html="summary"></div> -->

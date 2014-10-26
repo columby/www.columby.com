@@ -20,7 +20,6 @@ exports.me = function(req,res,id){
   // check jwt
   if (req.headers && req.headers.authorization){
     var token;
-    console.log('auth', req.headers.authorization);
     var parts = req.headers.authorization.split(' ');
     if (parts.length === 2) {
       var scheme = parts[0],
@@ -34,7 +33,6 @@ exports.me = function(req,res,id){
     }
 
     var decoded = jwt.decode(token, config.jwt.secret);
-    console.log('jwt token', decoded);
 
     if (decoded.exp <= Date.now()) {
       console.log('Access token has expired');
@@ -42,11 +40,12 @@ exports.me = function(req,res,id){
     }
 
     // get id from jwt
-    console.log('user id is ', decoded.iss);
-    User.findById(decoded.iss, function(err, user) {
-      if(err) { return handleError(res,err); }
-      return res.json(user);
-    });
+    User.findOne({_id: decoded.iss})
+      .populate('accounts')
+      .exec(function(err, user) {
+        if(err) { return handleError(res,err); }
+        return res.json(user);
+      });
   }
 }
 
