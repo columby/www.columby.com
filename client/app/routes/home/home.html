@@ -2,8 +2,12 @@
 
   <div class="page-header">
     <div class="container">
-			<img src="/assets/images/logo-transparant-white.png">
-      <h2 class="page-subtitle">publish and discover data</p>
+			<img src="/assets/images/logo.png">
+      <h2 class="page-subtitle">publish and discover data</h2>
+			<button type="button" class="btn btn-default button" ng-show="$root.user._id"  ui-sref="dataset.create">Publish new dataset</button>
+			<button type="button" class="btn btn-default button" ng-hide="$root.user._id"  ui-sref='signin'>Login or Signup</button>
+			<p>or</p>
+			<a ui-sref="about">Read about Columby</a>
     </div>
   </div>
 

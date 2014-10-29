@@ -3,16 +3,17 @@
 /*** ---- HOMEPAGE ---------------------------- ***/
 .page-home {
   .page-header {
+		margin: 0;
     text-align: center;
-    min-height: 260px;
+    min-height: 560px;
     color: #FFF;
     background-color: #eee;
-
-    background-image: url('/assets/images/homepage-header.svg');
-    background-position: 50% 50%;
-    // background-size: 100% 100%;
+    background-image: url('/assets/images/homepage.jpg');
+    background-size: cover;
+		background-position: 50% 50%;
     img {
       margin-top: 100px;
+			width: 400px;
     }
     h1.page-title {
       margin-top: 100px;
@@ -20,11 +21,36 @@
     }
     h2.page-subtitle {
       font-family: "merriweather", serif;
-      font-size: 14px;
+      font-size: 24px;
       font-weight: 300;
       letter-spacing: 0.6px;
       opacity: 0.7;
     }
+		.button{
+			margin-top: 30px;
+		}
+		p{
+			margin-top: 12px;
+      font-family: "merriweather", serif;
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.6px;
+      opacity: 0.7;
+			text-transform: italic;
+		}
+		a{
+			margin-top: 10px;
+      font-family: "merriweather", serif;
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: 0.6px;
+      opacity: 0.8;
+			color: #fff;
+		}
+		a:hover{
+			text-decoration: none;
+			opacity: 1;
+		}
   }
   .searchbox {
     margin: 70px 50px;
