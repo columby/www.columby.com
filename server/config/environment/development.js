@@ -30,5 +30,5 @@ module.exports = {
     logging   : 'trace'
   },
 
-  seedDB: true
+  seedDB: false
 };

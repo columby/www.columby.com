@@ -8,10 +8,10 @@ var _ = require('lodash'),
     moment = require('moment'),
     jwt = require('jwt-simple'),
     mandrill = require('mandrill-api/mandrill'),
-    config = require('../../config/environment')
-;
+    config = require('../../config/environment'),
 
-var mandrill_client = new mandrill.Mandrill(config.mandrill.key);
+    email = require('../../email/index');
+;
 
 
 // Provide the currently logged in user details
@@ -68,16 +68,15 @@ exports.show = function(req, res) {
 
 // Creates a new user in the DB.
 exports.register = function(req, res) {
-  console.log('creating user', req.body);
+  console.log('Registerein a new user', req.body);
   User.create(req.body, function(err, user) {
     if(err) { return handleError(res, err); }
 
-    console.log('Creating token');
+    console.log('Creating a login token for the new user.');
     var token = new Token({user: user._id});
     token.save();
-    console.log('Token created.', token);
 
-    console.log('creating new primary publication account');
+    console.log('Creating new primary publication account for the new user.');
     var account = new Account({
       owner   : user._id,
       name    : req.body.name,
@@ -85,48 +84,18 @@ exports.register = function(req, res) {
       primary : true
     });
     account.save()
-    console.log('account', account)
 
-    var tokenurl = req.protocol + '://' + req.get('host') + '/u/signin?token=' + token.token;
-
-    mandrill_client.messages.sendTemplate({
-      'template_name': 'columby-notice-template',
-      'template_content' : [{
-        'name' : 'Welcome to Columby!',
-        'content' : 'Hi!<br/>You can log in right away and start using your new account. Please click the button below to login. <br>Or copy and paste this url:<br>' + tokenurl + '<br><br>If you don\'t know what this is about, then someone has probably entered your email address by mistake. Sorry about that.'
-      }],
-      'message': {
-        'html': req.protocol + '://' + req.get('host') + '/u/signin?token=' + token.token,
-        'text': req.protocol + '://' + req.get('host') + '/u/signin?token=' + token.token,
-        'subject': 'Login at Columby',
-        'from_email': 'noreply@columby.com',
-        'from_name': 'Columby',
-        'to': [{
-          'email': user.email,
-          'name': user.name,
-          'type': 'to'
-        }],
-        'headers': {
-          'Reply-To': 'noreply@columby.com'
-        },
-        'merge_vars': [{
-          'rcpt' : user.email,
-          'vars': [{
-            'name':'TITLE',
-            'content':'Welcome to Columby!',
-          },{
-            'name':'MESSAGE',
-            'content':'Hi!<br/>You can log in right away and start using your new account. Please click the button below to login. <br>Or copy and paste this url:<br>' + tokenurl + '<br><br>If you don\'t know what this is about, then someone has probably entered your email address by mistake. Sorry about that.<br><br>Thank you,<br>The Columby team'
-          },{
-            'name':'LINK',
-            'content': tokenurl
-          },{
-            'name':'LINKTITLE',
-            'content': 'Login at Columby'
-          }],
-        }],
+    var vars={
+      tokenurl: req.protocol + '://' + req.get('host') + '/u/signin?token=' + token.token,
+      user:{
+        email: user.email,
+        name: user.name
       }
-    }, function(result){
+    }
+    // Send email to user with login link.
+    //console.log(email.register);
+    email.register(vars, function(result){
+      console.log(result);
       if (result[0].status === 'sent') {
         return res.json(user._id);
       } else {
@@ -272,6 +241,45 @@ exports.verify = function(req,res,next) {
 }
 
 
+exports.seed = function(res,err){
+  console.log('Removing and updating users');
+  // Delete all existing users
+  User.find({}).remove(function() {
+    // Delete all existing accounts
+    Account.find({}).remove(function(){
+      // Get the list of users
+      var u = require('../../seed/users');
+      // Create each user
+      for (var i=0; i<u.length; i++){
+        var newUser = u[i];
+        newUser.drupal = {
+          uid: newUser.uid,
+          uuid: newUser.uuid,
+          name: newUser.name
+        };
+        delete newUser.uid;
+        delete newUser.uuid;
+        User.create(newUser, function (err, user){
+          console.log(user);
+          // Create an account for each user
+          //console.log(user);
+          Account.create({
+             owner   : user._id,
+             name    : user.drupal.name,
+             slug    : user.drupal.name,
+             primary : true
+          }, function (err,account){
+             if (err) { console.log('err', err); }
+             //console.log('acount', account);
+          });
+
+        });
+      }
+
+      console.log('removed Users');
+    });
+  });
+}
 
 function handleError(res, err) {
   return res.send(500, err);

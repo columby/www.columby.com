@@ -45,7 +45,7 @@ var AccountSchema = new Schema({
   plan        : { type: String, default: 'free' },
   description : { type: String, required: false },
 
-  roles       : [ {type: String, default: 'authenticated'} ],
+  roles       : {type: Array, default: ['authenticated']},
 
   avatar      : {
     url         : {
@@ -67,7 +67,11 @@ var AccountSchema = new Schema({
   collections : [{ type: Schema.ObjectId, ref: 'Collection' }],
 
   createdAt   : { type:Date },
-  updatedAt   : { type: Date }
+  updatedAt   : { type: Date },
+
+  drupal:{
+    uuid: {type:String}
+  }
 });
 
 
@@ -82,8 +86,8 @@ AccountSchema.pre('save', function(next) {
 
   // Create a new api-key for a new publication account.
   if (this.isNew){
-    console.log('setting the default API-key');
-    this.apikeys.push(mongoose.Types.ObjectId());
+    //console.log('setting the default API-key');
+    this.apikeys.push(String(mongoose.Types.ObjectId()));
   }
 
   next();
@@ -91,15 +95,15 @@ AccountSchema.pre('save', function(next) {
 
 AccountSchema.post('save', function(account){
   var User = mongoose.model('User');
-  console.log('action after save, updating user accounts list');
+  //console.log('action after save, updating user accounts list');
   User.findOne({_id: account.owner}, function(err,user){
-    console.log(err);
-    console.log('user findone:', user);
+    if (err) { console.log(err); }
+    //console.log('user findone:', user);
     if (user){
       if (user.accounts.indexOf(account._id) === -1) {
         user.accounts.push(account._id);
         user.save();
-        console.log('user updated:', user);
+        //console.log('user updated:', user);
       }
     }
   });

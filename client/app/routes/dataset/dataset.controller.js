@@ -125,16 +125,16 @@ angular.module('columbyApp')
     /* dataset functions */
     $scope.updateTitle = function() {
       if (!$scope.dataset._id) {
-        console.log('Title changed, but not yet saved');
+        //console.log('Title changed, but not yet saved');
       } else {
         if ($scope.datasetUpdate.title === $scope.dataset.title) {
-          console.log('Dataset saved, but no title change');
+          //console.log('Dataset saved, but no title change');
         } else {
           var dataset = {
             _id: $scope.dataset._id,
             title: $scope.datasetUpdate.title,
           };
-          console.log('updating dataset title', dataset);
+          //console.log('updating dataset title', dataset);
 
           DatasetSrv.update({id:dataset._id},dataset,function(res){
             if (res._id){
@@ -147,12 +147,12 @@ angular.module('columbyApp')
     };
 
     $scope.updateDescription = function() {
-      console.log('updating dataset description');
+      //console.log('updating dataset description');
       if (!$scope.dataset._id) {
-        console.log('Dataset not yet saved');
+        //console.log('Dataset not yet saved');
       } else {
         if ($scope.datasetUpdate.description === $scope.dataset.description) {
-          console.log('Dataset saved, but no description change');
+          //console.log('Dataset saved, but no description change');
         } else {
           var dataset = {
             _id         : $scope.dataset._id,
@@ -163,7 +163,7 @@ angular.module('columbyApp')
               $scope.datasetUpdate.description = res.description;
               toaster.pop('success', 'Updated', 'Dataset description updated.');
             } else {
-              console.log('error updating description', res);
+              //console.log('error updating description', res);
             }
           });
         }
@@ -191,7 +191,7 @@ angular.module('columbyApp')
       $scope.dataset.title = $scope.datasetUpdate.title;
       $scope.dataset.description = $scope.datasetUpdate.description;
       DatasetSrv.save($scope.dataset, function(res){
-        console.log('create',res);
+        //console.log('create',res);
         if (res._id) {
           toaster.pop('success', 'Created', 'Dataset created.');
           $state.go('dataset.edit', {id:res._id, editMode:true});
@@ -207,9 +207,9 @@ angular.module('columbyApp')
           publicationStatus: 'published',
           publishedAt: Date.now()
         };
-        console.log('publishing dataset: ', dataset);
+        //console.log('publishing dataset: ', dataset);
         DatasetSrv.update({id: dataset._id}, dataset,function(res){
-          console.log(res);
+          //console.log(res);
           if (res._id){
             $scope.dataset.publicationStatus = 'published';
             toaster.pop('success', 'Updated', 'Your dataset is now published! ');
@@ -225,7 +225,7 @@ angular.module('columbyApp')
         slug: slug
       };
       DatasetSrv.update({id: d._id}, d, function(res){
-        console.log(res);
+        //console.log(res);
         if (res._id) {
           $scope.dataset.slug = res.slug;
           toaster.pop('success', 'Updated', 'Dataset custom URL updated.');
@@ -239,7 +239,7 @@ angular.module('columbyApp')
 
     /*** Distribution functions */
     $scope.initNewDistribution = function (){
-      console.log('Starting new distribution');
+      //console.log('Starting new distribution');
       $scope.newDistribution = {};
       ngDialog.open({
         template: 'app/routes/dataset/views/addDistributionModal.html',
@@ -256,7 +256,7 @@ angular.module('columbyApp')
     };
 
     $scope.createDistribution = function() {
-      console.log('Creating ditribution');
+      //console.log('Creating ditribution');
       // validate link
       if ($scope.newDistribution){
         if ($scope.newDistribution.valid) {
@@ -273,12 +273,12 @@ angular.module('columbyApp')
             // DCAT stuff
             accessUrl         : $scope.newDistribution.link
           };
-          console.log('attaching distribution', distribution);
+          //console.log('attaching distribution', distribution);
 
           DatasetDistributionSrv.save({
             id:$scope.dataset._id,
             distribution: distribution}, function(res){
-              console.log('res', res);
+              //console.log('res', res);
               if (res.status === 'success'){
                 $scope.dataset.distributions.push(res.distribution);
                 toaster.pop('success', 'Updated', 'New dataset added.');
@@ -311,7 +311,7 @@ angular.module('columbyApp')
       $scope.upload=[];
       var file = $files[0];
       file.progress = parseInt(0);
-      console.log('file', file);
+      //console.log('file', file);
 
       // check if the file is an image
       var validTypes = [ 'image/png', 'image/jpg', 'image/jpeg' ];
@@ -350,7 +350,7 @@ angular.module('columbyApp')
             },
             file: file,
           }).then(function(response) {
-            console.log(response.data);
+            //console.log(response.data);
             file.progress = parseInt(100);
             if (response.status === 201) {
               // convert xml response to json
@@ -373,15 +373,15 @@ angular.module('columbyApp')
                 }
               })
               .success(function(response){
-                console.log('res', response);
+                //console.log('res', response);
                 $scope.dataset.headerImage = response.url;
                 var d = {
                   id: $scope.dataset._id,
                   headerImage: response.url
                 };
-                console.log('datasetUpdate', d);
+                //console.log('datasetUpdate', d);
                 DatasetSrv.update(d, function(result){
-                  console.log('r',result);
+                  //console.log('r',result);
                   if (result._id) {
                     toaster.pop('success', 'Updated', 'Account updated.');
                     updateHeaderImage();
@@ -514,9 +514,7 @@ angular.module('columbyApp')
 
 
     /* --------- INIT ------------------------------------------------------------------------ */
-    console.log('stateparams', $stateParams);
     if ($stateParams.id) {
-      console.log('fetching dataset', $stateParams.id);
       getDataset();
     } else {
       initiateNewDataset();

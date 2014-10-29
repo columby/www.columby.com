@@ -18,6 +18,48 @@ function canEdit(req){
   }
 }
 
+
+function seedDataset(dataset){
+  console.log(dataset.organisation_uuid);
+  var Account = require('../account/account.model');
+
+  Account.findOne({'drupal.uuid': dataset.organisation_uuid}, function(err,account){
+    //console.log(account);
+    var self = this;
+    if (account){
+      Dataset.create({
+        account       : account._id,
+        title        : dataset.title,
+        description : dataset.description,
+        drupal: {
+          uuid      : dataset.uuid
+        }
+      }, function (err, dataset){
+        if (err) { console.log('err', err); }
+        console.log('dataset created', dataset_id);
+      });
+    }
+  });
+
+}
+
+// ADMIN ONLY
+exports.seed = function(req,res){
+  console.log('seeding datasets');
+  // Get the list of users
+  var datasets = require('../../seed/datasets');
+  var User = require('../user/user.model');
+  var Dataset = require('../dataset/dataset.model');
+
+  console.log('Number of datasets', datasets.length);
+
+  for (var i=0; i<datasets.length; i++){
+    console.log('seeding dataset');
+    seedDataset(datasets[ i]);
+  }
+}
+
+
 exports.extractlink = function(req,res) {
   console.log(req.params);
   console.log(req.query);
@@ -65,9 +107,9 @@ exports.index = function(req, res) {
     .find(filter)
     .limit(15)
     .sort('-createdAt')
-    .populate('account', 'slug')
+    .populate('account', 'slug name')
     .exec(function(err, datasets) {
-      console.log(datasets);
+      //console.log(datasets);
       if (err) { return res.json(500, { error: 'Cannot list the datasets' }); }
       return res.json(datasets);
     })

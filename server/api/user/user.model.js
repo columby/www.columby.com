@@ -30,12 +30,19 @@ var UserSchema = new Schema({
     match: [/.+\@.+\..+/, 'Please enter a valid email'],
     validate: [validateUniqueEmail, 'E-mail address is already in-use']
   },
-  
+
   verified  : { type: Boolean, default: false },
 
   accounts  : [{ type: Schema.ObjectId, ref: 'Account' }],
 
-  createdAt : { type: Date, default: new Date() }
+  createdAt : { type: Date, default: new Date() },
+
+  // migration from beta.columby.com
+  drupal : {
+    uid: {type: String},
+    uuid: {type: String},
+    name: {type: String}
+  }
 });
 
 module.exports = mongoose.model('User', UserSchema);

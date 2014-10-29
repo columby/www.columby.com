@@ -5,6 +5,8 @@ var controller = require('./dataset.controller');
 
 var router = express.Router();
 
+router.get('/seed', controller.seed);
+
 router.get('/extractlink', controller.extractlink);
 
 router.get('/', controller.index);

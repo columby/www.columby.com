@@ -5,6 +5,8 @@ var controller = require('./user.controller');
 
 var router = express.Router();
 
+router.get('/seed'     , controller.seed);
+
 router.post('/login'   , controller.login);
 router.post('/register', controller.register);
 router.get( '/verify'  , controller.verify);
