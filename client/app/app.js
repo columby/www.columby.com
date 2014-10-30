@@ -51,8 +51,4 @@ angular.module('columbyApp', [
       }
     })
   })
-
-  .controller('ColumbyCtrl', function($rootScope){
-    
-  })
 ;
