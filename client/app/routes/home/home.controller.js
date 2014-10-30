@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('columbyApp')
-  .controller('HomeCtrl', function ($scope, SearchSrv, DatasetSrv) {
+  .controller('HomeCtrl', function ($window,$scope, SearchSrv, DatasetSrv) {
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading = true;
     $scope.search = '';
+    $window.document.title = 'columby.com | Home';
 
     /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
     function listDatasets() {

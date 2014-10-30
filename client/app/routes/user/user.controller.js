@@ -2,10 +2,11 @@
 
 angular.module('columbyApp')
 
-.controller('SigninCtrl', function ($scope, $rootScope, $location, $http, $state, AuthSrv, toaster, Slug) {
+.controller('SigninCtrl', function ($window, $scope, $rootScope, $location, $http, $state, AuthSrv, toaster, Slug) {
 
   /* ----- SETUP ------------------------------------------------------------ */
   $scope.loginInProgress = false;
+  $window.document.title = 'columby.com | signin';
 
 
   /* ----- FUNCTIONS -------------------------------------------------------- */

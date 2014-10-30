@@ -26,7 +26,7 @@ module.exports = {
   },
 
   mandrill : {
-    key:    process.env.MANDRILL_KEY
+    key:    process.env.MANDRILL_API
   },
 
   // Amazon AWS S3 File Storage

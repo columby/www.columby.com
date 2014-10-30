@@ -10,7 +10,7 @@ var _ = require('lodash'),
     mandrill = require('mandrill-api/mandrill'),
     config = require('../../config/environment'),
 
-    email = require('../../email/index');
+    emailService = require('../../email/index');
 ;
 
 
@@ -94,7 +94,7 @@ exports.register = function(req, res) {
     }
     // Send email to user with login link.
     //console.log(email.register);
-    email.register(vars, function(result){
+    emailService.register(vars, function(result){
       console.log(result);
       if (result[0].status === 'sent') {
         return res.json(user._id);
@@ -151,44 +151,16 @@ exports.login = function(req,res,next) {
       var tokenurl = req.protocol + '://' + req.get('host') + '/u/signin?token=' + token.token;
 
       // Send the new token by email
-      mandrill_client.messages.sendTemplate({
-        'template_name': 'columby-notice-template',
-        'template_content' : [{
-          'name' : 'Your login token',
-          'content' : 'Hi!<br/>There was a request to login. Please click the button below to login. <br>Or copy and paste this url:<br>' + tokenurl + '<br><br>If you did not make this request, just ignore this email.'
-        }],
-        'message': {
-          'html': tokenurl,
-          'text': tokenurl,
-          'subject': 'Login at Columby',
-          'from_email': 'noreply@columby.com',
-          'from_name': 'Columby',
-          'to': [{
-            'email': user.email,
-            'name': user.email,
-            'type': 'to'
-          }],
-          'headers': {
-            'Reply-To': 'noreply@columby.com'
-          },
-          'merge_vars': [{
-            'rcpt' : user.email,
-            'vars': [{
-              'name':'TITLE',
-              'content':'Your login token',
-            },{
-              'name':'MESSAGE',
-              'content':'Hi!<br/>There was a request to login. Please click the button below to login. <br>Or copy and paste this url:<br>' + tokenurl + '<br><br>If you did not make this request, just ignore this email.'
-            },{
-              'name':'LINK',
-              'content': tokenurl
-            },{
-              'name':'LINKTITLE',
-              'content': 'Login at Columby'
-            }],
-          }],
+      var vars = {
+        tokenurl: req.protocol + '://' + req.get('host') + '/u/signin?token=' + token.token,
+        user: {
+          email: user.email,
+          name: user.name
         }
-      }, function(result){
+      }
+      console.log('var', vars);
+      emailService.login(vars, function(result){
+        console.log('result', result);
         if (result[0].status === 'sent') {
           return res.json(user._id);
         } else {

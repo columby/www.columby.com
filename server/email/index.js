@@ -7,8 +7,6 @@ var mandrill_client = new mandrill.Mandrill(config.mandrill.key);
 // send a login email to a user
 exports.register = function(vars, callback){
 
-  console.log('email vars', vars);
-
   mandrill_client.messages.sendTemplate({
     'template_name': 'columby-notice-template',
     'template_content' : [{
@@ -47,12 +45,48 @@ exports.register = function(vars, callback){
       }],
     }
   }, callback);
-
 }
 
 
 // send a registration email to a user
-exports.login = function(vars){
+exports.login = function(vars, callback){
 
-  return true;
+  mandrill_client.messages.sendTemplate({
+    'template_name': 'columby-notice-template',
+    'template_content' : [{
+      'name' : 'Your login token',
+      'content' : 'Hi!<br/>There was a request to login. Please click the button below to login. <br>Or copy and paste this url:<br>' + vars.tokenurl + '<br><br>If you did not make this request, just ignore this email.'
+    }],
+    'message': {
+      'html': vars.tokenurl,
+      'text': vars.tokenurl,
+      'subject': 'Login at Columby',
+      'from_email': 'noreply@columby.com',
+      'from_name': 'Columby',
+      'to': [{
+        'email': vars.user.email,
+        'name': vars.user.email,
+        'type': 'to'
+      }],
+      'headers': {
+        'Reply-To': 'noreply@columby.com'
+      },
+      'merge_vars': [{
+        'rcpt' : vars.user.email,
+        'vars': [{
+          'name':'TITLE',
+          'content':'Your login token',
+        },{
+          'name':'MESSAGE',
+          'content':'Hi!<br/>There was a request to login. Please click the button below to login. <br>Or copy and paste this url:<br>' + vars.tokenurl + '<br><br>If you did not make this request, just ignore this email.'
+        },{
+          'name':'LINK',
+          'content': vars.tokenurl
+        },{
+          'name':'LINKTITLE',
+          'content': 'Login at Columby'
+        }],
+      }],
+    }
+  }, callback);
 }

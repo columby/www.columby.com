@@ -85,7 +85,7 @@
       </div>
     </div>
 
-    <div class="datasets wrapper" ng-hide="editMode">
+    <div class="datasets wrapper" ng-show="editMode || account.datasets.length>0">
       <div class="container">
         <div class="col-md-12">
           <h3>Datasets</h3>
@@ -98,7 +98,7 @@
               </h4>
               <date>{{dataset.created | date:'short'}}</date>
             </li>
-            <li>
+            <li ng-show="account.canEdit">
               <h4><a ui-sref="dataset.create" class="new">+ Create a dataset</a></h4>
             </li>
           </ul>

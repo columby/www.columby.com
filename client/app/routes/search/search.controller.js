@@ -1,12 +1,14 @@
 'use strict';
 
 angular.module('columbyApp')
-  .controller('SearchCtrl', function ($scope, SearchSrv) {
+  .controller('SearchCtrl', function ($window, $scope, SearchSrv) {
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading = true;
-    $scope.search = '';
-
+    $scope.search = '';;
+    
+    $window.document.title = 'columby.com | search';
+    
     /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
 
 

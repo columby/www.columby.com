@@ -1,0 +1,23 @@
+'use strict';
+
+angular.module('columbyApp')
+
+// Directive to change the html page title.
+// state in ui-router needs a data.pageTitle
+.directive('updateTitle', function($rootScope) {
+  console.log('111');
+  return {
+    link: function(scope, element) {
+
+      var listener = function(event, toState, toParams, fromState, fromParams) {
+
+        var title = 'data publishing';
+        if (toState.data && toState.data.pageTitle) title = toState.data.pageTitle;
+        // Set asynchronously so page changes before title does
+        element.text('columby.com | ' + title);
+      };
+
+      $rootScope.$on('$stateChangeStart', listener);
+    }
+  }
+});

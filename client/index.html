@@ -1,4 +1,5 @@
 <!doctype html>
+<html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -56,13 +57,13 @@
 
     <div class="site-main">
       <!-- include metabar -->
-      <div class="metabar-wrapper" data-ng-include="'components/metabar/metabar.html'"></div>
+      <div class="metabar-wrapper" ng-include="'components/metabar/metabar.html'"></div>
 
       <div ui-view=""></div>
     </div>
 
     <div uservoice></div>
-    
+
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -113,6 +114,7 @@
           <script src="app/directives/embedly/embedly.directive.js"></script>
           <script src="app/directives/focus/focus.directive.js"></script>
           <script src="app/directives/scrollPosition/scrollPosition.directive.js"></script>
+          <script src="app/directives/updateTitle/updateTitle.directive.js"></script>
           <script src="app/directives/uservoice/uservoice.directive.js"></script>
           <script src="app/routes/account/account.controller.js"></script>
           <script src="app/routes/account/account.js"></script>

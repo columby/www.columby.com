@@ -1,6 +1,8 @@
 'use strict';
 
 angular.module('columbyApp')
-  .controller('PagesCtrl', function ($scope) {
-    $scope.message = 'Hello';
+  .controller('PagesCtrl', function ($window, $state) {
+
+    $window.document.title = 'columby.com | ' + $state.current.name;
+
   });

@@ -2,9 +2,7 @@
 
 angular.module('columbyApp')
 
-  .controller('DatasetCtrl', [
-  'configuration', '$rootScope', '$scope', '$location', '$state', '$stateParams', 'DatasetSrv', 'DatasetDistributionSrv', 'DatasetReferencesSrv', 'AuthSrv', 'toaster', 'Slug', 'ngDialog','EmbedlySrv','$http', '$upload',
-  function(configuration, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv, $http, $upload) {
+  .controller('DatasetCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv, $http, $upload) {
 
     /***   INITIALISATION   ***/
     //var editWatcher;               // Watch for model changes in editmode
@@ -13,7 +11,8 @@ angular.module('columbyApp')
     $scope.contentEdited = false;  // models is changed or not during editmode
     $scope.hostname = $location.protocol() + '://' + $location.host();
     $scope.datasetUpdate = {};
-
+    $window.document.title = 'columby.com';
+    
     // check edit mode
     if ($location.path().split('/')[3] === 'edit') {
       $scope.editMode = true;
@@ -34,6 +33,7 @@ angular.module('columbyApp')
         // add acquired dataset to the scope
         $scope.contentLoading = false;
         $scope.dataset = dataset;
+        $window.document.title = 'columby.com | ' + dataset.title;
 
         // set the avatar
         if (!dataset.account.avatar) {
@@ -521,4 +521,4 @@ angular.module('columbyApp')
       toggleEditMode(true);
     }
   }
-]);
+);

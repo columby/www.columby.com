@@ -13,7 +13,7 @@ angular.module('columbyApp')
 
         $scope.showPopup = function (){
           ngDialog.open({
-            template: 'accounts/views/includes/accountSwitcherModal.html',
+            template: 'app/directives/accountSwitcher/accountSwitcherModal.html',
             className: 'ngdialog-theme-default',
             scope: $scope
           });

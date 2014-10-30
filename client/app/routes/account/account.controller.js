@@ -7,15 +7,14 @@ angular.module('columbyApp')
  * Controller a user's account page
  *
  ***/
-.controller('AccountCtrl', [
-  'configuration', '$scope', '$rootScope', '$location', '$state', '$stateParams', '$http', 'AuthSrv', 'AccountSrv', 'toaster', '$upload',
-  function (configuration, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, toaster, $upload) {
+.controller('AccountCtrl', function ($window, configuration, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, toaster, $upload) {
 
 
   /* ---------- SETUP ----------------------------------------------------------------------------- */
   $scope.editMode        = false;       // edit mode is on or off
   $scope.contentLoading  = true;
   $scope.contentEdited   = false;  // models is changed or not during editmode
+  $window.document.title = 'columby.com';
 
   // check edit mode
   if ($location.path().split('/')[3] === 'edit') {
@@ -32,6 +31,7 @@ angular.module('columbyApp')
     AccountSrv.get({slug: $stateParams.slug}, function(result){
       $scope.account = result;
       $scope.contentLoading = false;
+      $window.document.title = 'columby.com | ' + result.name;
 
       // set draft title and description
       if ($scope.editMode){
@@ -294,5 +294,5 @@ angular.module('columbyApp')
     toggleEditMode(true);
   }
 
-}])
+})
 ;
