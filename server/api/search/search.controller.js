@@ -2,13 +2,16 @@
 
 var elasticsearch = require('elasticsearch'),
     config = require('../../config/environment/index.js'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    Dataset = require('../dataset/dataset.model');
+    console.log('dataset', Dataset);
 
 var serverOptions = {
   host: config.elasticsearch.host,
   log: config.elasticsearch.logging
 };
 
+console.log('connecting to elasticsearch host: ', config.elasticsearch.host);
 var elasticSearchClient = new elasticsearch.Client(serverOptions);
 
 // Check the connection on startup
@@ -48,7 +51,24 @@ exports.search = function(req, res) {
 
 exports.sync = function(req,res){
   console.log('sync');
-  var Dataset = mongoose.model('Dataset');
+
+
+  // Dataset.find({}, function(err, dataset){
+  //   var d = {
+  //     title: dataset[0].title
+  //   }
+  //   console.log(d);
+  //
+  //   elasticSearchClient.create({
+  //     index:'datasets',
+  //     type: 'dataset',
+  //     body:d
+  //   }, function(err,res){
+  //     console.log('err',err);
+  //     console.log('res',res);
+  //   });
+  // });
+
   var stream = Dataset.synchronize();
   var count = 0;
 
@@ -56,6 +76,8 @@ exports.sync = function(req,res){
     if (err) {
       console.log('Search sync error: ', err);
     }
+    console.log('syn counter: ', count);
+    console.log('doc', doc);
     count++;
   });
 
@@ -64,6 +86,7 @@ exports.sync = function(req,res){
   });
 
   stream.on('error', function(err){
+    console.log('sync error', err);
     res.json(err);
   });
 }
