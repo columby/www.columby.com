@@ -19,7 +19,7 @@ angular.module('columbyApp')
 
     /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
     $scope.search = function(){
-      console.log('search: ', $scope.search.searchTerm);
+      $scope.search.message = 'Searching for: ' + $scope.search.searchTerm;
       SearchSrv.query({
         index: 'datasets',
         size: 50,
@@ -31,8 +31,10 @@ angular.module('columbyApp')
           }
         }
       }).then(function (response) {
-        console.log('re', response);
         $scope.search.hits = response.hits.hits;
+
+      }, function(err){
+        $scope.search.message = 'Error: ' + err.data.message;
       });
     };
 

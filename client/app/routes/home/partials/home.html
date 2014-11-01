@@ -14,13 +14,14 @@
   <div class="page-content">
     <div class="container">
 
-      <div class="searchbox">
+      <div class="searchbox col-md-offset-1 col-md-10">
         <input
           type="text"
           ng-model="search.searchTerm"
           placeholder="Search datasets"
           class="input-large"
           ng-change="search()">
+        <div class="search-message">{{search.message}}</div>
       </div>
 
       <!-- Search result -->
