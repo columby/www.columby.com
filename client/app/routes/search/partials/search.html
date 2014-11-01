@@ -13,9 +13,10 @@
         <input
           focus
           class="input-search"
-          ng-model="search.term"
+          ng-model="search.searchTerm"
           placeholder="Search"
           ng-change="search()"/>
+        <div class="search-message">{{search.message}}</div>
       </div>
     </div>
 

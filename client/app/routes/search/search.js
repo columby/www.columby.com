@@ -5,7 +5,7 @@ angular.module('columbyApp')
     $stateProvider
       .state('search', {
         url: '/search',
-        templateUrl: 'app/routes/search/search.html',
+        templateUrl: 'app/routes/search/partials/search.html',
         controller: 'SearchCtrl'
       });
   });

@@ -19,23 +19,28 @@ angular.module('columbyApp')
 
     /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
     $scope.search = function(){
-      $scope.search.message = 'Searching for: ' + $scope.search.searchTerm;
-      SearchSrv.query({
-        index: 'datasets',
-        size: 50,
-        body: {
-          'query': {
-            'match': {
-              '_all': String($scope.search.searchTerm)
+      
+      if ($scope.search.searchTerm.length>2){
+        $scope.search.message = 'Searching for: ' + $scope.search.searchTerm;
+        SearchSrv.query({
+          index: 'datasets',
+          size: 50,
+          body: {
+            'query': {
+              'match': {
+                '_all': String($scope.search.searchTerm)
+              }
             }
           }
-        }
-      }).then(function (response) {
-        $scope.search.hits = response.hits.hits;
+        }).then(function (response) {
+          $scope.search.hits = response.hits.hits;
 
-      }, function(err){
-        $scope.search.message = 'Error: ' + err.data.message;
-      });
+        }, function(err){
+          $scope.search.message = 'Error: ' + err.data.message;
+        });
+      } else {
+        $scope.search.message = 'Type at least 3 characters.';
+      }
     };
 
     /* ---------- INIT ---------------------------------------------------------------------------- */

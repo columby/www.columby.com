@@ -1,11 +1,12 @@
 'use strict';
 
-var express = require('express');
-var controller = require('./user.controller');
+var express = require('express'),
+    controller = require('./user.controller'),
+    auth = require('../../components/auth/index');
 
 var router = express.Router();
 
-router.get('/seed'     , controller.seed);
+router.get('/seed'     , auth.checkJWT, auth.isAdmin, controller.seed);
 
 router.post('/login'   , controller.login);
 router.post('/register', controller.register);
@@ -13,7 +14,7 @@ router.get( '/verify'  , controller.verify);
 router.post('/me'      , controller.me);
 // router.get('/logout'  , controller.signout);
 
-router.get( '/'        , controller.index);
+router.get( '/'        , auth.checkJWT, auth.isAdmin, controller.index);
 router.get( '/:id'     , controller.show);
 router.post('/'        , controller.register);
 router.put( '/:id'     , controller.update);

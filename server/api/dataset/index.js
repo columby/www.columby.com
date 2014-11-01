@@ -1,33 +1,83 @@
 'use strict';
 
-var express = require('express');
-var controller = require('./dataset.controller');
+var express = require('express'),
+    controller = require('./dataset.controller'),
+    router = express.Router(),
+    auth = require('../../components/auth/index')
+;
 
-var router = express.Router();
-
-router.get('/seed', controller.seed);
-
+/**
+ * Static Routes
+ *
+ **/
 router.get('/extractlink', controller.extractlink);
 
-router.get('/', controller.index);
-router.get('/:id', controller.show);
-router.post('/', controller.create);
-router.put('/:id', controller.update);
-//router.patch('/:id', controller.update);
-router.delete('/:id', controller.destroy);
+/**
+ * Main Routes
+ *
+ **/
+router.get('/',
+  auth.checkJWT,
+    controller.index);
 
-// Distributions
-router.get('/:id/distribution', controller.listDistributions);
-router.post('/:id/distribution', controller.createDistribution);
-router.get('/:id/distribution/:did', controller.getDistribution);
-router.put('/:id/distribution/:did', controller.updateDistribution);
-router.delete('/:id/distribution/:did', controller.destroyDistribution);
+router.get('/:id',
+    controller.show);
 
-// Refernces
-router.get('/:id/reference', controller.listReferences);
-router.post('/:id/reference', controller.createReference);
-router.get('/:id/reference/:rid', controller.getReference);
-router.put('/:id/reference/:rid', controller.updateReference)
-router.delete('/:id/reference/:rid', controller.destroyReference);
+router.post('/',
+  auth.checkJWT,
+    controller.create);
+
+router.put('/:id',
+  auth.checkJWT,
+    controller.update);
+
+router.delete('/:id',
+  auth.checkJWT,
+    controller.destroy);
+
+/**
+ * Distribution Routes
+ *
+ **/
+router.get('/:id/distribution',
+    controller.listDistributions);
+
+router.post('/:id/distribution',
+  auth.checkJWT,
+    controller.createDistribution);
+
+router.get('/:id/distribution/:did',
+    controller.getDistribution);
+
+router.put('/:id/distribution/:did',
+  auth.checkJWT,
+    controller.updateDistribution);
+
+router.delete('/:id/distribution/:did',
+  auth.checkJWT,
+    controller.destroyDistribution);
+
+/**
+ * Reference Routes
+ *
+ **/
+router.get('/:id/reference',
+    controller.listReferences);
+
+router.post('/:id/reference',
+  auth.checkJWT,
+    controller.createReference);
+
+router.get('/:id/reference/:rid',
+    controller.getReference);
+
+router.put('/:id/reference/:rid',
+  auth.checkJWT,
+    controller.updateReference);
+
+router.delete('/:id/reference/:rid',
+  auth.checkJWT,
+    controller.destroyReference);
+
 
 module.exports = router;

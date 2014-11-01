@@ -37,6 +37,8 @@ var UserSchema = new Schema({
 
   createdAt : { type: Date, default: new Date() },
 
+  isAdmin   : { type: Boolean, default: false },
+  
   // migration from beta.columby.com
   drupal : {
     uid: {type: String},
