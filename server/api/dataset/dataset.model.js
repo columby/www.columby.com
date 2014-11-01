@@ -1,17 +1,18 @@
 'use strict';
 
 var mongoose = require('mongoose'),
+    mongoosastic = require('mongoosastic'),
     Schema = mongoose.Schema;
 
 var DatasetSchema = new Schema({
   // Dataset properties
-  createdAt       : { type: Date, default: Date.now },
+  createdAt       : { type: Date, default: Date.now, es_indexed:true },
   publishedAt     : { type: Date },
-  updatedAt       : { type: Date },
+  updatedAt       : { type: Date, es_indexed:true },
 
-  title           : { type : String, trim: true },
-  description     : { type : String, trim: true },
-  slug            : { type : String },
+  title           : { type : String, trim: true, es_indexed:true },
+  description     : { type : String, trim: true, es_indexed:true },
+  slug            : { type : String, es_indexed:true },
   headerImage     : { type : String },
 
   account         : { type: Schema.ObjectId, ref:  'Account' },
@@ -26,19 +27,19 @@ var DatasetSchema = new Schema({
 
   distributions    : [{
     // Columby stuff
-    uploader          : {type: Schema.ObjectId, ref: 'User' },
-    distributionType  : {type: String},      // external link, internal storage, internal api
-    publicationStatus : {type: String},      // private, public
+    uploader          : {type: Schema.ObjectId, ref: 'User', es_indexed:true },
+    distributionType  : {type: String, es_indexed:true },      // external link, internal storage, internal api
+    publicationStatus : {type: String, es_indexed:true },      // private, public
 
     // DCAT stuff
-    title           : { type: String },
-    description     : { type: String },
+    title           : { type: String, es_indexed:true },
+    description     : { type: String, es_indexed:true },
     issued          : { type: Date },
     modified        : { type: Date },
-    license         : { type: String },
+    license         : { type: String, es_indexed:true },
     rights          : { type: String },
-    accessUrl       : { type: String },
-    downloadUrl     : { type: String },
+    accessUrl       : { type: String, es_indexed:true },
+    downloadUrl     : { type: String, es_indexed:true },
     mediaType       : { type: String },
     format          : { type: String },
     byteSize        : { type: Number }
@@ -122,5 +123,8 @@ DatasetSchema.statics.load = function(id, cb) {
       Dataset.populate(dataset, opts, cb);
     });
 };
+
+
+DatasetSchema.plugin(mongoosastic);
 
 module.exports = mongoose.model('Dataset', DatasetSchema);

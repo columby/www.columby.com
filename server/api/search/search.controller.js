@@ -1,14 +1,14 @@
 'use strict';
 
 var elasticsearch = require('elasticsearch'),
-    url = require('url'),
-    config = require('../../config/environment/index.js');
+    config = require('../../config/environment/index.js'),
+    mongoose = require('mongoose');
 
-var connectionString = url.parse(config.elasticsearch.host);
 var serverOptions = {
-  host: connectionString.host,
+  host: config.elasticsearch.host,
   log: config.elasticsearch.logging
 };
+
 var elasticSearchClient = new elasticsearch.Client(serverOptions);
 
 // Check the connection on startup
@@ -46,6 +46,27 @@ exports.search = function(req, res) {
 };
 
 
+exports.sync = function(req,res){
+  console.log('sync');
+  var Dataset = mongoose.model('Dataset');
+  var stream = Dataset.synchronize();
+  var count = 0;
+
+  stream.on('data', function(err, doc){
+    if (err) {
+      console.log('Search sync error: ', err);
+    }
+    count++;
+  });
+
+  stream.on('close', function(){
+    res.json('indexed ' + count + ' documents!');
+  });
+
+  stream.on('error', function(err){
+    res.json(err);
+  });
+}
 
 function handleError(res, err) {
   return res.send(500, err);

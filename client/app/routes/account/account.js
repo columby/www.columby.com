@@ -36,6 +36,6 @@ angular.module('columbyApp')
           editMode: true
         },
         controller: 'AccountCtrl'
-      })
+      });
 
   });

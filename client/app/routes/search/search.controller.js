@@ -5,7 +5,7 @@ angular.module('columbyApp')
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading = true;
-    $scope.search = '';;
+    $scope.search = '';
 
     $window.document.title = 'columby.com | search';
 

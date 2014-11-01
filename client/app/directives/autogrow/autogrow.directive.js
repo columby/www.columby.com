@@ -44,7 +44,7 @@
 angular.module('columbyApp')
 
 .directive('autoGrow', function($timeout) {
-  return function(scope, element, attr){
+  return function(scope, element){
     var minHeight = element[0].offsetHeight,
       paddingLeft = element.css('paddingLeft'),
       paddingRight = element.css('paddingRight');

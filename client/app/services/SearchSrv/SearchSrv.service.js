@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-.service('SearchSrv', function ($http, $q) {
+.service('SearchSrv', function ($http) {
 
   return {
     query: function(query){

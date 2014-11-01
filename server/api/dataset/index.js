@@ -9,15 +9,15 @@ var express = require('express'),
 /**
  * Static Routes
  *
- **/
+ **/    
 router.get('/extractlink', controller.extractlink);
+
 
 /**
  * Main Routes
  *
  **/
 router.get('/',
-  auth.checkJWT,
     controller.index);
 
 router.get('/:id',

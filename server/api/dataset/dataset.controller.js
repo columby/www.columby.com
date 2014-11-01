@@ -36,7 +36,7 @@ function seedDataset(dataset){
         }
       }, function (err, dataset){
         if (err) { console.log('err', err); }
-        console.log('dataset created', dataset_id);
+        console.log('dataset created', dataset._id);
       });
     }
   });
@@ -68,7 +68,7 @@ exports.extractlink = function(req,res) {
 
   // get link properties
   if (uri){
-    request.head(uri, function(err, result, body){
+    req.head(uri, function(err, result, body){
       if (res.statusCode !== 200) {
         console.log('invalid url');
       } else {
@@ -226,7 +226,7 @@ exports.updateDistribution = function(req, res, id) {
 };
 
 // Delete a source attached to a dataset
-exports.destroyDistribution = function(req, res, id) {
+exports.destroyDistribution = function(req, res) {
 
   var id = String(req.params.id);
   var distributionId = String(req.params.distributionId);
@@ -281,7 +281,7 @@ exports.updateReference = function(req, res, id) {
 };
 
 // Delete a source attached to a dataset
-exports.destroyReference = function(req, res, id) {
+exports.destroyReference = function(req, res) {
 
   var id = String(req.params.id);
   var referenceId = String(req.params.referenceId);

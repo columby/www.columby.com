@@ -19,7 +19,7 @@ angular.module('columbyApp')
 
     /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
     $scope.search = function(){
-      
+
       if ($scope.search.searchTerm.length>2){
         $scope.search.message = 'Searching for: ' + $scope.search.searchTerm;
         SearchSrv.query({
@@ -33,8 +33,9 @@ angular.module('columbyApp')
             }
           }
         }).then(function (response) {
+          console.log(response);
           $scope.search.hits = response.hits.hits;
-
+          $scope.search.message = null;
         }, function(err){
           $scope.search.message = 'Error: ' + err.data.message;
         });

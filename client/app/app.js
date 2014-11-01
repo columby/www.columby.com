@@ -37,7 +37,7 @@ angular.module('columbyApp', [
   .config(function($httpProvider, jwtInterceptorProvider) {
     jwtInterceptorProvider.tokenGetter = function() {
       return angular.fromJson(localStorage.getItem('columby_token'));
-    }
+    };
     $httpProvider.interceptors.push('jwtInterceptor');
   })
 
@@ -49,6 +49,6 @@ angular.module('columbyApp', [
         $rootScope.user = response;
         $rootScope.selectedAccount = AuthSrv.selectedAccount();
       }
-    })
+    });
   })
 ;

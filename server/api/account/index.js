@@ -1,11 +1,11 @@
 'use strict';
 
-var express = require('express');
-var controller = require('./account.controller');
+var express = require('express'),
+    controller = require('./account.controller')
+;
 
 var router = express.Router();
 
-router.get('/seed'     , controller.seed);
 
 router.get('/'         , controller.index);
 router.get('/:id'      , controller.show);

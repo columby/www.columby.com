@@ -270,7 +270,7 @@ angular.module('columbyApp')
             // $scope.imageUploads.push(parsedData);
 
           } else {
-              alert('Upload Failed');
+            console.log('Upload Failed');
           }
         }, function(e){
           console.log(e);
@@ -279,7 +279,7 @@ angular.module('columbyApp')
           file.progress =  parseInt(100.0 * evt.loaded / evt.total);
         });
       })
-      .error(function(data, status, headers, config){
+      .error(function(data, status){
         console.log('Error message', data.err);
         console.log(status);
       });

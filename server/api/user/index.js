@@ -6,8 +6,6 @@ var express = require('express'),
 
 var router = express.Router();
 
-router.get('/seed'     , auth.checkJWT, auth.isAdmin, controller.seed);
-
 router.post('/login'   , controller.login);
 router.post('/register', controller.register);
 router.get( '/verify'  , controller.verify);

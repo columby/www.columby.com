@@ -23,7 +23,7 @@ angular.module('columbyApp')
 
         // Let the app know
         $rootScope.user = AuthSrv.user();
-        $rootScope.selectedAccount= 0
+        $rootScope.selectedAccount= 0;
 
         toaster.pop('success', null, 'You have succesfully signed in.');
 
@@ -111,7 +111,7 @@ angular.module('columbyApp')
   }
 
   $scope.logout = function(){
-    AuthSrv.logout().then(function(result){
+    AuthSrv.logout().then(function(){
       localStorage.removeItem('auth_token');
       $rootScope.user = {};
       toaster.pop('success', 'Signed out', 'You are now signed out.');

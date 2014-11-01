@@ -78,13 +78,13 @@ angular.module('columbyApp')
         var promise = $http.post('api/v2/user/me').then(function(result){
           user = result.data;
           return result.data;
-        })
+        });
         return promise;
       },
 
       // Get information about a given user by user-id
       getUser: function(){
-        console.log('getting the user srv')
+        console.log('getting the user srv');
         var promise = $http.get('/api/v2/user')
           .then(function(result){
             console.log('fetched user', result.data);
@@ -106,7 +106,7 @@ angular.module('columbyApp')
         var accountRoles = user.accounts[ selectedAccount].roles;
         if (accountRoles) {
           console.log('user roles,', accountRoles);
-          trustedRole = authorizedRoles.every(function(v,i) {
+          trustedRole = authorizedRoles.every(function(v) {
             return accountRoles.indexOf(v) !== -1;
           });
         }

@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .controller('DatasetCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv, $http, $upload) {
+  .controller('DatasetCtrl', function($window, configuration, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv, $http, $upload) {
 
     /***   INITIALISATION   ***/
     //var editWatcher;               // Watch for model changes in editmode
@@ -12,7 +12,7 @@ angular.module('columbyApp')
     $scope.hostname = $location.protocol() + '://' + $location.host();
     $scope.datasetUpdate = {};
     $window.document.title = 'columby.com';
-    
+
     // check edit mode
     if ($location.path().split('/')[3] === 'edit') {
       $scope.editMode = true;
@@ -399,7 +399,7 @@ angular.module('columbyApp')
               // $scope.imageUploads.push(parsedData);
 
             } else {
-                alert('Upload Failed');
+                console.log('Upload Failed');
             }
           }, function(e){
             console.log(e);
@@ -408,7 +408,7 @@ angular.module('columbyApp')
             file.progress =  parseInt(100.0 * evt.loaded / evt.total);
           });
         })
-        .error(function(data, status, headers, config){
+        .error(function(data, status){
           console.log('Error message', data.err);
           console.log(status);
         });

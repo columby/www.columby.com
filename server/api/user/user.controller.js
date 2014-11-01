@@ -11,7 +11,7 @@ var _ = require('lodash'),
     config = require('../../config/environment'),
 
     emailService = require('../../email/index');
-;
+
 
 
 // Provide the currently logged in user details
@@ -212,46 +212,6 @@ exports.verify = function(req,res,next) {
   );
 }
 
-
-exports.seed = function(res,err){
-  console.log('Removing and updating users');
-  // Delete all existing users
-  User.find({}).remove(function() {
-    // Delete all existing accounts
-    Account.find({}).remove(function(){
-      // Get the list of users
-      var u = require('../../seed/users');
-      // Create each user
-      for (var i=0; i<u.length; i++){
-        var newUser = u[i];
-        newUser.drupal = {
-          uid: newUser.uid,
-          uuid: newUser.uuid,
-          name: newUser.name
-        };
-        delete newUser.uid;
-        delete newUser.uuid;
-        User.create(newUser, function (err, user){
-          console.log(user);
-          // Create an account for each user
-          //console.log(user);
-          Account.create({
-             owner   : user._id,
-             name    : user.drupal.name,
-             slug    : user.drupal.name,
-             primary : true
-          }, function (err,account){
-             if (err) { console.log('err', err); }
-             //console.log('acount', account);
-          });
-
-        });
-      }
-
-      console.log('removed Users');
-    });
-  });
-}
 
 function handleError(res, err) {
   return res.send(500, err);

@@ -7,7 +7,7 @@ angular.module('columbyApp')
       scope:{
         urlsearch: '@'
       },
-      link: function (scope, element, attrs) {
+      link: function (scope, element) {
         scope.$watch('urlsearch', function(newVal) {
           console.log('new code', newVal);
 
@@ -30,7 +30,7 @@ angular.module('columbyApp')
                   // embed code was changed from last call and has to be replaced in DOM
                   element.html('<div>' + scope.embedCode + '</div>');
                 }
-              }, function(error) {
+              }, function() {
                 // promise rejected
                 var previousEmbedCode = scope.embedCode;
                 scope.embedCode = '';
