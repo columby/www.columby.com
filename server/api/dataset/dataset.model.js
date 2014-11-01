@@ -2,7 +2,9 @@
 
 var mongoose = require('mongoose'),
     mongoosastic = require('mongoosastic'),
-    Schema = mongoose.Schema;
+    Schema = mongoose.Schema,
+    config = require('../../config/environment/index'),
+    url=require('url');
 
 var DatasetSchema = new Schema({
   // Dataset properties
@@ -125,12 +127,14 @@ DatasetSchema.statics.load = function(id, cb) {
     });
 };
 
+var esUrl = url.parse(config.elasticsearch.host);
 
 DatasetSchema.plugin(mongoosastic,{
-  bulk: {
-    size: 10, // preferred number of docs to bulk index
-    delay: 1000 //milliseconds to wait for enough docs to meet size constraint
-  }
+  host      : esUrl.hostname,
+  auth      : esUrl.auth,
+  curlDebug : true,
+  port      : esUrl.port,
+  protocol  : esUrl.protocol === 'https:' ? 'https' : 'http'
 });
 
 module.exports = mongoose.model('Dataset', DatasetSchema);
