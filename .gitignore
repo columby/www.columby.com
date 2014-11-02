@@ -4,5 +4,5 @@ public
 .idea
 client/bower_components
 dist
-/server/config/local.env.js
-/server/seed
+server/config/local.env.js
+server/seed
