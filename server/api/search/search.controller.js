@@ -51,18 +51,32 @@ exports.search = function(req, res) {
 
 exports.sync = function(req,res){
 
-  var stream = Dataset.synchronize(),
-  count = 0;
+  // Clear the index
+  Dataset.esTruncate({
+    index: 'datasets',
+    type: 'dataset'
+  },function(err){
+    if (err) {
+      console.log('err', err);
+      return res.json(err);
+    }
+    console.log('Datasets removed from ES. ');
+    // Sync
+    var stream = Dataset.synchronize(),
+    count = 0;
 
-  stream.on('data', function(err, doc){
-    console.log(err, doc);
-    count++;
-  });
-  stream.on('close', function(){
-    console.log('indexed ' + count + ' documents!');
-  });
-  stream.on('error', function(err){
-    console.log(err);
+    stream.on('data', function(err, doc){
+      //console.log(err, doc);
+      if (err) { console.log('err', err); }
+      count++;
+    });
+    stream.on('close', function(){
+      console.log('indexed ' + count + ' documents!');
+      return res.json('indexed ' + count + ' documents!');
+    });
+    stream.on('error', function(err){
+      console.log(err);
+    });
   });
 }
 

@@ -69,9 +69,8 @@ var AccountSchema = new Schema({
   createdAt   : { type:Date },
   updatedAt   : { type: Date },
 
-  drupal:{
-    uuid: {type:String}
-  }
+  drupal_uuid : { type:String }
+
 });
 
 

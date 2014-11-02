@@ -7,25 +7,21 @@ var mongoose = require('mongoose'),
     url=require('url');
 
 var DatasetSchema = new Schema({
+
   // Dataset properties
-  createdAt       : { type: Date, default: Date.now },
-  publishedAt     : { type: Date },
-  updatedAt       : { type: Date },
-
-  title           : { type : String, trim: true },
-  description     : { type : String, trim: true },
-  slug            : { type : String },
-  headerImage     : { type : String },
-
   account         : { type: Schema.ObjectId, ref:  'Account' },
 
-  visibilityStatus    : { type: String, default: 'public' },
-  publicationStatus   : { type: String, default: 'draft' },
+  title           : { type : String, trim: true },
+  slug            : { type : String },
+  description     : { type : String, trim: true },
+  headerImage     : { type : String },
 
-  draft : {
-    title           : { type:String, trim:true },
-    description     : { type: String, trim: true },
-  },
+  tags            : [],
+
+  private         : { type: Boolean, default: true },
+
+  createdAt       : { type: Date, default: Date.now },
+  updatedAt       : { type: Date },
 
   distributions    : [{
     // Columby stuff
@@ -44,16 +40,16 @@ var DatasetSchema = new Schema({
     downloadUrl     : { type: String },
     mediaType       : { type: String },
     format          : { type: String },
-    byteSize        : { type: Number }
+    byteSize        : { type: Number },
+
+    // sync status for external api syncs
+    syncPeriod      : { type: String },
+    lastSync        : { type: Date },
 
   }],
 
   references      : [],
-
-  history: [{
-    date            : { type: Date, default: Date.now },
-    acitvity        : { type: String }
-  }]
+  
 });
 
 

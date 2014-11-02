@@ -38,13 +38,12 @@ var UserSchema = new Schema({
   createdAt : { type: Date, default: new Date() },
 
   isAdmin   : { type: Boolean, default: false },
-  
+
   // migration from beta.columby.com
-  drupal : {
-    uid: {type: String},
-    uuid: {type: String},
-    name: {type: String}
-  }
+  drupal_uid  : { type: String },
+  drupal_uuid : { type: String },
+  drupal_name : { type: String }
+
 });
 
 module.exports = mongoose.model('User', UserSchema);

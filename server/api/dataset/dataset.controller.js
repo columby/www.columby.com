@@ -6,6 +6,56 @@ var _ = require('lodash'),
     Account = mongoose.model('Account');
 
 
+/*** SEED ***/
+function seedDataset(dataset){
+  Account.findOne({'drupal_uuid': dataset.organisation_uuid}, function(err,account){
+    if (account) {
+      console.log('Found account for dataset');
+      console.log('tags', dataset.Tags);
+      if (dataset.Tags) {
+        dataset.tags = dataset.Tags.split(',');
+      }
+      Dataset.create({
+        account       : account._id,
+        title         : dataset.title,
+        description   : dataset.description,
+        drupal_uuid   : dataset.uuid,
+        private       : false,
+        tags          : dataset.tags
+      }, function (err, dataset){
+        if (err) { console.log('err', err); }
+        //console.log('dataset created', dataset);
+      });
+    } else {
+      console.log('account not found', dataset);
+    }
+  });
+
+}
+
+// ADMIN ONLY
+exports.seed = function(req,res){
+  console.log('seeding datasets');
+  //Remove existing datasets
+  Dataset.find({}).remove(function(err){
+    if (err) { return res.json(err);}
+    console.log('Datasets removed. ');
+
+    // Get the list of users
+    var datasets = require('../../seed/datasets');
+    console.log('Seeding ', datasets.length + ' datasets. ');
+
+    var counter=0;
+    for (var i=0; i<datasets.length; i++){
+      seedDataset(datasets[ i]);
+      counter++;
+    }
+    return res.json('processed ' + counter + ' datasets');
+  });
+
+}
+
+
 function canEdit(req){
 
   // check if user is owner of the dataset's account.
@@ -17,7 +67,6 @@ function canEdit(req){
     }
   }
 }
-
 
 
 exports.extractlink = function(req,res) {
@@ -61,10 +110,10 @@ exports.index = function(req, res) {
   // });
 
   var filter = {};
-  filter.visibilityStatus = 'public';
+  filter.private = false;
 
   if (req.query.userId) {
-    filter.publisher = req.query.userId;  
+    filter.publisher = req.query.userId;
   }
 
   Dataset
