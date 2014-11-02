@@ -8,10 +8,9 @@ var _ = require('lodash'),
 
 /*** SEED ***/
 function seedDataset(dataset){
+  //console.log(dataset);
   Account.findOne({'drupal_uuid': dataset.organisation_uuid}, function(err,account){
     if (account) {
-      console.log('Found account for dataset');
-      console.log('tags', dataset.Tags);
       if (dataset.Tags) {
         dataset.tags = dataset.Tags.split(',');
       }
@@ -21,7 +20,7 @@ function seedDataset(dataset){
         description   : dataset.description,
         drupal_uuid   : dataset.uuid,
         private       : false,
-        tags          : dataset.tags
+        tags          : dataset.tags,
       }, function (err, dataset){
         if (err) { console.log('err', err); }
         //console.log('dataset created', dataset);
@@ -30,8 +29,8 @@ function seedDataset(dataset){
       console.log('account not found', dataset);
     }
   });
-
 }
+
 
 // ADMIN ONLY
 exports.seed = function(req,res){
@@ -50,9 +49,56 @@ exports.seed = function(req,res){
       seedDataset(datasets[ i]);
       counter++;
     }
+
     return res.json('processed ' + counter + ' datasets');
   });
 
+}
+
+function seedDistribution(distribution){
+  //console.log(distribution);
+  //console.log(distribution.uuid);
+  Dataset.findOne({'drupal_uuid':distribution.uuid}, function(err,dataset){
+
+    if (dataset){
+
+      distribution.uploader   = dataset.account;
+      distribution.private    = false;
+      distribution.title      = distribution.data_type;
+      distribution.syncPeriod = distribution.sync_period;
+      distribution.issued     = distribution.createdAt + '000';
+
+      // distribution type
+      if (distribution.data_type === 'CSV File') {
+        distribution.type = 'File download';
+      } else if (distribution.data_type === 'arcGIS Service') {
+        distribution.type = 'External API';
+      } else if (distribution.data_type === ' IATI') {
+        distribution.type = 'IATI';
+      } else {
+        distribution.type = 'unknown';
+      }
+
+      dataset.distributions.push(distribution);
+
+      dataset.save(function(err){
+        console.log('err', err);
+        console.log('source saved', dataset);
+      });
+    }
+  });
+}
+
+exports.seedDistributions = function(req,res){
+  console.log('seeding distributions');
+  // add sources
+  var distributions = require('../../seed/distributions');
+  console.log('Seeding ' + distributions.length + ' distributions. ');
+  for (var k=0; k<distributions.length; k++){
+    seedDistribution(distributions[ k]);
+  }
+
+  return res.json('processed ' + distributions.length + ' distributions');
 }
 
 
@@ -108,7 +154,7 @@ exports.index = function(req, res) {
   //   if(err) { return handleError(res, err); }
   //   return res.json(200, datasets);
   // });
-
+  console.log('Dataset index');
   var filter = {};
   filter.private = false;
 
@@ -122,7 +168,6 @@ exports.index = function(req, res) {
     .sort('-createdAt')
     .populate('account', 'slug name')
     .exec(function(err, datasets) {
-      //console.log(datasets);
       if (err) { return res.json(500, { error: 'Cannot list the datasets' }); }
       return res.json(datasets);
     })
@@ -131,23 +176,25 @@ exports.index = function(req, res) {
 
 // Get a single dataset
 exports.show = function(req, res) {
-  console.log('show dataset');
   // id can be objectId or slug. Cast the id to objectId,
   // if this works then use it, otherwise treat it as a slug.
   var id,slug;
+
   try {
     id = new mongoose.Types.ObjectId(req.params.id);
   } catch (e) {
     console.log('Error casting param to objectID', e);
   }
-
+  var filter = {};
+  if (slug) {
+    filter.slug = slug;
+  } else if (id){
+    filter._id = id;
+  } else {
+    return res.json(null);
+  }
   Dataset
-    .findOne({
-      $or: [
-        { _id: id },
-        { slug: slug },
-      ]
-    })
+    .findOne(filter)
     .populate('account', 'slug name description owner avatar')
     .exec(function(err,dataset){
       if (err) { return handleError(res, err); }

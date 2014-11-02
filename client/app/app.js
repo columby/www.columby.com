@@ -43,7 +43,9 @@ angular.module('columbyApp', [
 
   .run(function($rootScope, AuthSrv){
     // On initial run, check the user (with the JWT required from config)
+    console.log('app run');
     AuthSrv.me().then(function(response){
+
       $rootScope.user = {};
       if (response){
         $rootScope.user = response;

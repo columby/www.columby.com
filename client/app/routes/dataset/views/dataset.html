@@ -139,6 +139,7 @@
               <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a>,
               <span class="published">created on <time class="post-date">{{dataset.createdAt | date:'d MMMM yyyy'}}</time></span>
             </p>
+            <p ng-show="dataset.tags.length>0"><strong>Tags: </strong><span ng-repeat="tag in dataset.tags">{{tag}}</span</p>
           </div>
 
           <!-- Editable avatar -->
@@ -216,8 +217,15 @@
           </h3>
           <ul ng-hide="!dataset.distributions || dataset.distributions.length===0">
             <li ng-repeat="distribution in dataset.distributions">
-  						<h4><a href="{{distribution.accessUrl}}" target="_blank">{{distribution.accessUrl}}</a></h4>
-  						<div class="date-size">{{distribution.distributionType}} - {{distribution.createdAt}} - {{distribution.size}}</div>
+              <h4><a href="{{distribution.accessUrl}}" target="_blank">{{distribution.title}}</a></h4>
+  						<div class="date-size">{{distribution.type}} - {{distribution.issued | date:'d MMMM yyyy'}} - {{distribution.size}}</div>
+              <div class="download" ng-show="distribution.downloadUrl">
+                <a href="{{distribution.downloadUrl}}"><i class="fa fa-download"></i></a>
+              </div>
+              <div class="link" ng-show="distribution.accessUrl">
+                <a href="distribution.accessUrl"><i class="fa da-link"></i></a>
+              </div>
+
               <div class="actions" ng-show="editMode">
                 <a href="" ng-click="editDistribution($index)"><i class="fa fa-edit"></i></a>
                 <a href="" ng-click="deleteDistribution($index)"><i class="fa fa-trash"></i></a>

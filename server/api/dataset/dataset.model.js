@@ -25,9 +25,9 @@ var DatasetSchema = new Schema({
 
   distributions    : [{
     // Columby stuff
-    uploader          : {type: Schema.ObjectId, ref: 'User' },
-    distributionType  : {type: String },      // external link, internal storage, internal api
-    publicationStatus : {type: String },      // private, public
+    uploader          : { type: Schema.ObjectId, ref: 'User' },
+    type              : { type: String },      // external link, internal storage, internal api
+    private           : { type: Boolean, default: true },
 
     // DCAT stuff
     title           : { type: String },
@@ -49,7 +49,9 @@ var DatasetSchema = new Schema({
   }],
 
   references      : [],
-  
+
+  drupal_uuid     : { type: String }
+
 });
 
 

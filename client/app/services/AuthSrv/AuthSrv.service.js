@@ -103,7 +103,10 @@ angular.module('columbyApp')
           authorizedRoles = [authorizedRoles];
         }
         var trustedRole = false;
-        var accountRoles = user.accounts[ selectedAccount].roles;
+        var accountRoles = null;
+        if (user && user.accounts && user.accounts[ selectedAccount]){
+          accountRoles = user.accounts[ selectedAccount].roles;
+        }
         if (accountRoles) {
           console.log('user roles,', accountRoles);
           trustedRole = authorizedRoles.every(function(v) {
@@ -123,24 +126,26 @@ angular.module('columbyApp')
         allowEdit = this.isAuthorized('administrator');
 
         // Define access based on content type
-        switch (item.postType) {
-          case 'account':
-            // edit own content
-            for (var i=0; i<user.accounts.length; i++){
-              if (item._id === user.accounts[ i]._id) {
-                allowEdit = true;
+        if (user) {
+          switch (item.postType) {
+            case 'account':
+              // edit own content
+              for (var i=0; i<user.accounts.length; i++){
+                if (item._id === user.accounts[ i]._id) {
+                  allowEdit = true;
+                }
               }
-            }
-          break;
+            break;
 
-          case 'dataset':
-            // check if logged in user is publisher of the account
-            for (i = 0; i < user.accounts.length; i++) {
-              if (user.accounts[ i]._id === item._id) {
-                allowEdit = true;
+            case 'dataset':
+              // check if logged in user is publisher of the account
+              for (i = 0; i < user.accounts.length; i++) {
+                if (user.accounts[ i]._id === item._id) {
+                  allowEdit = true;
+                }
               }
-            }
-          break;
+            break;
+          }
         }
 
         return allowEdit;
