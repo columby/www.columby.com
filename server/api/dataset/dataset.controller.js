@@ -7,26 +7,40 @@ var _ = require('lodash'),
 
 
 /*** SEED ***/
-function seedDataset(dataset){
+function seedDataset(d){
   //console.log(dataset);
-  Account.findOne({'drupal_uuid': dataset.organisation_uuid}, function(err,account){
+  Account.findOne({'drupal_uuid': d.organisation_uuid}, function(err,account){
     if (account) {
-      if (dataset.Tags) {
-        dataset.tags = dataset.Tags.split(',');
+      if (d.Tags) {
+        d.tags = d.Tags.split(',');
       }
-      Dataset.create({
+
+      var dataset = new Dataset({
         account       : account._id,
-        title         : dataset.title,
-        description   : dataset.description,
-        drupal_uuid   : dataset.uuid,
+        title         : d.title,
+        description   : d.description,
+        drupal_uuid   : d.uuid,
         private       : false,
-        tags          : dataset.tags,
-      }, function (err, dataset){
+        tags          : d.tags,
+      });
+
+      dataset.save(function (err) {
         if (err) { console.log('err', err); }
         //console.log('dataset created', dataset);
+
+        // update publication account.
+        Account.findByIdAndUpdate(
+          { _id   : dataset.account },
+          { $push : { datasets: dataset._id } },
+          { safe  : true, upsert: true },
+          function(err, model) {
+            console.log(err);
+            console.log('model', model);
+          }
+        );
       });
     } else {
-      console.log('account not found', dataset);
+      console.log('account not found', d);
     }
   });
 }

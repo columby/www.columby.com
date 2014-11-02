@@ -72,12 +72,10 @@ angular.module('columbyApp')
 
       // Logout a current user
       logout: function(){
-        var promise = $http.get('/api/v2/user/logout', {headers: {'Authorization': columbyToken}})
-          .then(function(response){
-            user = {};
-            return response.data;
-          });
-        return promise;
+        // simply remove the jwt from the Authorization header and localstorage
+        localStorage.removeItem('columby_token');
+        columbyToken = null;
+        user = null;
       },
 
       // Check the currently logged in user and save the response

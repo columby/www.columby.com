@@ -111,13 +111,10 @@ angular.module('columbyApp')
   }
 
   $scope.logout = function(){
-    AuthSrv.logout().then(function(){
-      localStorage.removeItem('auth_token');
-      $rootScope.user = {};
-      toaster.pop('success', 'Signed out', 'You are now signed out.');
-
-      $state.go('home');
-    });
+    AuthSrv.logout();
+    $rootScope.user = {};
+    toaster.pop('success', 'Signed out', 'You are now signed out.');
+    $state.go('home');
   };
 
   // Delete an account

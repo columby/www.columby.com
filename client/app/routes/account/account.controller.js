@@ -7,7 +7,7 @@ angular.module('columbyApp')
  * Controller a user's account page
  *
  ***/
-.controller('AccountCtrl', function ($window, configuration, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, toaster, $upload) {
+.controller('AccountCtrl', function ($window, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, toaster, $upload) {
 
 
   /* ---------- SETUP ----------------------------------------------------------------------------- */
@@ -204,7 +204,7 @@ angular.module('columbyApp')
         var fileResponse = response.file;
         // Initiate upload
         $scope.upload = $upload.upload({
-          url: 'https://s3.amazonaws.com/' + configuration.aws.bucket,
+          url: 'https://s3.amazonaws.com/' + $rootScope.config.aws.bucket,
           method: 'POST',
           data: {
             'key' : $scope.account._id + '/' + response.file.filename,

@@ -11,7 +11,6 @@ router.post('/register', controller.register);
 router.get( '/verify'  , controller.verify);
 router.post('/me'      , controller.me);
 router.post('/config'  , controller.config);
-// router.get('/logout'  , controller.signout);
 
 router.get( '/'        , auth.checkJWT, auth.isAdmin, controller.index);
 router.get( '/:id'     , controller.show);
