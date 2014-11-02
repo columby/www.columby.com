@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .controller('DatasetCtrl', function($window, configuration, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv, $http, $upload) {
+  .controller('DatasetCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv, $http, $upload) {
 
     /***   INITIALISATION   ***/
     //var editWatcher;               // Watch for model changes in editmode
@@ -336,7 +336,7 @@ angular.module('columbyApp')
           var fileResponse = response.file;
           // Initiate upload
           $scope.upload = $upload.upload({
-            url: 'https://s3.amazonaws.com/' + configuration.aws.bucket,
+            url: 'https://s3.amazonaws.com/' + $rootScope.config.aws.bucket,
             method: 'POST',
             data: {
               'key' : $scope.dataset.account._id + '/' + response.file.filename,

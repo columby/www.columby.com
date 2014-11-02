@@ -31,10 +31,9 @@ angular.module('columbyApp', [
 
 
   // Run once during startup
-  .run(function($rootScope, AuthSrv){
+  .run(function($rootScope, $http, AuthSrv){
     // On initial run, check the user (with the JWT required from config)
     AuthSrv.me().then(function(response){
-
       $rootScope.user = {};
       if (response){
         $rootScope.user = response;
@@ -43,11 +42,12 @@ angular.module('columbyApp', [
     });
 
     // Get environment vars from the server
-    AuthSrv.getConfig().then(function(response){
-      console.log(response);
-      if (response){
-        $rootScope.config = response;
+    $http.post('/api/v2/user/config').success(function(data){
+      if (data){
+        $rootScope.config = data;
       }
+    }).error(function(data) {
+      console.log(data);
     });
   })
 ;

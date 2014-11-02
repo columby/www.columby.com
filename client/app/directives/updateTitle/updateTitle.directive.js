@@ -5,7 +5,6 @@ angular.module('columbyApp')
 // Directive to change the html page title.
 // state in ui-router needs a data.pageTitle
 .directive('updateTitle', function($rootScope) {
-  console.log('111');
   return {
     link: function(scope, element) {
 

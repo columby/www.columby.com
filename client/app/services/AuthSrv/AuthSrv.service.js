@@ -28,6 +28,7 @@ angular.module('columbyApp')
 
       getConfig:function(){
         var promise = $http.post('api/v2/user/config').then(function(result){
+            console.log('authconfig', result);
           return result.data;
         });
         return promise;

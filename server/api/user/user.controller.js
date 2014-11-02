@@ -50,7 +50,7 @@ exports.me = function(req,res,id){
 }
 
 exports.config = function(req,res){
-  var config = {
+  var c = {
     aws: {
       publicKey : config.aws.publicKey,
       bucket    : config.aws.bucket,
@@ -60,7 +60,8 @@ exports.config = function(req,res){
       key       : config.embedly.key
     }
   };
-  return config;
+
+  return res.json(c);
 }
 // Get list of users
 exports.index = function(req, res) {
