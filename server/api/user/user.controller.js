@@ -49,6 +49,19 @@ exports.me = function(req,res,id){
   }
 }
 
+exports.config = function(req,res){
+  var config = {
+    aws: {
+      publicKey : config.aws.publicKey,
+      bucket    : config.aws.bucket,
+      endpoint  : config.aws.endpoint
+    },
+    embedly: {
+      key       : config.embedly.key
+    }
+  };
+  return config;
+}
 // Get list of users
 exports.index = function(req, res) {
   User.find(function (err, users) {

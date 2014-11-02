@@ -41,5 +41,9 @@ module.exports = {
   elasticsearch: {
     host      : process.env.BONSAI_URL,
     logging   : 'error'
+  },
+
+  embedly: {
+    key       : process.env.EMBEDLY_KEY
   }
 };

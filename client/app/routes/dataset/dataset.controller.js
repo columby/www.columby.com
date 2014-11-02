@@ -79,7 +79,6 @@ angular.module('columbyApp')
       $scope.dataset = {
         title             : null,
         description       : '<p>Add a nice description for your publication. </p>',
-        visibilityStatus  : 'private',
         avatar :{
           url               : 'assets/images/avatar.png'
         },
@@ -492,14 +491,15 @@ angular.module('columbyApp')
     };
 
 
-    $scope.toggleVisibilityStatus = function(status){
-      if (status !== $scope.dataset.visibilityStatus) {
+    $scope.togglePrivate = function(status){
+      if (status !== $scope.dataset.private) {
         $scope.visibilityStatusMessage = 'updating';
+        console.log('setting private to', status);
         var dataset = {
           _id: $scope.dataset._id,
-          visibilityStatus: status
+          private: status
         };
-        DatasetSrv.update({id: dataset._id}, dataset,function(res){
+        DatasetSrv.update({id: dataset._id}, dataset, function(res){
           $scope.visibilityStatusMessage = 'updated';
           if (res._id){
             $scope.dataset.visibilityStatus = status;

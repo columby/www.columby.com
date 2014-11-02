@@ -56,15 +56,15 @@
           </h3>
 	        <div class="btn-group btn-toggle">
           	<button
-              ng-click="toggleVisibilityStatus('private')"
+              ng-click="togglePrivate('true')"
               class="btn btn-xs btn-default btn-private"
-              ng-class="{active: dataset.visibilityStatus === 'private'}"
-              ng-disabled="dataset.visibilityStatus === 'private'">Private</button>
+              ng-class="{active: dataset.private === 'true'}"
+              ng-disabled="dataset.private === 'true'">Private</button>
           	<button
-              ng-click="toggleVisibilityStatus('public')"
+              ng-click="togglePrivate('false')"
               class="btn btn-xs btn-default btn-public"
-              ng-class="{active: dataset.visibilityStatus === 'public'}"
-              ng-disabled="dataset.visibilityStatus === 'public'">Public</button>
+              ng-class="{active: dataset.private === 'false'}"
+              ng-disabled="dataset.private === 'false'">Public</button>
           	</div>
 	      </div>
 			</div>

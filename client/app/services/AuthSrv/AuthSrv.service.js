@@ -26,6 +26,12 @@ angular.module('columbyApp')
       setSelectedAccount: function(a) { selectedAccount = a;    },
       selectedAccount: function()  { return selectedAccount; },
 
+      getConfig:function(){
+        var promise = $http.post('api/v2/user/config').then(function(result){
+          return result.data;
+        });
+        return promise;
+      },
 
       // Login a user using an email-address
       login: function(credentials) {

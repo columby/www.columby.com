@@ -205,8 +205,14 @@ exports.show = function(req, res) {
 
 // Creates a new dataset in the DB.
 exports.create = function(req, res) {
-  Dataset.create(req.body, function(err, dataset) {
+  var dataset = new Dataset(req.body);
+  dataset.save(function(err) {
     if(err) { return handleError(res, err); }
+
+    dataset.on('es-indexed', function(err, res){
+      if (err) console.log('err',err);
+      console.log('res',res);
+    });
 
     // update publication account.
     Account.findByIdAndUpdate(

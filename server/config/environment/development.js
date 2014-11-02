@@ -30,5 +30,9 @@ module.exports = {
     logging   : 'trace'
   },
 
+  embedly: {
+    key       : process.env.EMBEDLY_KEY
+  },
+  
   seedDB: false
 };
