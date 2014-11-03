@@ -58,13 +58,13 @@
           	<button
               ng-click="togglePrivate('true')"
               class="btn btn-xs btn-default btn-private"
-              ng-class="{active: dataset.private === 'true'}"
-              ng-disabled="dataset.private === 'true'">Private</button>
+              ng-class="{active: dataset.private === true}"
+              ng-disabled="dataset.private === true">Private</button>
           	<button
               ng-click="togglePrivate('false')"
               class="btn btn-xs btn-default btn-public"
-              ng-class="{active: dataset.private === 'false'}"
-              ng-disabled="dataset.private === 'false'">Public</button>
+              ng-class="{active: dataset.private === false}"
+              ng-disabled="dataset.private === false">Public</button>
           	</div>
 	      </div>
 			</div>
@@ -172,7 +172,7 @@
 
           <div
             ng-switch-default
-            ng-bind-html="dataset.description || '<p>The publisher of this dataset has not yet provided a description yet.</p>'">
+            ng-bind-html="dataset.description || '<p>The publisher of this dataset has not yet provided a description yet.</p>'" class="data-description">
           </div>
           <div
             ng-switch-when = "true">
@@ -241,7 +241,7 @@
           <!-- Datasource Modal -->
           <button
             ng-show="editMode"
-            class="btn btn-default"
+            class="btn btn-default btn-add"
             type="button"
             ng-click="initNewDistribution()"
             >Add new data</button>
@@ -331,7 +331,7 @@
           <!-- Datasource Modal -->
           <button
             ng-show="editMode"
-            class="btn btn-default"
+            class="btn btn-default btn-add"
             type="button"
             ng-click="newReference()"
             >Add new reference</button>
@@ -361,7 +361,7 @@
     <div class="share wrapper" ng-hide="editMode">
       <div class="container">
         <div class="col-md-12 content">
-          <div share-square="true" share-links="Facebook, Twitter, LinkedIn, Google-Plus" share-title="dataset.title"></div>
+          <div share-square="false" share-links="Facebook, Twitter, LinkedIn, Google-Plus" share-title="dataset.title"></div>
         </div>
       </div>
     </div>

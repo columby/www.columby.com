@@ -77,7 +77,7 @@ button {
   margin-bottom: 0;
   font-size: 14px;
   font-weight: normal;
-  line-height: 1.42857143;
+  line-height: 1.5;
   text-align: center;
   white-space: nowrap;
   vertical-align: middle;
@@ -97,6 +97,38 @@ button {
 }
 .btn {
   font-family: "lato", sans-serif;
+}
+.btn-add {
+  color: #fff;
+  background: #345;
+  border: 0;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.btn-tooltip {
+  float: right;
+  display: block;
+  border-radius: 50%;
+  height: 18px;
+  width: 18px;
+  color: #333;
+  border: none;
+  border: solid 1px #b3b3b3;
+  font-size: 11px;
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Garuda, Verdana, Tahoma, sans-serif;
+  font-weight: 100;
+  background-color: #fff;
+  margin-top: 12px;
+  padding-top: 0;
+}
+.btn-tooltip:hover {
+  border-color: #000000;
+  border-color: rgba(0, 0, 0, 0.3);
+}
+.popover {
+  font-size: 0.6em;
+  line-height: 1.8em;
+  color: #000;
 }
 .actions-bar {
   text-align: right;
