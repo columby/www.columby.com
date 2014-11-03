@@ -1,7 +1,8 @@
 #toast-container {
   top: 12px;
   right: 0;
-  width: 100%;
+  right: 50%;
+  margin-right: -225px;
 }
 #toast-container .toast {
   font-family: "lato", sans-serif;
@@ -27,8 +28,26 @@
 #toast-container > .toast-succes {
   background: none;
 }
+#toast-container > .toast-info {
+  background-image: none !important;
+}
+#toast-container > .toast-wait {
+  background-image: none !important;
+}
+#toast-container > .toast-error {
+  background-image: none !important;
+  background: red;
+  color: #fff;
+}
 #toast-container > .toast-success {
-  background: #f5e6b2 !important;
+  background-image: none !important;
+  background: green;
+  color: #fff;
+}
+#toast-container > .toast-warning {
+  background-image: none !important;
+  background: red;
+  color: #fff;
 }
 #toast-container > div.ng-enter,
 #toast-container > div.ng-leave {
@@ -45,19 +64,4 @@
 #toast-container > div.ng-leave.ng-leave-active,
 #toast-container > div.ng-enter {
   opacity: 1;
-}
-#toast-container > .toast-info {
-  background-image: none !important;
-}
-#toast-container > .toast-wait {
-  background-image: none !important;
-}
-#toast-container > .toast-error {
-  background-image: none !important;
-}
-#toast-container > .toast-success {
-  background-image: none !important;
-}
-#toast-container > .toast-warning {
-  background-image: none !important;
 }

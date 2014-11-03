@@ -71,6 +71,9 @@ button {
 .actions-bar {
   text-align: right;
 }
+.actions-bar li {
+  list-style: none;
+}
 .actions-bar button {
   background: none;
   border: 2px solid #fff;

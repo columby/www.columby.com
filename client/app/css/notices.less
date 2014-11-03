@@ -3,7 +3,8 @@
 #toast-container{
   top: 12px;
   right: 0;
-  width: 100%;
+	right: 50%;
+	margin-right: -225px;
   .toast{
     font-family: "lato",sans-serif;
     width: 450px;
@@ -29,10 +30,27 @@
   > .toast-succes{
     background: none;
   }
-}
-
-#toast-container > .toast-success {
-background: #f5e6b2 !important;
+	> .toast-info {
+	  background-image: none !important;
+	}
+	> .toast-wait {
+	  background-image: none !important;
+	}
+	> .toast-error {
+		background-image: none !important;
+	  background: red;
+		color: #fff;
+	}
+	> .toast-success {
+		background-image: none !important;
+		background: green;
+		color: #fff;
+	}
+	> .toast-warning {
+		background-image: none !important;
+	  background: red;
+		color: #fff;
+	}
 }
 
 #toast-container > div.ng-enter,
