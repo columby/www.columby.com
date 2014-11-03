@@ -101,7 +101,7 @@ angular.module('columbyApp')
 
     function updateHeaderImage(){
       $scope.headerStyle={
-        'background-image': 'url(/assets/images/bg.png), url(' + $scope.dataset.headerImage + ')',
+        'background-image': 'url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImage + ')',
         'background-blend-mode': 'multiply'
       };
     }
