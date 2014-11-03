@@ -1,1 +1,136 @@
-html,body,p{font-family:"merriweather",serif}h1,h2,h3,h4,h5,h6{font-family:"lato",sans-serif}h1{font-weight:400;text-transform:uppercase}h2{font-weight:400;font-size:18px}h3{font-size:30px}@media (min-width:768px) and (max-width:991px){.container{width:750px}}@media (min-width:992px) and (max-width:1199px){.container{width:750px}}@media (min-width:1200px){.container{width:750px}}.actions-bar{position:absolute;top:0;height:60px;z-index:900;padding:20px;right:0}.actions-bar ul{margin:0}.actions-bar ul li{float:left;padding:0;margin:0}.actions-bar ul li button{background:none;border:2px solid #fff;color:#fff;font-weight:bolder;display:inline-block;padding:6px 12px;margin-bottom:0;font-size:14px;line-height:1.42857143;text-align:center;white-space:nowrap;vertical-align:middle;border-radius:4px;width:auto;height:auto}.header.wrapper{margin-bottom:4.5em;background-image:url('/assets/images/default-header.svg');background-position:50% 50%;background-size:cover}.header.wrapper h1{font-size:70px;font-weight:700;color:#fff;margin-top:1em;position:relative;text-align:center;text-transform:none;text-shadow:1px 1px #323232}.header.wrapper h1.editable-placeholder{opacity:0.5;position:absolute;text-align:center;width:100%}.header.wrapper p{text-align:center}.header.wrapper .page-subtitle{text-align:center;font-family:"merriweather",serif;font-size:16px;font-weight:300;letter-spacing:0.6px;opacity:0.9;color:#fff;margin-top:3px;text-shadow:1px 1px #323232}.header.wrapper .meta p{color:#fff;text-shadow:1px 1px #323232}.header.wrapper .avatar{-ms-transform:translate(0, 30px);-webkit-transform:translate(0, 30px);transform:translate(0, 30px)}.header.wrapper .avatar img{display:block;margin:0 auto;width:100px;height:100px;border:5px solid #eee;border:5px solid rgba(112,112,112,0.2)}
+/*** ---- MAIN TYPOGRAPHY ---------------------------- ***/
+html,
+body,
+p {
+  font-family: "merriweather", serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "lato", sans-serif;
+}
+h1 {
+  font-weight: 400;
+  text-transform: uppercase;
+}
+h2 {
+  font-weight: 400;
+  font-size: 18px;
+}
+h3 {
+  font-size: 30px;
+}
+/*** ---- DEFAULT ELEMENTS ---------------------------- ***/
+@media (min-width: 768px) and (max-width: 991px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 750px;
+  }
+}
+/*** ---- ACTIONS BAR ----------------------------- ***/
+.actions-bar {
+  position: absolute;
+  top: 0;
+  height: 60px;
+  z-index: 900;
+  padding: 20px;
+  right: 0;
+}
+.actions-bar ul {
+  margin: 0;
+}
+.actions-bar ul li {
+  float: left;
+  padding: 0;
+  margin: 0;
+}
+.actions-bar ul li button {
+  background: none;
+  border: 2px solid #fff;
+  color: #fff;
+  font-weight: bolder;
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  border-radius: 4px;
+  width: auto;
+  height: auto;
+}
+.header.wrapper {
+  margin-bottom: 4.5em;
+  background-image: url('/assets/images/default-header.svg');
+  background-position: 50% 50%;
+  background-size: cover;
+}
+.header.wrapper h1 {
+  font-size: 70px;
+  font-weight: 700;
+  color: #fff;
+  margin-top: 1em;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+}
+.header.wrapper h1.editable-placeholder {
+  opacity: 0.5;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+.header.wrapper p {
+  text-align: center;
+}
+.header.wrapper .page-subtitle {
+  text-align: center;
+  font-family: "merriweather", serif;
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0.6px;
+  color: #fff;
+  margin-top: 3px;
+}
+.header.wrapper .meta p {
+  color: #fff;
+}
+.header.wrapper .meta p span a {
+  color: #fff;
+  padding-bottom: 5px;
+  border-bottom: solid 1px rgba(255, 255, 255, 0.3);
+  border-opacity: 0.2;
+}
+.header.wrapper .meta p span a:hover {
+  color: #fff;
+  border-bottom: solid 1px #ffffff;
+  text-decoration: none;
+}
+.header.wrapper .avatar {
+  -ms-transform: translate(0, 30px);
+  -webkit-transform: translate(0, 30px);
+  transform: translate(0, 30px);
+}
+.header.wrapper .avatar img {
+  display: block;
+  margin: 0 auto;
+  width: 100px;
+  height: 100px;
+  /* background-color: #eee; */
+  border: 5px solid #eee;
+  border: 5px solid rgba(112, 112, 112, 0.2);
+}

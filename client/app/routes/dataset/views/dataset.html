@@ -3,7 +3,7 @@
   <div class="actions-bar"
     scroll-position="scroll"
     ng-show="dataset.canEdit"
-    ng-class="{top: scroll<20}">
+    ng-class="{top: scroll<200}">
     <ul>
       <li>
         <button class="btn btn-default edit"
@@ -131,10 +131,11 @@
               ng-blur     = "updateTitle()"
               focus       = "true"
               ></textarea>
-            <h2 class="page-subtitle">dataset</h2>
+            <!-- <h2 class="page-subtitle">dataset</h2> -->
           </div>
           <!-- Meta -->
           <div class="meta" ng-show="dataset._id">
+						<span ng-show="dataset.private === true" class="label bg-primary">private</span>
             <p>A dataset by
               <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a>,
               <span class="published">created on <time class="post-date">{{dataset.createdAt | date:'d MMMM yyyy'}}</time></span>
@@ -361,6 +362,7 @@
     <div class="share wrapper" ng-hide="editMode">
       <div class="container">
         <div class="col-md-12 content">
+					<h3>Share this dataset</h3>
           <div share-square="false" share-links="Facebook, Twitter, LinkedIn, Google-Plus"></div>
         </div>
       </div>
@@ -391,10 +393,7 @@
 				<div class="col-md-12">
 		      <button
 		        class    = "btn dbt-default create disabled"
-		        ng-hide  = "dataset._id || datasetUpdate.title"
-						popover="Add a nice description about your dataset." 
-						popover-trigger="mouseenter" 
-						popover-placement="left">Proceed to add data
+		        ng-hide  = "dataset._id || datasetUpdate.title">Proceed to add data
 		      </button>
 					<p ng-hide  = "dataset._id || datasetUpdate.title">Please add a title first.</p>
 		      <button

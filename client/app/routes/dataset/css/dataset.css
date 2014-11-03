@@ -96,6 +96,17 @@
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   margin-bottom: 40px;
 }
+.dataset.view .content .meta {
+  text-align: center;
+}
+.dataset.view .content .meta .label {
+  font-size: 1.3em;
+  font-family: "lato", sans-serif;
+  margin: 0;
+}
+.dataset.view .content .meta p {
+  margin-top: 10px;
+}
 .dataset.view .content .data-description,
 .dataset.view .content .account-description {
   color: #555;
