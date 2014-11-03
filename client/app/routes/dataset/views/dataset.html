@@ -17,7 +17,7 @@
         <button
           class    = "btn dbt-default create"
           ng-hide  = "dataset._id || !datasetUpdate.title"
-          ng-click = "create()">Publish
+          ng-click = "create()">Save as draft
         </button>
       </li>
 
@@ -232,7 +232,11 @@
               </div>
   					</li>
           </ul>
-          <p ng-show="!dataset.distributions || dataset.distributions.length===0">No sources added yet</p>
+          <div class="highlight" ng-show="!dataset.distributions || dataset.distributions.length===0">
+						<i class="fa fa-exclamation-circle"></i>
+						<h2>No sources added yet</h2>
+						<p ng-show="editMode">Upload a file to Columby directly or locate a remote file from the internet. Columby will process your data, so it will become available through the API.</p>							
+					</div>
 
           <!-- Datasource Modal -->
           <button
@@ -318,7 +322,11 @@
                 </div>
   						</li>
             </ul>
-            <p ng-show="!dataset.references || dataset.references.length===0">No references added yet</p>
+	          <div class="highlight" ng-show="!dataset.references || dataset.references.length===0">
+							<i class="fa fa-exclamation-circle"></i>
+							<h2>No references added yet</h2>
+							<p ng-show="editMode">Did you get creative with your data? Add some references of output like a Data visualisation, app or website.</p>							
+						</div>
 
           <!-- Datasource Modal -->
           <button

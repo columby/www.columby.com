@@ -13,6 +13,27 @@ button:focus {
 .actions-bar ul {
   float: right;
 }
+.highlight {
+  color: #678;
+  background: #e9f7fb;
+  border-color: #c9d7db;
+  padding: 15px;
+  border: 1px dotted #d3d3d3;
+  border-radius: 5px;
+  margin: 20px 0 20px 0;
+}
+.highlight i {
+  float: right;
+  margin: 8px 0 8px 10px;
+  font-size: 30px;
+}
+.highlight h2 {
+  margin-bottom: 10px;
+  color: #456;
+  font-weight: 700;
+  line-height: 1.2em;
+  margin-top: 10px;
+}
 .title {
   font-family: "lato", sans-serif;
   font-size: 70px;
@@ -40,6 +61,15 @@ textarea.edit:hover {
   vertical-align: top;
   line-height: 2.3em;
   margin-left: 5px;
+}
+h3 {
+  font-size: 24px;
+  line-height: 40px;
+  border-bottom: 1px solid #d9d9d9;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #7a7a7a;
+  padding: 6px;
 }
 button {
   display: inline-block;
