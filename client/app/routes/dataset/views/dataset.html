@@ -391,14 +391,18 @@
 				<div class="col-md-12">
 		      <button
 		        class    = "btn dbt-default create disabled"
-		        ng-hide  = "dataset._id || datasetUpdate.title">Proceed to add data
+		        ng-hide  = "dataset._id || datasetUpdate.title"
+						popover="Add a nice description about your dataset." 
+						popover-trigger="mouseenter" 
+						popover-placement="left">Proceed to add data
 		      </button>
+					<p ng-hide  = "dataset._id || datasetUpdate.title">Please add a title first.</p>
 		      <button
 		        class    = "btn dbt-default create"
 		        ng-hide  = "dataset._id || !datasetUpdate.title"
 		        ng-click = "create()">Proceed to add data
 		      </button>
-					<p>Don't worry, you can still change your title and description</p>
+					<p ng-hide  = "dataset._id || !datasetUpdate.title">Don't worry, you can still change your title and description.</p>
 				</div>
 			</div>
 		</div>
