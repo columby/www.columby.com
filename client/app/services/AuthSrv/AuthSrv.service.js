@@ -131,7 +131,7 @@ angular.module('columbyApp')
         allowEdit = this.isAuthorized('administrator');
 
         // Define access based on content type
-        if (user) {
+        if (user && user.accounts) {
           switch (item.postType) {
             case 'account':
               // edit own content
