@@ -3,11 +3,7 @@
 .metabar-wrapper {
   position: fixed;
   top: 0;
-  // width: 100%;
-  /*border-bottom: 1px solid #eee;*/
   height: 60px;
-  // line-height: 60px;
-  /*background: rgba(255,255,255,0.97);*/
   z-index: 1250;
   padding: 20px;
   .metabar{
@@ -15,6 +11,9 @@
 		color: #fff;
 		font-weight: 700;
 		font-size: 18px;
+		.metabar-content{
+			display: inline;
+		}
   }
 	.menu-btn{
 		background: none;
@@ -23,34 +22,14 @@
 		font-weight: bolder;
 	}
   .logo {
-    width: 58px;
-    height: 24px;
-    background-color: #222;
-    margin-top: 15px;
-    color: #fff;
-    line-height: 25px;
-    text-align: center;
-    cursor: pointer;
-    transition-duration: 200ms;
-    border: solid 2px #FFF;
-    padding: 0;
-    text-transform: uppercase;
-    font-weight: bold;
-    letter-spacing: 1px;
-    font-size: 11px;
-    border-radius: 4px;
-    white-space: nowrap;
-    background: transparent;
-    display: block;
-    position: relative;
-    text-decoration: none;
-    cursor: pointer;
-    -webkit-transition-duration: 200ms; /* Safari */
-    transition-duration: 200ms;
-    &:hover{
-      background-color:#eee;
-      color: #222
-    }
+		display: inline;
+		margin-left: 20px;
+		&:hover{
+			opacity: 0.8;
+		}
+		img{
+			width: 200px;
+		}
   }
 	.actions{
 		text-align: right;
