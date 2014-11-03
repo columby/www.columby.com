@@ -118,11 +118,10 @@
       -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
       transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
 			margin-bottom: 40px;
-			.data-description{
+			.data-description, .account-description{
 				line-height: 2em;
 				color: #555;
 	      word-wrap: break-word;
-				margin-bottom: 40px; 
 				font-size: 1em;
 				line-height: 2em;
 			}
@@ -315,6 +314,36 @@
 			}
 		}
 
+    // Create new dataset
+		.step1{
+			text-align: center;
+			padding-top: 20px;
+			button{
+				background: #345;
+				font-size: 1.2em;
+				border-radius: 45px;
+				position: relative;
+				padding: 8px 34px;
+				&:hover {
+					background: #1E2730;
+					color: #fff;
+				}
+			}
+			button.disabled{
+				background: #eee;
+				font-size: 1.2em;
+				border-radius: 45px;
+				position: relative;
+				padding: 8px 34px;
+				
+			}
+			p{
+				font-style: italic;
+				font-size: 0.8em;
+				margin-top: 12px;
+				opacity: 0.8;
+			}
+		}
 
     // Specific styling for dataset view page
     &.view {

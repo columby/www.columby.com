@@ -96,10 +96,10 @@
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   margin-bottom: 40px;
 }
-.dataset.view .content .data-description {
+.dataset.view .content .data-description,
+.dataset.view .content .account-description {
   color: #555;
   word-wrap: break-word;
-  margin-bottom: 40px;
   font-size: 1em;
   line-height: 2em;
 }
@@ -281,6 +281,34 @@
 .dataset.view .share a:hover {
   color: #428bca;
   text-decoration: none;
+}
+.dataset.view .step1 {
+  text-align: center;
+  padding-top: 20px;
+}
+.dataset.view .step1 button {
+  background: #345;
+  font-size: 1.2em;
+  border-radius: 45px;
+  position: relative;
+  padding: 8px 34px;
+}
+.dataset.view .step1 button:hover {
+  background: #1E2730;
+  color: #fff;
+}
+.dataset.view .step1 button.disabled {
+  background: #eee;
+  font-size: 1.2em;
+  border-radius: 45px;
+  position: relative;
+  padding: 8px 34px;
+}
+.dataset.view .step1 p {
+  font-style: italic;
+  font-size: 0.8em;
+  margin-top: 12px;
+  opacity: 0.8;
 }
 .dataset h1,
 .dataset h1.focussed {
