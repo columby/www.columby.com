@@ -50,4 +50,12 @@ angular.module('columbyApp', [
       console.log(data);
     });
   })
+
+  .controller('ColumbyCtrl', function($rootScope){
+    $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams){
+      console.log('stateChange');
+      $rootScope.state = toState.name;
+    });
+
+  })
 ;
