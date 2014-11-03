@@ -13,6 +13,9 @@ button:focus {
 .actions-bar ul {
   float: right;
 }
+.top {
+  background: none;
+}
 .highlight {
   color: #678;
   background: #e9f7fb;
