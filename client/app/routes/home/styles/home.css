@@ -54,7 +54,11 @@
   background: #428bca;
   color: #fff;
   text-align: center;
-  height: 60px;
+  padding: 25px;
+}
+.page-home .news-flash h2 {
+  margin: 0;
+  line-height: 1.5em;
 }
 .page-home .news-flash a {
   color: #fff;
@@ -93,7 +97,10 @@
 .page-home .recent-publications .publication-listing .publication-item {
   list-style: none;
   padding: 6px;
-  margin-bottom: 30px;
+  margin: 0 0 30px 0;
+}
+.page-home .recent-publications .publication-listing .publication-item h4 {
+  word-wrap: break-word;
 }
 .page-home .recent-publications .publication-listing .publication-item h4 a {
   font-family: "lato", sans-serif;

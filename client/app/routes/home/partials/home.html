@@ -2,13 +2,13 @@
 
   <div class="page-header">
     <div class="container">
-			<div class="col-md-12">
-  			<img src="/assets/images/logo.png">
+      <div class="col-md-12">
+        <img src="/assets/images/logo.png" class="img-responsive">
         <h2 class="page-subtitle">publish and discover data</h2>
-  			<button type="button" class="btn btn-default button" ng-show="$root.user._id"  ui-sref="dataset.create">Publish new dataset</button>
-  			<button type="button" class="btn btn-default button" ng-hide="$root.user._id"  ui-sref='signin'>Login or Signup</button>
-  			<p>or</p>
-  			<a ui-sref="about">Read about Columby</a>
+        <button type="button" class="btn btn-default button" ng-show="$root.user._id"  ui-sref="dataset.create">Publish new dataset</button>
+        <button type="button" class="btn btn-default button" ng-hide="$root.user._id"  ui-sref='signin'>Login or Signup</button>
+        <p>or</p>
+        <a ui-sref="about">Read about Columby</a>
       </div>
     </div>
   </div>
@@ -52,19 +52,20 @@
       </div>
 
 
-
-
       <div class="col-md-12 recent-publications" ng-hide="search.hits.length">
-        <h3>Recently published</h2>
+        <h3>Recently published</h3>
         <div class="publication-listing">
 					<ul>
             <li ng-repeat="dataset in datasets" class="publication-item">
-            <h4><a ui-sref="dataset.view({ id: dataset._id })" ng-bind-html="dataset.title || 'Untitled'"></a><!-- <br/>[{{dataset._id}}] --><span ng-show=""><em>{{dataset.publishStatus}}</em></h4>
-            <div class="user-date"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.createdAt | date:'MMMM d, yyyy'}}</time></div>
-          </li>
+              <h4><a ui-sref="dataset.view({ id: dataset._id })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
+              <div class="user-date">
+                <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.createdAt | date:'MMMM d, yyyy'}}</time>
+              </div>
+            </li>
         	</ul>
 				</div>
       </div>
+
 
     </div>
   </div>
