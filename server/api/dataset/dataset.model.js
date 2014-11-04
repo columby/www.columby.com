@@ -11,9 +11,9 @@ var DatasetSchema = new Schema({
   // Dataset properties
   account         : { type: Schema.ObjectId, ref:  'Account' },
 
-  title           : { type : String, trim: true },
+  title           : { type : String, trim: true, es_indexed:true },
   slug            : { type : String },
-  description     : { type : String, trim: true },
+  description     : { type : String, trim: true, es_indexed:true },
   headerImage     : { type : String },
 
   tags            : [],
@@ -132,7 +132,11 @@ DatasetSchema.plugin(mongoosastic,{
   auth      : esUrl.auth,
   curlDebug : true,
   port      : esUrl.port,
-  protocol  : esUrl.protocol === 'https:' ? 'https' : 'http'
+  protocol  : esUrl.protocol === 'https:' ? 'https' : 'http',
+  bulk: {
+    size: 10, // preferred number of docs to bulk index
+    delay: 1000 //milliseconds to wait for enough docs to meet size constraint
+  }
 });
 
 module.exports = mongoose.model('Dataset', DatasetSchema);

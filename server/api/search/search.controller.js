@@ -13,7 +13,7 @@ var serverOptions = {
 
 console.log('connecting to elasticsearch host: ', config.elasticsearch.host);
 var elasticSearchClient = new elasticsearch.Client(serverOptions);
-
+console.log('checking server status');
 // Check the connection on startup
 elasticSearchClient.ping({
   // ping usually has a 100ms timeout
@@ -41,7 +41,7 @@ exports.search = function(req, res) {
     index: 'datasets',
     body: qryObj.body
   }).then(function(result){
-    console.log('res', result);
+    //console.log('res', result);
     res.send(result);
   }, function(err){
     console.log('err',err);
@@ -49,34 +49,68 @@ exports.search = function(req, res) {
   });
 };
 
+
 exports.sync = function(req,res){
 
-  // Clear the index
-  Dataset.esTruncate({
-    index: 'datasets',
-    type: 'dataset'
-  },function(err){
-    if (err) {
-      console.log('err', err);
-      return res.json(err);
-    }
-    console.log('Datasets removed from ES. ');
-    // Sync
-    var stream = Dataset.synchronize(),
-    count = 0;
+  // Delete the index
+  elasticSearchClient.indices.delete({
+    timeout: 1000,
+    index: 'datasets'
+  }, function(error, response, status){
+    console.log('delete index status');
+    console.log('error', error);
+    console.log('response', response);
+    console.log('status', status);
 
-    stream.on('data', function(err, doc){
-      //console.log(err, doc);
-      if (err) { console.log('err', err); }
-      count++;
-    });
-    stream.on('close', function(){
-      console.log('indexed ' + count + ' documents!');
-      return res.json('indexed ' + count + ' documents!');
-    });
-    stream.on('error', function(err){
-      console.log(err);
-    });
+    // Initiate the new index
+    elasticSearchClient.indices.create({
+      timeout: 1000,
+      index: 'datasets',
+      type: 'dataset'
+    }, function(error, response,status){
+      console.log('create index status');
+      console.log('error', error);
+      console.log('response', response);
+      console.log('status', status);
+
+
+      // Dataset
+      //   .find({})
+      //   .select('title description tags')
+      //   .limit(10)
+      //   .exec(function(err,datasets){
+      //     //console.log(datasets);
+      //     indexSet = datasets;
+      //     send();
+      //     // // Sync
+      //     // elasticSearchClient.bulk({
+      //     //   body: s
+      //     // }, function (err, resp) {
+      //     //   if (err){console.log(err);}
+      //     //   console.log(resp);
+      //     //   console.log(resp);
+      //     // });
+      //   }
+      // );
+
+
+      var stream = Dataset.synchronize(),
+      count = 0;
+
+      stream.on('data', function(err, doc){
+        //console.log(err, doc);
+        if (err) { console.log('err', err); }
+        count++;
+      });
+      stream.on('close', function(){
+        console.log('indexed ' + count + ' documents!');
+        return res.json('indexed ' + count + ' documents!');
+      });
+      stream.on('error', function(err){
+        console.log(err);
+      });
+    })
+
   });
 }
 

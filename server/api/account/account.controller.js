@@ -16,42 +16,6 @@ function slugify(text) {
 }
 
 
-function seedOrg(organisation){
-  console.log(organisation.admin_uuid);
-  var User = require('../user/user.model');
-
-  User.findOne({'drupal_uuid': organisation.admin_uuid}, function(err,user){
-    var self = this;
-    Account.create({
-      owner   : user._id,
-      name    : organisation.title,
-      slug    : organisation.title,
-      primary : false,
-      description: organisation.description,
-      drupal_uuid: organisation.uuid
-    }, function (err,account){
-      if (err) { console.log('err', err); }
-      console.log('acount created', account);
-    });
-  });
-
-}
-
-// ADMIN ONLY
-exports.seed = function(req,res){
-  console.log('seeding accounts: organisations');
-  // Get the list of users
-  var organisations = require('../../seed/organisations');
-  console.log('organisations', organisations.length);
-  //remove existing non-primary accounts
-  Account.find({primary:false}).remove(function(err){
-    console.log(err);
-    for (var i=0; i<organisations.length; i++){
-      seedOrg(organisations[ i]);
-    }
-  })
-}
-
 // Get list of accounts
 exports.index = function(req, res) {
   Account.find(function (err, accounts) {
@@ -67,7 +31,7 @@ exports.show = function(req, res) {
     //.populate('collections', 'title description datasets')
     .exec(function(err, account) {
       if(err) { return handleError(res, err); }
-      console.log(account);
+      //console.log(account);
       return res.json(account);
     });
 };
