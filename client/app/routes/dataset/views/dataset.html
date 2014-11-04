@@ -314,21 +314,43 @@
               class="btn btn-default"
               ng-show="editMode"><i class="fa fa-question"></i>
             </button></h3>
-            <ul>
+            
+            
+            <div class="row">
+              
+              <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
+                <div class="thumbnail dataset-reference">
+                  <div class="caption clearfix">
+
+                    <h4><a href="{{reference.url}}">{{reference.title}}</a></h4>
+                    <img src="{{reference.image}}" class="pull-right" ng-show="{{reference.image}}"/>
+                    <p>{{reference.description}}</p>
+                    <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
+                  </div>
+                  <div class="actions" ng-show="editMode">
+                    <a href="" ng-click="deleteReference($index)"><i class="fa fa-trash"></i></a>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            
+            
+            <!-- <ul>
               <li ng-repeat="reference in dataset.references">
-  							<div class="col-md-12">
+                <div class="col-md-12">
                   <h4><a href="{{reference.url}}">{{reference.title}}</a></h4>
                 </div>
                 <div class="col-sm-12">
                   <img src="{{reference.image}}" class="preview"/>
                   <p>{{reference.description}}</p>
-  							  <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
+                  <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
                 </div>
                 <div class="actions" ng-show="editMode">
                   <a href="" ng-click="deleteReference($index)"><i class="fa fa-trash"></i></a>
                 </div>
-  						</li>
-            </ul>
+              </li>
+            </ul> -->
 	          <div class="highlight" ng-show="!dataset.references || dataset.references.length===0">
 							<!-- <i class="fa fa-exclamation-circle"></i> -->
 							<h2>No references added yet</h2>
@@ -377,7 +399,7 @@
     <!-- Dataset Collections -->
     <div class="collections wrapper" ng-hide="dataset || dataset._id || !editMode">
       <div class="container">
-        <div class="content">
+        <div class="col-md-12 content">
           <h3>Collections</h3>
           List of collections
 

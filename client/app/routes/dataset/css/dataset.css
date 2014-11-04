@@ -313,6 +313,18 @@
   color: #428bca;
   font-family: "lato", sans-serif;
 }
+.dataset.view .dataset-reference {
+  border-radius: 0;
+  padding: 0;
+}
+.dataset.view .dataset-reference .caption h4 {
+  margin-top: 0;
+}
+.dataset.view .dataset-reference .caption img {
+  border: 1px solid #eee;
+  margin: 2px;
+  max-width: 150px;
+}
 .dataset.view .share {
   text-align: center;
 }
