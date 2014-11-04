@@ -200,6 +200,9 @@ exports.verify = function(req,res,next) {
       .populate('accounts')
       .exec(function(err,user){
 
+        if (err) { return handleError(res,err); }
+        if (!user) { return res.json({status:'error',err:'user not found'})}
+
         // Make user verified
         if (user.verified === false){
           user.verified=true;
@@ -228,5 +231,6 @@ exports.verify = function(req,res,next) {
 
 
 function handleError(res, err) {
+  console.log('User Controller error:', err);
   return res.send(500, err);
 }
