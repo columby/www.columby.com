@@ -26,5 +26,11 @@ angular.module('columbyApp')
         url: '/features',
         templateUrl: 'app/routes/pages/views/features.html',
         controller : 'PagesCtrl'
+      })
+      
+      .state('columby-update', {
+        url: '/columby-update',
+        templateUrl: 'app/routes/pages/views/columby-update.html',
+        controller : 'PagesCtrl'
       });
   });

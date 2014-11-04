@@ -3,7 +3,8 @@
 .about .page-header,
 .features .page-header,
 .search .page-header,
-.roadmap .page-header {
+.roadmap .page-header,
+.update .page-header {
   text-align: center;
   min-height: 260px;
   margin: 0;
@@ -16,14 +17,16 @@
 .about .page-header img,
 .features .page-header img,
 .search .page-header img,
-.roadmap .page-header img {
+.roadmap .page-header img,
+.update .page-header img {
   margin-top: 100px;
 }
 .terms .page-header h1,
 .about .page-header h1,
 .features .page-header h1,
 .search .page-header h1,
-.roadmap .page-header h1 {
+.roadmap .page-header h1,
+.update .page-header h1 {
   margin-top: 100px;
   font-size: 4em;
   font-weight: 900;
@@ -36,7 +39,8 @@
 .about .page-header h2.page-subtitle,
 .features .page-header h2.page-subtitle,
 .search .page-header h2.page-subtitle,
-.roadmap .page-header h2.page-subtitle {
+.roadmap .page-header h2.page-subtitle,
+.update .page-header h2.page-subtitle {
   font-family: "merriweather", serif;
   font-size: 14px;
   font-weight: 300;
@@ -47,14 +51,16 @@
 .about .page-content,
 .features .page-content,
 .search .page-content,
-.roadmap .page-content {
+.roadmap .page-content,
+.update .page-content {
   margin-top: 50px;
 }
 .terms .page-content img.intro,
 .about .page-content img.intro,
 .features .page-content img.intro,
 .search .page-content img.intro,
-.roadmap .page-content img.intro {
+.roadmap .page-content img.intro,
+.update .page-content img.intro {
   margin: 80px 0 80px 0;
 }
 .terms .page-content p,
@@ -62,11 +68,13 @@
 .features .page-content p,
 .search .page-content p,
 .roadmap .page-content p,
+.update .page-content p,
 .terms .page-content ol,
 .about .page-content ol,
 .features .page-content ol,
 .search .page-content ol,
-.roadmap .page-content ol {
+.roadmap .page-content ol,
+.update .page-content ol {
   line-height: 2em;
   margin-bottom: 40px;
 }
@@ -74,21 +82,24 @@
 .about .page-content ol > li,
 .features .page-content ol > li,
 .search .page-content ol > li,
-.roadmap .page-content ol > li {
+.roadmap .page-content ol > li,
+.update .page-content ol > li {
   margin-bottom: 40px;
 }
 .terms .page-content ul.built,
 .about .page-content ul.built,
 .features .page-content ul.built,
 .search .page-content ul.built,
-.roadmap .page-content ul.built {
+.roadmap .page-content ul.built,
+.update .page-content ul.built {
   text-decoration: line-through;
 }
 .terms .page-content li,
 .about .page-content li,
 .features .page-content li,
 .search .page-content li,
-.roadmap .page-content li {
+.roadmap .page-content li,
+.update .page-content li {
   list-style: inherit;
   padding: 6px;
   margin-top: 15px;
