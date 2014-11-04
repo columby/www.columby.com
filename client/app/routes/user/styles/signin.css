@@ -1,13 +1,27 @@
 /*** ---- LOGIN ---------------------------- ***/
-.signin .signin-header {
-  text-align: center;
+.signin h2 {
+  font-size: 24px;
+  line-height: 40px;
+  border-bottom: 1px solid #d9d9d9;
+  font-weight: 700;
+  color: #428bca;
+  padding: 6px;
+  margin-bottom: 20px;
 }
-.signin .signin-header .logo {
-  margin-top: 70px;
+.signin .passwordless {
+  margin-top: 60px;
+  padding-top: 30px;
+  min-height: 300px;
+  background-image: url('/assets/images/passwordless.png');
+  background-position: top right;
+  background-repeat: no-repeat;
+  margin-bottom: 40px;
 }
-.signin .row {
-  margin-top: 70px;
-  margin-bottom: 70px;
+.signin .passwordless h2 {
+  font-size: 2em;
+}
+.signin .passwordless p {
+  color: #666;
 }
 .signin-success,
 .registration-success {
