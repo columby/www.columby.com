@@ -282,6 +282,25 @@
   color: #428bca;
   margin-top: 5px;
 }
+.dataset.view .distributions ul {
+  padding: 0;
+}
+.dataset.view .distributions li {
+  list-style: none;
+}
+.dataset.view .distributions .properties {
+  padding: 20px 0 20px 0;
+}
+.dataset.view .distributions .properties li {
+  display: inline-block;
+  margin-right: 15px;
+  color: #666;
+}
+.dataset.view .distributions .properties li label {
+  margin-right: 5px;
+  color: #428bca;
+  font-family: "lato", sans-serif;
+}
 .dataset.view .share {
   text-align: center;
 }
