@@ -52,7 +52,7 @@ angular.module('columbyApp', [
   })
 
   .controller('ColumbyCtrl', function($rootScope){
-    $rootScope.$on('$stateChangeSuccess',  function(toState){
+    $rootScope.$on('$stateChangeSuccess',  function(event, toState){
       // Add state to body class
       $rootScope.state = toState.name;
     });
