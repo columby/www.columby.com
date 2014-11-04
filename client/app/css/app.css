@@ -88,6 +88,7 @@ h3 {
   position: relative;
   text-align: center;
   text-transform: none;
+  word-wrap: break-word;
 }
 .header.wrapper h1.editable-placeholder {
   opacity: 0.5;
