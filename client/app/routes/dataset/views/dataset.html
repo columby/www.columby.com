@@ -211,58 +211,36 @@
           </h3>
           <ul ng-hide="!dataset.distributions || dataset.distributions.length===0">
             <li ng-repeat="distribution in dataset.distributions">
-              <h4><a href="{{distribution.accessUrl}}" target="_blank">{{distribution.title}}</a><span class="label bg-primary">File</span></h4>
-  						<div class="date-size">{{distribution.type}} - {{distribution.issued | date:'d MMMM yyyy'}} - {{distribution.size}}</div>
+              <h4 class="datasource-title">{{distribution.title}}</h4>
+              <div class="download datasource-icon" ng-show="distribution.downloadUrl">
+                <a href="{{distribution.downloadUrl}}"><i class="fa fa-download"></i></a>
+              </div>
+              <div class="link datasource-icon" ng-show="distribution.accessUrl">
+                <a href="{{distribution.accessUrl}}"><i class="fa fa-external-link"></i></a>
+              </div>
               
               <ul class="properties">
-                <!-- <li><label>Title</label>Hier komt een titel van een dataset</li> -->
                 <li><label>Datasource type</label>File</li>
-                <li><label>Access URL</label><a href="{{distribution.accessUrl}}" target="_blank">access url</a></li>
-                <li><label>Download URL</label><a href="{{distribution.downloadUrl}}" target="_blank">download url</a></li>
+                <li><label>License</label>cc0</li>
                 <li><label>Media type</label>application/csv</li>
                 <li><label>File size</label>20.34 MB</li>
                 <br/>
                 <li><label>Issued</label>20-10-2014</li>
                 <li><label>Modified</label>20-10-2014</li>
-                <li><label>License</label>cc0</li>
                 <br/>
                 <li><label>Sync</label>Every 24 hours</li>
                 <li><label>Last sync</label>2 hours ago</li>
               </ul>
               
-              <div class="download" ng-show="distribution.downloadUrl">
-                <a href="{{distribution.downloadUrl}}"><i class="fa fa-download"></i></a>
-              </div>
-              <div class="link" ng-show="distribution.accessUrl">
-                <a href="{{distribution.accessUrl}}"><i class="fa fa-external-link"></i></a>
-              </div>
 
               <div class="actions" ng-show="editMode">
                 <a href="" ng-click="editDistribution($index)"><i class="fa fa-edit"></i></a>
                 <a href="" ng-click="deleteDistribution($index)"><i class="fa fa-trash"></i></a>
               </div>
-              
-
-
-              <!-- title            : Some title,<br/> show_with_placeholder -->
-              <!-- description      : Some text tescription,<br/> -->
-              <!-- issued           : Date,<br/> show_if_available -->
-              <!-- modified         : Date,<br/> show_if_available
-              license          : cc0, andere versies<br/> show_with_placeholder
-              accessUrl        : { type: String },<br/> show
-              of - downloadUrl : { type: String },<br/>or show
-              mediaType        : application/csv of application/link<br/> icon
-              byteSize         : 12345 bytes,<br/> show_if_available
-
-              sync on? check if syncPeriod === true
-              syncPeriod -->
-              <!-- last sync -> syncDate -->
-
 
   					</li>
           </ul>
           <div class="highlight" ng-show="!dataset.distributions || dataset.distributions.length===0">
-						<!-- <i class="fa fa-exclamation-circle"></i> -->
 						<h2>No sources added yet</h2>
 						<p ng-show="editMode">Upload a file to Columby directly or locate a remote file from the internet. Columby will process your data, so it will become available through the API.</p>
 					</div>

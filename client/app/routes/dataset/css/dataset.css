@@ -283,13 +283,25 @@
   margin-top: 5px;
 }
 .dataset.view .distributions ul {
-  padding: 0;
+  padding: 0 0 0 6px;
 }
 .dataset.view .distributions li {
   list-style: none;
 }
+.dataset.view .distributions li .datasource-icon {
+  display: inline;
+  font-size: 22px;
+  margin-right: 7px;
+}
+.dataset.view .distributions li h4 {
+  display: inline;
+  margin-right: 20px;
+  margin-top: 20px;
+  font-size: 2em;
+  font-weight: 900;
+}
 .dataset.view .distributions .properties {
-  padding: 20px 0 20px 0;
+  padding: 10px 0 20px 0;
 }
 .dataset.view .distributions .properties li {
   display: inline-block;
