@@ -323,7 +323,7 @@
                   <div class="caption clearfix">
 
                     <h4><a href="{{reference.url}}">{{reference.title}}</a></h4>
-                    <img src="{{reference.image}}" class="pull-right" ng-show="{{reference.image}}"/>
+                    <div class="ref-img pull-right" style="background-image:url('{{reference.image}}');background-size:cover;" ng-show="{{reference.image}}"></div>
                     <p>{{reference.description}}</p>
                     <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
                   </div>

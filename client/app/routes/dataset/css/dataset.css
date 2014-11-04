@@ -320,6 +320,12 @@
 .dataset.view .dataset-reference .caption h4 {
   margin-top: 0;
 }
+.dataset.view .dataset-reference .caption .ref-img {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #eee;
+  margin: 0 0 10px 10px;
+}
 .dataset.view .dataset-reference .caption img {
   border: 1px solid #eee;
   margin: 2px;
