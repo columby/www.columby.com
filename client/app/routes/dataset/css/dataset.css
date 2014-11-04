@@ -96,6 +96,9 @@
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   margin-bottom: 40px;
 }
+.dataset.view .content .header.wrapper {
+  height: 420px;
+}
 .dataset.view .content .meta {
   text-align: center;
 }
