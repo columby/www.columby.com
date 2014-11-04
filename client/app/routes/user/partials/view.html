@@ -2,7 +2,7 @@
 
   <div class="actions-bar"
     scroll-position="scroll"
-    ng-class="{top: scroll<200}">
+    ng-class="{top: scroll<215}">
     <ul>
       <li>
         <button class="btn btn-default logout"
@@ -39,7 +39,7 @@
         <p ng-show="!user.accounts || user.accounts.length===0">No account for this user</p>
         <ul>
           <li ng-repeat="account in user.accounts | orderBy:account.primary">
-            <h4><a ui-sref="account.view({slug:account.slug})">{{account.name}}</a><span ng-show="account.primary" class="label bg-primary">Primary</span></h4>
+            <h4><a ui-sref="account.view({slug:account.slug})">{{account.name}}</a></h4>
             <p>{{account.datasets.length}} datasets</p>
           </li>
           <!-- <li>

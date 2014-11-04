@@ -1,1 +1,37 @@
-.signin .signin-header{text-align:center}.signin .signin-header .logo{margin-top:70px}.signin .row{margin-top:70px;margin-bottom:70px}.signin-success,.registration-success{position:absolute;padding-top:40px;top:0;left:0;right:0;bottom:0;text-align:center;background-color:#FFF;opacity:0.95}
+/*** ---- LOGIN ---------------------------- ***/
+.signin .signin-header {
+  text-align: center;
+}
+.signin .signin-header .logo {
+  margin-top: 70px;
+}
+.signin .row {
+  margin-top: 70px;
+  margin-bottom: 70px;
+}
+.signin-success,
+.registration-success {
+  position: absolute;
+  padding-top: 40px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  background-color: #FFF;
+  opacity: 0.95;
+}
+.settings .accounts ul {
+  padding: 0;
+}
+.settings .accounts li {
+  list-style: none;
+  padding: 6px;
+  margin-bottom: 30px;
+}
+.settings .accounts li h4 a {
+  font-family: "lato", sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: #222;
+}
