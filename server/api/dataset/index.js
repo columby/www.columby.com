@@ -27,7 +27,7 @@ router.get('/:id',
     controller.show);
 
 router.post('/',
-  auth.checkJWT,
+  //auth.checkJWT,
     controller.create);
 
 router.put('/:id',
@@ -46,7 +46,7 @@ router.get('/:id/distribution',
     controller.listDistributions);
 
 router.post('/:id/distribution',
-  auth.checkJWT,
+  //auth.checkJWT,
     controller.createDistribution);
 
 router.get('/:id/distribution/:did',

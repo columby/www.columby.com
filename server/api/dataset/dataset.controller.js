@@ -219,7 +219,11 @@ exports.show = function(req, res) {
 
 // Creates a new dataset in the DB.
 exports.create = function(req, res) {
-  var dataset = new Dataset(req.body);
+  var d = req.body;
+  if (d.tags) {
+    d.tags = d.tags.split(',');
+  }
+  var dataset = new Dataset(d);
   dataset.save(function(err) {
     if(err) { return handleError(res, err); }
 
@@ -282,8 +286,10 @@ exports.getDistribution = function(req,res,id){
 
 exports.createDistribution = function(req, res) {
   console.log('creating distribution');
+  console.log(req.body);
   var id = req.params.id;
   var distribution = req.body.distribution;
+  console.log('d', distribution);
   distribution._id = mongoose.Types.ObjectId();
   Dataset
     .findOne({_id: id})

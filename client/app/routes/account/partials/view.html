@@ -7,18 +7,6 @@
       ng-hide  = "editMode"
       ng-click = "toggleEditmode()">edit
     </button>
-
-    <button class="btn btn-default editmode"
-      type     = "button"
-      ng-show  = "editMode && account._id"
-      ng-click = "toggleEditmode()">Exit edit mode
-    </button>
-
-    <button
-      class    = "btn btn-default publish"
-      ng-show  = "!account._id"
-      ng-click = "createAccount()">Publish
-    </button>
   </div>
 
   <!-- Content -->
@@ -27,27 +15,10 @@
     <div class="header wrapper" ng-style="headerStyle">
       <div class="container">
 
-        <div ng-switch="editMode">
-          <h1 ng-switch-default ng-bind-html="account.name || 'No name yet'"></h1>
-          <textarea ng-switch-when="true"
-            class       = "input-noborder name title edit"
-            type        = 'text'
-            name        = "title"
-            placeholder = 'Your account name'
-            ng-model    = 'account.nameUpdate'
-            ng-blur     = 'updateName()'
-            focus       = 'true'
-           />
-        </div>
+        <h1 ng-bind-html="account.name || 'No name yet'"></h1>
 
         <div class="avatar">
           <img src="{{account.avatar.url}}"/>
-          <div class="btn"
-            ng-show="editMode"
-            ng-file-select="onFileSelect($files)"
-            data-multiple="true">
-            <i class="fa fa-cog"></i>
-          </div>
         </div>
       </div>
     </div>
@@ -56,36 +27,13 @@
     <div class="description wrapper">
       <!-- Editable description -->
       <div class="container">
-        <div class="col-md-12" ng-switch="editMode">
-          <h3 ng-show="editMode">Description</h3>
-            <button
-              class="right btn-xs btn-tooltip"
-              popover="----"
-              popover-trigger="mouseenter"
-              popover-placement="left"
-              class="btn btn-default"><i class="fa fa-question"></i>
-            </button>
-
-
-          <div
-            ng-switch-default
-            ng-bind-html="account.description || '<p>No account description yet.</p>'">
-          </div>
-          <div
-            ng-switch-when = "true">
-            <div
-              ng-model        = "account.descriptionUpdate"
-              text-angular
-              ta-default-wrap = "p"
-              ng-blur         = "updateDescription()"
-              ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"
-          ></div>
-          </div>
+        <div class="col-md-12">
+          <div ng-bind-html="account.description || '<p>No account description yet.</p>'">
         </div>
       </div>
     </div>
 
-    <div class="datasets wrapper" ng-show="editMode || account.datasets.length>0">
+    <div class="datasets wrapper" ng-show="account.datasets.length>0">
       <div class="container">
         <div class="col-md-12">
           <h3>Datasets</h3>

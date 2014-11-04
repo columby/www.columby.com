@@ -3,11 +3,62 @@
 angular.module('columbyApp')
 
 
+.controller('AccountCtrl', function($window,$rootScope, $scope, $stateParams, AccountSrv, AuthSrv){
+  /* ---------- SETUP ----------------------------------------------------------------------------- */
+  $scope.contentLoading  = true;
+  $window.document.title = 'columby.com';
+
+
+  /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
+
+
+  /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
+  function getAccount(){
+
+    // get account information of user by userSlug
+    AccountSrv.get({slug: $stateParams.slug}, function(result){
+      $scope.account = result;
+      $scope.contentLoading = false;
+      $window.document.title = 'columby.com | ' + result.name;
+
+      // set draft title and description
+      if ($scope.editMode){
+        $scope.accountUpdate.name        = $scope.account.name;
+        $scope.accountUpdate.description = $scope.account.description;
+      }
+
+      $scope.account.canEdit= AuthSrv.canEdit({postType:'account', _id:result._id});
+
+      if ($scope.account.headerImage){
+        updateHeaderBg();
+      }
+
+    });
+  }
+
+
+
+  function updateHeaderBg(){
+    $scope.headerStyle={
+      'background-image': 'url(' + $scope.account.headerPattern + '), url(' + $scope.account.headerImage + ')',
+      'background-blend-mode': 'multiply'
+    };
+  }
+
+
+  /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
+
+
+  /* ---------- INIT ----------------------------------------------------------------------------- */
+  getAccount();
+
+})
+
 /***
- * Controller a user's account page
+ * Account View Controller
  *
  ***/
-.controller('AccountCtrl', function ($window, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, toaster, $upload) {
+.controller('AccountEditCtrl', function ($window, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, toaster, $upload) {
 
 
   /* ---------- SETUP ----------------------------------------------------------------------------- */
