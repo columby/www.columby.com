@@ -11,24 +11,22 @@ angular.module('columbyApp')
 
       .state('dataset.create', {
         url: '/d/new',
-        templateUrl: 'app/routes/dataset/views/dataset.html',
+        templateUrl: 'app/routes/dataset/partials/edit.html',
         authorization: { authorizedRoles: ['authenticated'] },
-        data: { editMode: true},
-        controller: 'DatasetCtrl'
+        controller: 'DatasetEditCtrl'
       })
 
       .state('dataset.view', {
         url: '/d/:id',
-        templateUrl: 'app/routes/dataset/views/dataset.html',
-        controller: 'DatasetCtrl'
+        templateUrl: 'app/routes/dataset/partials/view.html',
+        controller: 'DatasetViewCtrl'
       })
 
       .state('dataset.edit', {
         url: '/d/:id/edit',
-        templateUrl: 'app/routes/dataset/views/dataset.html',
-        controller: 'DatasetCtrl',
+        templateUrl: 'app/routes/dataset/partials/edit.html',
+        controller: 'DatasetEditCtrl',
         authorization: { authorizedRoles: ['authenticated'] },
-        data: { editMode: true }
       })
     ;
   });

@@ -1,17 +1,12 @@
-<div class="account view">
+<div class="account edit">
 
   <!-- Actions -->
   <div class="actions-bar" ng-show="account.canEdit">
-    <button class="btn btn-default edit"
-      type     = "button"
-      ng-hide  = "editMode"
-      ng-click = "toggleEditmode()">edit
-    </button>
 
-    <button class="btn btn-default editmode"
+    <button class="btn btn-default"
       type     = "button"
-      ng-show  = "editMode && account._id"
-      ng-click = "toggleEditmode()">Exit edit mode
+      ng-show  = "account._id"
+      ui-sref="account.view({slug:account.slug})">Exit edit mode
     </button>
 
     <button
@@ -27,25 +22,20 @@
     <div class="header wrapper" ng-style="headerStyle">
       <div class="container">
 
-        <div ng-switch="editMode">
-          <h1 ng-switch-default ng-bind-html="account.name || 'No name yet'"></h1>
-          <textarea ng-switch-when="true"
-            class       = "input-noborder name title edit"
-            type        = 'text'
-            name        = "title"
-            placeholder = 'Your account name'
-            ng-model    = 'account.nameUpdate'
-            ng-blur     = 'updateName()'
-            focus       = 'true'
-           />
-        </div>
+        <textarea class = "input-noborder name title edit"
+          type        = 'text'
+          name        = "title"
+          placeholder = 'Your account name'
+          ng-model    = 'accountUpdate.name'
+          ng-blur     = 'update()'
+          focus       = 'true'
+         />
 
         <div class="avatar">
           <img src="{{account.avatar.url}}"/>
           <div class="btn"
-            ng-show="editMode"
             ng-file-select="onFileSelect($files)"
-            data-multiple="true">
+            data-multiple="false">
             <i class="fa fa-cog"></i>
           </div>
         </div>
@@ -56,8 +46,8 @@
     <div class="description wrapper">
       <!-- Editable description -->
       <div class="container">
-        <div class="col-md-12" ng-switch="editMode">
-          <h3 ng-show="editMode">Description</h3>
+        <div class="col-md-12">
+          <h3>Description</h3>
             <button
               class="right btn-xs btn-tooltip"
               popover="----"
@@ -68,24 +58,17 @@
 
 
           <div
-            ng-switch-default
-            ng-bind-html="account.description || '<p>No account description yet.</p>'">
-          </div>
-          <div
-            ng-switch-when = "true">
-            <div
-              ng-model        = "account.descriptionUpdate"
-              text-angular
-              ta-default-wrap = "p"
-              ng-blur         = "updateDescription()"
-              ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"
-          ></div>
-          </div>
+            ng-model        = "accountUpdate.description"
+            text-angular
+            ta-default-wrap = "p"
+            ng-blur         = "update()"
+            ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"
+        ></div>
         </div>
       </div>
     </div>
 
-    <div class="datasets wrapper" ng-show="editMode || account.datasets.length>0">
+    <!-- <div class="datasets wrapper" ng-show="account.datasets.length>0">
       <div class="container">
         <div class="col-md-12">
           <h3>Datasets</h3>
@@ -104,7 +87,7 @@
           </ul>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- <div class="collections wrapper" ng-hide="editMode">
       <div class="container">
@@ -124,4 +107,4 @@
       </div>
     </div> -->
   </div>
-</section>
+</div>

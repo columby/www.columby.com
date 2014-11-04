@@ -2,22 +2,85 @@
 
 angular.module('columbyApp')
 
-  .controller('DatasetCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv, $http, $upload) {
+  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster) {
 
     /***   INITIALISATION   ***/
-    //var editWatcher;               // Watch for model changes in editmode
+    $scope.hostname = $location.protocol() + '://' + $location.host();
+    $window.document.title = 'columby.com';
 
-    $scope.editMode = false;       // edit mode is on or off
-    $scope.contentEdited = false;  // models is changed or not during editmode
+    /***   FUNCTIONS   ***/
+    function getDataset(){
+      $scope.contentLoading = true;  // show loading message while loading dataset
+      DatasetSrv.get({
+        id: $stateParams.id
+      }, function(dataset) {
+        if (!dataset._id){
+          toaster.pop('danger',null,'Sorry, the requested dataset was not found. ');
+          $state.go('home');
+          return;
+        }
+        // add acquired dataset to the scope
+        $scope.contentLoading = false;
+        $scope.dataset = dataset;
+        $window.document.title = 'columby.com | ' + dataset.title;
+
+        // transition the url from slug to id
+        if ($stateParams.id !== dataset._id) {
+          $state.transitionTo ('dataset.view', { id: dataset._id}, {
+            location: true,
+            inherit: true,
+            relative: $state.$current,
+            notify: false
+          });
+        }
+
+        // // create summary
+        // var summary = '<p>';
+        // // check for file source
+        // if (!dataset.sources) {
+        //   summary += 'There is no data for this dataset available yet. ';
+        // } else if (!dataset.sources.primary) {
+        //   summary += 'There is no primary source for this dataset yet. ';
+        // } else if (dataset.sources.primary.type) {
+        //   summary += 'This dataset if of the type <strong>' + dataset.sources.primary.type + '</strong>.';
+        // }
+        // $scope.summary = summary + '</p>';
+
+        $scope.dataset.canEdit= AuthSrv.canEdit({postType:'dataset', _id:dataset.account._id});
+
+        updateHeaderImage();
+
+      });
+    }
+
+    function updateHeaderImage(){
+      $scope.headerStyle={
+        'background-image': 'url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImage + ')',
+        'background-blend-mode': 'multiply'
+      };
+    }
+
+    /* --------- SCOPE FUNCTIONS ------------------------------------------------------------ */
+
+
+    /* --------- ROOTSCOPE EVENTS ------------------------------------------------------------ */
+
+
+    /* --------- INIT ------------------------------------------------------------------------ */
+    if ($stateParams.id) {
+      getDataset();
+    } else {
+      toaster.pop('danger',null,'Sorry, the requested dataset was not found. ');
+      $state.go('home');
+    }
+  }
+)
+  .controller('DatasetEditCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv, $http, $upload) {
+
+    /***   INITIALISATION   ***/
     $scope.hostname = $location.protocol() + '://' + $location.host();
     $scope.datasetUpdate = {};
     $window.document.title = 'columby.com';
-
-    // check edit mode
-    if ($location.path().split('/')[3] === 'edit') {
-      $scope.editMode = true;
-      $scope.showOptions = false;
-    }
 
     /***   FUNCTIONS   ***/
     function getDataset(){
@@ -78,7 +141,7 @@ angular.module('columbyApp')
     function initiateNewDataset(){
       $scope.dataset = {
         title             : null,
-        description       : '<p>Add a nice description for your publication. </p>',
+        description       : null,
         avatar :{
           url               : 'assets/images/avatar.png'
         },
@@ -107,19 +170,6 @@ angular.module('columbyApp')
     }
 
     /***   SCOPE FUNCTIONS   ***/
-
-    /*** Editmode functions */
-    $scope.toggleEditmode = function(){
-      if ($scope.editMode) {
-        $state.go('dataset.view', {id: $scope.dataset._id});
-      } else {
-        $state.go('dataset.edit', {id: $scope.dataset._id});
-      }
-    };
-
-    $scope.toggleOptions = function(){
-      $scope.showOptions = !$scope.showOptions;
-    };
 
     /* dataset functions */
     $scope.updateTitle = function() {
@@ -196,25 +246,6 @@ angular.module('columbyApp')
           $state.go('dataset.edit', {id:res._id, editMode:true});
         }
       });
-    };
-
-    // Change publication from draft to published
-    $scope.publishDataset = function(){
-      if ($scope.dataset.publicationStatus !== 'published') {
-        var dataset = {
-          _id: $scope.dataset._id,
-          publicationStatus: 'published',
-          publishedAt: Date.now()
-        };
-        //console.log('publishing dataset: ', dataset);
-        DatasetSrv.update({id: dataset._id}, dataset,function(res){
-          //console.log(res);
-          if (res._id){
-            $scope.dataset.publicationStatus = 'published';
-            toaster.pop('success', 'Updated', 'Your dataset is now published! ');
-          }
-        });
-      }
     };
 
     $scope.updateSlug = function(){
@@ -518,7 +549,6 @@ angular.module('columbyApp')
       getDataset();
     } else {
       initiateNewDataset();
-      toggleEditMode(true);
     }
   }
 );

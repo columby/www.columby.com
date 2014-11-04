@@ -2,11 +2,9 @@
 
   <!-- Actions -->
   <div class="actions-bar" ng-show="account.canEdit">
-    <button class="btn btn-default edit"
-      type     = "button"
-      ng-hide  = "editMode"
-      ng-click = "toggleEditmode()">edit
-    </button>
+    <a class="btn btn-default edit"
+      a ui-sref="account.edit({slug:account.slug})">edit
+    </a>
   </div>
 
   <!-- Content -->
