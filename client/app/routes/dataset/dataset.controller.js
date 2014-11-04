@@ -138,7 +138,7 @@ angular.module('columbyApp')
           DatasetSrv.update({id:dataset._id},dataset,function(res){
             if (res._id){
               $scope.datasetUpdate.title = res.title;
-              toaster.pop('success', 'Updated', 'Dataset title updated.');
+              toaster.pop('success', null, 'Dataset title updated.');
             }
           });
         }
@@ -160,7 +160,7 @@ angular.module('columbyApp')
           DatasetSrv.update({id:dataset._id},dataset,function(res){
             if (res._id){
               $scope.datasetUpdate.description = res.description;
-              toaster.pop('success', 'Updated', 'Dataset description updated.');
+              toaster.pop('success', null, 'Dataset description updated.');
             } else {
               //console.log('error updating description', res);
             }
@@ -180,7 +180,7 @@ angular.module('columbyApp')
       DatasetSrv.update({id: dataset._id}, dataset,function(res){
         if (res._id){
           $scope.dataset = res;
-          toaster.pop('success', 'Updated', 'Dataset updated.');
+          toaster.pop('success', null, 'Dataset updated.');
           toggleEditMode();
         }
       });
@@ -192,7 +192,7 @@ angular.module('columbyApp')
       DatasetSrv.save($scope.dataset, function(res){
         //console.log('create',res);
         if (res._id) {
-          toaster.pop('success', 'Created', 'Dataset created.');
+          toaster.pop('success', null, 'Your dataset page is created. Now add some data.');
           $state.go('dataset.edit', {id:res._id, editMode:true});
         }
       });
