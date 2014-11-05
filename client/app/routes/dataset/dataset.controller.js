@@ -152,15 +152,6 @@ angular.module('columbyApp')
       toaster.pop('notice',null,'Here\'s your new dataset!');
     }
 
-    function toggleEditMode(mode){
-      $scope.editMode = mode || !$scope.editMode;
-      if ($scope.editMode) {
-        $scope.datasetUpdate.title       = $scope.dataset.title;
-        $scope.datasetUpdate.description = $scope.dataset.description;
-      }
-    }
-
-
     function updateHeaderImage(){
       $scope.headerStyle={
         'background-image': 'url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImage + ')',
@@ -169,6 +160,9 @@ angular.module('columbyApp')
     }
 
     /***   SCOPE FUNCTIONS   ***/
+    $scope.toggleOptions = function(){
+      $scope.showOptions = !$scope.showOptions;
+    };
 
     /* dataset functions */
     $scope.updateTitle = function() {
@@ -230,7 +224,6 @@ angular.module('columbyApp')
         if (res._id){
           $scope.dataset = res;
           toaster.pop('success', null, 'Dataset updated.');
-          toggleEditMode();
         }
       });
     };
