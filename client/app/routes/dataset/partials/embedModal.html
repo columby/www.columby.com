@@ -1,5 +1,5 @@
-<h2>EMBED</h2>
+<h2>Embed this dataset</h2>
+<p>You can add this embed to your website by copying and pasting the HTML code below.</p>
 
-<pre>{{dataset}}</pre>
-
-columby.com/d/{{dataset._id}}?embed=true
+<textarea><iframe src="{{embedUrl}}?embed=true" style="width:840px;height:900px;margin-bottom:5px;border:solid 1px #ccc;border-radius:2px;"></iframe>
+<br><a href="{{embedUrl}}">{{dataset.title}}</a> by <a href="http://www.columby.com/a/{{dataset.account.slug}}">{{dataset.account.name}}</a> on <a href="http://www.columby.com">Columby</a></textarea>
