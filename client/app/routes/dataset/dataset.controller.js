@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster) {
+  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster, ngDialog) {
 
     /***   INITIALISATION   ***/
     $scope.hostname = $location.protocol() + '://' + $location.host();
@@ -62,6 +62,14 @@ angular.module('columbyApp')
     }
 
     /* --------- SCOPE FUNCTIONS ------------------------------------------------------------ */
+    $scope.showEmbedModal = function(){
+      console.log(dataset);
+      ngDialog.open({
+        template: 'app/routes/dataset/partials/embedModal.html',
+        className: 'ngDialog-theme-default fullscreenDialog embedModal',
+        scope: $scope
+      });
+    };
 
 
     /* --------- ROOTSCOPE EVENTS ------------------------------------------------------------ */
@@ -259,12 +267,14 @@ angular.module('columbyApp')
       });
     };
 
+
+
     /*** Distribution functions */
     $scope.initNewDistribution = function (){
       //console.log('Starting new distribution');
       $scope.newDistribution = {};
       ngDialog.open({
-        template: 'app/routes/dataset/views/addDistributionModal.html',
+        template: 'app/routes/dataset/partials/addDistributionModal.html',
         className: 'ngdialog-theme-default fullscreenDialog',
         scope: $scope
       });
@@ -441,7 +451,7 @@ angular.module('columbyApp')
     $scope.newReference = function() {
 
       ngDialog.open({
-        template: 'app/routes/dataset/views/addReferenceModal.html',
+        template: 'app/routes/dataset/partials/addReferenceModal.html',
         className: 'ngdialog-theme-default fullscreenDialog',
         scope: $scope
       });
