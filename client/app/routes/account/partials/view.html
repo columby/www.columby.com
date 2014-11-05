@@ -1,7 +1,7 @@
 <div class="account view">
 
   <!-- Actions -->
-  <div class="actions-bar" 
+  <div class="actions-bar"
        scroll-position="scroll"
        ng-class="{top: scroll<165}">
     <a class="btn btn-default edit"
@@ -39,7 +39,7 @@
         <div class="col-md-12">
           <h3>Datasets</h3>
           <p ng-show="!account.datasets">No datasets for this user</p>
-          
+
           <div class="dataset-listing">
             <ul>
               <li ng-repeat="dataset in account.datasets" class="dataset">
@@ -57,27 +57,26 @@
               </li>
             </ul>
           </div>
-          
+
         </div>
       </div>
     </div>
 
-    <!-- <div class="collections wrapper" ng-hide="editMode">
+    <div class="collections wrapper" ng-show="account.collections.length > 0">
       <div class="container">
         <div class="col-md-12">
           <h3>Collections</h3>
-          <p ng-show="account.collections.length === 0">No collections for this user</p>
           <ul>
             <li ng-repeat="collection in account.collections">
                 <h4><a ui-sref="collection.view({id: collection._id})">{{collection.title}}</a></h4>
                 <p>{{collection.description}}</p>
             </li>
-    				<li>
+    				<!-- <li>
     					<h4><a ui-sref="collection.create({accountId: account._id})" class="new">+ Create a collection</a></h4>
-    				</li>
+    				</li> -->
           </ul>
         </div>
       </div>
-    </div> -->
+    </div>
   </div>
 </section>

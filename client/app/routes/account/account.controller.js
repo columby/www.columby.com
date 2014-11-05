@@ -3,7 +3,7 @@
 angular.module('columbyApp')
 
 
-.controller('AccountCtrl', function($window,$rootScope, $scope, $stateParams, AccountSrv, AuthSrv){
+.controller('AccountCtrl', function($window,$rootScope, $scope, $stateParams, AccountSrv, AuthSrv, CollectionSrv){
   /* ---------- SETUP ----------------------------------------------------------------------------- */
   $scope.contentLoading  = true;
   $window.document.title = 'columby.com';
@@ -13,6 +13,20 @@ angular.module('columbyApp')
 
 
   /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
+  function getCollections(){
+    if ($scope.account.collections.length >0){
+      console.log('Getting collections.');
+      angular.forEach($scope.account.collections, function(value, key) {
+        console.log(key + ': ' + value);
+        CollectionSrv.get({id:value}, function(result){
+          $scope.account.collections[ key] = result;
+        });
+      });
+    } else {
+      console.log('no collections');
+    }
+  }
+
   function getAccount(){
 
     // get account information of user by userSlug
@@ -32,6 +46,8 @@ angular.module('columbyApp')
       if ($scope.account.headerImage){
         updateHeaderBg();
       }
+
+      getCollections();
 
     });
   }

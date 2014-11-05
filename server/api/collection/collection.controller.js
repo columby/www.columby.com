@@ -5,7 +5,10 @@ var Collection = require('./collection.model');
 
 // Get list of collections
 exports.index = function(req, res) {
-  Collection.find(function (err, collections) {
+  Collection
+    .find({})
+    .populate('datasets', 'title')
+    .exec(function (err, collections) {
     if(err) { return handleError(res, err); }
     return res.json(200, collections);
   });
@@ -13,46 +16,17 @@ exports.index = function(req, res) {
 
 // Get a single collection
 exports.show = function(req, res) {
-  Collection.findById(req.params.id, function (err, collection) {
-    if(err) { return handleError(res, err); }
-    if(!collection) { return res.send(404); }
-    return res.json(collection);
-  });
-};
-
-// Creates a new collection in the DB.
-exports.create = function(req, res) {
-  Collection.create(req.body, function(err, collection) {
-    if(err) { return handleError(res, err); }
-    return res.json(201, collection);
-  });
-};
-
-// Updates an existing collection in the DB.
-exports.update = function(req, res) {
-  if(req.body._id) { delete req.body._id; }
-  Collection.findById(req.params.id, function (err, collection) {
-    if (err) { return handleError(res, err); }
-    if(!collection) { return res.send(404); }
-    var updated = _.merge(collection, req.body);
-    updated.save(function (err) {
-      if (err) { return handleError(res, err); }
-      return res.json(200, collection);
-    });
-  });
-};
-
-// Deletes a collection from the DB.
-exports.destroy = function(req, res) {
-  Collection.findById(req.params.id, function (err, collection) {
-    if(err) { return handleError(res, err); }
-    if(!collection) { return res.send(404); }
-    collection.remove(function(err) {
+  Collection
+    .findById(req.params.id)
+    .populate('datasets', 'title')
+    .exec(function (err, collection) {
       if(err) { return handleError(res, err); }
-      return res.send(204);
-    });
-  });
+      if(!collection) { return res.send(404); }
+      return res.json(collection);
+    }
+  );
 };
+
 
 function handleError(res, err) {
   return res.send(500, err);
