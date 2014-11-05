@@ -143,26 +143,31 @@ button {
 .actions-bar {
   text-align: right;
 }
-.actions-bar li {
+.actions-bar ul li {
   list-style: none;
+  margin-left: 10px;
 }
-.actions-bar button {
+.actions-bar button,
+.actions-bar a {
   background: none;
   border: 2px solid #fff;
   color: #fff;
   font-weight: bolder;
   float: right;
 }
-.actions-bar button:focus {
+.actions-bar button:focus,
+.actions-bar a:focus {
   color: #fff;
   outline: 0 !important;
 }
-.actions-bar button:hover {
+.actions-bar button:hover,
+.actions-bar a:hover {
   background: none;
   color: #000;
   border: solid 2px #000;
 }
-.actions-bar button.active {
+.actions-bar button.active,
+.actions-bar a.active {
   color: #000;
   border: solid 2px #000;
 }

@@ -23,6 +23,10 @@
   color: #fff;
   font-weight: bolder;
 }
+.metabar-wrapper .menu-btn:hover {
+  border: 2px solid #000;
+  color: #000;
+}
 .metabar-wrapper .logo {
   display: inline;
   margin-left: 20px;
