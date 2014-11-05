@@ -2,7 +2,6 @@
 var mongoose = require('mongoose');
 var _ = require('lodash');
 var Account = require('./account.model');
-var Collection = require('./collection.model');
 
 
 function slugify(text) {
