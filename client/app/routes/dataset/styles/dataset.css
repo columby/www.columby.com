@@ -394,6 +394,37 @@
   border-radius: 4px;
   padding: 10px;
 }
+.embedModal {
+  background: white;
+  height: 100%;
+  width: 100%;
+  opacity: 0.95;
+  color: #000;
+  text-align: center;
+}
+.embedModal h2 {
+  font-size: 2em;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.embedModal p {
+  color: #999;
+  margin-bottom: 20px;
+}
+.embedModal textarea {
+  height: 190px;
+  width: 450px;
+  font-family: "lato", sans-serif;
+}
+.embedModal .ngdialog-overlay {
+  display: none;
+}
+.embedModal .ngdialog-close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 2em;
+}
 .dataset-view.embed .metabar-wrapper {
   display: none;
 }
