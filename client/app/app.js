@@ -32,6 +32,9 @@ angular.module('columbyApp', [
 
   // Run once during startup
   .run(function($rootScope, $http, AuthSrv){
+
+    $rootScope.bodyClasses = {};
+
     // On initial run, check the user (with the JWT required from config)
     AuthSrv.me().then(function(response){
       $rootScope.user = {};
@@ -51,11 +54,11 @@ angular.module('columbyApp', [
     });
   })
 
-  .controller('ColumbyCtrl', function($rootScope){
+  .controller('ColumbyCtrl', function($rootScope, $location){
     $rootScope.$on('$stateChangeSuccess',  function(event, toState){
       // Add state to body class
-      $rootScope.state = toState.name;
+      $rootScope.bodyClasses.state = toState.name;
+      $rootScope.bodyClasses.embed = $location.search().embed;
     });
-
   })
 ;

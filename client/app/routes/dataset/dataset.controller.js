@@ -8,6 +8,7 @@ angular.module('columbyApp')
     $scope.hostname = $location.protocol() + '://' + $location.host();
     $window.document.title = 'columby.com';
 
+
     /***   FUNCTIONS   ***/
     function getDataset(){
       $scope.contentLoading = true;  // show loading message while loading dataset
@@ -116,7 +117,7 @@ angular.module('columbyApp')
         // set draft title and description
         $scope.datasetUpdate.title = $scope.dataset.title;
         $scope.datasetUpdate.description = $scope.dataset.description;
-        
+
         // create summary
         var summary = '<p>';
         // check for file source

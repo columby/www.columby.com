@@ -160,15 +160,15 @@ angular.module('columbyApp')
   //   });
   // };
 
-  
+
   $scope.onFileSelect = function($files) {
     $scope.upload=[];
     var file = $files[0];
     file.progress = parseInt(0);
-    console.log('file', file);
+    // console.log('file', file);
 
     // check if the file is an image
-    var validTypes = [ 'image/png' ];
+    var validTypes = [ 'image/png', 'image/jpg', 'image/jpeg' ];
 
     if (validTypes.indexOf(file.type) === -1) {
       toaster.pop('alert',null,'File type ' + file.type + ' is not allowed');
@@ -178,26 +178,32 @@ angular.module('columbyApp')
     // First get a signed request from the Columby server
     $http({
       method: 'GET',
-      url: 'api/v2/files/sign',
+      url: 'api/v2/file/sign',
+      //skipAuthorization: true,
       params: {
         type: file.type,
         size: file.size,
         name: file.name,
         accountId: $scope.account._id
-      },
-      headers: {
-        Authorization: AuthSrv.columbyToken()
       }
     })
-      .success(function(response){
+      .success(function(response) {
+        console.log('config', $rootScope.config.aws);
+
+        console.log('policy', response);
         var s3Params = response.credentials;
         var fileResponse = response.file;
+        console.log('key', $scope.account._id + '/' + response.file.filename);
+        console.log('file', file);
+
         // Initiate upload
         $scope.upload = $upload.upload({
-          url: 'https://s3.amazonaws.com/' + $rootScope.config.aws.bucket,
+          url: 'https://' + $rootScope.config.aws.bucket + '.s3.amazonaws.com/',
           method: 'POST',
+          // remove Authorization header (angular-jwt)
+          skipAuthorization: true,
           data: {
-            'key' : $scope.account._id + '/' + response.file.filename,
+            'key' : 'jan', //file.name,
             'acl' : 'public-read',
             'Content-Type' : file.type,
             'AWSAccessKeyId': s3Params.AWSAccessKeyId,
@@ -207,7 +213,7 @@ angular.module('columbyApp')
           },
           file: file,
         }).then(function(response) {
-          console.log(response.data);
+          console.log('upload response', response.data);
           file.progress = parseInt(100);
           if (response.status === 201) {
             // convert xml response to json
@@ -223,7 +229,7 @@ angular.module('columbyApp')
             // upload finished, update the file reference
             $http({
               method: 'POST',
-              url: 'api/v2/files/s3success',
+              url: 'api/v2/file/s3success',
               data: {
                 fileId: fileResponse._id,
                 url: parsedData.location
