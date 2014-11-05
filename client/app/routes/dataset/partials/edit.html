@@ -10,14 +10,14 @@
           class    = "btn dbt-default options"
           ng-show  = "dataset._id"
           ng-class = "{active: showOptions}"
-          ng-click = "toggleOptions()">Options
+          ng-click = "toggleOptions()">options
         </button>
       </li>
 
       <li>
         <a class="btn btn-default edit"
           ng-show  = "dataset._id"
-          ui-sref="dataset.view({id:dataset._id})">View dataset
+          ui-sref="dataset.view({id:dataset._id})">view dataset
         </a>
       </li>
     </ul>
