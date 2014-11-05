@@ -1,0 +1,49 @@
+<div class="dataset view">
+  <div class="content">
+    <div class="header wrapper" ng-style="headerStyle">
+      <div class="container">
+        <div class="col-md-12">
+
+          <h1 class="title" ng-bind-html="collection.title"></h1>
+
+          <!-- Meta -->
+          <div class="meta" ng-show="collection._id">
+            <p>A collection by
+              <span class="account"><a ui-sref="account.view({slug:collection.account.slug})">{{collection.account.name || 'noname'}}</a>,
+            </p>
+          </div>
+
+          <div class="avatar">
+            <a ui-sref="account.view({slug:collection.account.slug})">
+              <img src="{{collection.account.avatar.url}}" alt="{{collection.account.name}}"/>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Collection Description -->
+    <div class="description wrapper">
+      <div class="container">
+        <div class="col-md-12">
+          <div class="collection-description"
+            ng-bind-html="collection.description || '<p>The publisher of this collection has not yet provided a description yet.</p>'">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dataset List -->
+    <div class="wrapper">
+      <div class="container">
+        <div class="col-md-12">
+          <ul>
+            <li ng-repeat="dataset in collection.datasets">
+              <a ui-sref="dataset.view({id:dataset._id})">{{dataset.title}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

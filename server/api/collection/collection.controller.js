@@ -8,6 +8,7 @@ exports.index = function(req, res) {
   Collection
     .find({})
     .populate('datasets', 'title')
+    .populate('account', 'name')
     .exec(function (err, collections) {
     if(err) { return handleError(res, err); }
     return res.json(200, collections);
@@ -17,8 +18,9 @@ exports.index = function(req, res) {
 // Get a single collection
 exports.show = function(req, res) {
   Collection
-    .findById(req.params.id)
+    .findOne({_id: req.params.id})
     .populate('datasets', 'title')
+    .populate('account', 'name avatar slug')
     .exec(function (err, collection) {
       if(err) { return handleError(res, err); }
       if(!collection) { return res.send(404); }
