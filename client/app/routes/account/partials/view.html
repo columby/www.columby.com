@@ -49,10 +49,10 @@
                 </h4>
                 <ul class="properties">
                   <li><label>Created</label><date>{{dataset.createdAt | date:'d MMMM yyyy'}}</date></li>
-                  <li><label>Data sources</label>{{dataset.distributions.length}}</li>
-                  <li><label>References</label>{{dataset.references.length}}</li>
-                  <br/>
-                  <li><label>Tags</label><span ng-repeat="tag in dataset.tags">{{tag}}</span></li>
+                  <li ng-show="dataset.distributions.length>0"><label>Data sources</label>{{dataset.distributions.length}}</li>
+                  <li ng-show="dataset.references.length>0"><label>References</label>{{dataset.references.length}}</li>
+                  <br ng-show="dataset.tags.length>0"/>
+                  <li ng-show="dataset.tags.length>0"><label>Tags</label><span ng-repeat="tag in dataset.tags">{{tag}}</span></li>
                 </ul>
               </li>
             </ul>
