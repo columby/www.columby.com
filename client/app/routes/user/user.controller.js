@@ -71,10 +71,12 @@ angular.module('columbyApp')
     $scope.registrationInProgress = true;
     console.log('registering new user', $scope.newuser);
     AuthSrv.register($scope.newuser).then(function(response){
-      //console.log('register response', response);
+      console.log('register response', response);
       $scope.registrationInProgress = false;
-      if (response.status === 'error') {
-        toaster.pop('warning', 'Registration error', 'There was an error registering: ' + response.error.msg);
+      if (response.errors && response.errors.email) {
+        if (response.errors.email.message==='E-mail address is already in-use'){
+          toaster.pop('danger', 'This email address is already registered, please sign in!');
+        }
       } else {
         $scope.registrationSuccess = true;
       }
@@ -113,7 +115,7 @@ angular.module('columbyApp')
   $scope.logout = function(){
     AuthSrv.logout();
     $rootScope.user = {};
-    toaster.pop('success', 'Signed out', 'You are now signed out.');
+    toaster.pop('success', null, 'You are now signed out.');
     $state.go('home');
   };
 

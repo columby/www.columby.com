@@ -32,9 +32,6 @@ angular.module('columbyApp')
         authorization: {
           authorizedRoles: ['authenticated']
         },
-        data: {
-          editMode: true
-        },
         controller: 'AccountEditCtrl'
       });
 

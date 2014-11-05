@@ -31,13 +31,10 @@
           focus       = 'true'
          />
 
-        <div class="avatar">
+        <div class="avatar"
+          ng-file-select="onFileSelect($files)"
+          data-multiple="false">
           <img src="{{account.avatar.url}}"/>
-          <div class="btn"
-            ng-file-select="onFileSelect($files)"
-            data-multiple="false">
-            <i class="fa fa-cog"></i>
-          </div>
         </div>
       </div>
     </div>

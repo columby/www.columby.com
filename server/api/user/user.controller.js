@@ -82,9 +82,12 @@ exports.show = function(req, res) {
 
 // Creates a new user in the DB.
 exports.register = function(req, res) {
-  console.log('Registerein a new user', req.body);
+  console.log('Registering a new user', req.body);
   User.create(req.body, function(err, user) {
-    if(err) { return handleError(res, err); }
+    if (err) {
+      return res.json(err);
+      //return handleError(res, err); 
+    }
 
     console.log('Creating a login token for the new user.');
     var token = new Token({user: user._id});

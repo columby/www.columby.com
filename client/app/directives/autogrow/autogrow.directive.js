@@ -61,7 +61,6 @@ angular.module('columbyApp')
     angular.element(document.body).append($shadow);
 
     var update = function() {
-      console.log('update');
       var times = function(string, number) {
         for (var i = 0, r = ''; i < number; i++) {
           r += string;

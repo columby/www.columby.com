@@ -114,11 +114,9 @@ angular.module('columbyApp')
         }
 
         // set draft title and description
-        if ($scope.editMode){
-          $scope.datasetUpdate.title = $scope.dataset.title;
-          $scope.datasetUpdate.description = $scope.dataset.description;
-        }
-
+        $scope.datasetUpdate.title = $scope.dataset.title;
+        $scope.datasetUpdate.description = $scope.dataset.description;
+        
         // create summary
         var summary = '<p>';
         // check for file source
