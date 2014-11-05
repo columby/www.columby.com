@@ -97,7 +97,7 @@
   margin-bottom: 40px;
 }
 .dataset .content .header.wrapper {
-  height: 420px;
+  height: auto;
 }
 .dataset .content .meta {
   text-align: center;
@@ -331,17 +331,21 @@
   margin: 2px;
   max-width: 150px;
 }
-.dataset .share {
+.dataset .share,
+.dataset .embed {
   text-align: center;
 }
-.dataset .share .fa {
+.dataset .share .fa,
+.dataset .embed .fa {
   font-size: 25px;
 }
-.dataset .share a {
+.dataset .share a,
+.dataset .embed a {
   color: #678;
   margin: 10px 20px 10px 20px;
 }
-.dataset .share a:hover {
+.dataset .share a:hover,
+.dataset .embed a:hover {
   color: #428bca;
   text-decoration: none;
 }
@@ -389,6 +393,24 @@
   border: 1px solid #fff;
   border-radius: 4px;
   padding: 10px;
+}
+.dataset-view.embed .metabar-wrapper {
+  display: none;
+}
+.dataset-view.embed .actions-bar {
+  display: none;
+}
+.dataset-view.embed .embed {
+  display: none;
+}
+.dataset-view.embed .more-about {
+  display: none;
+}
+.dataset-view.embed .uv-icon {
+  display: none;
+}
+.dataset-view.embed h1 {
+  font-size: 2em;
 }
 .ta-text.ta-editor.form-control {
   border: 1px solid #fff;

@@ -57,7 +57,9 @@ angular.module('columbyApp', [
   .controller('ColumbyCtrl', function($rootScope, $location){
     $rootScope.$on('$stateChangeSuccess',  function(event, toState){
       // Add state to body class
-      $rootScope.bodyClasses.state = toState.name;
+      var stateName = toState.name;
+      stateName = stateName.replace('.','-');
+      $rootScope.bodyClasses.state = stateName;
       $rootScope.bodyClasses.embed = $location.search().embed;
     });
   })

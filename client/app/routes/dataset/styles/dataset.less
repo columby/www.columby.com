@@ -119,7 +119,7 @@
       transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
 			margin-bottom: 40px;
       .header.wrapper{
-        height: 420px;
+        height: auto;
       }
 			.meta{
 				text-align: center;
@@ -367,7 +367,7 @@
       }
     }
     
-		.share{
+		.share, .embed{
 			text-align: center;
 			.fa{
 				font-size: 25px;
@@ -386,8 +386,9 @@
 
     // Specific styling for dataset view page
     &.view {
-
+      
     }
+
 
 
 
@@ -445,6 +446,36 @@
     padding: 10px;
   }
 }
+
+// EMBEDDED DATASET STYLING
+.dataset-view.embed{
+
+  .metabar-wrapper{
+    display: none;
+  }
+  
+  .actions-bar{
+    display: none;
+  }
+  
+  .embed{
+    display: none;
+  }
+  
+  .more-about{
+    display: none;
+  }
+  
+  .uv-icon{
+    display:none;
+  }
+  
+  h1{
+    font-size: 2em;
+  }
+}
+
+
 
 //Focussed edit fields (borders)
 
