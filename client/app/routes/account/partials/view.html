@@ -1,9 +1,12 @@
 <div class="account view">
 
   <!-- Actions -->
-  <div class="actions-bar" ng-show="account.canEdit">
+  <div class="actions-bar" 
+       scroll-position="scroll"
+       ng-class="{top: scroll<165}">
     <a class="btn btn-default edit"
-      a ui-sref="account.edit({slug:account.slug})">edit
+       ng-show="account.canEdit"
+       ui-sref="account.edit({slug:account.slug})">edit
     </a>
   </div>
 
@@ -26,7 +29,7 @@
       <!-- Editable description -->
       <div class="container">
         <div class="col-md-12">
-          <div ng-bind-html="account.description || '<p>No account description yet.</p>'">
+          <div ng-bind-html="account.description || '<p>No account description yet.</p>'"></div>
         </div>
       </div>
     </div>
@@ -36,18 +39,25 @@
         <div class="col-md-12">
           <h3>Datasets</h3>
           <p ng-show="!account.datasets">No datasets for this user</p>
-          <ul>
-            <li ng-repeat="dataset in account.datasets">
-              <h4>
-                <a ui-sref="dataset.view({ id: dataset._id })">{{dataset.title}}</a>
-                <span ng-show="dataset.private === true" class="label bg-primary">private</span>
-              </h4>
-              <date>{{dataset.created | date:'short'}}</date>
-            </li>
-            <li ng-show="account.canEdit">
-              <h4><a ui-sref="dataset.create" class="new">+ Create a dataset</a></h4>
-            </li>
-          </ul>
+          
+          <div class="dataset-listing">
+            <ul>
+              <li ng-repeat="dataset in account.datasets" class="dataset">
+                <h4>
+                  <a ui-sref="dataset.view({ id: dataset._id })">{{dataset.title}}</a>
+                  <span ng-show="dataset.private === true" class="label bg-primary">private</span>
+                </h4>
+                <ul class="properties">
+                  <li><label>Created</label><date>{{dataset.createdAt | date:'d MMMM yyyy'}}</date></li>
+                  <li><label>Data sources</label>{{dataset.distributions.length}}</li>
+                  <li><label>References</label>{{dataset.references.length}}</li>
+                  <br/>
+                  <li><label>Tags</label><span ng-repeat="tag in dataset.tags">{{tag}}</span></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          
         </div>
       </div>
     </div>

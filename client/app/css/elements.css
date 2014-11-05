@@ -48,6 +48,12 @@ button:focus {
   margin-top: 1em;
   line-height: 1.2em;
 }
+.description {
+  color: #555;
+  word-wrap: break-word;
+  font-size: 1em;
+  line-height: 2em;
+}
 textarea.edit {
   background: none;
   border-radius: 10px;
@@ -71,7 +77,7 @@ h3 {
   border-bottom: 1px solid #d9d9d9;
   margin-bottom: 10px;
   font-weight: bold;
-  color: #428bca;
+  color: #7a7a7a;
   padding: 6px;
 }
 .pager li > a,
