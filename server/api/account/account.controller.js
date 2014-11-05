@@ -2,6 +2,7 @@
 var mongoose = require('mongoose');
 var _ = require('lodash');
 var Account = require('./account.model');
+var Collection = require('./collection.model');
 
 
 function slugify(text) {
@@ -28,8 +29,12 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
   Account.findOne({slug: req.params.id})
     .populate('datasets')
-    //.populate('collections', 'title description datasets')
+    .populate('collections', 'title description datasets')
     .exec(function(err, account) {
+      account.collections.populate('datasets', 'title')
+      .exec(function(err, a){
+        console.log(a);
+      });
       if(err) { return handleError(res, err); }
       //console.log(account);
       return res.json(account);

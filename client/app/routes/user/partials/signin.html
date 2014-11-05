@@ -11,16 +11,16 @@
         </div>
       </div>
     </div>
-    
+
     <!-- login & register forms -->
     <div class="container">
       <div class="col-md-12">
-        
+
         <!-- login form -->
         <div class="login-form col-md-6">
           <h2>Login to continue</h2>
           <form class="form-horizontal novalidate" role="form" name="loginForm" ng-submit="login()" >
-        
+
             <div class="form-group">
               <div class="col-sm-12">
                 <input class="form-control"
@@ -50,22 +50,22 @@
                 </div>
               </div>
             </div>
-        
+
           </form>
         </div>
-      
+
         <!-- register form -->
         <div class="register-form col-md-6">
           <h2>Register your account</h2>
-      
+          <p>Registration is currently in private beta. Please enter your email-address and desired username. We'll let you know when your account is approved. </p>
           <form class="form-horizontal" role="form" name="registerForm" ng-submit="register()">
-        
+
             <div class="form-group">
               <div class="col-sm-12">
                 <input type="email" class="form-control" id="email" name="email" placeholder="Email" ng-model="newuser.email" required>
               </div>
             </div>
-        
+
             <div class="form-group">
               <div class="col-sm-8">
                 <input
@@ -80,13 +80,13 @@
                   ng-change="slugifyName()" required>
               </div>
             </div>
-        
+
             <div class="form-group">
               <div class="col-sm-8">
                 <p>I accept the <a ui-sref="terms" target="_blank">terms</a>
               </div>
             </div>
-        
+
             <div class="form-group">
               <div class="col-sm-4">
                 <button
@@ -102,10 +102,10 @@
                 </div>
               </div>
             </div>
-        
+
           </form>
         </div>
-        
+
         <!-- passwordless explanation -->
         <div class="col-md-12 passwordless">
           <div class="col-md-8">
@@ -114,13 +114,13 @@
             <p>Columby has chosen for passwordless login. We email you "one-time passwords" for everytime you would like to sign in.</p>
           </div>
         </div>
-        
+
       </div>
     </div>
-    <!-- end login & register forms -->    
-    
+    <!-- end login & register forms -->
+
   </div>
-  
+
   <!-- Verification madal -->
   <div class="verify-in-progress" ng-show="verifyInProgress">
     <h1>Signing in</h1>
@@ -138,8 +138,8 @@
 
   <!-- Registration request success -->
   <div class="registration-success" ng-show="registrationSuccess">
-    <h1>Registration successful</h1>
-    <p>The registration process was successful. You should receive a login link in your inbox soon.</p>
+    <h1>Check your inbox</h1>
+    <p>The registration process was successful. We just sent you a confirmation by email. We'll let you know when you account is approved!</p>
     <a ui-sref="home">home</a>
   </div>
 </div>

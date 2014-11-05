@@ -86,12 +86,12 @@ exports.register = function(req, res) {
   User.create(req.body, function(err, user) {
     if (err) {
       return res.json(err);
-      //return handleError(res, err); 
+      //return handleError(res, err);
     }
 
-    console.log('Creating a login token for the new user.');
-    var token = new Token({user: user._id});
-    token.save();
+    // console.log('Creating a login token for the new user.');
+    // var token = new Token({user: user._id});
+    // token.save();
 
     console.log('Creating new primary publication account for the new user.');
     var account = new Account({
@@ -103,7 +103,7 @@ exports.register = function(req, res) {
     account.save()
 
     var vars={
-      tokenurl: req.protocol + '://' + req.get('host') + '/u/signin?token=' + token.token,
+      //tokenurl: req.protocol + '://' + req.get('host') + '/u/signin?token=' + token.token,
       user:{
         email: user.email,
         name: user.name
@@ -111,7 +111,7 @@ exports.register = function(req, res) {
     }
     // Send email to user with login link.
     //console.log(email.register);
-    emailService.register(vars, function(result){
+    emailService.preRegister(vars, function(result){
       console.log(result);
       if (result[0].status === 'sent') {
         return res.json(user._id);
@@ -119,6 +119,16 @@ exports.register = function(req, res) {
         return handleError(res, { status: 'error', err: 'Error sending mail.' });
       }
     });
+
+
+    // emailService.register(vars, function(result){
+    //   console.log(result);
+    //   if (result[0].status === 'sent') {
+    //     return res.json(user._id);
+    //   } else {
+    //     return handleError(res, { status: 'error', err: 'Error sending mail.' });
+    //   }
+    // });
   });
 };
 

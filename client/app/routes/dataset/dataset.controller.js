@@ -6,6 +6,7 @@ angular.module('columbyApp')
 
     /***   INITIALISATION   ***/
     $scope.hostname = $location.protocol() + '://' + $location.host();
+    console.log($location);
     $window.document.title = 'columby.com';
 
 
