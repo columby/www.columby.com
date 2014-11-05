@@ -41,8 +41,9 @@
           <p ng-show="!account.datasets">No datasets for this user</p>
 
           <div class="dataset-listing">
+            <input type="text" ng-model="search.$" placeholder="Search">
             <ul>
-              <li ng-repeat="dataset in account.datasets" class="dataset">
+              <li ng-repeat="dataset in account.datasets | filter:search" class="dataset">
                 <h4>
                   <a ui-sref="dataset.view({ id: dataset._id })">{{dataset.title}}</a>
                   <span ng-show="dataset.private === true" class="label bg-primary">private</span>
