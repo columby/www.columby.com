@@ -6,7 +6,6 @@ angular.module('columbyApp')
 
     /***   INITIALISATION   ***/
     $scope.hostname = $location.protocol() + '://' + $location.host();
-    console.log($location);
     $window.document.title = 'columby.com';
 
 
@@ -64,7 +63,6 @@ angular.module('columbyApp')
 
     /* --------- SCOPE FUNCTIONS ------------------------------------------------------------ */
     $scope.showEmbedModal = function(){
-      console.log(dataset);
       ngDialog.open({
         template: 'app/routes/dataset/partials/embedModal.html',
         className: 'ngDialog-theme-default fullscreenDialog embedModal',
