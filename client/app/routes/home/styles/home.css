@@ -24,7 +24,6 @@
   font-size: 24px;
   font-weight: 300;
   letter-spacing: 0.6px;
-  opacity: 0.7;
 }
 .page-home .page-header .button {
   margin-top: 30px;
@@ -35,7 +34,6 @@
   font-size: 10px;
   font-weight: 300;
   letter-spacing: 0.6px;
-  opacity: 0.7;
   text-transform: italic;
 }
 .page-home .page-header a {
@@ -44,8 +42,14 @@
   font-size: 12px;
   font-weight: 300;
   letter-spacing: 0.6px;
-  opacity: 0.8;
   color: #fff;
+  padding-bottom: 5px;
+  border-bottom: solid 1px rgba(255, 255, 255, 0.3);
+  border-opacity: 0.2;
+}
+.page-home .page-header a:hover {
+  border-bottom: solid 1px #ffffff;
+  border-opacity: 1;
 }
 .page-home .page-header a:hover {
   text-decoration: none;
@@ -70,8 +74,19 @@
   text-decoration: none;
   border-bottom: solid 1px #ffffff;
 }
+.page-home .showcase-presentation .row {
+  margin-top: 100px;
+  margin-bottom: 70px;
+}
+.page-home .showcase-presentation .row .picture-side {
+  padding: 0;
+}
+.page-home .showcase-presentation .row p {
+  padding-left: 6px;
+  font-size: 1.2em;
+  line-height: 1.7em;
+}
 .page-home .searchbox {
-  margin-top: 70px;
   text-align: center;
 }
 .page-home .searchbox input {

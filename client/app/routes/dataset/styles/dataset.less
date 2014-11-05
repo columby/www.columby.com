@@ -93,7 +93,7 @@
   &.listing {
 
   }
-  &.view {
+  // &.view {
     // General styling for a dataset page (view and edit)
     .loader {
       display: block;
@@ -382,43 +382,48 @@
 			}
 		}
 
-    // Create new dataset
-		.step1{
-			text-align: center;
-			padding-top: 20px;
-			button{
-				background: #345;
-				font-size: 1.2em;
-				border-radius: 45px;
-				position: relative;
-				padding: 8px 34px;
-				&:hover {
-					background: #1E2730;
-					color: #fff;
-				}
-			}
-			button.disabled{
-				background: #DDD;
-				font-size: 1.2em;
-				border-radius: 45px;
-				position: relative;
-				padding: 8px 34px;
-			}
-			p{
-				font-style: italic;
-				font-size: 0.8em;
-				margin-top: 12px;
-				opacity: 0.8;
-			}
-		}
+   
 
     // Specific styling for dataset view page
     &.view {
 
     }
 
-    // Specific styling for dataset view page
-    &.edit {
+
+
+  // }
+  // Specific styling for dataset edit page
+  &.edit {
+    .content {
+      // Create new dataset
+  		.step1{
+  			text-align: center;
+  			padding-top: 20px;
+  			button{
+  				background: #345;
+  				font-size: 1.2em;
+  				border-radius: 45px;
+  				position: relative;
+  				padding: 8px 34px;
+  				&:hover {
+  					background: #1E2730;
+  					color: #fff;
+  				}
+  			}
+  			button.disabled{
+  				background: #DDD;
+  				font-size: 1.2em;
+  				border-radius: 45px;
+  				position: relative;
+  				padding: 8px 34px;
+  			}
+  			p{
+  				font-style: italic;
+  				font-size: 0.8em;
+  				margin-top: 12px;
+  				opacity: 0.8;
+  			}
+  		}
     }
   }
   h1, h1.focussed {
