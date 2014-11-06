@@ -74,6 +74,9 @@
   text-decoration: none;
   border-bottom: solid 1px #ffffff;
 }
+.page-home .showcase-presentation .container-fluid {
+  margin-top: 100px;
+}
 .page-home .showcase-presentation .row {
   margin-top: 100px;
   margin-bottom: 70px;
