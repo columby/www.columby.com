@@ -34,15 +34,41 @@
       </div>
     </div>
 
+    <div class="collections wrapper" ng-show="account.collections.length > 0">
+      <div class="container">
+        <div class="col-md-12">
+          <h3>Collections</h3>
+					
+					<div class="collection-listing">
+          
+					<ul>
+            <li ng-repeat="collection in account.collections" class="collection">
+                <h4><a ui-sref="collection.view({id: collection._id})">{{collection.title}}</a></h4>
+                <p>{{collection.description}}</p>
+            </li>
+    				<!-- <li>
+    					<h4><a ui-sref="collection.create({accountId: account._id})" class="new">+ Create a collection</a></h4>
+    				</li> -->
+          </ul>
+					
+					</div>
+					
+        </div>
+      </div>
+    </div>
+
     <div class="datasets wrapper" ng-show="account.datasets.length>0">
       <div class="container">
         <div class="col-md-12">
+					
+					<input type="text" ng-model="search.$" placeholder="Search this dataset list" class="searchbox" ng-show="account.datasets.length>10">
+					
           <h3>Datasets</h3>
           <p ng-show="!account.datasets">No datasets for this user</p>
 
           <div class="dataset-listing">
-            <input type="text" ng-model="search.$" placeholder="Search">
-            <ul>
+            
+						<ul>
               <li ng-repeat="dataset in account.datasets | filter:search" class="dataset">
                 <h4>
                   <a ui-sref="dataset.view({ id: dataset._id })">{{dataset.title}}</a>
@@ -57,27 +83,15 @@
                 </ul>
               </li>
             </ul>
+						
           </div>
 
         </div>
       </div>
     </div>
 
-    <div class="collections wrapper" ng-show="account.collections.length > 0">
-      <div class="container">
-        <div class="col-md-12">
-          <h3>Collections</h3>
-          <ul>
-            <li ng-repeat="collection in account.collections">
-                <h4><a ui-sref="collection.view({id: collection._id})">{{collection.title}}</a></h4>
-                <p>{{collection.description}}</p>
-            </li>
-    				<!-- <li>
-    					<h4><a ui-sref="collection.create({accountId: account._id})" class="new">+ Create a collection</a></h4>
-    				</li> -->
-          </ul>
-        </div>
-      </div>
-    </div>
+
+		
+		
   </div>
 </section>
