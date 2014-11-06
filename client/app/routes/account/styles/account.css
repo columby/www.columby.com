@@ -34,32 +34,87 @@
   height: 100px;
   background-color: #eee;
 }
-.account .content .datasets .dataset-listing ul {
+.account .content .searchbox {
+  margin-top: 30px;
+  padding: 10px;
+  width: 100%;
+  font-size: 24px;
+  border: 1px solid #CFCFCF;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.account .content .datasets .dataset-listing ul,
+.account .content .collections .dataset-listing ul,
+.account .content .datasets .collection-listing ul,
+.account .content .collections .collection-listing ul {
   padding: 0;
 }
-.account .content .datasets .dataset-listing .dataset {
+.account .content .datasets .dataset-listing .dataset,
+.account .content .collections .dataset-listing .dataset,
+.account .content .datasets .collection-listing .dataset,
+.account .content .collections .collection-listing .dataset,
+.account .content .datasets .dataset-listing .collection,
+.account .content .collections .dataset-listing .collection,
+.account .content .datasets .collection-listing .collection,
+.account .content .collections .collection-listing .collection {
   list-style: none;
   padding: 6px;
   margin: 0 0 30px 0;
+  color: #666;
 }
-.account .content .datasets .dataset-listing .dataset h4 {
+.account .content .datasets .dataset-listing .dataset h4,
+.account .content .collections .dataset-listing .dataset h4,
+.account .content .datasets .collection-listing .dataset h4,
+.account .content .collections .collection-listing .dataset h4,
+.account .content .datasets .dataset-listing .collection h4,
+.account .content .collections .dataset-listing .collection h4,
+.account .content .datasets .collection-listing .collection h4,
+.account .content .collections .collection-listing .collection h4 {
   word-wrap: break-word;
 }
-.account .content .datasets .dataset-listing .dataset h4 a {
+.account .content .datasets .dataset-listing .dataset h4 a,
+.account .content .collections .dataset-listing .dataset h4 a,
+.account .content .datasets .collection-listing .dataset h4 a,
+.account .content .collections .collection-listing .dataset h4 a,
+.account .content .datasets .dataset-listing .collection h4 a,
+.account .content .collections .dataset-listing .collection h4 a,
+.account .content .datasets .collection-listing .collection h4 a,
+.account .content .collections .collection-listing .collection h4 a {
   font-family: "lato", sans-serif;
   font-size: 30px;
   font-weight: 700;
   color: #222;
 }
-.account .content .datasets .dataset-listing .dataset .properties {
+.account .content .datasets .dataset-listing .dataset .properties,
+.account .content .collections .dataset-listing .dataset .properties,
+.account .content .datasets .collection-listing .dataset .properties,
+.account .content .collections .collection-listing .dataset .properties,
+.account .content .datasets .dataset-listing .collection .properties,
+.account .content .collections .dataset-listing .collection .properties,
+.account .content .datasets .collection-listing .collection .properties,
+.account .content .collections .collection-listing .collection .properties {
   padding: 10px 0 20px 0;
 }
-.account .content .datasets .dataset-listing .dataset .properties li {
+.account .content .datasets .dataset-listing .dataset .properties li,
+.account .content .collections .dataset-listing .dataset .properties li,
+.account .content .datasets .collection-listing .dataset .properties li,
+.account .content .collections .collection-listing .dataset .properties li,
+.account .content .datasets .dataset-listing .collection .properties li,
+.account .content .collections .dataset-listing .collection .properties li,
+.account .content .datasets .collection-listing .collection .properties li,
+.account .content .collections .collection-listing .collection .properties li {
   display: inline-block;
   margin-right: 15px;
-  color: #666;
 }
-.account .content .datasets .dataset-listing .dataset .properties li label {
+.account .content .datasets .dataset-listing .dataset .properties li label,
+.account .content .collections .dataset-listing .dataset .properties li label,
+.account .content .datasets .collection-listing .dataset .properties li label,
+.account .content .collections .collection-listing .dataset .properties li label,
+.account .content .datasets .dataset-listing .collection .properties li label,
+.account .content .collections .dataset-listing .collection .properties li label,
+.account .content .datasets .collection-listing .collection .properties li label,
+.account .content .collections .collection-listing .collection .properties li label {
   margin-right: 5px;
   color: #428bca;
   font-family: "lato", sans-serif;

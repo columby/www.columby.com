@@ -42,8 +42,18 @@
 	    }
 	  }
     
+		.searchbox{
+			margin-top: 30px;
+			padding: 10px;
+			width: 100%;
+			font-size: 24px;
+			border: 1px solid #CFCFCF;
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			border-radius: 5px;
+		}
     
-    .datasets {
+    .datasets, .collections {
       h3{
         // font-size: 24px;
         // line-height: 40px;
@@ -53,16 +63,16 @@
         // color: #7a7a7a;
         // padding: 6px
       }
-      .dataset-listing {
+      .dataset-listing, .collection-listing {
 
         ul{
           padding: 0;
         }
-        .dataset {
+        .dataset, .collection {
           list-style: none;
           padding: 6px;
           margin: 0 0 30px 0;
-        
+        	color: #666;
           h4 {
             word-wrap: break-word;
             a {
@@ -77,7 +87,7 @@
             li{
               display: inline-block;
               margin-right: 15px;
-              color: #666;
+
               label{
                 margin-right: 5px;
                 color: #428bca;
