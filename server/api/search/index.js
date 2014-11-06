@@ -8,8 +8,8 @@ var express = require('express'),
 var router = express.Router();
 
 router.get('/sync',
-  auth.checkJWT,
-  auth.isAdmin,
+  //auth.checkJWT,
+  //auth.isAdmin,
     controller.sync);
 
 router.get('/', controller.search);
