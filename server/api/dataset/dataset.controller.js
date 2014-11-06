@@ -48,6 +48,9 @@ exports.index = function(req, res) {
   console.log('Dataset index');
   var filter = {};
   filter.private = false;
+  filter.createdAt = {
+    $lte: new Date('2014-11-05T09:23:32.586Z')
+  }
 
   if (req.query.userId) {
     filter.publisher = req.query.userId;
