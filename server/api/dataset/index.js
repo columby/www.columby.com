@@ -10,9 +10,6 @@ var express = require('express'),
  * Static Routes
  *
  **/
-router.get('/seed', controller.seed);
-router.get('/seedDistributions', controller.seedDistributions);
-
 router.get('/extractlink', controller.extractlink);
 
 

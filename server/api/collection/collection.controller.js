@@ -17,6 +17,7 @@ exports.index = function(req, res) {
 
 // Get a single collection
 exports.show = function(req, res) {
+  console.log(req.params.id);
   Collection
     .findOne({_id: req.params.id})
     .populate('datasets', 'title')
@@ -24,6 +25,7 @@ exports.show = function(req, res) {
     .exec(function (err, collection) {
       if(err) { return handleError(res, err); }
       if(!collection) { return res.send(404); }
+      console.log('c', collection);
       return res.json(collection);
     }
   );

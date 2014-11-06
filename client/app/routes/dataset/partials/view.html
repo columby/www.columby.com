@@ -83,13 +83,13 @@
               </div>
 
               <ul class="properties">
-                <li><label>Datasource type</label>File</li>
+                <li ng-show="distribution.type"><label>Type</label>{{distribution.type}}</li>
                 <li ng-show="distribution.license"><label>License</label>{{distribution.license}}</li>
-                <li ng-show="distribution.mediaType"><label>Media type</label>application/csv</li>
-                <li ng-show="distribution.fileSize"><label>File size</label>20.34 MB</li>
+                <li ng-show="distribution.mediaType"><label>Media type</label>{{distribution.type}}</li>
+                <li ng-show="distribution.fileSize"><label>File size</label>{{distribution.size}}</li>
                 <br/>
-                <li ng-show="distribution.issueDate"><label>Issued</label>20-10-2014</li>
-                <li ng-show="distribution.modifiedDate"><label>Modified</label>20-10-2014</li>
+                <li ng-show="distribution.issueDate"><label>Issued</label>{{distribution.issueDate}}</li>
+                <li ng-show="distribution.modifiedDate"><label>Modified</label>{{distribution.modifiedDate}}</li>
                 <br/>
                 <li ng-show="distribution.syncPeriod"><label>Sync</label>{{distribution.syncPeriod}}</li>
                 <li ng-show="distribution.lastSync"><label>Last sync</label>{{distribution.lastSync}}</li>
