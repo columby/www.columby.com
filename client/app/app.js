@@ -54,13 +54,18 @@ angular.module('columbyApp', [
     });
   })
 
-  .controller('ColumbyCtrl', function($rootScope, $location){
+  .controller('ColumbyCtrl', function($window, $rootScope, $location, $anchorScroll){
     $rootScope.$on('$stateChangeSuccess',  function(event, toState){
+      // send to analytics
+      //$window.ga('send', 'pageview', { page: $location.path() });
       // Add state to body class
       var stateName = toState.name;
       stateName = stateName.replace('.','-');
       $rootScope.bodyClasses.state = stateName;
       $rootScope.bodyClasses.embed = $location.search().embed;
+
+      $anchorScroll();
+      
     });
   })
 ;
