@@ -87,6 +87,8 @@ exports.show = function(req, res) {
   } else {
     return res.json(null);
   }
+  filter.private = false;
+
   Dataset
     .findOne(filter)
     .populate('account', 'slug name description owner avatar')

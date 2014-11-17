@@ -14,7 +14,7 @@ angular.module('columbyApp')
 
       // Getters and setters
       setColumbyToken: function(token) {
-        columbyToken = 'Bearer ' + token;
+        columbyToken = token;
       },
       columbyToken: function(){
         return columbyToken;

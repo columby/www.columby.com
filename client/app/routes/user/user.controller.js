@@ -14,12 +14,15 @@ angular.module('columbyApp')
   function verify(token) {
     $scope.verificationInProgress = true;
     AuthSrv.verify(token).then(function(response){
-      if (response.status === 'success'){
+      console.log(response);
+
+      if (response.token){
         console.log('token received', response.token);
         // save JWT token in local storage (browser)
         localStorage.setItem('columby_token', JSON.stringify(response.token));
         // save JWT token in auth Service so we can use it with each request to the Columby API
         AuthSrv.setColumbyToken = 'Bearer ' + response.token;
+        AuthSrv.setUser(response.user);
 
         // Let the app know
         $rootScope.user = AuthSrv.user();
@@ -30,7 +33,7 @@ angular.module('columbyApp')
         // Redirect back to frontpage
         $state.go('home');
       } else {
-        toaster.pop('warning', 'error', 'There was an error verifying the login. Please try again.');
+        toaster.pop('warning', null, 'There was an error verifying the login. Please try again. ' + response.err);
         $state.go('signin');
       }
     });
@@ -108,7 +111,7 @@ angular.module('columbyApp')
     console.log('getting the user');
     AuthSrv.me().then(function(result){
       console.log('user', result);
-      $scope.user = result;
+      $scope.user = result.user;
     });
   }
 

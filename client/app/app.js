@@ -17,7 +17,7 @@ angular.module('columbyApp', [
 
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $urlRouterProvider.otherwise('/');
-    $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode(true).hashPrefix('!');
   })
 
 
@@ -34,15 +34,26 @@ angular.module('columbyApp', [
   .run(function($rootScope, $http, AuthSrv){
 
     $rootScope.bodyClasses = {};
+    $rootScope.user = {};
 
-    // On initial run, check the user (with the JWT required from config)
-    AuthSrv.me().then(function(response){
-      $rootScope.user = {};
-      if (response){
-        $rootScope.user = response;
-        $rootScope.selectedAccount = AuthSrv.selectedAccount();
-      }
-    });
+    // On initial run, check the user (with the JWT required from config).
+    AuthSrv.setColumbyToken(angular.fromJson(localStorage.getItem('columby_token')));
+    if (AuthSrv.columbyToken()) {
+      // Fetch user information from server with JWT
+      AuthSrv.me().then(function (response) {
+        // remove local JWT when there was an error (expires or malformed).
+        if (response.status === 'error') {
+          localStorage.removeItem('columby_token');
+          AuthSrv.setColumbyToken(null);
+        }
+        // Attached the user object to the rootscope.
+        $rootScope.user = response.user;
+        // Set the selected account if present, otherwise default to the first publication account.
+        var a = response.selectedAccount || 0;
+        AuthSrv.setSelectedAccount(a);
+        $rootScope.selectedAccount = a;
+      });
+    }
 
     // Get environment vars from the server
     $http.post('/api/v2/user/config').success(function(data){
@@ -65,7 +76,7 @@ angular.module('columbyApp', [
       $rootScope.bodyClasses.embed = $location.search().embed;
 
       $anchorScroll();
-      
+
     });
   })
 ;

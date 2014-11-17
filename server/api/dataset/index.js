@@ -28,11 +28,11 @@ router.post('/',
     controller.create);
 
 router.put('/:id',
-  auth.checkJWT,
+  auth.ensureAuthenticated,
     controller.update);
 
 router.delete('/:id',
-  auth.checkJWT,
+  auth.ensureAuthenticated,
     controller.destroy);
 
 /**
@@ -50,11 +50,11 @@ router.get('/:id/distribution/:did',
     controller.getDistribution);
 
 router.put('/:id/distribution/:did',
-  auth.checkJWT,
+  auth.ensureAuthenticated,
     controller.updateDistribution);
 
 router.delete('/:id/distribution/:did',
-  auth.checkJWT,
+  auth.ensureAuthenticated,
     controller.destroyDistribution);
 
 /**
@@ -65,18 +65,18 @@ router.get('/:id/reference',
     controller.listReferences);
 
 router.post('/:id/reference',
-  auth.checkJWT,
+  auth.ensureAuthenticated,
     controller.createReference);
 
 router.get('/:id/reference/:rid',
     controller.getReference);
 
 router.put('/:id/reference/:rid',
-  auth.checkJWT,
+  auth.ensureAuthenticated,
     controller.updateReference);
 
 router.delete('/:id/reference/:rid',
-  auth.checkJWT,
+  auth.ensureAuthenticated,
     controller.destroyReference);
 
 

@@ -5,48 +5,34 @@ var _ = require('lodash'),
     Token = require('./token.model'),
     Account = require('../account/account.model'),
 
-    moment = require('moment'),
-    jwt = require('jwt-simple'),
-    mandrill = require('mandrill-api/mandrill'),
     config = require('../../config/environment'),
 
+    auth = require('../../components/auth/index'),
     emailService = require('../../email/index');
 
 
 
+
+
 // Provide the currently logged in user details
-exports.me = function(req,res,id){
-
-  // check jwt
-  if (req.headers && req.headers.authorization){
-    var token;
-    var parts = req.headers.authorization.split(' ');
-    if (parts.length === 2) {
-      var scheme = parts[0],
-        credentials = parts[1];
-      if (/^Bearer$/i.test(scheme)) {
-        token = credentials;
+exports.me = function(req, res) {
+  User.findOne({_id: req.jwt.sub})
+    .populate('accounts', 'name slug plan roles avatar')
+    .exec(function(err, user) {
+      if(err) { return handleError(res,err); }
+      var output = {
+        user:user
+      };
+      if (req.jwt.accountId){
+        var idx = _.chain(user.accounts).pluck('_id').flatten().value().toString().indexOf(req.jwt.accountId);
+        if (idx !== -1) {
+          output.selectedAccount = idx;
+          console.log(user.selectedAccount);
+          console.log('user', user);
+        }
       }
-    } else {
-      console.log('Format is Authorization: Bearer [token]');
-      //return res.status(401).json({err: 'Format is Authorization: Bearer [token]'});
-    }
-
-    var decoded = jwt.decode(token, config.jwt.secret);
-
-    if (decoded.exp <= Date.now()) {
-      console.log('Access token has expired');
-      //res.status(401).json('Access token has expired');
-    }
-
-    // get id from jwt
-    User.findOne({_id: decoded.iss})
-      .populate('accounts')
-      .exec(function(err, user) {
-        if(err) { return handleError(res,err); }
-        return res.json(user);
-      });
-  }
+      return res.json(output);
+    });
 }
 
 exports.config = function(req,res){
@@ -209,12 +195,11 @@ exports.verify = function(req,res,next) {
     if (!token) { return res.json({status:'error',err:'token not found'})}
 
     User
-      .findById(token.user)
-      .populate('accounts')
+      .findOne({_id: token.user})
       .exec(function(err,user){
 
         if (err) { return handleError(res,err); }
-        if (!user) { return res.json({status:'error',err:'user not found'})}
+        if (!user) { return res.json(user)}
 
         // Make user verified
         if (user.verified === false){
@@ -222,20 +207,14 @@ exports.verify = function(req,res,next) {
           user.save();
         }
 
-        // Create a new JWT
-        var expires = moment().add(7, 'days').valueOf();
+        var u=user;
+        u.selectedAccount = 0;
+        var token = auth.createToken(user);
+        console.log('Verify complete, token created. ', token);
 
-        var token = jwt.encode({
-          iss: user._id,
-          exp: expires
-          }, config.jwt.secret);
-
-        console.log('Verify complete', token);
         return res.json({
-          status: 'success',
-          user: user,
-          token : token,
-          expires : expires
+          user  : user,
+          token : token
         });
       })
     }

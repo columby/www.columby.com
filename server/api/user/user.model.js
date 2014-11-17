@@ -33,11 +33,12 @@ var UserSchema = new Schema({
 
   verified  : { type: Boolean, default: false },
 
-  accounts  : [{ type: Schema.ObjectId, ref: 'Account' }],
+  accounts  : [{
+    type : { type: Schema.ObjectId, ref: 'Account'},
+    role : { type: String }   // admin, publisher, author, viewer
+  }],
 
   createdAt : { type: Date, default: new Date() },
-
-  isAdmin   : { type: Boolean, default: false },
 
   // migration from beta.columby.com
   drupal_uid  : { type: String },

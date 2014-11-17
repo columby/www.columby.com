@@ -15,7 +15,8 @@ module.exports = {
 
   // MongoDB connection options
   mongo: {
-    uri:    process.env.MONGO_URL ||
+    uri:    process.env.MONGOHQ_URL ||
+            process.env.MONGO_URL ||
             'mongodb://localhost/columby'
   },
 

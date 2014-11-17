@@ -41,23 +41,19 @@ var AccountSchema = new Schema({
   // Account settings
   name        : { type: String, unique: true },
   slug        : { type: String, unique: true },
-  primary     : { type: Boolean },
   plan        : { type: String, default: 'free' },
   description : { type: String, required: false },
 
-  roles       : {type: Array, default: ['authenticated']},
+  users : [{
+    userId : { type: Schema.ObjectId, ref: 'User' },
+    role   : { type: String }   // admin, publisher, author, viewer
+  }],
 
   avatar      : {
     url         : {
       type: String,
       required: false,
       default: 'assets/images/avatar.png'}
-  },
-
-  owner       : {
-    type        : Schema.ObjectId,
-    ref         : 'User',
-    required    : true
   },
 
   datasets    : [{ type: Schema.ObjectId, ref: 'Dataset' }],
