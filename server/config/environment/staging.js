@@ -9,8 +9,7 @@ module.exports = {
             undefined,
 
   // Server port
-  port:     process.env.OPENSHIFT_NODEJS_PORT ||
-            process.env.PORT ||
+  port:     process.env.PORT ||
             8080,
 
   // MongoDB connection options
@@ -24,7 +23,8 @@ module.exports = {
   },
 
   mandrill : {
-    key:    process.env.MANDRILL_API
+    key:    process.env.MANDRILL_API ||
+            ''
   },
 
   // Amazon AWS S3 File Storage
