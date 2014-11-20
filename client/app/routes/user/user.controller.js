@@ -17,16 +17,22 @@ angular.module('columbyApp')
       console.log(response);
 
       if (response.token){
-        console.log('token received', response.token);
+        console.log('JWT token received', response.token);
         // save JWT token in local storage (browser)
         localStorage.setItem('columby_token', JSON.stringify(response.token));
-        // save JWT token in auth Service so we can use it with each request to the Columby API
-        AuthSrv.setColumbyToken = 'Bearer ' + response.token;
+
+        // set primary account
+        for (var i=0;i<user.accounts.length;i++){
+          if (user.accounts[ i].primary===true){
+            console.log(user.accounts[ i].primary);
+            user.primaryAccount = user.accounts[ i];
+            return
+          }
+        }
         AuthSrv.setUser(response.user);
 
         // Let the app know
         $rootScope.user = AuthSrv.user();
-        $rootScope.selectedAccount= 0;
 
         toaster.pop('success', null, 'You have succesfully signed in.');
 
@@ -111,7 +117,7 @@ angular.module('columbyApp')
     console.log('getting the user');
     AuthSrv.me().then(function(result){
       console.log('user', result);
-      $scope.user = result.user;
+      $scope.user = result;
     });
   }
 

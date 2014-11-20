@@ -18,19 +18,12 @@
       </li> -->
 
       <li ng-show="$root.user._id">
-        <a ui-sref="account.view({slug: $root.user.accounts[ $root.selectedAccount].slug})" ng-class="{active: $state.includes(account.view)}">
+        <a ui-sref="account.view({slug: $root.user.primaryAccount.slug})" ng-class="{active: $state.includes(account.view)}">
          My profile<!-- {{$root.selectedAccount.name}} -->
         </a>
         <span class="settings">
           <a ui-sref='settings'><i class="fa fa-cog"></i></a>
         </span>
-      </li>
-
-      <!-- Account switcher -->
-      <li ng-show="$root.user._id && $root.user.accounts.length > 1">
-        <div account-switcher
-          accounts="$root.user.accounts">
-        </div>
       </li>
 
       <li ng-hide="$root.user._id">

@@ -38,9 +38,11 @@
         <h3>Your accounts</h3>
         <p ng-show="!user.accounts || user.accounts.length===0">No account for this user</p>
         <ul>
-          <li ng-repeat="account in user.accounts | orderBy:account.primary">
+          <li ng-repeat="account in user.accounts | orderBy:'account.primary':true">
             <h4><a ui-sref="account.view({slug:account.slug})">{{account.name}}</a></h4>
+            <h5 ng-show="account.primary">Primary account</h5>
             <p>{{account.datasets.length}} datasets</p>
+
           </li>
           <!-- <li>
             <h4><a ui-sref="account.create({userId: user._id})" class="new">+ Create a new publication account</a></h4>

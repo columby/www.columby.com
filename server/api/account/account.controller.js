@@ -1,7 +1,14 @@
 'use strict';
-var mongoose = require('mongoose');
-var _ = require('lodash');
-var Account = require('./account.model');
+
+/**
+ *
+ * Dependencies
+ *
+ */
+var _ = require('lodash'),
+    mongoose = require('mongoose'),
+    Account = require('./account.model');
+
 
 
 function slugify(text) {
@@ -26,11 +33,12 @@ exports.index = function(req, res) {
 
 // Get a single account
 exports.show = function(req, res) {
+  console.log('show account');
   Account.findOne({slug: req.params.id})
     .populate('datasets')
     .exec(function(err, account) {
       if(err) { return handleError(res, err); }
-      //console.log(account);
+      console.log(account);
       return res.json(account);
     });
 };

@@ -8,22 +8,8 @@ angular.module('columbyApp')
       slug: '@slug'
     }, {
       update: {
-        method: 'PUT',
-        headers: {
-          Authorization: AuthSrv.columbyToken()
-        }
-      },
-      get: {
-        headers: {
-          Authorization: AuthSrv.columbyToken()
-        }
-      },
-      save: {
-        method: 'POST',
-        headers: {
-          Authorization: AuthSrv.columbyToken()
-        }
-      },
+        method: 'PUT'
+      }
     }
   );
 });

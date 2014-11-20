@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ *
+ * Dependencies
+ *
+ */
 var _ = require('lodash'),
     mongoose = require('mongoose'),
     Dataset = require('./dataset.model'),
@@ -38,7 +43,11 @@ exports.extractlink = function(req,res) {
 };
 
 
-// Get list of datasets
+/**
+ *
+ * Get list of datasets.
+ *
+ */
 exports.index = function(req, res) {
 
   // Dataset.find(function (err, datasets) {
@@ -68,7 +77,11 @@ exports.index = function(req, res) {
   ;
 };
 
-// Get a single dataset
+/**
+ *
+ * Show a single dataset.
+ *
+ */
 exports.show = function(req, res) {
   // id can be objectId or slug. Cast the id to objectId,
   // if this works then use it, otherwise treat it as a slug.
@@ -124,7 +137,7 @@ exports.create = function(req, res) {
           console.log('model', model);
         }
     );
-    return res.json(201, dataset);
+    return res.json(dataset);
   });
 };
 

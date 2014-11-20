@@ -37,21 +37,24 @@ angular.module('columbyApp', [
     $rootScope.user = {};
 
     // On initial run, check the user (with the JWT required from config).
-    AuthSrv.setColumbyToken(angular.fromJson(localStorage.getItem('columby_token')));
-    if (AuthSrv.columbyToken()) {
+    if (localStorage.getItem('columby_token')) {
       // Fetch user information from server with JWT
       AuthSrv.me().then(function (response) {
         // remove local JWT when there was an error (expires or malformed).
         if (response.status === 'error') {
           localStorage.removeItem('columby_token');
-          AuthSrv.setColumbyToken(null);
         }
         // Attached the user object to the rootscope.
-        $rootScope.user = response.user;
-        // Set the selected account if present, otherwise default to the first publication account.
-        var a = response.selectedAccount || 0;
-        AuthSrv.setSelectedAccount(a);
-        $rootScope.selectedAccount = a;
+        if (response._id) {
+          var user = response;
+          // set primary account
+          for (var i=0;i<user.accounts.length;i++){
+            if (user.accounts[ i].primary===true){
+              user.primaryAccount = user.accounts[ i];
+            }
+          }
+          $rootScope.user = response;
+        }
       });
     }
 

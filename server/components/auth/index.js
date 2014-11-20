@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ *
+ * Dependencies
+ *
+ * @type {exports}
+ */
 var config = require('../../config/environment'),
     jwt    = require('jwt-simple'),
     moment = require('moment')

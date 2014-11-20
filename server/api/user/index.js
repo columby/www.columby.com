@@ -1,9 +1,13 @@
 'use strict';
 
+/**
+ * Dependencies
+ *
+ * @type {exports}
+ */
 var express = require('express'),
     controller = require('./user.controller'),
     auth = require('../../components/auth/index');
-
 var router = express.Router();
 
 
@@ -13,7 +17,7 @@ var router = express.Router();
  * @param req
  * @param res
  * @param next
- * 
+ *
  */
 function canEdit(req,res,next){
   console.log(req.params);
@@ -27,12 +31,25 @@ function canEdit(req,res,next){
   }
 }
 
+
+/**
+ * Get website configuration (public keys etc).
+ *
+ */
 router.post('/config',
   controller.config);
 
+
+/**
+ * Login and registration functions
+ *
+ * Roles: visitor
+ *
+ */
 router.post('/login'   , controller.login);
 router.post('/register', controller.register);
 router.get( '/verify'  , controller.verify);
+
 
 /**
  * Show currently logged in user account

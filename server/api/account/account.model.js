@@ -82,7 +82,7 @@ var AccountSchema = new Schema({
   description : { type: String, required: false },
 
   owner       : {type: Schema.ObjectId, ref: 'User' },
-
+  primary     : { type: Boolean },
   users : [{
     userId : { type: Schema.ObjectId, ref: 'User' },
     role   : { type: String }   // owner, admin, publisher, author, viewer

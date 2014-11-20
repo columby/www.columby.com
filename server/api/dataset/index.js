@@ -7,30 +7,80 @@ var express = require('express'),
 ;
 
 /**
- * Static Routes
+ *
+ * Middleware to check if user can edit the required dataset.
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+function canEdit(req,res,next){
+
+}
+
+/**
+ *
+ * Extract a link
+ *
+ * Roles: authenticated
  *
  **/
-router.get('/extractlink', controller.extractlink);
+router.get('/extractlink',
+  auth.ensureAuthenticated,
+    controller.extractlink);
 
 
 /**
- * Main Routes
+ *
+ * List datasets
+ *
+ * Public access
  *
  **/
 router.get('/',
+
     controller.index);
 
+/**
+ *
+ * Get a dataset
+ *
+ * Public access
+ *
+ **/
 router.get('/:id',
+
     controller.show);
 
+/**
+ *
+ * Create a new dataset
+ *
+ * Roles: authenticated
+ *
+ **/
 router.post('/',
-  //auth.checkJWT,
+  auth.ensureAuthenticated,
     controller.create);
 
+/**
+ *
+ * Update a dataset
+ *
+ * Roles: authenticated
+ *
+ **/
 router.put('/:id',
   auth.ensureAuthenticated,
     controller.update);
 
+/**
+ *
+ * Delete a dataset
+ *
+ * Roles: authenticated
+ *
+ **/
 router.delete('/:id',
   auth.ensureAuthenticated,
     controller.destroy);

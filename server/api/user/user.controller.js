@@ -9,27 +9,19 @@ var _             = require('lodash'),
     emailService  = require('../../email/index');
 
 
-// Provide the currently logged in user details
+/**
+ *
+ * Provide the currently logged in user details
+ *
+ */
 exports.me = function(req, res) {
   User.findOne({_id: req.jwt.sub})
-    .populate('accounts', 'name slug plan avatar')
+    .populate('accounts', 'name slug plan avatar primary')
     .exec(function(err, user) {
       if(err) { return handleError(res,err); }
-      console.log('user', user);
-      var output = {
-        user:user
-      };
-      if (req.jwt.accountId){
-        var idx = _.chain(user.accounts).pluck('_id').flatten().value().toString().indexOf(req.jwt.accountId);
-        if (idx !== -1) {
-          output.selectedAccount = idx;
-          console.log(user.selectedAccount);
-          console.log('user', user);
-        }
-      }
-      return res.json(output);
+      return res.json(user);
     });
-}
+};
 
 
 exports.config = function(req,res){
@@ -99,7 +91,6 @@ exports.show = function(req, res) {
  *
  **/
 exports.register = function(req, res) {
-  // Create a new user.
   User.create(req.body, function(err, user) {
     if (err) { return handleError(res, err); }
     // Create a primary publication account for this user.
@@ -191,7 +182,7 @@ exports.destroy = function(req, res) {
  *
  **/
 exports.login = function(req,res) {
-  User.findOne({'email': email}, function(err,user){
+  User.findOne({'email': req.body.email}, function(err,user){
     if (err) { return handleError(res, err); }
     if (!user){ return res.send(user); }
 
@@ -239,6 +230,7 @@ exports.verify = function(req,res) {
     // Find the user connected to the token
     User
       .findOne({_id: token.user})
+      .populate('accounts', 'name slug plan avatar primary')
       .exec(function(err,user){
         if (err) { return handleError(res,err); }
         if (!user) { return res.json(user)}

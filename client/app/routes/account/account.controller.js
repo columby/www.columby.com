@@ -3,13 +3,15 @@
 angular.module('columbyApp')
 
 
-.controller('AccountCtrl', function($window,$rootScope, $scope, $stateParams, AccountSrv, AuthSrv, CollectionSrv){
-  /* ---------- SETUP ----------------------------------------------------------------------------- */
-  $scope.contentLoading  = true;
-  $window.document.title = 'columby.com';
+.controller('AccountCtrl',
+  function($window,$rootScope,$scope, $stateParams,$state,toaster, AccountSrv, AuthSrv, CollectionSrv){
+    /* ---------- SETUP ----------------------------------------------------------------------------- */
+    $scope.contentLoading  = true;
+    $window.document.title = 'columby.com';
 
 
-  /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
+
+    /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
 
 
   /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
@@ -31,24 +33,22 @@ angular.module('columbyApp')
 
     // get account information of user by userSlug
     AccountSrv.get({slug: $stateParams.slug}, function(result){
-      $scope.account = result;
-      $scope.contentLoading = false;
-      $window.document.title = 'columby.com | ' + result.name;
+      if (!result._id){
+        toaster.pop('warning', null, 'The requested account was not found. ');
+        $state.go('home');
+      } else {
+        $scope.account = result;
+        $scope.contentLoading = false;
+        $window.document.title = 'columby.com | ' + result.name;
 
-      // set draft title and description
-      if ($scope.editMode){
-        $scope.accountUpdate.name        = $scope.account.name;
-        $scope.accountUpdate.description = $scope.account.description;
+        $scope.account.canEdit = AuthSrv.canEdit({postType: 'account', _id: result._id});
+
+        if ($scope.account.headerImage) {
+          updateHeaderBg();
+        }
+
+        getCollections();
       }
-
-      $scope.account.canEdit= AuthSrv.canEdit({postType:'account', _id:result._id});
-
-      if ($scope.account.headerImage){
-        updateHeaderBg();
-      }
-
-      getCollections();
-
     });
   }
 
@@ -66,7 +66,12 @@ angular.module('columbyApp')
 
 
   /* ---------- INIT ----------------------------------------------------------------------------- */
-  getAccount();
+    if (!$stateParams.slug){
+      toaster.pop('warning', null, 'The requested account was not found. ');
+      $state.go('home');
+    } else {
+      getAccount();
+    }
 
 })
 
