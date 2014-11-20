@@ -76,7 +76,7 @@ h3 {
 .header.wrapper {
   margin-bottom: 4.5em;
   background-image: url('/assets/images/default-header.png');
-  background-image: url('/assets/images/default-header.svg');
+  background-image: linear-gradient(transparent, transparent), url('/assets/images/default-header.svg');
   background-position: 50% 50%;
   background-size: cover;
   height: 290px;
