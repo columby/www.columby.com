@@ -130,7 +130,7 @@
       </div>
     </div>
 
-    <p>Published on: {{dataset.publicationAccount.name}} <a ng-click="changeAccount()">Change</a></a></p>
+    <p>Published on: {{dataset.publicationAccount.name}} <a ng-click="changeAccount()" ng-show="$root.user.accounts.length>1">Change</a></a></p>
 
     <!-- Dataset Description -->
     <div class="description wrapper">

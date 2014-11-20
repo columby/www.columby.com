@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('columbyApp')
-  
+
   .directive('accountSelector', function($rootScope){
     return {
       templateUrl: 'app/directives/accountSelector/accountSelector.html',

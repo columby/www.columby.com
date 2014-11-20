@@ -155,7 +155,9 @@ angular.module('columbyApp')
     function initiateNewDataset(){
 
       // if user has multiple accounts, show the account-selector.
-      $scope.showAccountSelector = true;
+      if ($scope.user.accounts.length>1){
+        $scope.showAccountSelector = true;
+      }
 
       $scope.dataset = {
         title             : null,
