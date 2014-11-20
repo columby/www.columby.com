@@ -147,20 +147,40 @@ angular.module('columbyApp')
       });
     }
 
+    /**
+     *
+     * Start with a new dataset, published on the user's primary account.
+     *
+     */
     function initiateNewDataset(){
+
+      // if user has multiple accounts, show the account-selector.
+      $scope.showAccountSelector = true;
+
       $scope.dataset = {
         title             : null,
         description       : null,
         avatar :{
-          url               : 'assets/images/avatar.png'
+          url             : 'assets/images/avatar.png'
         },
-        draft:{},
-        account: $rootScope.user.accounts[ $rootScope.selectedAccount]._id,
-        canEdit : true
+        owner           : $rootScope.user.primaryAccount._id,
+        canEdit           : true
       };
 
       toaster.pop('notice',null,'Here\'s your new dataset!');
     }
+
+    $scope.changeAccount = function(){
+      $scope.showAccountSelector = true;
+    }
+
+    $scope.updateDatasetOwner = function(id){
+      console.log(id);
+      $scope.dataset.owner = $rootScope.user.accounts[ id]._id;
+      $scope.dataset.avatar.url = $rootScope.user.accounts[ id].avatar.url;
+      $scope.dataset.publicationAccount = $rootScope.user.accounts[ id];
+      $scope.showAccountSelector = false;
+    };
 
     function updateHeaderImage(){
       $scope.headerStyle={

@@ -1,0 +1,16 @@
+
+.accountSelector {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #eee;
+}
+.accountSelector .switcher {
+  color: #333;
+  text-align: center;
+  padding-top: 80px;
+.accountSelector .switcher  a {
+  color: #333;
+}

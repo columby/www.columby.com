@@ -1,3 +1,16 @@
-<div class="accountSwitcher">
-  <a href="" ng-click="showPopup()">Switch Account</a>
+<div class="accountSwitcher" ng-show="showAccountSwitcher">
+  <div class="switcher">
+    <h3>Change Account</h3>
+    <ul>
+      <li ng-repeat="account in accounts">
+        <a href="" ng-click="switchAccount($index)">
+          <div>
+            <img src="{{account.avatar.url}}"/>
+            <span class="account">{{account.name}}</span>
+          </div>
+        </a>
+      </li>
+      <!-- <li><a href="" ng-click="addAccount()">+ Create a new account</a></li> -->
+    </ul>
+  </div>
 </div>

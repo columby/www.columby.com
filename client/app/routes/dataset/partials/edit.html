@@ -124,11 +124,13 @@
 
           <!-- Editable avatar -->
           <div class="avatar">
-            <img src="{{$root.user.accounts[ $root.selectedAccount].avatar.url}}" alt="new"/>
+            <img src="{{dataset.avatar.url}}" alt="{{dataset.owner}}"/>
           </div>
         </div>
       </div>
     </div>
+
+    <p>Published on: {{dataset.publicationAccount.name}} <a ng-click="changeAccount()">Change</a></a></p>
 
     <!-- Dataset Description -->
     <div class="description wrapper">
@@ -309,4 +311,7 @@
 
 
   </div>
+
+  <!-- Account selector -->
+  <div account-selector select="updateDatasetOwner(id)" ng-show="showAccountSelector"></div>
 </div>
