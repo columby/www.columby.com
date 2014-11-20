@@ -58,7 +58,7 @@ angular.module('columbyApp')
     function updateHeaderImage(){
 			if ($scope.dataset.headerImage) {
 	      $scope.headerStyle={
-	        'background-image': 'url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImage + ')',
+	        'background-image': 'linear-gradient(transparent,transparent), url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImage + ')',
 	        'background-blend-mode': 'multiply'
 	      };
 	    }
