@@ -166,6 +166,7 @@ angular.module('columbyApp')
           url             : 'assets/images/avatar.png'
         },
         owner           : $rootScope.user.primaryAccount._id,
+        publicationAccount: $rootScope.user.primaryAccount,
         canEdit           : true
       };
 
