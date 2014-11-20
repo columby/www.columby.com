@@ -6,27 +6,86 @@ var express = require('express'),
 
 var router = express.Router();
 
+
+/**
+ * Check if a user can edit a requested user account.
+ *
+ * @param req
+ * @param res
+ * @param next
+ * 
+ */
+function canEdit(req,res,next){
+  console.log(req.params);
+  console.log(req.body);
+  if (req.user) {
+    if ( (req.user.roles.indexOf('admin')) || (req.user._id === req.params.id) ){
+      next();
+    }
+  } else {
+    res.status(401).json('Not authorized');
+  }
+}
+
+router.post('/config',
+  controller.config);
+
 router.post('/login'   , controller.login);
 router.post('/register', controller.register);
 router.get( '/verify'  , controller.verify);
 
-router.post('/me'      ,
+/**
+ * Show currently logged in user account
+ *
+ * Roles: admin, authenticated
+ *
+ */
+router.post('/me',
   auth.ensureAuthenticated,
-    controller.me);
+    controller.me)
+;
 
-router.post('/config'  , controller.config);
-
-router.get( '/'        , auth.ensureAuthenticated, auth.isAdmin, controller.index);
-
-router.get( '/:id'     , controller.show);
-
-// Create a new user
-router.post('/'        , controller.register);
-
-router.put( '/:id',
+/**
+ * List user accounts
+ *
+ * Roles: admin
+ *
+ */
+router.get( '/',
   auth.ensureAuthenticated,
-    controller.update
-);
+  auth.isAdmin,
+    controller.index);
 
+/**
+ * Show a user accounts
+ *
+ * Roles: admin
+ *
+ */
+router.get( '/:id',
+  auth.ensureAuthenticated,
+  auth.isAdmin,
+    controller.show);
+
+/**
+ * Create a new user
+ *
+ * Roles: all
+ *
+ */
+router.post('/',
+    controller.register);
+
+/**
+ * Update an existing user account
+ *
+ * Roles: admin
+ * Permissions: edit own account
+ *
+ */
+router.put('/:id',
+  auth.ensureAuthenticated,
+  canEdit,
+    controller.update);
 
 module.exports = router;

@@ -1,41 +1,78 @@
 'use strict';
 
+/***
+ *
+ * -----------------
+ * | ACCOUNT MODEL |
+ * -----------------
+ *
+ * A publication account can publish datasets on Columby. An account always has an owner.
+ * Publication accounts can have multiple users with a certain role (admin, publisher, viewer).
+ *
+ *
+ * A user can create extra publication accounts.
+ * These extra accounts can have multiple users attached with different roles.
+ *
+ * Account:
+ *  - name: Selected by user
+ *  - slug: Created automatically based on name
+ *  - plan: Account subscription
+ *  - description: Created by user
+ *  - owner: Main user
+ *  - users: Other users
+ *  - avatar:
+ *  - datasets: A list of datasets published by this account
+ *  - keys:
+ *  - collections: A list of collections published by this account.
+ *  -
+ *
+ * onCreate
+ *   - Create a new primary account
+ *   - Save the primary account _id into the user model
+ *
+ * onUpdate
+ *   -
+ *
+ * onDelete
+ *   - Delete primary account
+ *
+ */
+
+
+
 /**
+ *
  * Module dependencies.
+ *
  */
 var mongoose = require('mongoose'),
-  Schema = mongoose.Schema
+  Schema = mongoose.Schema,
+  User = mongoose.model('User')
 ;
 
 
+/**
+ *
+ * Slugify a string.
+ *
+ */
 function slugify(text) {
 
   return text.toString().toLowerCase()
-    .replace(/\s+/g, '-')        // Replace spaces with -
+    .replace(/\s+/g, '-')       // Replace spaces with -
     .replace(/[^\w\-]+/g, '')   // Remove all non-word chars
-    .replace(/\-\-+/g, '-')      // Replace multiple - with single -
-    .replace(/^-+/, '')          // Trim - from start of text
-    .replace(/-+$/, '');         // Trim - from end of text
-    //limit characters
-
+    .replace(/\-\-+/g, '-')     // Replace multiple - with single -
+    .replace(/^-+/, '')         // Trim - from start of text
+    .replace(/-+$/, '');        // Trim - from end of text
+                                // Limit characters
 }
-/**
- * Validations
- */
-/*
-var validateAccountType = function(value, callback) {
-  if (value !== 'user'){
-    callback(false);
-  } else {
-    callback(true);
-  }
-};
-*/
+
 
 /**
- * Publication Account Schema
+ *
+ * Publication account Schema.
+ *
  */
-
 var AccountSchema = new Schema({
 
   // Account settings
@@ -44,9 +81,11 @@ var AccountSchema = new Schema({
   plan        : { type: String, default: 'free' },
   description : { type: String, required: false },
 
+  owner       : {type: Schema.ObjectId, ref: 'User' },
+
   users : [{
     userId : { type: Schema.ObjectId, ref: 'User' },
-    role   : { type: String }   // admin, publisher, author, viewer
+    role   : { type: String }   // owner, admin, publisher, author, viewer
   }],
 
   avatar      : {
@@ -70,40 +109,50 @@ var AccountSchema = new Schema({
 });
 
 
-
 /**
+ *
  * Pre-save hook
+ *
+ * When saving the new account, create a slug based on the username.
+ * Create a new api-key for a new publication account.
+ *
  */
 AccountSchema.pre('save', function(next) {
-
-  // When saving the new account, create a slug based on the username.
-  this.set('slug', slugify(this.slug));
-
-  // Create a new api-key for a new publication account.
   if (this.isNew){
-    //console.log('setting the default API-key');
+    this.set('slug', slugify(this.slug));
     this.apikeys.push(String(mongoose.Types.ObjectId()));
   }
-
   next();
 });
 
-AccountSchema.post('save', function(account){
-  var User = mongoose.model('User');
-  //console.log('action after save, updating user accounts list');
-  User.findOne({_id: account.owner}, function(err,user){
+
+/**
+ *
+ * Post-save hook
+ *
+ * Add the new publication account to the user who created it
+ * When primary: add 'owner' role, otherwise 'admin' role
+ *
+ */
+AccountSchema.post('save', function(account) {
+  // find the user this account belongs to
+  User.findOne({_id: account.owner}, function(err,user) {
     if (err) { console.log(err); }
-    //console.log('user findone:', user);
     if (user){
-      if (user.accounts.indexOf(account._id) === -1) {
-        user.accounts.push(account._id);
-        user.save();
-        //console.log('user updated:', user);
+      // check if it is a primary account or not.
+      if (account.primary === true){
+        user.primaryAccount = account._id;
+      } else {
+        // Check if account id is new for the user
+        if (user.accounts.indexOf(account._id) === -1) {
+          // Add it to the list of users
+          user.accounts.push({userId: account._id, role: 'owner'});
+          user.save();
+        }
       }
     }
   });
 });
-
 
 
 module.exports = mongoose.model('Account', AccountSchema);

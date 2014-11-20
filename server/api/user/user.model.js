@@ -1,3 +1,32 @@
+/***
+ *
+ * --------------
+ * | USER MODEL |
+ * --------------
+ *
+ * A User can login into the website. Each user has a free primary publication account.
+ * The primary publication account is created automatically upon registration.
+ *
+ * A user can create extra publication accounts.
+ * These extra accounts can have multiple users attached with different roles.
+ *
+ * User:
+ *  - email
+ *  - primary account reference
+ *  - other account references
+ *
+ * onCreate
+ *   - Create a new primary account
+ *   - Save the primary account _id into the user model
+ *
+ * onUpdate
+ *   -
+ *
+ * onDelete
+ *   - Delete primary account
+ *
+ */
+
 'use strict';
 
 var mongoose = require('mongoose'),
@@ -24,19 +53,16 @@ var validateUniqueEmail = function(value, callback) {
 /* --- SCHEMA DEFINITION ------------------------------------------------------------- */
 var UserSchema = new Schema({
   email: {
-    type: String,
+    type    : String,
     required: true,
-    unique: true,
-    match: [/.+\@.+\..+/, 'Please enter a valid email'],
+    unique  : true,
+    match   : [/.+\@.+\..+/, 'Please enter a valid email'],
     validate: [validateUniqueEmail, 'E-mail address is already in-use']
   },
 
-  verified  : { type: Boolean, default: false },
-
-  accounts  : [{
-    type : { type: Schema.ObjectId, ref: 'Account'},
-    role : { type: String }   // admin, publisher, author, viewer
-  }],
+  verified      : { type: Boolean, default: false },
+  primaryAccount: { type: Schema.ObjectId, ref: 'Account' },
+  accounts      : [{ type: Schema.ObjectId, ref: 'Account' }],
 
   createdAt : { type: Date, default: new Date() },
 

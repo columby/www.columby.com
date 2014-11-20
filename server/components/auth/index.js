@@ -6,10 +6,10 @@ var config = require('../../config/environment'),
 ;
 
 
-/*
- |--------------------------------------------------------------------------
- | Generate JSON Web Token
- |--------------------------------------------------------------------------
+/**
+ *
+ * Generate JSON Web Token
+ *
  */
 exports.createToken = function(user) {
   var payload = {
@@ -22,10 +22,10 @@ exports.createToken = function(user) {
 };
 
 
-/*
- |--------------------------------------------------------------------------
- | Login Required Middleware
- |--------------------------------------------------------------------------
+/**
+ *
+ * Login Required Middleware
+ *
  */
 exports.ensureAuthenticated = function(req, res, next) {
 
@@ -51,3 +51,21 @@ exports.ensureAuthenticated = function(req, res, next) {
   next();
 };
 
+
+/**
+ *
+ * Admin required middleware
+ *
+ * Validate if a user has admin rights
+ */
+exports.isAdmin = function(req,res,next) {
+  User.findOne({_id: req.jwt.sub}, function(err,user) {
+    if (user && (user.roles.indexOf('admin') !== -1)) {
+      req.user = user;
+      next();
+    }
+    else {
+      res.status(401).json('Administers only.');
+    }
+  });
+};
