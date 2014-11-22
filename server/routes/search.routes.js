@@ -1,8 +1,8 @@
 'use strict';
 
 var express = require('express'),
-    controller = require('./../controllers/search.controller.js'),
-    auth = require('.././index')
+    controller = require('./../controllers/search.controller'),
+    auth = require('./../controllers/auth.controller')
 ;
 
 var router = express.Router();

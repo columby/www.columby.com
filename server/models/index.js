@@ -5,18 +5,24 @@ var path      = require('path');
 var Sequelize = require('sequelize');
 var config    = require('./../config/environment');
 
-var sequelize = new Sequelize(
-  config.db.mysql.database_name,
-  config.db.mysql.user,
-  config.db.mysql.password, {
-    dialect: 'postgres', // or 'sqlite', 'postgres', 'mariadb'
-    port:    config.db.mysql.port, // or 5432 (for postgres)
+/**
+ *
+ * Database settings
+ *
+ **/
+var sequelize = new Sequelize(config.db.uri, {
+    dialect: config.db.dialect,
     define: {
       underscored: true
     }
   }
 );
 
+/**
+ *
+ * Authenticate to the database
+ *
+ **/
 sequelize
   .authenticate()
   .complete(function(err) {
@@ -26,13 +32,15 @@ sequelize
       console.log('Postgres; Connection has been established successfully.')
     }
   });
-// export connection
-//module.exports.sequelize = sequelize;
 
+/**
+ *
+ * Read model files
+ *
+ **/
 var db        = {};
 
-fs
-  .readdirSync(__dirname)
+fs.readdirSync(__dirname)
   .filter(function(file) {
     return (file.indexOf(".") !== 0) && (file !== "index.js");
   })
@@ -41,6 +49,11 @@ fs
     db[model.name] = model;
   });
 
+/**
+ *
+ * Create associations for loaded models
+ *
+ **/
 Object.keys(db).forEach(function(modelName) {
   if ("associate" in db[modelName]) {
     db[modelName].associate(db);
@@ -48,6 +61,11 @@ Object.keys(db).forEach(function(modelName) {
 });
 
 
+/**
+ *
+ * Resync database for development version
+ *
+ **/
 if (config.env === 'development'){
   sequelize
     .sync({ force: true })

@@ -6,8 +6,8 @@
  * @type {exports}
  */
 var express = require('express'),
-    controller = require('./../controllers/user.controller.js'),
-    auth = require('.././index');
+    controller = require('./../controllers/user.controller'),
+    auth = require('./../controllers/auth.controller');
 var router = express.Router();
 
 

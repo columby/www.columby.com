@@ -1,9 +1,9 @@
 'use strict';
 
 var express = require('express'),
-    controller = require('./../controllers/dataset.controller.js'),
+    controller = require('./../controllers/dataset.controller'),
     router = express.Router(),
-    auth = require('.././index')
+    auth = require('../controllers/auth.controller')
 ;
 
 /**

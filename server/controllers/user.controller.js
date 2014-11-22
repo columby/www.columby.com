@@ -1,14 +1,15 @@
 'use strict';
 
 var _             = require('lodash'),
-    User          = require('./../routes/user/user.model.js'),
-    Token         = require('./../routes/user/token.model.js'),
-    Account       = require('../routes/account/account.model.js'),
+    User          = require('./../routes/user/user.model'),
+    Token         = require('./../routes/user/token.model'),
+    Account       = require('../routes/account/account.model'),
     config        = require('../config/environment/index'),
-    auth          = require('.././index'),
-    emailService  = require('.././index');
+    auth          = require('./../controllers/auth.controller'),
+    emailService  = require('./../controllers/email.controller');
 
-var models=require('../models/index');
+var models = require('../models/index');
+
 
 /**
  *

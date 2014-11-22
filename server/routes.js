@@ -4,18 +4,18 @@
 
 'use strict';
 
-var errors = require('./components/errors');
+var errors = require('./controllers/errors.controller');
 
 module.exports = function(app) {
 
   // Insert routes below
-  app.use('/api/v2/collection', require('./api/collection'));
-  app.use('/api/v2/file', require('./api/file'));
-  app.use('/api/v2/admin', require('./api/admin'));
-  app.use('/api/v2/search', require('./api/search'));
-  app.use('/api/v2/account', require('./api/account'));
-  app.use('/api/v2/user', require('./api/user'));
-  app.use('/api/v2/dataset', require('./api/dataset'));
+  app.use('/api/v2/collection', require('./routes/collection.routes'));
+  app.use('/api/v2/file', require('./routes/file.routes'));
+  app.use('/api/v2/admin', require('./routes/admin.routes'));
+  app.use('/api/v2/search', require('./routes/search.routes'));
+  app.use('/api/v2/account', require('./routes/account.routes'));
+  app.use('/api/v2/user', require('./routes/user.routes'));
+  app.use('/api/v2/dataset', require('./routes/dataset.routes'));
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')

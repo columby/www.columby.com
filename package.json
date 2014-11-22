@@ -23,6 +23,7 @@
     "mongoosastic": "^2.0.0",
     "mongoose": "~3.8.8",
     "morgan": "~1.0.0",
+    "mysql": "^2.5.3",
     "node-uuid": "^1.4.1",
     "pg": "^4.0.0",
     "sequelize": "^2.0.0-rc2",

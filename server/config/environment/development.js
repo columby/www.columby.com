@@ -9,12 +9,8 @@ module.exports = {
   },
 
   db:{
-    mysql:{
-      database_name: 'columby-dev',
-      user: 'Arn',
-      password: '',
-      port: '5432'
-    }
+    uri: process.env.DB_URI,
+    dialect : process.env.DB_DIALECT
   },
 
   jwt: {
