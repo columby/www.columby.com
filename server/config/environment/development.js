@@ -8,6 +8,15 @@ module.exports = {
     uri: 'mongodb://localhost/columby-dev'
   },
 
+  db:{
+    mysql:{
+      database_name: 'columby-dev',
+      user: 'Arn',
+      password: '',
+      port: '5432'
+    }
+  },
+
   jwt: {
     secret: process.env.JWT_SECRET
   },
@@ -33,6 +42,6 @@ module.exports = {
   embedly: {
     key       : process.env.EMBEDLY_KEY
   },
-  
+
   seedDB: false
 };

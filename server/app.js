@@ -11,9 +11,9 @@ var express = require('express');
 var mongoose = require('mongoose');
 var config = require('./config/environment');
 
-// Connect to database
-console.log(config.mongo.uri);
+// Connect to the mongo database
 mongoose.connect(config.mongo.uri, config.mongo.options);
+
 
 // Populate DB with sample data
 //if(config.seedDB) { require('./config/seed'); }
@@ -23,6 +23,8 @@ var app = express();
 var server = require('http').createServer(app);
 require('./config/express')(app);
 require('./routes')(app);
+var models = require("./models");
+
 
 // Start server
 server.listen(config.port, config.ip, function () {

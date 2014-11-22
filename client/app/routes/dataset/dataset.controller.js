@@ -265,10 +265,11 @@ angular.module('columbyApp')
       $scope.dataset.title = $scope.datasetUpdate.title;
       $scope.dataset.description = $scope.datasetUpdate.description;
       DatasetSrv.save($scope.dataset, function(res){
+        console.log(res);
         //console.log('create',res);
         if (res._id) {
           toaster.pop('success', null, 'Your dataset page is created. Now add some data.');
-          $state.go('dataset.edit', {id:res._id, editMode:true});
+          $state.go('dataset.edit', {id:res._id});
         }
       });
     };
