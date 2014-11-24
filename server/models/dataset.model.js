@@ -9,17 +9,18 @@ module.exports = function(sequelize, DataTypes) {
    */
   var Dataset = sequelize.define('Dataset',
     {
+      uuid        : { type: DataTypes.UUID },
       title       : { type: DataTypes.STRING },
       slug        : { type: DataTypes.STRING },
       description : { type: DataTypes.TEXT },
       header_img  : { type: DataTypes.STRING },
-      private     : { type: DataTypes.BOOLEAN }
+      private     : { type: DataTypes.BOOLEAN, defaultValue: false }
 
     }, {
       classMethods: {
         associate: function (models) {
           // A dataset can have multiple tags
-          DataTypes.hasMany(models.Tags);
+          //DataTypes.hasMany(models.Tags);
           // a dataset belongs to a single account
           Dataset.belongsTo(models.Account);
           // a dataset can belong to multiple collections

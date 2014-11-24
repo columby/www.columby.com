@@ -41,6 +41,7 @@ angular.module('columbyApp', [
       // Fetch user information from server with JWT
       AuthSrv.me().then(function (response) {
         // remove local JWT when there was an error (expires or malformed).
+        console.log(response);
         if (response.status === 'error') {
           localStorage.removeItem('columby_token');
         }

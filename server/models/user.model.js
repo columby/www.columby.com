@@ -9,11 +9,8 @@ module.exports = function(sequelize, DataTypes) {
    */
   var User = sequelize.define('User',
     {
-      uuid: {
-        type: DataTypes.UUID,
-        default: sequelize.UUIDV4
-      },
-      email: {
+      uuid  : { type: DataTypes.UUID, default: sequelize.UUIDV4 },
+      email : {
         type      : DataTypes.STRING,
         allowNull : false,
         unique    : true,

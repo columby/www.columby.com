@@ -17,12 +17,16 @@ var _             = require('lodash'),
  *
  */
 exports.me = function(req, res) {
-  User.find(req.jwt.sub)
+  console.log(req.jwt.sub);
+  var t = req.jwt.sub;
+  User.find({ where: {uuid:req.jwt.sub}})
     //.populate('accounts', 'name slug plan avatar primary')
     .success(function(user) {
       return res.json(user);
     })
     .error(function(err){
+      console.log('something went wrong!');
+
       handleError(res,err);
     });
 };
@@ -286,5 +290,5 @@ exports.verify = function(req,res) {
  **/
 function handleError(res, err) {
   console.log('User Controller error:', err);
-  return res.send(500, err);
+  return res.json({status: 'error', msg: err});
 }

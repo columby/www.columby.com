@@ -1,12 +1,13 @@
 'use strict';
 
 var express = require('express'),
-    controller = require('./../controllers/dataset.controller'),
+    controller = require('../controllers/dataset.controller'),
     auth = require('../controllers/auth.controller'),
     router = express.Router();
 
 
 module.exports = function(app){
+
 
   /**
    *
@@ -15,9 +16,9 @@ module.exports = function(app){
    * Roles: authenticated
    *
    **/
-  router.get('/extractlink',
-    auth.ensureAuthenticated,
-    controller.extractlink);
+  //router.get('/extractlink',
+  //  auth.ensureAuthenticated,
+  //  controller.extractlink);
 
 
   /**
@@ -30,6 +31,7 @@ module.exports = function(app){
   router.get('/',
 
     controller.index);
+
 
   /**
    *
@@ -120,4 +122,5 @@ module.exports = function(app){
     controller.destroyReference);
 
   app.use('/api/v2/dataset',router);
+
 };

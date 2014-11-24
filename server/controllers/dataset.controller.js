@@ -52,30 +52,25 @@ exports.extractlink = function(req,res) {
  */
 exports.index = function(req, res) {
 
-  // check if user is authenticated
-  if ( (req.user) && (req.user._id)) {
-    console.log('User connected');
-  }
-
   var filter = {
     private: false,
-    created_at:  {
-      lte: new Date('2014-11-05T09:23:32.586Z')
-    }
+    //created_at:  {
+    //  lte: new Date('2014-11-05T09:23:32.586Z')
+    //}
   };
-  if (req.query.userId) {
-    filter.publisher = req.query.userId;
-  }
 
-  var limit = 10;
-  var offset = 0;
+  // Set (default) limit
+  var limit = req.query.limit || 10;
+  // Set (default) offset
+  var offset = req.query.offset | 0;
 
   Dataset
     .findAll({
       where: filter,
       limit: limit,
       offset: offset,
-      order: 'created_at DESC'
+      order: 'created_at DESC',
+      include: [ {model: Account }]
     })
     //.populate('account', 'slug name account owner')
     .success(function(datasets) {

@@ -8,10 +8,11 @@ module.exports = function(sequelize, DataTypes) {
    *
    */
   var Account = sequelize.define('Account', {
+      uuid        : { type: DataTypes.UUID },
       name        : { type: DataTypes.STRING },
       description : { type: DataTypes.TEXT },
       avatar      : { type: DataTypes.STRING },
-      primary     : { type: DataTypes.BOOLEAN }
+      primary     : { type: DataTypes.BOOLEAN, defaultValue: false }
     },{
       classMethods: {
         associate: function(models) {

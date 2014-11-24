@@ -8,8 +8,8 @@ angular.module('columbyApp')
       id: '@id'
     }, {
       update: {
-        method: 'PUT',
-      },
+        method: 'PUT'
+      }
     }
     );
 
