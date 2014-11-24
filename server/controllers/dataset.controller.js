@@ -9,7 +9,8 @@ var _ = require('lodash'),
     mongoose = require('mongoose'),
     //Dataset = require('./../routes/dataset/dataset.model.js'),
     Dataset = require('../models/index').Dataset,
-    Account = require('../models/index').Account
+    Account = require('../models/index').Account,
+  Sequelize = require('sequelize')
   ;
 
 
@@ -90,31 +91,44 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
   // id can be objectId or slug. Cast the id to objectId,
   // if this works then use it, otherwise treat it as a slug.
-  var id,slug;
+  //var id,slug;
+  //
+  //try {
+  //  id = new mongoose.Types.ObjectId(req.params.id);
+  //} catch (e) {
+  //  console.log('Error casting param to objectID', e);
+  //}
+  //var filter = {};
+  //if (slug) {
+  //  filter.slug = slug;
+  //} else if (id){
+  //  filter._id = id;
+  //} else {
+  //  return res.json(null);
+  //}
+  //filter.private = false;
 
-  try {
-    id = new mongoose.Types.ObjectId(req.params.id);
-  } catch (e) {
-    console.log('Error casting param to objectID', e);
-  }
-  var filter = {};
-  if (slug) {
-    filter.slug = slug;
-  } else if (id){
-    filter._id = id;
-  } else {
-    return res.json(null);
-  }
-  filter.private = false;
+  console.log(req.params.id);
+  Dataset.find({
+    where: { shortid: req.params.id },
+    include: [
+      { model: Account }
+    ]
+  }).success(function(dataset){
+    res.json(dataset);
+  }).error(function(err){
+    console.log(err);
+  });
 
-  Dataset
-    .findOne(filter)
-    .populate('account', 'slug name description owner account avatar')
-    .exec(function(err,dataset){
-      if (err) { return handleError(res, err); }
-      if (!dataset) return res.json({error:'Failed to load dataset ' + req.params.id, err:err});
-      return res.json(dataset);
-    });
+
+
+    //.findOne(filter)
+    //.populate('account', 'slug name description owner account avatar')
+    //.exec(function(err,dataset){
+    //  if (err) { return handleError(res, err); }
+    //  if (!dataset) return res.json({error:'Failed to load dataset ' + req.params.id, err:err});
+    //  return res.json(dataset);
+    //});
 };
 
 // Creates a new dataset in the DB.

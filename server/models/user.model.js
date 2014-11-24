@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
         validate  : {
           isEmail: true
         }
-      }, 
+      },
       verified: {
         type: DataTypes.BOOLEAN,
         defaultValue: false

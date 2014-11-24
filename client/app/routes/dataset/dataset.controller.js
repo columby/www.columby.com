@@ -16,7 +16,7 @@ angular.module('columbyApp')
       DatasetSrv.get({
         id: $stateParams.id
       }, function(dataset) {
-        if (!dataset._id){
+        if (!dataset.id){
           toaster.pop('danger',null,'Sorry, the requested dataset was not found. ');
           $state.go('home');
           return;
@@ -27,8 +27,8 @@ angular.module('columbyApp')
         $window.document.title = 'columby.com | ' + dataset.title;
 
         // transition the url from slug to id
-        if ($stateParams.id !== dataset._id) {
-          $state.transitionTo ('dataset.view', { id: dataset._id}, {
+        if ($stateParams.id !== dataset.shortid) {
+          $state.transitionTo ('dataset.view', { id: dataset.shortid}, {
             location: true,
             inherit: true,
             relative: $state.$current,
@@ -48,7 +48,7 @@ angular.module('columbyApp')
         // }
         // $scope.summary = summary + '</p>';
 
-        $scope.dataset.canEdit= AuthSrv.canEdit({postType:'dataset', _id:dataset.account._id});
+        $scope.dataset.canEdit= AuthSrv.canEdit({postType:'dataset', id:dataset.Account.id});
 
         updateHeaderImage();
 
@@ -99,7 +99,7 @@ angular.module('columbyApp')
       DatasetSrv.get({
         id: $stateParams.id
       }, function(dataset) {
-        if (!dataset._id){
+        if (!dataset.id){
           toaster.pop('danger',null,'Sorry, the requested dataset was not found. ');
           $state.go('home');
           return;
@@ -115,8 +115,8 @@ angular.module('columbyApp')
         }
 
         // transition the url from slug to id
-        if ($stateParams.id !== dataset._id) {
-          $state.transitionTo ('dataset.view', { id: dataset._id}, {
+        if ($stateParams.id !== dataset.id) {
+          $state.transitionTo ('dataset.view', { id: dataset.id}, {
             location: true,
             inherit: true,
             relative: $state.$current,
@@ -140,7 +140,7 @@ angular.module('columbyApp')
         }
         $scope.summary = summary + '</p>';
 
-        $scope.dataset.canEdit= AuthSrv.canEdit({postType:'dataset', _id:dataset.account._id});
+        $scope.dataset.canEdit= AuthSrv.canEdit({postType:'dataset', id:dataset.account.id});
 
         updateHeaderImage();
 
@@ -165,7 +165,7 @@ angular.module('columbyApp')
         avatar :{
           url             : 'assets/images/avatar.png'
         },
-        owner           : $rootScope.user.primaryAccount._id,
+        owner           : $rootScope.user.primaryAccount.id,
         publicationAccount: $rootScope.user.primaryAccount,
         canEdit           : true
       };
@@ -175,11 +175,11 @@ angular.module('columbyApp')
 
     $scope.changeAccount = function(){
       $scope.showAccountSelector = true;
-    }
+    };
 
     $scope.updateDatasetOwner = function(id){
       console.log(id);
-      $scope.dataset.owner = $rootScope.user.accounts[ id]._id;
+      $scope.dataset.owner = $rootScope.user.accounts[ id].id;
       $scope.dataset.avatar.url = $rootScope.user.accounts[ id].avatar.url;
       $scope.dataset.publicationAccount = $rootScope.user.accounts[ id];
       $scope.showAccountSelector = false;
@@ -199,20 +199,20 @@ angular.module('columbyApp')
 
     /* dataset functions */
     $scope.updateTitle = function() {
-      if (!$scope.dataset._id) {
+      if (!$scope.dataset.id) {
         //console.log('Title changed, but not yet saved');
       } else {
         if ($scope.datasetUpdate.title === $scope.dataset.title) {
           //console.log('Dataset saved, but no title change');
         } else {
           var dataset = {
-            _id: $scope.dataset._id,
-            title: $scope.datasetUpdate.title,
+            id: $scope.dataset.id,
+            title: $scope.datasetUpdate.title
           };
           //console.log('updating dataset title', dataset);
 
-          DatasetSrv.update({id:dataset._id},dataset,function(res){
-            if (res._id){
+          DatasetSrv.update({id:dataset.id},dataset,function(res){
+            if (res.id){
               $scope.datasetUpdate.title = res.title;
               toaster.pop('success', null, 'Dataset title updated.');
             }
@@ -223,18 +223,18 @@ angular.module('columbyApp')
 
     $scope.updateDescription = function() {
       //console.log('updating dataset description');
-      if (!$scope.dataset._id) {
+      if (!$scope.dataset.id) {
         //console.log('Dataset not yet saved');
       } else {
         if ($scope.datasetUpdate.description === $scope.dataset.description) {
           //console.log('Dataset saved, but no description change');
         } else {
           var dataset = {
-            _id         : $scope.dataset._id,
+            id         : $scope.dataset.id,
             description : $scope.datasetUpdate.description
           };
-          DatasetSrv.update({id:dataset._id},dataset,function(res){
-            if (res._id){
+          DatasetSrv.update({id:dataset.id},dataset,function(res){
+            if (res.id){
               $scope.datasetUpdate.description = res.description;
               toaster.pop('success', null, 'Dataset description updated.');
             } else {
@@ -248,13 +248,13 @@ angular.module('columbyApp')
     $scope.update = function(){
 
       var dataset = {
-        _id: $scope.dataset._id,
+        id: $scope.dataset.id,
         title: $scope.dataset.title,
         description: $scope.dataset.description
       };
 
-      DatasetSrv.update({id: dataset._id}, dataset,function(res){
-        if (res._id){
+      DatasetSrv.update({id: dataset.id}, dataset,function(res){
+        if (res.id){
           $scope.dataset = res;
           toaster.pop('success', null, 'Dataset updated.');
         }
@@ -267,9 +267,9 @@ angular.module('columbyApp')
       DatasetSrv.save($scope.dataset, function(res){
         console.log(res);
         //console.log('create',res);
-        if (res._id) {
+        if (res.id) {
           toaster.pop('success', null, 'Your dataset page is created. Now add some data.');
-          $state.go('dataset.edit', {id:res._id});
+          $state.go('dataset.edit', {id:res.id});
         }
       });
     };
@@ -277,12 +277,12 @@ angular.module('columbyApp')
     $scope.updateSlug = function(){
       var slug = Slug.slugify($scope.dataset.slug);
       var d={
-        _id: $scope.dataset._id,
+        id: $scope.dataset.id,
         slug: slug
       };
-      DatasetSrv.update({id: d._id}, d, function(res){
+      DatasetSrv.update({id: d.id}, d, function(res){
         //console.log(res);
-        if (res._id) {
+        if (res.id) {
           $scope.dataset.slug = res.slug;
           toaster.pop('success', 'Updated', 'Dataset custom URL updated.');
         } else if (res.err && res.err.errors.slug){
@@ -325,7 +325,7 @@ angular.module('columbyApp')
 
           var distribution = {
             // Columby Stuff
-            uploader          : $rootScope.user._id,
+            uploader          : $rootScope.user.id,
             distributionType  : $scope.newDistribution.distributionType,
             publicationStatus : 'public',
             // DCAT stuff
@@ -334,7 +334,7 @@ angular.module('columbyApp')
           //console.log('attaching distribution', distribution);
 
           DatasetDistributionSrv.save({
-            id:$scope.dataset._id,
+            id:$scope.dataset.id,
             distribution: distribution}, function(res){
               //console.log('res', res);
               if (res.status === 'success'){
@@ -354,8 +354,8 @@ angular.module('columbyApp')
     };
 
     $scope.deleteDistribution = function(index){
-      var id = $scope.dataset._id;
-      var distributionId = $scope.dataset.distributions[ index]._id;
+      var id = $scope.dataset.id;
+      var distributionId = $scope.dataset.distributions[ index].id;
 
       DatasetDistributionSrv.delete({id:id, distributionId:distributionId}, function(res){
         if (res.status === 'success') {
@@ -387,7 +387,7 @@ angular.module('columbyApp')
           type: file.type,
           size: file.size,
           name: file.name,
-          accountId: $scope.dataset.account._id
+          accountId: $scope.dataset.account.id
         }
       })
         .success(function(response){
@@ -398,7 +398,7 @@ angular.module('columbyApp')
             url: 'https://s3.amazonaws.com/' + $rootScope.config.aws.bucket,
             method: 'POST',
             data: {
-              'key' : $scope.dataset.account._id + '/' + response.file.filename,
+              'key' : $scope.dataset.account.id + '/' + response.file.filename,
               'acl' : 'public-read',
               'Content-Type' : file.type,
               'AWSAccessKeyId': s3Params.AWSAccessKeyId,
@@ -406,7 +406,7 @@ angular.module('columbyApp')
               'Policy' : s3Params.s3Policy,
               'Signature' : s3Params.s3Signature
             },
-            file: file,
+            file: file
           }).then(function(response) {
             //console.log(response.data);
             file.progress = parseInt(100);
@@ -426,7 +426,7 @@ angular.module('columbyApp')
                 method: 'POST',
                 url: 'api/v2/files/s3success',
                 data: {
-                  fileId: fileResponse._id,
+                  fileId: fileResponse.id,
                   url: parsedData.location
                 }
               })
@@ -434,13 +434,13 @@ angular.module('columbyApp')
                 //console.log('res', response);
                 $scope.dataset.headerImage = response.url;
                 var d = {
-                  id: $scope.dataset._id,
+                  id: $scope.dataset.id,
                   headerImage: response.url
                 };
                 //console.log('datasetUpdate', d);
                 DatasetSrv.update(d, function(result){
                   //console.log('r',result);
-                  if (result._id) {
+                  if (result.id) {
                     toaster.pop('success', 'Updated', 'Account updated.');
                     updateHeaderImage();
                   } else {
@@ -525,7 +525,7 @@ angular.module('columbyApp')
       console.log('saving reference', reference);
 
       // save reference
-      DatasetReferencesSrv.save({id:$scope.dataset._id, reference: reference}, function(res){
+      DatasetReferencesSrv.save({id:$scope.dataset.id, reference: reference}, function(res){
         if (res.status==='success') {
           $scope.dataset.references.push(reference);
           ngDialog.closeAll();
@@ -537,8 +537,8 @@ angular.module('columbyApp')
 
     $scope.deleteReference = function(index){
       console.log(index);
-      var id = $scope.dataset._id;
-      var referenceId = $scope.dataset.references[ index]._id;
+      var id = $scope.dataset.id;
+      var referenceId = $scope.dataset.references[ index].id;
 
       DatasetReferencesSrv.delete({id:id, referenceId:referenceId}, function(res){
         console.log(res);
@@ -555,12 +555,12 @@ angular.module('columbyApp')
         $scope.visibilityStatusMessage = 'updating';
         console.log('setting private to', status);
         var dataset = {
-          _id: $scope.dataset._id,
+          id: $scope.dataset.id,
           private: status
         };
-        DatasetSrv.update({id: dataset._id}, dataset, function(res){
+        DatasetSrv.update({id: dataset.id}, dataset, function(res){
           $scope.visibilityStatusMessage = 'updated';
-          if (res._id){
+          if (res.id){
             $scope.dataset.visibilityStatus = status;
             toaster.pop('success', null, 'Dataset visibility status updated to  ' + status);
           }

@@ -7,7 +7,7 @@
  */
 var _ = require('lodash'),
     mongoose = require('mongoose'),
-    Account = require('././account.model.js');
+    Account = require('../models/account.model.js');
 
 
 

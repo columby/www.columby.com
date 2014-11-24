@@ -86,7 +86,7 @@
         <div class="publication-listing">
 					<ul>
             <li ng-repeat="dataset in datasets" class="publication-item">
-              <h4><a ui-sref="dataset.view({ id: dataset.uuid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
+              <h4><a ui-sref="dataset.view({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
               <div class="user-date">
                 <a ui-sref="account.view({slug:dataset.Account.slug})">{{dataset.Account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.createdAt | date:'MMMM d, yyyy'}}</time>
               </div>
