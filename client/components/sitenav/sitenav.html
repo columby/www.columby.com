@@ -9,16 +9,16 @@
         <a ui-sref="search" class="search"><i class="fa fa-search"></i></a>
       </li>
 
-      <li ng-show="$root.user._id">
+      <li ng-show="$root.user.id">
         <a ui-sref="dataset.create" ng-class="{active: $state.includes('dataset.create')}">Publish new dataset</a>
       </li>
 
-      <!-- <li ng-show="$root.user._id">
+      <!-- <li ng-show="$root.user.id">
         <a ui-sref='account.view({slug: $root.selectedAccount.slug})'>My datasets</a>
       </li> -->
 
-      <li ng-show="$root.user._id">
-        <a ui-sref="account.view({slug: $root.user.primaryAccount.slug})" ng-class="{active: $state.includes(account.view)}">
+      <li ng-show="$root.user.id">
+        <a ui-sref="account.view({slug: $root.user.slug})" ng-class="{active: $state.includes(account.view)}">
          My profile<!-- {{$root.selectedAccount.name}} -->
         </a>
         <span class="settings">
@@ -26,7 +26,7 @@
         </span>
       </li>
 
-      <li ng-hide="$root.user._id">
+      <li ng-hide="$root.user.id">
         <a ui-sref='signin'>Login or Signup</a>
       </li>
     </ul>

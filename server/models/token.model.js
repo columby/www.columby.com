@@ -1,7 +1,5 @@
 'use strict';
 
-var uuid = require('node-uuid');
-
 module.exports = function(sequelize, DataTypes) {
 
   /**
@@ -12,8 +10,8 @@ module.exports = function(sequelize, DataTypes) {
   var Token = sequelize.define('Token',
     {
       token: {
-        type: DataTypes.STRING,
-        default: uuid.v4()
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4
       }
     }, {
       classMethods: {

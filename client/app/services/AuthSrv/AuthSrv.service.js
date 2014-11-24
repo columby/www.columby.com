@@ -41,6 +41,7 @@ angular.module('columbyApp')
             if (response.data.user){
               user = response.data.user;
             }
+            console.log(response);
             return response.data;
           });
         return promise;

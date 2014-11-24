@@ -31,7 +31,7 @@ angular.module('columbyApp')
 
     // get account information of user by userSlug
     AccountSrv.get({slug: $stateParams.slug}, function(result){
-      if (!result._id){
+      if (!result.id){
         toaster.pop('warning', null, 'The requested account was not found. ');
         $state.go('home');
       } else {

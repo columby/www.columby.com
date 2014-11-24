@@ -18,12 +18,13 @@ var config = require('../config/environment/index'),
  *
  */
 exports.createToken = function(user) {
+  console.log('jwt user', user.id);
   var payload = {
-    sub: user._id,
+    sub: user.id,
     iat: moment().unix(),
-    exp: moment().add(14, 'days').unix(),
-    accountId: user.accounts[ user.selectedAccount]
+    exp: moment().add(14, 'days').unix()
   };
+  console.log('payload', payload);
   return jwt.encode(payload, config.jwt.secret);
 };
 

@@ -17,18 +17,14 @@ var _             = require('lodash'),
  *
  */
 exports.me = function(req, res) {
-  console.log(req.jwt.sub);
-  var t = req.jwt.sub;
-  User.find({ where: {uuid:req.jwt.sub}})
-    //.populate('accounts', 'name slug plan avatar primary')
-    .success(function(user) {
-      return res.json(user);
-    })
-    .error(function(err){
-      console.log('something went wrong!');
-
-      handleError(res,err);
-    });
+  console.log('jwt', req.jwt.sub);
+  User.find(req.jwt.sub).success(function(user) {
+    console.log('user found', user);
+    return res.json(user);
+  }).error(function(err){
+    console.log('something went wrong!');
+    handleError(res,err);
+  });
 };
 
 
@@ -207,8 +203,7 @@ exports.destroy = function(req, res) {
  **/
 exports.login = function(req,res) {
   console.log('Finding user ', req.body.email);
-  User
-    .findOne({
+  User.find({
       where: {
         email: req.body.email
       }
@@ -217,9 +212,8 @@ exports.login = function(req,res) {
       if (!user){ return res.send(user); }
 
       // create a new logintoken
-      var token = new Token({user: user._id});
-      token.save(function(err) {
-        if (err) { return handleError(res,err); }
+      Token.create({user_id: user.id}).success(function(token){
+        console.log('token created', token.token);
         // Send the new token by email
         var vars = {
           tokenurl: req.protocol + '://' + req.get('host') + '/u/signin?token=' + token.token,
@@ -229,12 +223,16 @@ exports.login = function(req,res) {
           }
         };
         emailService.login(vars, function(result){
+          console.log(user.shortid);
           if (result[0].status === 'sent') {
-            return res.json(user._id);
+            return res.json({status: 'success', user: user.shortid});
           } else {
             return handleError(res, { status: 'error', err: 'Error sending mail.' });
           }
         });
+      }).error(function(err){
+        console.log('err', err);
+        return handleError(res,err);
       });
     })
     .error(function(err){
@@ -257,29 +255,35 @@ exports.verify = function(req,res) {
   var loginToken = req.query.token;
 
   // Check if supplied token exists and delete it after use
-  Token.findOneAndRemove({'token': loginToken}, function(err,token){
-    if (err) { return handleError(res,err); }
-    if (!token) { return res.json({status:'error',err:'token not found'})}
-    // Find the user connected to the token
-    User
-      .findOne({_id: token.user})
-      .populate('accounts', 'name slug plan avatar primary')
-      .exec(function(err,user){
-        if (err) { return handleError(res,err); }
-        if (!user) { return res.json(user)}
-        // Make user verified if needed
-        if (user.verified === false){
-          user.verified=true;
-          user.save();
-        }
-        // Send back a JWT
-        return res.json({
-          user  : user,
-          token : auth.createToken(user)
-        });
-      })
+  Token.find({where:{'token': loginToken}}).success(function(token) {
+    if (!token) {
+      return res.json({status: 'error', err: 'token not found'});
     }
-  );
+    // Find the user connected to the token
+    User.find(token.user_id).success(function (user) {
+      //.populate('accounts', 'name slug plan avatar primary')
+      if (!user) { return res.json(user); }
+      // Make user verified if needxed
+      if (user.verified !== true) {
+        user.verified = true;
+        user.save().success(function(user){}).error(function(err){
+          console.log('eee',err);
+        });
+      }
+      //delete the token
+      token.destroy().success(function(res){}).error(function(err){
+        console.log('err token delete, ', err);
+      });
+      // Send back a JWT
+      return res.json({
+        user: user,
+        token: auth.createToken(user)
+      });
+    }).error(function (err) {
+      console.log('User find error, ', err);
+      return handleError(res, err);
+    });
+  });
 };
 
 

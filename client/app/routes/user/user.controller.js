@@ -21,14 +21,6 @@ angular.module('columbyApp')
         // save JWT token in local storage (browser)
         localStorage.setItem('columby_token', JSON.stringify(response.token));
 
-        // set primary account
-        for (var i=0;i<user.accounts.length;i++){
-          if (user.accounts[ i].primary===true){
-            console.log(user.accounts[ i].primary);
-            user.primaryAccount = user.accounts[ i];
-            return
-          }
-        }
         AuthSrv.setUser(response.user);
 
         // Let the app know
@@ -56,11 +48,10 @@ angular.module('columbyApp')
     AuthSrv.login({email:$scope.email}).then(function(response){
 
       $scope.loginInProgress = false;
-
-      if (response) {
+      if (response.status === 'success') {
         // handle valid response
         $scope.signinSuccess = true;
-      } else {
+      } else if (response.status === 'not_found') {
         toaster.pop('warning', 'Signin error', 'The email address ' + $scope.email + ' does not exist. Would you like to register for a new account?');
         $scope.newuser={};
         $scope.newuser.email = $scope.email;
@@ -70,13 +61,15 @@ angular.module('columbyApp')
           newmail = newmail + c;
         }
         $scope.newuser.name = newmail;
+      } else {
+        toaster.pop('warning', null, 'Sorry, something went wrong... ' + JSON.stringify(response.err));
       }
 
     });
   };
 
   $scope.register = function(){
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem('columby_token');
     $scope.registrationInProgress = true;
     console.log('registering new user', $scope.newuser);
     AuthSrv.register($scope.newuser).then(function(response){

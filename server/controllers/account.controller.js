@@ -6,9 +6,9 @@
  *
  */
 var _ = require('lodash'),
-    mongoose = require('mongoose'),
-    Account = require('../models/account.model.js');
-
+    Sequelize = require('sequelize'),
+    Account = require('../models/index').Account,
+    Dataset = require('../models/index').Dataset;
 
 
 function slugify(text) {
@@ -23,24 +23,48 @@ function slugify(text) {
 }
 
 
-// Get list of accounts
+/**
+ *
+ * Get list of accounts
+ *
+ */
 exports.index = function(req, res) {
-  Account.find(function (err, accounts) {
-    if(err) { return handleError(res, err); }
-    return res.json(200, accounts);
+  // Define WHERE clauses
+  var filter = {
+    private: false
+  };
+  // Set (default) limit
+  var limit = req.query.limit || 10;
+  // Set (default) offset
+  var offset = req.query.offset | 0;
+
+  Account.findAll({
+    where: filter,
+    limit: limit,
+    offset: offset,
+    order: 'created_at DESC'
+  }).success(function(accounts) {
+    return res.json(accounts);
+  }).error(function(err){
+    console.log(err);
+    return handleError(res, err);
   });
 };
 
 // Get a single account
 exports.show = function(req, res) {
-  console.log('show account');
-  Account.findOne({slug: req.params.id})
-    .populate('datasets')
-    .exec(function(err, account) {
-      if(err) { return handleError(res, err); }
-      console.log(account);
-      return res.json(account);
-    });
+
+  Account.find({
+    where: { slug: req.params.id },
+    //include: [
+    //  { model: Dataset }
+    //]
+  }).success(function(dataset){
+    console.log(dataset);
+    res.json(dataset);
+  }).error(function(err){
+    console.log(err);
+  });
 };
 
 // Creates a new account in the DB.

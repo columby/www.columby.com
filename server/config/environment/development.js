@@ -42,5 +42,5 @@ module.exports = {
     key       : process.env.EMBEDLY_KEY
   },
 
-  seedDB: true
+  seedDB: false
 };
