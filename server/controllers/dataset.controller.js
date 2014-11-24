@@ -52,13 +52,10 @@ exports.extractlink = function(req,res) {
  */
 exports.index = function(req, res) {
 
+  // Define WHERE clauses
   var filter = {
-    private: false,
-    //created_at:  {
-    //  lte: new Date('2014-11-05T09:23:32.586Z')
-    //}
+    private: false
   };
-
   // Set (default) limit
   var limit = req.query.limit || 10;
   // Set (default) offset
@@ -70,7 +67,9 @@ exports.index = function(req, res) {
       limit: limit,
       offset: offset,
       order: 'created_at DESC',
-      include: [ {model: Account }]
+      include: [
+        { model: Account }
+      ]
     })
     //.populate('account', 'slug name account owner')
     .success(function(datasets) {

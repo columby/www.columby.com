@@ -1,5 +1,8 @@
 'use strict';
 
+var Hashids = require('hashids'),
+  hashids = new Hashids('Salt', 8);
+
 module.exports = function(sequelize, DataTypes) {
 
   /**
@@ -9,10 +12,21 @@ module.exports = function(sequelize, DataTypes) {
    */
   var Distribution = sequelize.define('Distribution',
     {
-      // Columby
-      title           : { type: DataTypes.STRING },
-      type            : { type: DataTypes.STRING },      // external link, internal storage, internal api
-      private         : { type: DataTypes.BOOLEAN, default: true },
+      shortid:{
+        type: DataTypes.STRING,
+        unique: true
+      },
+      title: {
+        type: DataTypes.STRING
+      },
+      type: {
+        // external link, internal storage, internal api
+        type: DataTypes.STRING
+      },
+      private: {
+        type: DataTypes.BOOLEAN,
+        default: true
+      },
 
       // DCAT
       description     : { type: DataTypes.STRING },
@@ -39,6 +53,17 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   );
+
+  /**
+   *
+   * Set shortid after creating a new account
+   *
+   */
+  Distribution.afterCreate( function(model) {
+    model.updateAttributes({
+      shortid: hashids.encode(parseInt(String(Date.now()) + String(model.id)))
+    }).success(function(){}).error(function(){});
+  });
 
   return Distribution;
 };

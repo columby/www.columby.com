@@ -1,5 +1,8 @@
 'use strict';
 
+var Hashids = require('hashids'),
+  hashids = new Hashids('Salt', 8);
+
 module.exports = function(sequelize, DataTypes) {
 
   /**
@@ -9,13 +12,29 @@ module.exports = function(sequelize, DataTypes) {
    */
   var Dataset = sequelize.define('Dataset',
     {
-      uuid        : { type: DataTypes.UUID },
-      title       : { type: DataTypes.STRING },
-      slug        : { type: DataTypes.STRING },
-      description : { type: DataTypes.TEXT },
-      header_img  : { type: DataTypes.STRING },
-      private     : { type: DataTypes.BOOLEAN, defaultValue: false }
-
+      shortid: {
+        type: DataTypes.STRING,
+        unique: true
+      },
+      uuid: {
+        type: DataTypes.UUID
+      },
+      title: {
+        type: DataTypes.STRING
+      },
+      slug: {
+        type: DataTypes.STRING
+      },
+      description: {
+        type: DataTypes.TEXT
+      },
+      header_img  : {
+        type: DataTypes.STRING
+      },
+      private: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      }
     }, {
       classMethods: {
         associate: function (models) {
@@ -31,6 +50,17 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   );
+
+  /**
+   *
+   * Set shortid after creating a new account
+   *
+   */
+  Dataset.afterCreate( function(model) {
+    model.updateAttributes({
+      shortid: hashids.encode(parseInt(String(Date.now()) + String(model.id)))
+    }).success(function(){}).error(function(){});
+  });
 
   return Dataset;
 };

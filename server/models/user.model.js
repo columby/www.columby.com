@@ -1,5 +1,8 @@
 'use strict';
 
+var Hashids = require('hashids'),
+  hashids = new Hashids('Salt', 8);
+
 module.exports = function(sequelize, DataTypes) {
 
   /**
@@ -9,7 +12,14 @@ module.exports = function(sequelize, DataTypes) {
    */
   var User = sequelize.define('User',
     {
-      uuid  : { type: DataTypes.UUID, default: sequelize.UUIDV4 },
+      shortid: {
+        type: DataTypes.STRING,
+        unique: true
+      },
+      uuid:{
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4
+      },
       email : {
         type      : DataTypes.STRING,
         allowNull : false,
@@ -17,15 +27,18 @@ module.exports = function(sequelize, DataTypes) {
         validate  : {
           isEmail: true
         }
+      }, 
+      verified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
       },
-
-      verified      : { type: DataTypes.BOOLEAN, default: false },
-
       // migration from beta.columby.com
-      drupal_name : { type: DataTypes.STRING },
-      drupal_created: { type: DataTypes.STRING }
-
-
+      drupal_name: {
+        type: DataTypes.STRING
+      },
+      drupal_created: {
+        type: DataTypes.STRING
+      }
     },{
       classMethods: {
         associate: function(models) {
@@ -35,6 +48,17 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   );
+
+  /**
+   *
+   * Set shortid after creating a new account
+   *
+   */
+  User.afterCreate( function(model) {
+    model.updateAttributes({
+      shortid: hashids.encode(parseInt(String(Date.now()) + String(model.id)))
+    }).success(function(){}).error(function(){});
+  });
 
   return User;
 };
