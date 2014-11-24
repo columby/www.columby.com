@@ -1,10 +1,12 @@
 'use strict';
 
-var express = require('express');
-var controller = require('./../controllers/admin.controller.js');
+var express = require('express'),
+    controller = require('./../controllers/admin.controller.js'),
+    router = express.Router();
 
-var router = express.Router();
+module.exports = function(app){
 
-router.get( '/user/check-primary-accounts', controller.userAccounts );
+  router.get('/check-primary-accounts', controller.userAccounts );
 
-module.exports = router;
+  app.use('/api/v2/admin', router);
+};

@@ -1,14 +1,14 @@
 'use strict';
 
 var _             = require('lodash'),
-    User          = require('./../routes/user/user.model'),
-    Token         = require('./../routes/user/token.model'),
-    Account       = require('../routes/account/account.model'),
-    config        = require('../config/environment/index'),
-    auth          = require('./../controllers/auth.controller'),
-    emailService  = require('./../controllers/email.controller');
 
-var models = require('../models/index');
+    User          = require('../models/index').User,
+    Token         = require('../models/index').Token,
+    Account       = require('../models/index').Account,
+
+    config        = require('../config/environment/index'),
+    auth          = require('../controllers/auth.controller'),
+    emailService  = require('../controllers/email.controller');
 
 
 /**
@@ -17,18 +17,13 @@ var models = require('../models/index');
  *
  */
 exports.me = function(req, res) {
-  models.sequelize.sync().done(function(err, res) {
-    console.log('sync done');
-    models.User.findAll({}).done(function(err,res){
-      console.log('u', err,res);
-    });
-  });
-
-  User.findOne({_id: req.jwt.sub})
-    .populate('accounts', 'name slug plan avatar primary')
-    .exec(function(err, user) {
-      if(err) { return handleError(res,err); }
+  User.find(req.jwt.sub)
+    //.populate('accounts', 'name slug plan avatar primary')
+    .success(function(user) {
       return res.json(user);
+    })
+    .error(function(err){
+      handleError(res,err);
     });
 };
 
@@ -100,32 +95,48 @@ exports.show = function(req, res) {
  *
  **/
 exports.register = function(req, res) {
-  User.create(req.body, function(err, user) {
-    if (err) { return handleError(res, err); }
-    // Create a primary publication account for this user.
-    var account = new Account({
-      owner   : user._id,
-      name    : req.body.name,
-      primary : true
-    });
-    account.save(); // user .save() to user model's save-hooks
+  console.log('new user', req.body);
+  // Try to create a new user
+  User.create(req.body)
+    // Handle successful user creation
+    .success(function(user) {
 
-    // Send email to user with login link.
-    var vars={
-      user:{
-        email: user.email,
-        name: user.name
-      }
-    };
-    // emailService.preRegister / emailService.register
-    emailService.preRegister(vars, function(result){
-      if (result[0].status === 'sent') {
-        return res.json(user._id);
-      } else {
-        return handleError(res, { status: 'error', err: 'Error sending mail.' });
-      }
+      // Create a primary publication account for this user.
+      Account.create({
+        name: req.body.name,
+        primary: true
+      }).success(function(account){
+        console.log('new account');
+        user.addAccount(account).success(function(account){
+          // Send email to user with login link.
+          var vars = {
+            user: {
+              email: user.email,
+              name: account.name
+            }
+          };
+          console.log('var', vars);
+          // emailService.preRegister / emailService.register
+          emailService.preRegister(vars, function (result) {
+            if (result[0].status === 'sent') {
+              return res.json(user._id);
+            } else {
+              return handleError(res, {status: 'error', err: 'Error sending mail.'});
+            }
+          });
+        }).error(function(err){
+          user.destroy();
+          console.log('err',err);
+          handleError(res,err);
+        });
+      }).error(function(err){
+        console.log(err);
+        handleError(res,err);
+      });
+    }).error(function(err){
+      console.log(err);
+      handleError(res,err);
     });
-  });
 };
 
 
@@ -191,31 +202,40 @@ exports.destroy = function(req, res) {
  *
  **/
 exports.login = function(req,res) {
-  User.findOne({'email': req.body.email}, function(err,user){
-    if (err) { return handleError(res, err); }
-    if (!user){ return res.send(user); }
+  console.log('Finding user ', req.body.email);
+  User
+    .findOne({
+      where: {
+        email: req.body.email
+      }
+    })
+    .success(function(user) {
+      if (!user){ return res.send(user); }
 
-    // create a new logintoken
-    var token = new Token({user: user._id});
-    token.save(function(err) {
-      if (err) { return handleError(res,err); }
-      // Send the new token by email
-      var vars = {
-        tokenurl: req.protocol + '://' + req.get('host') + '/u/signin?token=' + token.token,
-        user: {
-          email: user.email,
-          name: user.name
-        }
-      };
-      emailService.login(vars, function(result){
-        if (result[0].status === 'sent') {
-          return res.json(user._id);
-        } else {
-          return handleError(res, { status: 'error', err: 'Error sending mail.' });
-        }
+      // create a new logintoken
+      var token = new Token({user: user._id});
+      token.save(function(err) {
+        if (err) { return handleError(res,err); }
+        // Send the new token by email
+        var vars = {
+          tokenurl: req.protocol + '://' + req.get('host') + '/u/signin?token=' + token.token,
+          user: {
+            email: user.email,
+            name: user.name
+          }
+        };
+        emailService.login(vars, function(result){
+          if (result[0].status === 'sent') {
+            return res.json(user._id);
+          } else {
+            return handleError(res, { status: 'error', err: 'Error sending mail.' });
+          }
+        });
       });
+    })
+    .error(function(err){
+      if (err) { return handleError(res, err); }
     });
-  });
 };
 
 

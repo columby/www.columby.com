@@ -7,8 +7,10 @@
  */
 var _ = require('lodash'),
     mongoose = require('mongoose'),
-    Dataset = require('./../routes/dataset/dataset.model.js'),
-    Account = mongoose.model('Account');
+    //Dataset = require('./../routes/dataset/dataset.model.js'),
+    Dataset = require('../models/index').Dataset,
+    Account = require('../models/index').Account
+  ;
 
 
 exports.extractlink = function(req,res) {
@@ -49,30 +51,39 @@ exports.extractlink = function(req,res) {
  *
  */
 exports.index = function(req, res) {
+
   // check if user is authenticated
-  if (res.user._id){
-    console.log('user connected');
-  }
-  // check if user is connected to a dataset
-
-  var filter = {};
-  filter.private = false;
-  filter.createdAt = {
-    $lte: new Date('2014-11-05T09:23:32.586Z')
+  if ( (req.user) && (req.user._id)) {
+    console.log('User connected');
   }
 
+  var filter = {
+    private: false,
+    created_at:  {
+      lte: new Date('2014-11-05T09:23:32.586Z')
+    }
+  };
   if (req.query.userId) {
     filter.publisher = req.query.userId;
   }
 
+  var limit = 10;
+  var offset = 0;
+
   Dataset
-    .find(filter)
-    .limit(15)
-    .sort('-createdAt')
-    .populate('account', 'slug name account owner')
-    .exec(function(err, datasets) {
-      if (err) { return res.json(500, { error: 'Cannot list the datasets' }); }
+    .findAll({
+      where: filter,
+      limit: limit,
+      offset: offset,
+      order: 'created_at DESC'
+    })
+    //.populate('account', 'slug name account owner')
+    .success(function(datasets) {
       return res.json(datasets);
+    })
+    .error(function(err){
+      console.log(err);
+      return handleError(res, err);
     })
   ;
 };

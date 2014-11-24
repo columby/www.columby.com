@@ -1,8 +1,8 @@
 'use strict';
 
 var _ = require('lodash');
-var User = require('../routes/user/user.model.js'),
-    Account = require('../routes/account/account.model.js')
+var User = require('../models').User,
+    Account = require('../models').Account
 ;
 
 function createAccount(user){

@@ -10,8 +10,10 @@ var config    = require('./../config/environment');
  * Database settings
  *
  **/
-var sequelize = new Sequelize(config.db.uri, {
+var sequelize = new Sequelize(config.db.name, config.db.username, config.db.password, {
     dialect: config.db.dialect,
+    port: config.db.port,
+    logging: false,
     define: {
       underscored: true
     }
@@ -46,8 +48,10 @@ fs.readdirSync(__dirname)
   })
   .forEach(function(file) {
     var model = sequelize["import"](path.join(__dirname, file));
+    //console.log('adding ', model.name);
     db[model.name] = model;
   });
+
 
 /**
  *
@@ -60,22 +64,25 @@ Object.keys(db).forEach(function(modelName) {
   }
 });
 
-
 /**
  *
  * Resync database for development version
  *
  **/
-if (config.env === 'development'){
+if (config.seedDB === true){
   sequelize
     .sync({ force: true })
     .complete(function(err) {
       if (!!err) {
         console.log('An error occurred while creating the table:', err)
       } else {
-        console.log('It worked!')
+        console.log('It worked!');
+        console.log('seesing');
+        require('./../seed/seed');
       }
     });
+
+
 }
 
 db.sequelize = sequelize;

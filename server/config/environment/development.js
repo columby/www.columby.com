@@ -9,8 +9,11 @@ module.exports = {
   },
 
   db:{
-    uri: process.env.DB_URI,
-    dialect : process.env.DB_DIALECT
+    dialect : process.env.DB_DIALECT,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    name    : process.env.DB_NAME,
+    port    : process.env.DB_PORT
   },
 
   jwt: {
@@ -39,5 +42,5 @@ module.exports = {
     key       : process.env.EMBEDLY_KEY
   },
 
-  seedDB: false
+  seedDB: true
 };

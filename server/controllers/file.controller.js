@@ -1,7 +1,8 @@
 'use strict';
 
 var _ = require('lodash'),
-    File = require('./../routes/file/file.model.js'),
+    //File = require('./../routes/file/file.model.js'),
+    File = require('../models/index').File,
     crypto    = require('crypto'),
     config = require('../config/environment/index'),
     AWS = require('aws-sdk'),

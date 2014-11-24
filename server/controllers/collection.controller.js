@@ -1,7 +1,7 @@
 'use strict';
 
-var _ = require('lodash');
-var Collection = require('./../routes/collection/collection.model.js');
+var _ = require('lodash'),
+    Collection = require('../models/index').Collection;
 
 // Get list of collections
 exports.index = function(req, res) {

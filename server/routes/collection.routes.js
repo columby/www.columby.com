@@ -1,15 +1,18 @@
 'use strict';
 
-var express = require('express');
-var controller = require('./../controllers/collection.controller.js');
+var express = require('express'),
+    controller = require('./../controllers/collection.controller.js'),
+    router = express.Router();
 
-var router = express.Router();
+module.exports = function(app){
 
-router.get('/', controller.index);
-router.get('/:id', controller.show);
+
+  router.get('/', controller.index);
+  router.get('/:id', controller.show);
 // router.post('/', controller.create);
 // router.put('/:id', controller.update);
 // router.patch('/:id', controller.update);
 // router.delete('/:id', controller.destroy);
 
-module.exports = router;
+  app.use('/api/2/collection',router);
+};

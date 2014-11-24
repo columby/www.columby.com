@@ -1,17 +1,14 @@
 'use strict';
 
 var express = require('express'),
-    controller = require('./../controllers/search.controller'),
-    auth = require('./../controllers/auth.controller')
-;
+    controller = require('../controllers/search.controller'),
+    auth = require('../controllers/auth.controller'),
+    router = express.Router();
 
-var router = express.Router();
 
-router.get('/sync',
-  //auth.checkJWT,
-  //auth.isAdmin,
-    controller.sync);
+module.exports = function(app){
 
-router.get('/', controller.search);
+  router.get('/', controller.search);
 
-module.exports = router;
+  app.use('/api/2/search', router);
+};

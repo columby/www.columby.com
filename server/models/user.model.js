@@ -9,8 +9,10 @@ module.exports = function(sequelize, DataTypes) {
    */
   var User = sequelize.define('User',
     {
-      displayName: { type: DataTypes.STRING },
-
+      uuid: {
+        type: DataTypes.UUID,
+        default: sequelize.UUIDV4
+      },
       email: {
         type      : DataTypes.STRING,
         allowNull : false,
@@ -23,15 +25,15 @@ module.exports = function(sequelize, DataTypes) {
       verified      : { type: DataTypes.BOOLEAN, default: false },
 
       // migration from beta.columby.com
-      drupal_uid  : { type: DataTypes.STRING },
-      drupal_uuid : { type: DataTypes.STRING },
-      drupal_name : { type: DataTypes.STRING }
+      drupal_name : { type: DataTypes.STRING },
+      drupal_created: { type: DataTypes.STRING }
+
 
     },{
       classMethods: {
         associate: function(models) {
           User.hasMany(models.Token);
-          User.hasMany(models.Account);
+          User.hasMany(models.Account, {through: models.AccountsUsers});
         }
       }
     }
