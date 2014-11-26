@@ -17,7 +17,7 @@
       <div class="container">
         <h1 ng-bind-html="account.name || 'No name yet'"></h1>
         <div class="avatar">
-          <img src="{{account.avatar.url}}"/>
+          <img class="img-circle" src="{{account.avatar.url}}"/>
           <div class="label label-success" ng-show="account.id===$root.user.primaryAccount.id">This is you!</div>
 
         </div>

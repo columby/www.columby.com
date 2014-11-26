@@ -132,7 +132,17 @@ button{
 }
 
 .btn{
-  font-family: "lato", sans-serif
+  font-family: "lato", sans-serif;
+  &.transparant{
+    background: none;
+    border: 2px solid #fff;
+    color: #fff;
+    font-weight: bolder;
+    &:hover{
+      border: 2px solid #000;
+      color: #000;
+    }
+  }
 }
 
 .btn-add {
@@ -210,4 +220,26 @@ button{
     }
   }
 
+}
+
+
+// FOOTER
+
+.footer-wrapper{
+  background: #428bca;
+  color: #fff;
+  padding: 10px;
+  font-size: 0.8em;
+  .footer-info{
+    margin-top: 11px;
+    font-family: "lato", sans-serif;
+    a{
+      color: #fff;
+      text-decoration: underline;
+      &:hover{
+        text-decoration: none;
+        color: #fff;
+      }
+    }
+  }
 }
