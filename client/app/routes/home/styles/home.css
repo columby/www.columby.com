@@ -10,10 +10,14 @@
   background-position: 50% 50%;
   border: 0;
 }
-.page-home .page-header img {
+.page-home .page-header .logo {
   margin: 0 auto;
   margin-top: 100px;
   width: 400px;
+}
+.page-home .page-header .arrow {
+  margin: 0 auto;
+  margin-top: 50px;
 }
 .page-home .page-header h1.page-title {
   margin-top: 100px;
