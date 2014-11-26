@@ -56,12 +56,14 @@
     <div class="container">
 
       <div class="searchbox col-md-offset-1 col-md-10">
+        <label for="search-datasets" class="sr-only">Search datasets</label>
         <input
           type="text"
           ng-model="search.searchTerm"
           placeholder="Search datasets"
           class="input-large"
-          ng-change="search()">
+          ng-change="search()"
+          id="search-datasets">
         <div class="search-message">{{search.message}}</div>
       </div>
 
