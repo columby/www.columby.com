@@ -1,15 +1,6 @@
 .account .editorSidebar {
   top: 200px;
 }
-.account .content .header.wrapper h1 {
-  font-size: 70px;
-  font-weight: 700;
-  color: #fff;
-  margin-top: 1em;
-  position: relative;
-  text-align: center;
-  text-transform: none;
-}
 .account .content .header.wrapper h1.editable-placeholder {
   opacity: 0.5;
   position: absolute;
