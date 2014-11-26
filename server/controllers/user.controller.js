@@ -17,9 +17,9 @@ var _             = require('lodash'),
  *
  */
 exports.me = function(req, res) {
-  console.log('jwt', req.jwt.sub);
+  //console.log('jwt', req.jwt.sub);
   User.find(req.jwt.sub).success(function(user) {
-    console.log('user found', user);
+    //console.log('user found', user);
     return res.json(user);
   }).error(function(err){
     console.log('something went wrong!');
@@ -102,13 +102,18 @@ exports.register = function(req, res) {
     .success(function(user) {
 
       // Create a primary publication account for this user.
-      Account.create({
+      var newAccount = {
         name: req.body.name,
         primary: true
-      }).success(function(account){
-        console.log('new account');
-        user.addAccount(account).success(function(account){
+      };
+      console.log('Creating user: ', newAccount);
+      Account.create(newAccount).success(function(account){
+        console.log('New account: ', account);
+        // Add the new account to the craeted user
+        user.addAccount(account).success(function(result){
           // Send email to user with login link.
+          console.log('result after save: ', result);
+
           var vars = {
             user: {
               email: user.email,
@@ -116,13 +121,29 @@ exports.register = function(req, res) {
             }
           };
           console.log('var', vars);
-          // emailService.preRegister / emailService.register
-          emailService.preRegister(vars, function (result) {
-            if (result[0].status === 'sent') {
-              return res.json(user._id);
-            } else {
-              return handleError(res, {status: 'error', err: 'Error sending mail.'});
-            }
+          // Create Login Token
+          // create a new logintoken
+          Token.create({user_id: user.id}).success(function(token){
+            console.log('token created', token.token);
+            // Send the new token by email
+            var emailVars = {
+              tokenurl: req.protocol + '://' + req.get('host') + '/u/signin?token=' + token.token,
+              user: {
+                email: user.email,
+                name: user.name
+              }
+            };
+            emailService.register(emailVars, function(result){
+              console.log(user.shortid);
+              if (result[0].status === 'sent') {
+                return res.json({status: 'success', user: user.shortid});
+              } else {
+                return handleError(res, { status: 'error', err: 'Error sending mail.' });
+              }
+            });
+          }).error(function(err){
+            console.log('err', err);
+            return handleError(res,err);
           });
         }).error(function(err){
           user.destroy();

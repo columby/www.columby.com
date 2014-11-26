@@ -10,8 +10,8 @@
       <div class="col-md-12">
         <img src="/assets/images/logo.png" class="img-responsive" />
         <h2 class="page-subtitle">publish and discover data</h2>
-        <button type="button" class="btn btn-default button" ng-show="$root.user._id"  ui-sref="dataset.create">Publish new dataset</button>
-        <button type="button" class="btn btn-default button" ng-hide="$root.user._id"  ui-sref='signin'>Login or Signup</button>
+        <button type="button" class="btn btn-default button" ng-show="$root.user.id"  ui-sref="dataset.create">Publish new dataset</button>
+        <button type="button" class="btn btn-default button" ng-hide="$root.user.id"  ui-sref='signin'>Login or Signup</button>
         <p>or</p>
         <a ui-sref="about">Read about Columby</a>
       </div>
@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <div class="showcase-presentation" ng-hide="$root.user._id">
+  <div class="showcase-presentation" ng-hide="$root.user.id">
 
       <div class="container-fluid">
         <div class="col-xs-12 col-sm-6 col-md-offset-1 col-md-5 col-lg-offset-1 col-lg-5">
@@ -73,8 +73,8 @@
           </div>
 					<ul>
             <li ng-repeat="result in search.hits" class="publication-item">
-              <h4><a ui-sref="dataset.view({id: result._id})">{{result._source.title}}</a><em>{{result._source.publishStatus}}</em></h4>
-              <div class="user-date"><!-- {{result._source.account.name || '[Oops! No publisher found]'}} on  --><time class="post-date">{{result._source.createdAt | date:'d MMMM yyyy'}}</time></div>
+              <h4><a ui-sref="dataset.view({id: result.id})">{{result._source.title}}</a><em>{{result._source.publishStatus}}</em></h4>
+              <div class="user-date"><!-- {{result._source.account.name || '[Oops! No publisher found]'}} on  --><time class="post-date">{{result._source.created_at | date:'d MMMM yyyy'}}</time></div>
             </li>
         	</ul>
         </div>
@@ -88,7 +88,7 @@
             <li ng-repeat="dataset in datasets" class="publication-item">
               <h4><a ui-sref="dataset.view({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
               <div class="user-date">
-                <a ui-sref="account.view({slug:dataset.Account.slug})">{{dataset.Account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.createdAt | date:'MMMM d, yyyy'}}</time>
+                <a ui-sref="account.view({slug:dataset.Account.slug})">{{dataset.Account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'MMMM d, yyyy'}}</time>
               </div>
             </li>
         	</ul>

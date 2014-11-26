@@ -39,7 +39,7 @@ module.exports = function(sequelize, DataTypes) {
       classMethods: {
         associate: function (models) {
           // A dataset can have multiple tags
-          //DataTypes.hasMany(models.Tags);
+          Dataset.hasMany(models.Tag);
           // a dataset belongs to a single account
           Dataset.belongsTo(models.Account);
           // a dataset can belong to multiple collections

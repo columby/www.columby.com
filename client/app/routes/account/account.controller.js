@@ -16,7 +16,7 @@ angular.module('columbyApp')
 
   /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
   function getCollections(){
-    if ($scope.account.collections.length >0){
+    if ($scope.account.collections && $scope.account.collections.length >0){
       angular.forEach($scope.account.collections, function(value, key) {
         CollectionSrv.get({id:value}, function(result){
           $scope.account.collections[ key] = result;
