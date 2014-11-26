@@ -8,12 +8,13 @@
   <div class="page-header">
     <div class="container">
       <div class="col-md-12">
-        <img src="/assets/images/logo.png" class="img-responsive" />
+        <img src="/assets/images/logo.png" class="logo img-responsive" />
         <h2 class="page-subtitle">publish and discover data</h2>
         <button type="button" class="btn btn-default button" ng-show="$root.user.id"  ui-sref="dataset.create">Publish new dataset</button>
         <button type="button" class="btn btn-default button" ng-hide="$root.user.id"  ui-sref='signin'>Login or Signup</button>
         <p>or</p>
         <a ui-sref="about">Read about Columby</a>
+				<img src="/assets/images/arrow.png" width="30" height="29" alt="Scroll down for more info" class="arrow img-responsive" />
       </div>
     </div>
   </div>
