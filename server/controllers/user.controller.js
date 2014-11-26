@@ -17,10 +17,25 @@ var _             = require('lodash'),
  *
  */
 exports.me = function(req, res) {
-  //console.log('jwt', req.jwt.sub);
+  console.log('jwt account id', req.jwt.sub);
+
+
+  // TODO:
+  //Company.findAll({
+  //  include: [ { model: Division } ],
+  //  order: [ [ Division, DepartmentDivision, 'name' ] ]
+  //});
   User.find(req.jwt.sub).success(function(user) {
-    //console.log('user found', user);
-    return res.json(user);
+    user.getAccounts().success(function(accounts){
+      user = user.dataValues;
+      user.accounts = [];
+      for (var i=0;i<accounts.length;i++){
+        user.accounts.push(accounts[ i].dataValues);
+      }
+      return res.json(user);
+    }).error(function(err){
+      console.log(err);
+    });
   }).error(function(err){
     console.log('something went wrong!');
     handleError(res,err);
@@ -135,6 +150,7 @@ exports.register = function(req, res) {
             };
             emailService.register(emailVars, function(result){
               console.log(user.shortid);
+              console.log(result);
               if (result[0].status === 'sent') {
                 return res.json({status: 'success', user: user.shortid});
               } else {
@@ -225,40 +241,47 @@ exports.destroy = function(req, res) {
 exports.login = function(req,res) {
   console.log('Finding user ', req.body.email);
   User.find({
-      where: {
-        email: req.body.email
-      }
-    })
-    .success(function(user) {
-      if (!user){ return res.send(user); }
-
-      // create a new logintoken
-      Token.create({user_id: user.id}).success(function(token){
-        console.log('token created', token.token);
-        // Send the new token by email
-        var vars = {
-          tokenurl: req.protocol + '://' + req.get('host') + '/u/signin?token=' + token.token,
-          user: {
-            email: user.email,
-            name: user.name
-          }
-        };
-        emailService.login(vars, function(result){
-          console.log(user.shortid);
-          if (result[0].status === 'sent') {
-            return res.json({status: 'success', user: user.shortid});
-          } else {
-            return handleError(res, { status: 'error', err: 'Error sending mail.' });
-          }
-        });
-      }).error(function(err){
-        console.log('err', err);
-        return handleError(res,err);
+    where: {
+      email: req.body.email
+    },
+    include: [
+      { model: Account }
+    ]
+  }).success(function(user) {
+    if (!user) {
+      return res.json({
+        status: 'not_found',
+        msg: 'The requested user with email ' + req.body.email + ' was not found.'
       });
-    })
-    .error(function(err){
-      if (err) { return handleError(res, err); }
+    }
+  
+    // create a new logintoken
+    Token.create({user_id: user.id}).success(function(token){
+      console.log('token created', token.token);
+      // Send the new token by email
+      var vars = {
+        tokenurl: req.protocol + '://' + req.get('host') + '/u/signin?token=' + token.token,
+        user: {
+          email: user.email,
+          name: user.name
+        }
+      };
+      emailService.login(vars, function(result){
+        console.log(user.shortid);
+        if (result[0].status === 'sent') {
+          return res.json({status: 'success', user: user.shortid});
+        } else {
+          return handleError(res, { status: 'error', err: 'Error sending mail.' });
+        }
+      });
+    }).error(function(err){
+      console.log('err', err);
+      return handleError(res,err);
     });
+  })
+  .error(function(err){
+    if (err) { return handleError(res, err); }
+  });
 };
 
 

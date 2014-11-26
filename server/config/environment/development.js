@@ -48,5 +48,5 @@ module.exports = {
     api_secret: process.env.CLOUDINARY_SECRET,
   },
 
-  seedDB: true
+  seedDB: false
 };
