@@ -114,6 +114,16 @@ button {
 .btn {
   font-family: "lato", sans-serif;
 }
+.btn.transparant {
+  background: none;
+  border: 2px solid #fff;
+  color: #fff;
+  font-weight: bolder;
+}
+.btn.transparant:hover {
+  border: 2px solid #000;
+  color: #000;
+}
 .btn-add {
   color: #fff;
   background: #345;
@@ -183,5 +193,23 @@ button {
 }
 .actions-bar button.logout:hover {
   background: #F03C02;
+  color: #fff;
+}
+.footer-wrapper {
+  background: #428bca;
+  color: #fff;
+  padding: 10px;
+  font-size: 0.8em;
+}
+.footer-wrapper .footer-info {
+  margin-top: 11px;
+  font-family: "lato", sans-serif;
+}
+.footer-wrapper .footer-info a {
+  color: #fff;
+  text-decoration: underline;
+}
+.footer-wrapper .footer-info a:hover {
+  text-decoration: none;
   color: #fff;
 }
