@@ -113,16 +113,34 @@ button {
 }
 .btn {
   font-family: "lato", sans-serif;
-}
-.btn.transparant {
   background: none;
   border: 2px solid #fff;
   color: #fff;
   font-weight: bolder;
 }
-.btn.transparant:hover {
+.btn.transparant {
+  background: none;
+}
+.btn:hover {
+  border: 2px solid #000;
+  background: #000;
+  color: #fff;
+}
+.btn.dark {
   border: 2px solid #000;
   color: #000;
+}
+.btn.dark:hover {
+  background: #000;
+  color: #fff;
+}
+.btn.blue {
+  border: 2px solid #197fa3;
+  color: #197fa3;
+}
+.btn.blue:hover {
+  background: #197fa3;
+  color: #fff;
 }
 .btn-add {
   color: #fff;
@@ -196,7 +214,7 @@ button {
   color: #fff;
 }
 .footer-wrapper {
-  background: #428bca;
+  background: #2fccff;
   color: #fff;
   padding: 10px;
   font-size: 0.8em;

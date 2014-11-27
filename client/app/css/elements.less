@@ -133,16 +133,38 @@ button{
 
 .btn{
   font-family: "lato", sans-serif;
+  background: none;
+  border: 2px solid #fff;
+  color: #fff;
+  font-weight: bolder;
+    
   &.transparant{
     background: none;
-    border: 2px solid #fff;
+  }
+  
+  &:hover{
+    border: 2px solid #000;
+    background: #000;
     color: #fff;
-    font-weight: bolder;
+  }
+  
+  &.dark{
+    border: 2px solid #000;
+    color: #000;
     &:hover{
-      border: 2px solid #000;
-      color: #000;
+      background: #000;
+      color: #fff;
     }
   }
+  &.blue{
+    border: 2px solid #197fa3;
+    color: #197fa3;
+    &:hover{
+      background: #197fa3;
+      color: #fff;
+    }
+  }
+  
 }
 
 .btn-add {
@@ -226,7 +248,7 @@ button{
 // FOOTER
 
 .footer-wrapper{
-  background: #428bca;
+  background: #2fccff;
   color: #fff;
   padding: 10px;
   font-size: 0.8em;
