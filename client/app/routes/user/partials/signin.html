@@ -6,7 +6,7 @@
     <div class="header wrapper">
       <div class="container">
         <div>
-          <h1 class="title">Sign in or register</h1>
+          <h1 class="title">Sign in</h1>
           <!-- <h2 class="page-subtitle">View your details and accounts</h2> -->
         </div>
       </div>
@@ -14,15 +14,13 @@
 
     <!-- login & register forms -->
     <div class="container">
-      <div class="col-md-12">
-
         <!-- login form -->
-        <div class="login-form col-md-6">
+        <div class="login-form col-md-12">
           <h2>Login to continue</h2>
           <form class="form-horizontal novalidate" role="form" name="loginForm" ng-submit="login()" >
 
             <div class="form-group">
-              <div class="col-sm-12">
+              <div class="col-sm-6">
                 <input class="form-control"
                   required
                   id="email"
@@ -31,13 +29,10 @@
                   placeholder="Your email address"
                   ng-model="email"/>
               </div>
-            </div>
-
-            <div class="form-group">
-              <div class="col-sm-4">
+              <div class="col-sm-6">
                 <button
                   type="submit"
-                  class="btn btn-default"
+                  class="btn transparant dark"
                   ng-disabled="loginForm.$invalid || loginInProgress">Login</button>
                 <span ng-show="loginInProgress"><i class="fa fa-spinner fa-spin"></i></span>
               </div>
@@ -52,19 +47,17 @@
             </div>
 
           </form>
+          <div class="register-link"><a ui-sref='register'>Need to sign up?</a></div>
         </div>
 
         <!-- passwordless explanation -->
-        <div class="col-md-12 passwordless">
-          <div class="col-md-8">
-            <h2>Wait whuuut, no password?</h2>
-            <p>'12345', 'password', ... Inventing great passwords is hard. So many users still don't do it. Worse: the same passwords are repeated across several websites, so if one of the sites is broken all of the user's accounts are broken simultaneously.</p>
-            <p>Columby has chosen for passwordless login. We email you "one-time passwords" for everytime you would like to sign in.</p>
-          </div>
+        <div class="col-md-12">
+          <h2>Wait whuuut, no password?</h2>
+          <p>'12345', 'password', ... Inventing great passwords is hard. So many users still don't do it. Worse: the same passwords are repeated across several websites, so if one of the sites is broken all of the user's accounts are broken simultaneously.</p>
+          <p>Columby has chosen for passwordless login. We email you "one-time passwords" for everytime you would like to sign in.</p>
         </div>
 
       </div>
-    </div>
     <!-- end login & register forms -->
 
   </div>
