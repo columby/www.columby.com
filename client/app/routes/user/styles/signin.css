@@ -13,7 +13,8 @@
 .register .footer-wrapper {
   display: none;
 }
-h2 {
+.register h2,
+.signin h2 {
   font-size: 24px;
   line-height: 40px;
   border-bottom: 1px solid #d9d9d9;
