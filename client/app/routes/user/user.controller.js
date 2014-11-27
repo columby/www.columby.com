@@ -127,7 +127,6 @@ angular.module('columbyApp')
     /* ----- ROOTSCOPE EVENTS -------------------------------------------------------- */
 
     /* ----- SCOPE FUNCTIONS -------------------------------------------------------- */
-    // Handle passwordless login
     $scope.register = function(){
       localStorage.removeItem('columby_token');
       $scope.registrationInProgress = true;

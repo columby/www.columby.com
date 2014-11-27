@@ -61,6 +61,7 @@ module.exports = function(sequelize, DataTypes) {
           Account.hasMany(models.Dataset);
           Account.hasMany(models.Distribution);
           Account.hasMany(models.Collection);
+          Account.hasMany(models.File);
         }
       }
     }

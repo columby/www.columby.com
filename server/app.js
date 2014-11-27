@@ -22,7 +22,6 @@ mongoose.connect(config.mongo.uri, config.mongo.options);
 var app = express();
 var server = require('http').createServer(app);
 require('./config/express')(app);
-//require('./routes')(app);
 
 var models = require('./models');
 var routes = require('./routes')(app);

@@ -52,7 +52,14 @@ exports.index = function(req, res) {
   });
 };
 
-// Get a single account
+/**
+ *
+ * Get a single account
+ *
+ * @param req
+ * @param res
+ *
+ */
 exports.show = function(req, res) {
 
   Account.find({
@@ -62,39 +69,60 @@ exports.show = function(req, res) {
       //{ model: Dataset }
     ]
   }).success(function(dataset){
-    console.log(dataset);
+    //console.log(dataset);
     res.json(dataset);
   }).error(function(err){
     console.log(err);
   });
 };
 
-// Creates a new account in the DB.
+
+/**
+ *
+ * Creates a new account in the DB.
+ *
+ * @param req
+ * @param res
+ *
+ */
 exports.create = function(req, res) {
-  Account.create(req.body, function(err, account) {
-    if(err) { return handleError(res, err); }
+  Account.create(req.body).success(function(account) {
     return res.json(201, account);
+  }).error(function(err){
+    handleError(res,err);
+    console.log(err);
   });
 };
 
-// Updates an existing account in the DB.
+
+/**
+ *
+ * Updates an existing account in the DB.
+ *
+ * @param req
+ * @param res
+ *
+ */
 exports.update = function(req, res) {
-  var a = req.body;
-  var id = a._id;
-  if (a._id)  { delete a.slug; }
-  if (a.slug) { delete a.slug; }
-  Account.findById(id, function (err, account) {
-    if (err) { return handleError(res, err); }
-    if(!account) { return res.json(account); }
+  Account.find(req.body.id).success(function(account){
     var updated = _.merge(account, req.body);
-    updated.save(function (err) {
-      if (err) { return handleError(res, err); }
-      return res.json(200, account);
+    updated.save().success(function(account) {
+    }).error(function(err) {
+      handleError(res,err);
     });
+  }).error(function(err){
+    handleError(res,err);
   });
 };
 
-// Deletes a account from the DB.
+/**
+ *
+ * Deletes a account from the DB.
+ *
+ * @param req
+ * @param res
+ *
+ */
 exports.destroy = function(req, res) {
   Account.findById(req.params.id, function (err, account) {
     if(err) { return handleError(res, err); }

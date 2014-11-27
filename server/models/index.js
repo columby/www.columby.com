@@ -81,8 +81,6 @@ if (config.seedDB === true){
         require('./../seed/seed');
       }
     });
-
-
 }
 
 db.sequelize = sequelize;
