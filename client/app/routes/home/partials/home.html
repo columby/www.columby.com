@@ -8,12 +8,13 @@
   <div class="page-header">
     <div class="container">
       <div class="col-md-12">
-        <img src="/assets/images/logo.png" class="img-responsive" />
+        <img src="/assets/images/logo.png" class="logo img-responsive" />
         <h2 class="page-subtitle">publish and discover data</h2>
-        <button type="button" class="btn btn-default button" ng-show="$root.user._id"  ui-sref="dataset.create">Publish new dataset</button>
-        <button type="button" class="btn btn-default button" ng-hide="$root.user._id"  ui-sref='signin'>Login or Signup</button>
+        <button type="button" class="btn btn-default button" ng-show="$root.user.id"  ui-sref="dataset.create">Publish new dataset</button>
+        <button type="button" class="btn btn-default button" ng-hide="$root.user.id"  ui-sref='signin'>Login or Signup</button>
         <p>or</p>
         <a ui-sref="about">Read about Columby</a>
+				<img src="/assets/images/arrow.png" width="30" height="29" alt="Scroll down for more info" class="arrow img-responsive" />
       </div>
     </div>
   </div>
@@ -26,7 +27,7 @@
     </div>
   </div>
 
-  <div class="showcase-presentation" ng-hide="$root.user._id">
+  <div class="showcase-presentation" ng-hide="$root.user.id">
 
       <div class="container-fluid">
         <div class="col-xs-12 col-sm-6 col-md-offset-1 col-md-5 col-lg-offset-1 col-lg-5">
@@ -34,13 +35,13 @@
           <p>You carefully gather your data. We help you to present it in it's best way. Attach beautiful pictures, describe your dataset and add some references.</p>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-          <img src="/assets/images/showcase-presentation.png" class="img-responsive pull-right"></img>
+          <img src="/assets/images/showcase-presentation.png" class="img-responsive pull-right"/>
         </div>
       </div>
 
         <div class="container-fluid">
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-          <img src="/assets/images/showcase-presentation-embed.png" class="img-responsive pull-left"></img>
+          <img src="/assets/images/showcase-presentation-embed.png" class="img-responsive pull-left"/>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
           <h3>Embed your data with ease.</h3>
@@ -55,12 +56,14 @@
     <div class="container">
 
       <div class="searchbox col-md-offset-1 col-md-10">
+        <label for="search-datasets" class="sr-only">Search datasets</label>
         <input
           type="text"
           ng-model="search.searchTerm"
           placeholder="Search datasets"
           class="input-large"
-          ng-change="search()">
+          ng-change="search()"
+          id="search-datasets">
         <div class="search-message">{{search.message}}</div>
       </div>
 
@@ -73,8 +76,8 @@
           </div>
 					<ul>
             <li ng-repeat="result in search.hits" class="publication-item">
-              <h4><a ui-sref="dataset.view({id: result._id})">{{result._source.title}}</a><em>{{result._source.publishStatus}}</em></h4>
-              <div class="user-date"><!-- {{result._source.account.name || '[Oops! No publisher found]'}} on  --><time class="post-date">{{result._source.createdAt | date:'d MMMM yyyy'}}</time></div>
+              <h4><a ui-sref="dataset.view({id: result.id})">{{result._source.title}}</a><em>{{result._source.publishStatus}}</em></h4>
+              <div class="user-date"><!-- {{result._source.account.name || '[Oops! No publisher found]'}} on  --><time class="post-date">{{result._source.created_at | date:'d MMMM yyyy'}}</time></div>
             </li>
         	</ul>
         </div>
@@ -85,10 +88,10 @@
         <h3>Recently published</h3>
         <div class="publication-listing">
 					<ul>
-            <li ng-repeat="dataset in datasets" class="publication-item">
-              <h4><a ui-sref="dataset.view({ id: dataset._id })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
+            <li ng-repeat="dataset in datasets.rows" class="publication-item">
+              <h4><a ui-sref="dataset.view({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
               <div class="user-date">
-                <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.createdAt | date:'MMMM d, yyyy'}}</time>
+                <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'MMMM d, yyyy'}}</time>
               </div>
             </li>
         	</ul>

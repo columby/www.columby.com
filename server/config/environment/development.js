@@ -8,6 +8,14 @@ module.exports = {
     uri: 'mongodb://localhost/columby-dev'
   },
 
+  db:{
+    dialect : process.env.DB_DIALECT,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    name    : process.env.DB_NAME,
+    port    : process.env.DB_PORT
+  },
+
   jwt: {
     secret: process.env.JWT_SECRET
   },
@@ -33,6 +41,12 @@ module.exports = {
   embedly: {
     key       : process.env.EMBEDLY_KEY
   },
-  
+
+  cloudinary: {
+    cloud_name: process.env.CLOUDINARY_CLOUD,
+    api_key   : process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET,
+  },
+
   seedDB: false
 };

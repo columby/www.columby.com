@@ -9,6 +9,12 @@ angular.module('columbyApp')
         controller: 'SigninCtrl'
       })
 
+      .state('register', {
+        url: '/u/register',
+        templateUrl: 'app/routes/user/partials/register.html',
+        controller: 'RegisterCtrl'
+      })
+
       // Edit user settings
       .state('settings', {
         url:'/u/settings',

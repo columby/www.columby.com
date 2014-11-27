@@ -41,18 +41,14 @@ angular.module('columbyApp', [
       // Fetch user information from server with JWT
       AuthSrv.me().then(function (response) {
         // remove local JWT when there was an error (expires or malformed).
+        console.log(response);
         if (response.status === 'error') {
           localStorage.removeItem('columby_token');
         }
         // Attached the user object to the rootscope.
-        if (response._id) {
+        if (response.id) {
           var user = response;
           // set primary account
-          for (var i=0;i<user.accounts.length;i++){
-            if (user.accounts[ i].primary===true){
-              user.primaryAccount = user.accounts[ i];
-            }
-          }
           $rootScope.user = response;
         }
       });
