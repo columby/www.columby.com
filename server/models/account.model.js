@@ -59,7 +59,8 @@ module.exports = function(sequelize, DataTypes) {
           // An account can have multiple accounts with roles
           Account.hasMany(models.User, {through: models.AccountsUsers });
           Account.hasMany(models.Dataset);
-          Account.hasMany((models.Distribution))
+          Account.hasMany(models.Distribution);
+          Account.hasMany(models.Collection);
         }
       }
     }

@@ -18,6 +18,9 @@ angular.module('columbyApp')
 
 
     /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
+
+     // TODO: Marcel, zoeken op dataset titel en beschrijving van een dataset, titel van een account, tags.
+     // Resultaat gegroepeerdspot
     $scope.search = function(){
 
       if ($scope.search.searchTerm.length>2){

@@ -1,10 +1,8 @@
 'use strict';
 
-angular.module('columbyApp')
+angular.module('columbyApp').controller('AccountCtrl',
+  function($window,$rootScope,$scope, $stateParams,$state,toaster, AccountSrv, AuthSrv, CollectionSrv, DatasetSrv){
 
-
-.controller('AccountCtrl',
-  function($window,$rootScope,$scope, $stateParams,$state,toaster, AccountSrv, AuthSrv, CollectionSrv){
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading  = true;
     $window.document.title = 'columby.com';
@@ -14,18 +12,26 @@ angular.module('columbyApp')
     /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
 
 
-  /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
-  function getCollections(){
-    if ($scope.account.collections && $scope.account.collections.length >0){
-      angular.forEach($scope.account.collections, function(value, key) {
-        CollectionSrv.get({id:value}, function(result){
-          $scope.account.collections[ key] = result;
+    /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
+    function getCollections(){
+      if ($scope.account.collections && $scope.account.collections.length >0){
+        angular.forEach($scope.account.collections, function(value, key) {
+          CollectionSrv.get({id:value}, function(result){
+            $scope.account.collections[ key] = result;
+          });
         });
-      });
-    } else {
-      console.log('no collections');
+      } else {
+        console.log('no collections');
+      }
     }
-  }
+
+    function getDatasets(){
+
+      DatasetSrv.index({accountId: $scope.account.id}, function(d){
+        $scope.datasets = d.rows;
+      });
+
+    }
 
   function getAccount(){
 
@@ -46,6 +52,7 @@ angular.module('columbyApp')
         }
 
         getCollections();
+        getDatasets();
       }
     });
   }
@@ -74,10 +81,12 @@ angular.module('columbyApp')
 })
 
 /***
+ *
  * Account View Controller
  *
  ***/
-.controller('AccountEditCtrl', function ($window, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, toaster, $upload) {
+.controller('AccountEditCtrl',
+  function ($window, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, toaster, $upload) {
 
 
   /* ---------- SETUP ----------------------------------------------------------------------------- */

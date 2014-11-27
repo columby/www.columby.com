@@ -35,13 +35,13 @@
           <p>You carefully gather your data. We help you to present it in it's best way. Attach beautiful pictures, describe your dataset and add some references.</p>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-          <img src="/assets/images/showcase-presentation.png" class="img-responsive pull-right"></img>
+          <img src="/assets/images/showcase-presentation.png" class="img-responsive pull-right"/>
         </div>
       </div>
 
         <div class="container-fluid">
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-          <img src="/assets/images/showcase-presentation-embed.png" class="img-responsive pull-left"></img>
+          <img src="/assets/images/showcase-presentation-embed.png" class="img-responsive pull-left"/>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
           <h3>Embed your data with ease.</h3>
@@ -88,10 +88,10 @@
         <h3>Recently published</h3>
         <div class="publication-listing">
 					<ul>
-            <li ng-repeat="dataset in datasets" class="publication-item">
+            <li ng-repeat="dataset in datasets.rows" class="publication-item">
               <h4><a ui-sref="dataset.view({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
               <div class="user-date">
-                <a ui-sref="account.view({slug:dataset.Account.slug})">{{dataset.Account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'MMMM d, yyyy'}}</time>
+                <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'MMMM d, yyyy'}}</time>
               </div>
             </li>
         	</ul>

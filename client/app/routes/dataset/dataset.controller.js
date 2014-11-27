@@ -165,8 +165,8 @@ angular.module('columbyApp')
         avatar :{
           url             : 'assets/images/avatar.png'
         },
-        owner           : $rootScope.user.primaryAccount.id,
-        publicationAccount: $rootScope.user.primaryAccount,
+        owner           : $rootScope.user.primary.id,
+        publicationAccount: $rootScope.user.primary,
         canEdit           : true
       };
 
@@ -180,7 +180,7 @@ angular.module('columbyApp')
     $scope.updateDatasetOwner = function(id){
       console.log(id);
       $scope.dataset.owner = $rootScope.user.accounts[ id].id;
-      $scope.dataset.avatar.url = $rootScope.user.accounts[ id].avatar.url;
+      $scope.dataset.avatar.url = $rootScope.user.accounts[ id].avatar;
       $scope.dataset.publicationAccount = $rootScope.user.accounts[ id];
       $scope.showAccountSelector = false;
     };

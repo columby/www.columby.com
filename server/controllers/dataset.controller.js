@@ -57,13 +57,18 @@ exports.index = function(req, res) {
   var filter = {
     private: false
   };
+
+  if (req.query.accountId){
+    filter.account_id = req.query.accountId;
+  }
+
   // Set (default) limit
   var limit = req.query.limit || 10;
   // Set (default) offset
-  var offset = req.query.offset | 0;
+  var offset = req.query.offset || 0;
 
   Dataset
-    .findAll({
+    .findAndCountAll({
       where: filter,
       limit: limit,
       offset: offset,
@@ -72,9 +77,18 @@ exports.index = function(req, res) {
         { model: Account }
       ]
     })
-    //.populate('account', 'slug name account owner')
     .success(function(datasets) {
-      return res.json(datasets);
+      var r = {};
+      r.count = datasets.count;
+      r.rows = [];
+      for (var i=0;i<datasets.rows.length; i++){
+        var s = datasets.rows[ i].dataValues;
+        s.account = s.Account.dataValues;
+        delete s.Account;
+        r.rows.push(s);
+      }
+      console.log(r);
+      return res.json(r);
     })
     .error(function(err){
       console.log(err);

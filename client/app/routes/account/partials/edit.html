@@ -18,25 +18,22 @@
 
   <!-- Content -->
   <div class="content" ng-hide="contentLoading">
-
-
-
     <div class="header wrapper" ng-style="headerStyle">
       <div class="container">
 
         <textarea class = "input-noborder name title edit"
           type        = 'text'
-          name        = "title"
+          name        = 'title'
           placeholder = 'Your account name'
           ng-model    = 'accountUpdate.name'
           ng-blur     = 'update()'
           focus       = 'true'
          />
 
-        <div class="avatar"
+        <div class="avatar-container"
           ng-file-select="onFileSelect($files)"
           data-multiple="false">
-          <img src="{{account.avatar.url}}"/>
+          <img class="img-circle avatar" src="{{account.avatar}}"/>
         </div>
       </div>
     </div>

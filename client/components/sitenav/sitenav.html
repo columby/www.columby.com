@@ -18,7 +18,8 @@
       </li> -->
 
       <li ng-show="$root.user.id">
-        <a ui-sref="account.view({slug: $root.user.slug})" ng-class="{active: $state.includes(account.view)}">
+        {{$root.primary}}
+        <a ui-sref="account.view({slug: $root.user.primary.slug})" ng-class="{active: $state.includes(account.view)}">
          My profile<!-- {{$root.selectedAccount.name}} -->
         </a>
         <span class="settings">

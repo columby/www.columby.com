@@ -5,6 +5,7 @@ angular.module('columbyApp')
 .service('SearchSrv', function ($http) {
 
   return {
+    // TODO: Marcel. universele service naar columby search api
     query: function(query){
       return $http({
         method: 'get',

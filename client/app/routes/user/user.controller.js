@@ -2,10 +2,16 @@
 
 angular.module('columbyApp')
 
-.controller('SigninCtrl', function ($window, $scope, $rootScope, $location, $http, $state, AuthSrv, toaster, Slug) {
+  .controller('SigninCtrl', function ($window, $scope, $rootScope, $location, $http, $state, AuthSrv, toaster, Slug) {
 
   /* ----- SETUP ------------------------------------------------------------ */
-  $scope.loginInProgress = false;
+  // if user is already logged in
+  if($rootScope.user.id){
+    toaster.pop('danger', null, 'You are already logged in. ');
+    $state.go('settings');
+  }
+  // Check
+    $scope.loginInProgress = false;
   $window.document.title = 'columby.com | signin';
 
 
@@ -103,7 +109,58 @@ angular.module('columbyApp')
   }
 })
 
-.controller('UserCtrl', function ($scope, $rootScope, $location, $state, AuthSrv, AccountSrv, toaster) {
+  .controller('RegisterCtrl', function ($window, $scope, $rootScope, $location, $http, $state, AuthSrv, toaster, Slug) {
+
+    /* ----- SETUP ------------------------------------------------------------ */
+    // if user is already logged in
+    if($rootScope.user.id){
+      toaster.pop('danger', null, 'You are already logged in. ');
+      $state.go('settings');
+    }
+    // Check
+    $scope.loginInProgress = false;
+    $window.document.title = 'columby.com | register';
+
+
+    /* ----- FUNCTIONS -------------------------------------------------------- */
+
+    /* ----- ROOTSCOPE EVENTS -------------------------------------------------------- */
+
+    /* ----- SCOPE FUNCTIONS -------------------------------------------------------- */
+    // Handle passwordless login
+    $scope.register = function(){
+      localStorage.removeItem('columby_token');
+      $scope.registrationInProgress = true;
+      console.log('registering new user', $scope.newuser);
+      AuthSrv.register($scope.newuser).then(function(response){
+        console.log('register response', response);
+        $scope.registrationInProgress = false;
+        if (response.errors && response.errors.email) {
+          if (response.errors.email.message==='E-mail address is already in-use'){
+            toaster.pop('danger', 'This email address is already registered, please sign in!');
+          }
+        } else {
+          $scope.registrationSuccess = true;
+        }
+      });
+    };
+
+    $scope.slugifyName = function(){
+      if ($scope.newuser.name){
+        var n = Slug.slugify($scope.newuser.name);
+        while(n.length<3){
+          n = n+'-';
+        }
+        $scope.newuser.name = n;
+      }
+    };
+
+
+    /* ----- INIT ------------------------------------------------------------ */
+
+  })
+
+  .controller('UserCtrl', function ($scope, $rootScope, $location, $state, AuthSrv, AccountSrv, toaster) {
 
   /* --- FUNCTIONS ------------------------------------------------------------- */
   function getUser(){

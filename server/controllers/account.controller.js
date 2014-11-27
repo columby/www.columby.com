@@ -8,7 +8,8 @@
 var _ = require('lodash'),
     Sequelize = require('sequelize'),
     Account = require('../models/index').Account,
-    Dataset = require('../models/index').Dataset;
+    Dataset = require('../models/index').Dataset,
+    Collection = require('../models/index').Collection;
 
 
 function slugify(text) {
@@ -56,9 +57,10 @@ exports.show = function(req, res) {
 
   Account.find({
     where: { slug: req.params.id },
-    //include: [
-    //  { model: Dataset }
-    //]
+    include: [
+      { model: Collection }
+      //{ model: Dataset }
+    ]
   }).success(function(dataset){
     console.log(dataset);
     res.json(dataset);

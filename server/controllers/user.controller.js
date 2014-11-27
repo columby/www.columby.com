@@ -30,6 +30,9 @@ exports.me = function(req, res) {
       user = user.dataValues;
       user.accounts = [];
       for (var i=0;i<accounts.length;i++){
+        if (accounts[ i].primary){
+          user.primary = accounts[ i].dataValues;
+        }
         user.accounts.push(accounts[ i].dataValues);
       }
       return res.json(user);
@@ -254,7 +257,7 @@ exports.login = function(req,res) {
         msg: 'The requested user with email ' + req.body.email + ' was not found.'
       });
     }
-  
+
     // create a new logintoken
     Token.create({user_id: user.id}).success(function(token){
       console.log('token created', token.token);

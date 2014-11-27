@@ -8,7 +8,7 @@
       <li>
         <button
           class    = "btn dbt-default options"
-          ng-show  = "dataset._id"
+          ng-show  = "dataset.id"
           ng-class = "{active: showOptions}"
           ng-click = "toggleOptions()">options
         </button>
@@ -16,8 +16,8 @@
 
       <li>
         <a class="btn btn-default edit"
-          ng-show  = "dataset._id"
-          ui-sref="dataset.view({id:dataset._id})">view dataset
+          ng-show  = "dataset.id"
+          ui-sref="dataset.view({id:dataset.id})">view dataset
         </a>
       </li>
     </ul>
@@ -28,7 +28,7 @@
     <div class="options-arrow"></div>
     <div class="editorSidebarContent">
       <div class="sidebarModule">
-	      <div class="visibility setting" ng-show="dataset._id">
+	      <div class="visibility setting" ng-show="dataset.id">
           <h3>Visibility
             <button
               class="right btn-xs btn-tooltip"
@@ -52,7 +52,7 @@
 	      </div>
 			</div>
 
-      <div class="slug" ng-show="dataset._id">
+      <div class="slug" ng-show="dataset.id">
         <h3>Custom URL
           <button
             class="right btn-xs btn-tooltip"
@@ -113,7 +113,7 @@
           </textarea>
 
           <!-- Meta -->
-          <div class="meta" ng-show="dataset._id">
+          <div class="meta" ng-show="dataset.id">
 						<span ng-show="dataset.private === true" class="label bg-primary">private</span>
             <p>A dataset by
               <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a>,
@@ -124,7 +124,7 @@
 
           <!-- Editable avatar -->
           <div class="avatar">
-            <img src="{{dataset.avatar.url}}" alt="{{dataset.owner}}"/>
+            <img src="{{dataset.avatar}}" alt="{{dataset.owner}}"/>
           </div>
         </div>
       </div>
@@ -158,7 +158,7 @@
     </div>
 
     <!-- Dataset Sources -->
-    <div class="distributions wrapper" ng-show="dataset._id">
+    <div class="distributions wrapper" ng-show="dataset.id">
       <div class="container">
         <div class="col-md-12">
 
@@ -219,7 +219,7 @@
     </div>
 
     <!-- Dataset references -->
-    <div class="references wrapper" ng-show="dataset._id">
+    <div class="references wrapper" ng-show="dataset.id">
       <div class="container">
         <div class="col-md-12">
 
@@ -271,7 +271,7 @@
     </div>
 
     <!-- Dataset Collections -->
-    <div class="collections wrapper" ng-hide="dataset || dataset._id">
+    <div class="collections wrapper" ng-hide="dataset || dataset.id">
       <div class="container">
         <div class="col-md-12 content">
           <h3>Collections</h3>
@@ -290,20 +290,20 @@
 
 
 		<!-- Create new dataset -->
-		<div class="step1 wrapper" ng-hide="dataset._id">
+		<div class="step1 wrapper" ng-hide="dataset.id">
 			<div class="container">
 				<div class="col-md-12">
 		      <button
 		        class    = "btn dbt-default create disabled"
-		        ng-hide  = "dataset._id || datasetUpdate.title">Save draft & proceed to add data
+		        ng-hide  = "dataset.id || datasetUpdate.title">Save draft & proceed to add data
 		      </button>
-					<p ng-hide  = "dataset._id || datasetUpdate.title">Please add a title first.</p>
+					<p ng-hide  = "dataset.id || datasetUpdate.title">Please add a title first.</p>
 		      <button
 		        class    = "btn dbt-default create"
-		        ng-hide  = "dataset._id || !datasetUpdate.title"
+		        ng-hide  = "dataset.id || !datasetUpdate.title"
 		        ng-click = "create()">Save draft & proceed to add data
 		      </button>
-					<p ng-hide  = "dataset._id || !datasetUpdate.title">Don't worry, you can still change your title and description.</p>
+					<p ng-hide  = "dataset.id || !datasetUpdate.title">Don't worry, you can still change your title and description.</p>
 				</div>
 			</div>
 		</div>
