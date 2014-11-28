@@ -30,7 +30,7 @@ angular.module('columbyApp')
           size: 50,
           body: {
             'query': {
-              'match': {
+              'wildcard': {
                 '_all': String($scope.search.searchTerm)
               }
             }

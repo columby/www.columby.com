@@ -10,5 +10,5 @@ module.exports = function(app){
 
   router.get('/', controller.search);
 
-  app.use('/api/2/search', router);
+  app.use('/api/v2/search', router);
 };
