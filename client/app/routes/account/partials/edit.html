@@ -5,13 +5,13 @@
 
     <button class="btn btn-default"
       type     = "button"
-      ng-show  = "account._id"
+      ng-show  = "account.id"
       ui-sref="account.view({slug:account.slug})">Exit edit mode
     </button>
 
     <button
       class    = "btn btn-default publish"
-      ng-show  = "!account._id"
+      ng-show  = "!account.id"
       ng-click = "createAccount()">Publish
     </button>
   </div>
@@ -19,19 +19,22 @@
   <!-- Content -->
   <div class="content" ng-hide="contentLoading">
     <div class="header wrapper" ng-style="headerStyle">
+      <div class="upload-button" ng-file-select="onFileSelect($files,'header')">
+        <i class="fa fa-cog"></i>
+      </div>
+
       <div class="container">
 
         <textarea class = "input-noborder name title edit"
-          type        = 'text'
           name        = 'title'
           placeholder = 'Your account name'
-          ng-model    = 'accountUpdate.name'
-          ng-blur     = 'update()'
+          data-ng-model    = 'accountUpdate.name'
+          data-ng-blur     = 'update()'
           focus       = 'true'
-         />
+         ></textarea>
 
         <div class="avatar-container avatar"
-          ng-file-select="onFileSelect($files)"
+          ng-file-select="onFileSelect($files,'avatar')"
           data-multiple="false">
           <img class="img-circle avatar" src="{{account.avatar}}"/>
         </div>

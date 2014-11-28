@@ -104,9 +104,12 @@ exports.create = function(req, res) {
  *
  */
 exports.update = function(req, res) {
+  console.log(req.body);
   Account.find(req.body.id).success(function(account){
-    var updated = _.merge(account, req.body);
-    updated.save().success(function(account) {
+    //console.log('account', account);
+    account.updateAttributes(req.body).success(function(account) {
+      console.log('success',account);
+      res.json(account);
     }).error(function(err) {
       handleError(res,err);
     });
@@ -135,5 +138,6 @@ exports.destroy = function(req, res) {
 };
 
 function handleError(res, err) {
+  console.log('err',err);
   return res.send(500, err);
 }

@@ -8,7 +8,6 @@ angular.module('columbyApp').controller('AccountCtrl',
     $window.document.title = 'columby.com';
 
 
-
     /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
 
 
@@ -33,7 +32,7 @@ angular.module('columbyApp').controller('AccountCtrl',
 
     }
 
-  function getAccount(){
+    function getAccount(){
 
     // get account information of user by userSlug
     AccountSrv.get({slug: $stateParams.slug}, function(result){
@@ -47,8 +46,8 @@ angular.module('columbyApp').controller('AccountCtrl',
 
         $scope.account.canEdit = AuthSrv.canEdit({postType: 'account', _id: result._id});
 
-        if ($scope.account.headerImage) {
-          updateHeaderBg();
+        if ($scope.account.header_mg) {
+          updateHeaderImage();
         }
 
         getCollections();
@@ -57,9 +56,7 @@ angular.module('columbyApp').controller('AccountCtrl',
     });
   }
 
-
-
-  function updateHeaderBg(){
+    function updateHeaderImage(){
     $scope.headerStyle={
       'background-image': 'url(' + $scope.account.headerPattern + '), url(' + $scope.account.headerImage + ')',
       'background-blend-mode': 'multiply'
@@ -67,10 +64,10 @@ angular.module('columbyApp').controller('AccountCtrl',
   }
 
 
-  /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
+    /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
 
 
-  /* ---------- INIT ----------------------------------------------------------------------------- */
+    /* ---------- INIT ----------------------------------------------------------------------------- */
     if (!$stateParams.slug){
       toaster.pop('warning', null, 'The requested account was not found. ');
       $state.go('home');
@@ -112,7 +109,9 @@ angular.module('columbyApp').controller('AccountCtrl',
 
         $scope.account.canEdit= AuthSrv.canEdit({postType:'account', _id:result._id});
 
-        updateHeaderImage();
+        if ($scope.account.header_img) {
+          updateHeaderImage();
+        }
 
       });
     }
@@ -136,7 +135,6 @@ angular.module('columbyApp').controller('AccountCtrl',
     }
 
     /**
-     *
      * Upload a file with a valid signed request
      *
      * @param params
@@ -185,14 +183,42 @@ angular.module('columbyApp').controller('AccountCtrl',
       xhr.open('POST', 'https://' + params.credentials.bucket + '.s3.amazonaws.com/', true);
       xhr.send(fd);
     }
+
+    /**
+     * File is uploaded, finish it at the server.
+     * @param params
+     */
     function finishUpload(params){
       FileSrv.finishS3(params).then(function(res){
         console.log('res', res);
-        if (res.url){
-          $scope.account.avatar = res.url;
-          $scope.account.$update(function(result){
+        if (res.url) {
+          console.log('updating url',res.url);
+          console.log($scope.fileUpload.target);
+          var updated={
+            id: $scope.account.id,
+            slug: $scope.account.slug
+          };
+          switch($scope.fileUpload.target){
+            case 'header':
+              $scope.account.header_img = res.url;
+              updated.header_img=res.url;
+              console.log('updating header image');
+                  break;
+            case 'avatar':
+              $scope.account.avatar = res.url;
+              console.log('updating avatar');
+              updated.avatar = res.url;
+                  break;
+          }
+          $scope.fileUpload = null;
+          toaster.pop('notice',null,'File uploaded, updating account');
+
+          AccountSrv.update(updated,function(result){
             console.log('update', result);
+            toaster.pop('notice',null,'File uploaded!');
           });
+        } else {
+          $scope.fileUpload = null;
         }
       });
     }
@@ -230,37 +256,47 @@ angular.module('columbyApp').controller('AccountCtrl',
     }
   };
 
+
     /**
      *
      * Handle file select
      *
      * @param $files
      */
-    $scope.onFileSelect = function($files) {
+    $scope.onFileSelect = function($files, target) {
       var file = $files[0];
-      // Check if the file has the right type
-      if (FileSrv.validateImage(file.type)) {
-        ngProgress.start();
-        // Define the parameters to get the right signed request
-        var params = {
-          filetype: file.type,
-          filesize: file.size,
-          filename: file.name,
-          accountId: $scope.account.id,
-          type: 'image'
-        };
-        // Request a signed request
-        FileSrv.signS3(params).then(function (signResponse) {
-          if (signResponse.file) {
-            // signed request is valid, send the file to S3
-            uploadFile(signResponse, file);
-          } else {
-            toaster.pop('error', null, 'Sorry, there was an error. Details: ' +  signResponse.msg);
-            console.log(signresponse);
-          }
-        })
+      if ($scope.upload){
+        toaster.pop('warning',null,'There is already an upload in progress. ');
       } else {
-        toaster.pop('warning',null,'The file you chose is not valid. ' + file.type);
+        // Check if the file has the right type
+        if (FileSrv.validateImage(file.type)) {
+          $scope.fileUpload = {
+            file:file,
+            target:target
+          };
+          console.log($scope.fileUpload);
+          ngProgress.start();
+          // Define the parameters to get the right signed request
+          var params = {
+            filetype: file.type,
+            filesize: file.size,
+            filename: file.name,
+            accountId: $scope.account.id,
+            type: 'image'
+          };
+          // Request a signed request
+          FileSrv.signS3(params).then(function (signResponse) {
+            if (signResponse.file) {
+              // signed request is valid, send the file to S3
+              uploadFile(signResponse, file);
+            } else {
+              toaster.pop('error', null, 'Sorry, there was an error. Details: ' +  signResponse.msg);
+              console.log(signresponse);
+            }
+          });
+        } else {
+          toaster.pop('warning', null, 'The file you chose is not valid. ' + file.type);
+        }
       }
     };
 

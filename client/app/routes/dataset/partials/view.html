@@ -8,7 +8,7 @@
       <li>
         <a class="btn btn-default edit"
           ng-show  = "dataset.canEdit"
-          ui-sref="dataset.edit({id:dataset.id})">edit
+          ui-sref="dataset.edit({id:dataset.shortid})">edit
         </a>
       </li>
     </ul>
@@ -28,15 +28,15 @@
           <div class="meta" ng-show="dataset.id">
 						<span ng-show="dataset.private === true" class="label bg-primary">private</span>
             <p>A dataset by
-              <span class="account"><a ui-sref="account.view({slug:dataset.Account.slug})">{{dataset.Account.name || 'noname'}}</a>,
+              <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a>,
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
             </p>
             <p ng-show="dataset.tags.length>0"><strong>Tags: </strong><span ng-repeat="tag in dataset.tags">{{tag}}</span></p>
           </div>
 
           <div class="avatar">
-            <a ui-sref="account.view({slug:dataset.Account.slug})">
-              <img class="img-circle" ng-src="{{dataset.Account.avatar.url}}" no-image alt="{{dataset.Account.name}}"/>
+            <a ui-sref="account.view({slug:dataset.account.slug})">
+              <img class="img-circle" ng-src="{{dataset.account.avatar}}" no-image alt="{{dataset.account.name}}"/>
             </a>
           </div>
         </div>
@@ -198,9 +198,9 @@
       <div class="container">
         <div class="col-md-12">
           <div class="content">
-              <h3>About {{dataset.Account.name}}</h3>
-              <div ng-bind-html="dataset.Account.description" class="account-description"></div>
-  						<p class="more-about"><a ui-sref="account.view({slug: dataset.Account.slug})">more about {{dataset.Account.name}}</a></p>
+              <h3>About {{dataset.account.name}}</h3>
+              <div ng-bind-html="dataset.account.description" class="account-description"></div>
+  						<p class="more-about"><a ui-sref="account.view({slug: dataset.account.slug})">more about {{dataset.account.name}}</a></p>
             </div>
           </div>
         </div>

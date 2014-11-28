@@ -45,9 +45,6 @@ module.exports = function(sequelize, DataTypes) {
       description: {
         type: DataTypes.TEXT
       },
-      avatar: {
-        type: DataTypes.STRING
-      },
       primary: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
@@ -56,6 +53,10 @@ module.exports = function(sequelize, DataTypes) {
       classMethods: {
         // Create associations to other models
         associate: function(models) {
+
+          Account.hasOne(models.File, {as: 'Avatar', foreignKey: 'avatar_id'});
+          Account.hasOne(models.File, {as: 'Headerimg', foreignKey: 'headerimg_id'});
+
           // An account can have multiple accounts with roles
           Account.hasMany(models.User, {through: models.AccountsUsers });
           Account.hasMany(models.Dataset);

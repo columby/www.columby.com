@@ -48,7 +48,7 @@ angular.module('columbyApp')
         // }
         // $scope.summary = summary + '</p>';
 
-        $scope.dataset.canEdit= AuthSrv.canEdit({postType:'dataset', id:dataset.Account.id});
+        $scope.dataset.canEdit= AuthSrv.canEdit({postType:'dataset', id:dataset.account.id});
 
         updateHeaderImage();
 
@@ -160,14 +160,11 @@ angular.module('columbyApp')
       }
 
       $scope.dataset = {
-        title             : null,
-        description       : null,
-        avatar :{
-          url             : 'assets/images/avatar.png'
-        },
-        owner           : $rootScope.user.primary.id,
-        publicationAccount: $rootScope.user.primary,
-        canEdit           : true
+        title: null,
+        description: null,
+        avatar: 'assets/images/avatar.png',
+        accountId: $rootScope.user.primary.id,
+        canEdit: true
       };
 
       toaster.pop('notice',null,'Here\'s your new dataset!');
@@ -179,15 +176,14 @@ angular.module('columbyApp')
 
     $scope.updateDatasetOwner = function(id){
       console.log(id);
-      $scope.dataset.owner = $rootScope.user.accounts[ id].id;
-      $scope.dataset.avatar.url = $rootScope.user.accounts[ id].avatar;
-      $scope.dataset.publicationAccount = $rootScope.user.accounts[ id];
+      $scope.dataset.account_id = $rootScope.user.accounts[ id].id;
+      $scope.dataset.avatar = $rootScope.user.accounts[ id].avatar;
       $scope.showAccountSelector = false;
     };
 
     function updateHeaderImage(){
       $scope.headerStyle={
-        'background-image': 'url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImage + ')',
+        'background-image': 'url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.header_img + ')',
         'background-blend-mode': 'multiply'
       };
     }

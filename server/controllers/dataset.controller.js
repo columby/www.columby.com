@@ -87,7 +87,6 @@ exports.index = function(req, res) {
         delete s.Account;
         r.rows.push(s);
       }
-      console.log(r);
       return res.json(r);
     })
     .error(function(err){
@@ -103,52 +102,24 @@ exports.index = function(req, res) {
  *
  */
 exports.show = function(req, res) {
-  // id can be objectId or slug. Cast the id to objectId,
-  // if this works then use it, otherwise treat it as a slug.
-  //var id,slug;
-  //
-  //try {
-  //  id = new mongoose.Types.ObjectId(req.params.id);
-  //} catch (e) {
-  //  console.log('Error casting param to objectID', e);
-  //}
-  //var filter = {};
-  //if (slug) {
-  //  filter.slug = slug;
-  //} else if (id){
-  //  filter._id = id;
-  //} else {
-  //  return res.json(null);
-  //}
-  //filter.private = false;
-
-  console.log(req.params.id);
+  console.log('show dataset:', req.params.id);
   Dataset.find({
     where: { shortid: req.params.id },
     include: [
       { model: Account }
     ]
   }).success(function(dataset){
-    res.json(dataset);
+    var d = dataset.dataValues;
+    d.account = dataset.Account;
+    delete d.Account;
+    res.json(d);
   }).error(function(err){
     console.log(err);
   });
-
-
-
-    //.findOne(filter)
-    //.populate('account', 'slug name description owner account avatar')
-    //.exec(function(err,dataset){
-    //  if (err) { return handleError(res, err); }
-    //  if (!dataset) return res.json({error:'Failed to load dataset ' + req.params.id, err:err});
-    //  return res.json(dataset);
-    //});
 };
 
 // Creates a new dataset in the DB.
 exports.create = function(req, res) {
-  console.log(req.body);
-
   var d = req.body;
   if (d.tags) {
     d.tags = d.tags.split(',');
