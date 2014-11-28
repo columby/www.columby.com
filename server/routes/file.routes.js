@@ -17,5 +17,5 @@ module.exports = function(app) {
   router.put('/:id', auth.ensureAuthenticated, controller.update);
   router.delete('/:id', auth.ensureAuthenticated, controller.destroy);
 
-  app.use('/api/2/file', router);
+  app.use('/api/v2/file', router);
 };

@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash'),
-    //File = require('./../routes/file/file.model.js'),
     File = require('../models/index').File,
     crypto    = require('crypto'),
     config = require('../config/environment/index'),
@@ -9,7 +8,7 @@ var _ = require('lodash'),
     path = require('path')
 ;
 
-/* ------ FUNCTIONS ------------------------------------------------------- */
+/** ------ FUNCTIONS ------------------------------------------------------- **/
 
 function getExpiryTime() {
   var _date = new Date();
@@ -17,23 +16,22 @@ function getExpiryTime() {
     (_date.getDate() + 1) + 'T' + (_date.getHours() + 3) + ':' + '00:00.000Z';
 }
 
-
-
 function createS3Policy(file, callback) {
-
+  //console.log('file',file);
   var s3Policy = {
     'expiration': getExpiryTime(),
     'conditions': [
       //['starts-with', '$key', file.owner+'/'],
-      ['starts-with', '$key', 'jan'],
-      {'bucket': 'columby-dev'},
+      //['starts-with', '$key', file.account_id + '/' + file.filename],
+      ['eq', '$key', file.account_id + '/' + file.filename ],
+      {'bucket': config.aws.bucket},
       {'acl': 'public-read'},
-      ['starts-with', '$Content-Type', file.type],
+      ['starts-with', '$Content-Type', file.filetype],
       {'success_action_status' : '201'},
       ['content-length-range', 0, file.size]
     ]
   };
-
+  console.log('policy', s3Policy);
   // stringify and encode the policy
   var stringPolicy = JSON.stringify(s3Policy);
   var base64Policy = new Buffer(stringPolicy, 'utf-8').toString('base64');
@@ -43,15 +41,12 @@ function createS3Policy(file, callback) {
                       .update(new Buffer(base64Policy, 'utf-8')).digest('base64');
 
   // build the results object
-  var s3Credentials = {
-      s3Policy: base64Policy,
-      s3Signature: signature,
-      AWSAccessKeyId: config.aws.publicKey
+  return {
+      policy: base64Policy,
+      signature: signature,
+      key: config.aws.publicKey,
+      bucket: config.aws.bucket
   };
-
-  // send it back
-  return s3Credentials;
-
 }
 
 /* ------ ROUTES ---------------------------------------------------------- */
@@ -139,7 +134,7 @@ exports.destroy = function(req, res) {
  * Required params: size, type, name
  *
  ***/
-exports.sign = function(req,res,next) {
+exports.sign = function(req,res) {
 
   // Signing a request involves 3 steps:
   //   1. Create a unique, slugified filename
@@ -149,73 +144,69 @@ exports.sign = function(req,res,next) {
   // Handle the supplied query parameters
   var file = {
     type      : req.query.type,
-    size      : req.query.size,
-    filename  : req.query.name,
-    owner     : req.query.accountId
+    filetype  : req.query.filetype,
+    size      : req.query.filesize,
+    filename  : req.query.filename,
+    account_id: req.query.accountId
   };
 
-  // Slugify name
-  var ext = path.extname(file.filename);
-  var basename = path.basename(file.filename, ext).toString().toLowerCase()
-      .replace(/\s+/g, '-')        // Replace spaces with -
-      .replace(/[^\w\-]+/g, '')   // Remove all non-word chars
-      .replace(/\-\-+/g, '-')      // Replace multiple - with single -
-      .replace(/^-+/, '')          // Trim - from start of text
-      .replace(/-+$/, '');         // Trim - from end of text
-  //file.filename = basename+ext;
-
   // Check file type validity
-  var validTypes = ['.jpg', '.png', '.jpeg'];
-  if (validTypes.indexOf(ext) === -1) {
-    res.status(400).json({err: 'File type ' + ext + ' is not allowed. '});
+  var validTypes = [];
+  var maxSize =0;
+  switch (req.query.type){
+    case 'image':
+      validTypes = [ 'image/png', 'image/jpg', 'image/jpeg' ];
+      maxSize = 10000000; //10 mb
+      break;
   }
 
-  console.log('file', file);
-
-  // Check if a user can upload the filesize
-
-  // Create a File record in the database
-  File.create(file, function(err,doc){
-    if (err) return res.json({err:err});
-    if (!err) {
-      console.log('err', err);
-      // update the filename, making it unique by using the _id
-      //doc.filename = doc._id + '_' + file.filename;
-      //doc.save();
-      // Create policy
+  if (validTypes.indexOf(file.filetype) === -1) {
+    return res.status(400).json({status: 'error', err: 'File type ' + file.type + ' is not allowed. '});
+  } else if (file.filesize > maxSize){
+    console.log('the file is valid');
+    return res.json({status: 'error', err: 'File size ' + file.size + ' is too big. ' + maxSize + ' allowed. '});
+  } else {
+    // Create a File record in the database
+    File.create(file).success(function(file){
+      var file = file.dataValues;
       var credentials = createS3Policy(file);
       // Send back the policy
-      console.log('credentials', credentials);
       return res.json({
-        file: doc,
+        file: file,
         credentials: credentials
       });
-    }
-  });
+    }).error(function(error){
+      handleError(res,error);
+    });
+  }
 };
 
-/***
- * Handle a succesful uplad
+/**
+ *
+ * Handle a successful upload
  * Update the status of a file from draft to published
  *
- ***/
-
-exports.handleS3Success = function(req,res,next) {
-  File.findOne({_id: req.body.fileId}, function(err,file){
-    if (err) return err;
-    if (file) {
-      file.status = 'published';
-      file.url = req.body.url;
-      file.save();
-      res.json(file);
-    }
+ */
+exports.handleS3Success = function(req,res) {
+  File.find(req.body.fileId).success(function (file) {
+    file.updateAttributes({
+      status: true,
+      url: req.body.url
+    }).success(function(file){
+      //console.log(file.dataValues);
+      return res.json(file);
+    }).error(function(err){
+      handleError(res,err);
+    });
+  }).error(function (err) {
+    handleError(res, err);
   });
-
 };
 
 
 
 
 function handleError(res, err) {
+  console.log('Error: ', err);
   return res.send(500, err);
 }

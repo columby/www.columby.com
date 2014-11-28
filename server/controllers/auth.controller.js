@@ -12,6 +12,7 @@ var config = require('../config/environment/index'),
 ;
 
 
+
 /**
  *
  * Generate JSON Web Token

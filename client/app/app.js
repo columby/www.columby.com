@@ -12,7 +12,8 @@ angular.module('columbyApp', [
   'ngDialog',
   'angularFileUpload',
   'textAngular',
-  'td.easySocialShare'
+  'td.easySocialShare',
+  'ngProgress'
 ])
 
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {

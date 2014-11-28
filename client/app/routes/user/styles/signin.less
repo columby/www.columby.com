@@ -1,34 +1,70 @@
 // out: signin.css, compress: true
 
 /*** ---- LOGIN ---------------------------- ***/
+
 .signin {
+  .header.wrapper {
+    background-image: url('/assets/images/default-header-blue.png');
+    margin-bottom: 1em;
+  }
+  .footer-wrapper {
+    display: none;
+  }
+}
+
+.register {
+  .header.wrapper {
+    background-image: url('/assets/images/default-header-yellow.png');
+    margin-bottom: 1em;
+  }
+  .footer-wrapper {
+    display: none;
+  }
+}
+
+.register, .signin{
   h2{
     font-size: 24px;
     line-height: 40px;
     border-bottom: 1px solid #d9d9d9;
     font-weight: 700;
-    // color: #428bca;
     padding: 6px;
     margin-bottom: 20px;
   }
-  .login-form {}
-  .register-form {}
-  .passwordless{
-    margin-top: 60px;
-    padding-top: 30px;
-    min-height: 300px;
-    background-image: url('/assets/images/passwordless.png');
-    background-position: top right;
-    background-repeat: no-repeat;
-    margin-bottom: 40px;
-    h2{
-      font-size: 2em;
-    }
-    p{
-      color: #666;
-    }
+}
+
+
+.login-form, .register-form {
+  input{
+    border: solid 2px #000;
+    height: auto;
+    font-family: "lato", sans-serif;
+    color: #000;
+    margin-bottom: 10px;
+  }
+  input:-webkit-autofill {
+      -webkit-box-shadow: 0 0 0 1000px #fff inset;
   }
 }
+.register-form {
+
+}
+.passwordless{
+  margin-top: 60px;
+  padding-top: 30px;
+  min-height: 300px;
+  background-image: url('/assets/images/passwordless.png');
+  background-position: top right;
+  background-repeat: no-repeat;
+  margin-bottom: 40px;
+  h2{
+    font-size: 2em;
+  }
+  p{
+    color: #666;
+  }
+}
+
 .signin-success,
 .registration-success {
   position: absolute;

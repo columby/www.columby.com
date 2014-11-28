@@ -86,60 +86,119 @@ angular.module('columbyApp').controller('AccountCtrl',
  *
  ***/
 .controller('AccountEditCtrl',
-  function ($window, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, toaster, $upload) {
+  function ($window, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, toaster, $upload, FileSrv, ngProgress) {
 
 
-  /* ---------- SETUP ----------------------------------------------------------------------------- */
-  $scope.contentLoading  = true;
-  $window.document.title = 'columby.com';
+    /* ---------- SETUP ----------------------------------------------------------------------------- */
+    $scope.contentLoading  = true;
+    $window.document.title = 'columby.com';
 
-  /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
+    /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
 
 
-  /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
-  function getAccount(){
-    console.log($stateParams);
-    // get account information of user by userSlug
-    AccountSrv.get({slug: $stateParams.slug}, function(result){
-      console.log(result);
-      $scope.account = result;
-      $scope.contentLoading = false;
-      $window.document.title = 'columby.com | ' + result.name;
+    /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
+    function getAccount(){
+      console.log($stateParams);
+      // get account information of user by userSlug
+      AccountSrv.get({slug: $stateParams.slug}, function(result){
+        $scope.account = result;
+        $scope.contentLoading = false;
+        $window.document.title = 'columby.com | ' + result.name;
 
-      $scope.accountUpdate = {
-        name        : $scope.account.name,
-        description : $scope.account.description
+        $scope.accountUpdate = {
+          name        : $scope.account.name,
+          description : $scope.account.description
+        };
+
+        $scope.account.canEdit= AuthSrv.canEdit({postType:'account', _id:result._id});
+
+        updateHeaderImage();
+
+      });
+    }
+
+    function initiateNewAccount(){
+      $scope.account = {
+        name        : 'New account',
+        description : '<p>Account description</p>',
+        owner       : $rootScope.user._id,
+        canEdit     : true
       };
+      $scope.contentLoading = false;
+      console.log('account initiated', $scope.account);
+    }
 
-      $scope.account.canEdit= AuthSrv.canEdit({postType:'account', _id:result._id});
+    function updateHeaderImage(){
+      $scope.headerStyle={
+        'background-image': 'url(' + $scope.account.headerPattern + '), url(' + $scope.account.headerImage + ')',
+        'background-blend-mode': 'multiply'
+      };
+    }
 
-      updateHeaderImage();
+    /**
+     *
+     * Upload a file with a valid signed request
+     *
+     * @param params
+     * @param file
+     */
+    function uploadFile(params, file) {
 
-    });
-  }
+      file.filename = params.file.filename;
 
-  function initiateNewAccount(){
-    $scope.account = {
-      name        : 'New account',
-      description : '<p>Account description</p>',
-      owner       : $rootScope.user._id,
-      canEdit     : true
-    };
-    $scope.contentLoading = false;
-    console.log('account initiated', $scope.account);
-  }
+      var xhr = new XMLHttpRequest();
+      var fd = new FormData();
+      // Populate the Post paramters.
+      fd.append('key', params.file.account_id + '/' +file.filename);
+      fd.append('AWSAccessKeyId', params.credentials.key);
+      fd.append('acl', 'public-read');
+      //fd.append('success_action_redirect', "https://attachments.me/upload_callback")
+      fd.append('policy', params.credentials.policy);
+      fd.append('signature', params.credentials.signature);
+      fd.append('Content-Type', params.file.filetype);
+      fd.append('success_action_status', '201');
+      // This file object is retrieved from a file input.
+      fd.append('file', file);
 
-  function updateHeaderImage(){
-    $scope.headerStyle={
-      'background-image': 'url(' + $scope.account.headerPattern + '), url(' + $scope.account.headerImage + ')',
-      'background-blend-mode': 'multiply'
-    };
-  }
+      xhr.upload.addEventListener('progress', function (evt) {
+        ngProgress.set(parseInt(100.0 * evt.loaded / evt.total));
+      }, false);
 
+      xhr.addEventListener('load', function(evt){
+        ngProgress.complete();
+        var parsedData = FileSrv.handleS3Response(evt.target.response);
+        var p = {
+          fid: params.file.id,
+          url: parsedData.location
+        };
+        finishUpload(p);
+      });
+      xhr.addEventListener('error', function(evt){
+        ngProgress.complete();
+        toaster.pop('warning',null,'There was an error attempting to upload the file.' + evt);
+      }, false);
+      xhr.addEventListener("abort", function(){
+        ngProgress.complete();
+        toaster.pop('warning',null,'The upload has been canceled by the user or the browser dropped the connection.');
+      }, false);
 
+      xhr.open('POST', 'https://' + params.credentials.bucket + '.s3.amazonaws.com/', true);
+      xhr.send(fd);
+    }
+    function finishUpload(params){
+      FileSrv.finishS3(params).then(function(res){
+        console.log('res', res);
+        if (res.url){
+          $scope.account.avatar = res.url;
+          $scope.account.$update(function(result){
+            console.log('update', result);
+          });
+        }
+      });
+    }
 
-  /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
-  $scope.update = function(){
+    /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
+    $scope.update = function(){
     console.log('updating account.');
     if (!$scope.account._id) {
       console.log('Name changed, but not yet saved');
@@ -171,151 +230,45 @@ angular.module('columbyApp').controller('AccountCtrl',
     }
   };
 
-  // $scope.createAccount = function(){
-  //   console.log('creating account');
-  //   AccountSrv.save($scope.account, function(res){
-  //     if (res.err){
-  //       if (res.code === 11000) {
-  //         toaster.pop('danger', 'Sorry, that account name already exists. Please chose a different name. ');
-  //       }
-  //     }
-  //     if (res._id) {
-  //       // add to local user
-  //       $rootScope.user.accounts.push(res);
-  //       toaster.pop('success', 'Created', 'Account created.');
-  //       $state.go('account.view', {slug: res.slug});
-  //     }
-  //   });
-  // };
-
-
-  $scope.onFileSelect = function($files) {
-    $scope.upload=[];
-    var file = $files[0];
-    file.progress = parseInt(0);
-    // console.log('file', file);
-
-    // check if the file is an image
-    var validTypes = [ 'image/png', 'image/jpg', 'image/jpeg' ];
-
-    if (validTypes.indexOf(file.type) === -1) {
-      toaster.pop('alert',null,'File type ' + file.type + ' is not allowed');
-      return;
-    }
-
-    // First get a signed request from the Columby server
-    $http({
-      method: 'GET',
-      url: 'api/v2/file/sign',
-      //skipAuthorization: true,
-      params: {
-        type: file.type,
-        size: file.size,
-        name: file.name,
-        accountId: $scope.account._id
-      }
-    })
-      .success(function(response) {
-        console.log('config', $rootScope.config.aws);
-
-        console.log('policy', response);
-        var s3Params = response.credentials;
-        var fileResponse = response.file;
-        console.log('key', $scope.account._id + '/' + response.file.filename);
-        console.log('file', file);
-
-        // Initiate upload
-        $scope.upload = $upload.upload({
-          url: 'https://' + $rootScope.config.aws.bucket + '.s3.amazonaws.com/',
-          method: 'POST',
-          // remove Authorization header (angular-jwt)
-          skipAuthorization: true,
-          data: {
-            'key' : 'jan', //file.name,
-            'acl' : 'public-read',
-            'Content-Type' : file.type,
-            'AWSAccessKeyId': s3Params.AWSAccessKeyId,
-            'success_action_status' : '201',
-            'Policy' : s3Params.s3Policy,
-            'Signature' : s3Params.s3Signature
-          },
-          file: file,
-        }).then(function(response) {
-          console.log('upload response', response.data);
-          file.progress = parseInt(100);
-          if (response.status === 201) {
-            // convert xml response to json
-            var data = window.xml2json.parser(response.data),
-            parsedData;
-            parsedData = {
-                location: data.postresponse.location,
-                bucket: data.postresponse.bucket,
-                key: data.postresponse.key,
-                etag: data.postresponse.etag
-            };
-
-            // upload finished, update the file reference
-            $http({
-              method: 'POST',
-              url: 'api/v2/file/s3success',
-              data: {
-                fileId: fileResponse._id,
-                url: parsedData.location
-              },
-              headers: {
-                Authorization: AuthSrv.columbyToken()
-              }
-            })
-            .success(function(response){
-              console.log('res', response);
-              $scope.account.avatar.url = response.url;
-              var a = {
-                slug: $scope.account.slug,
-                avatar: {
-                  url: response.url
-                }
-              };
-              console.log('a', a);
-              AccountSrv.update(a, function(result){
-                console.log('r',result);
-                if (result.status === 'success') {
-                  toaster.pop('success', 'Updated', 'Account updated.');
-                } else {
-                  toaster.pop('warning', 'Updated', 'Account There was an error updating.');
-                }
-              });
-            })
-            .error(function(data, status, headers, config){
-              console.log('res', data);
-              console.log(status);
-              console.log(headers);
-              console.log(config);
-            });
-            // $scope.imageUploads.push(parsedData);
-
+    /**
+     *
+     * Handle file select
+     *
+     * @param $files
+     */
+    $scope.onFileSelect = function($files) {
+      var file = $files[0];
+      // Check if the file has the right type
+      if (FileSrv.validateImage(file.type)) {
+        ngProgress.start();
+        // Define the parameters to get the right signed request
+        var params = {
+          filetype: file.type,
+          filesize: file.size,
+          filename: file.name,
+          accountId: $scope.account.id,
+          type: 'image'
+        };
+        // Request a signed request
+        FileSrv.signS3(params).then(function (signResponse) {
+          if (signResponse.file) {
+            // signed request is valid, send the file to S3
+            uploadFile(signResponse, file);
           } else {
-            console.log('Upload Failed');
+            toaster.pop('error', null, 'Sorry, there was an error. Details: ' +  signResponse.msg);
+            console.log(signresponse);
           }
-        }, function(e){
-          console.log(e);
-        }, function(evt) {
-          console.log(evt);
-          file.progress =  parseInt(100.0 * evt.loaded / evt.total);
-        });
-      })
-      .error(function(data, status){
-        console.log('Error message', data.err);
-        console.log(status);
-      });
-  };
+        })
+      } else {
+        toaster.pop('warning',null,'The file you chose is not valid. ' + file.type);
+      }
+    };
 
 
-  /* ---------- INIT ----------------------------------------------------------------------------- */
-  if ($stateParams.slug) {
-    getAccount();
-  } else {
-    initiateNewAccount();
-  }
-
-})
-;
+    /* ---------- INIT ----------------------------------------------------------------------------- */
+    if ($stateParams.slug) {
+      getAccount();
+    } else {
+      initiateNewAccount();
+    }
+  });

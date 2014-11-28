@@ -21,7 +21,8 @@
     "xml2json": "~1.1.1",
     "angular-easy-social-share": "*",
     "angular-slugify": "~1.0.0",
-    "angular-jwt": "~0.0.4"
+    "angular-jwt": "~0.0.4",
+    "ngprogress": "~1.0.7"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
