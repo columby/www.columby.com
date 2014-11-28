@@ -26,15 +26,7 @@ angular.module('columbyApp')
       if ($scope.search.searchTerm.length>2){
         $scope.search.message = 'Searching for: ' + $scope.search.searchTerm;
         SearchSrv.query({
-          index: 'datasets',
-          size: 50,
-          body: {
-            'query': {
-              'wildcard': {
-                '_all': String($scope.search.searchTerm)
-              }
-            }
-          }
+          text: $scope.search.searchTerm
         }).then(function (response) {
           console.log(response);
           $scope.search.hits = response.hits.hits;
