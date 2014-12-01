@@ -13,8 +13,7 @@ exports.search = function(req, res) {
     handleError(res, 'error, no query provided');
   }
 
-  var query = JSON.parse(req.query.query);
-  var q = query.body.query.wildcard._all;
+  var q = req.query.query;
 
   // @todo Sequelize.or does not seem to work or I implemented it wrongly.. (marcelfw)
 
@@ -22,9 +21,7 @@ exports.search = function(req, res) {
   var _q = q.trim().split(" ");
   for(var idx=0; idx < _q.length; idx++) {
       dataset_wheres.push({title: { ilike: "%"+_q[idx]+"%" }});
-
-      // disabled until Sequelize.or works..
-      //dataset_wheres.push({description: { ilike: "%"+_q[idx]+"%" }});
+      dataset_wheres.push({description: { ilike: "%"+_q[idx]+"%" }});
   }
 
   var account_wheres = [];
@@ -35,23 +32,48 @@ exports.search = function(req, res) {
 
   var chain = new Sequelize.Utils.QueryChainer();
 
+  // calculate fuzzy weight
+  // start weight is weights[0]
+  // every matched keyword from _q adds weights[1]
+  var weightFunc = function(weights, str){
+    if (str == undefined) {
+        return 0;
+    }
+    var weight = weights[0];
+    for(var idx=0; idx < _q.length; idx++) {
+      if (str.search(new RegExp(_q[idx], 'i')) >= 0) {
+        weight += weights[1];
+        continue;
+      }
+    }
+    return weight;
+  };
+
+  var weight_DatasetTitle = [ 10, 2 ];
+  var weight_DatasetDescription = [ 5, 1 ];
+  var weight_AccountName = [ 10, 2 ];
+
   new Sequelize.Utils.QueryChainer()
-    .add(Dataset.findAll({where: Sequelize.or(dataset_wheres)}).on('sql', console.log))
-    .add(Account.findAll({where: Sequelize.or(account_wheres)}).on('sql', console.log))
+    .add(Dataset.findAll({where: Sequelize.or.apply(null, dataset_wheres)})) // .on('sql', console.log))
+    .add(Account.findAll({where: Sequelize.or.apply(null, account_wheres)})) // .on('sql', console.log))
     .run()
     .success(function(_results){
         var results = [];
         // add datasets
         for(var idx=0; idx < _results[0].length; idx++) {
-            var weight = 10;
-            // @todo fix weight..
-            results.push({title: _results[0][idx].title, description: _results[0][idx].description, weight:weight});
+            results.push({
+              title: _results[0][idx].title,
+              description: _results[0][idx].description,
+              weight: weightFunc(weight_DatasetTitle, _results[0][idx].title) + weightFunc(weight_DatasetDescription, _results[0][idx].description)
+            });
         }
         // add accounts
         for(var idx=0; idx < _results[1].length; idx++) {
-            var weight = 5;
-            // @todo fix weight..
-            results.push({title: _results[1][idx].name, description: '', weight:weight});
+            results.push({
+              title: _results[1][idx].name,
+              description: '',
+              weight: weightFunc(weight_AccountName, _results[0][idx].name)
+            });
         }
         // sort on weight
         results.sort(function(a,b){
