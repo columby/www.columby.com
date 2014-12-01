@@ -6,11 +6,10 @@
  *
  */
 var _ = require('lodash'),
-    mongoose = require('mongoose'),
-    //Dataset = require('./../routes/dataset/dataset.model.js'),
     Dataset = require('../models/index').Dataset,
     Account = require('../models/index').Account,
-  Sequelize = require('sequelize')
+    File = require('../models/index').File,
+    Sequelize = require('sequelize')
   ;
 
 
@@ -74,7 +73,9 @@ exports.index = function(req, res) {
       offset: offset,
       order: 'created_at DESC',
       include: [
-        { model: Account }
+        { model: Account, include: [
+          { model: File, as: 'avatar'}
+        ] }
       ]
     })
     .success(function(datasets) {
@@ -106,7 +107,11 @@ exports.show = function(req, res) {
   Dataset.find({
     where: { shortid: req.params.id },
     include: [
-      { model: Account }
+      { model: File, as: 'headerImg'},
+      { model: Account, include: [
+        { model: File, as: 'avatar'},
+        { model: File, as: 'headerImg'}
+      ] }
     ]
   }).success(function(dataset){
     var d = dataset.dataValues;
@@ -150,15 +155,24 @@ exports.create = function(req, res) {
 
 // Updates an existing dataset in the DB.
 exports.update = function(req, res) {
+
   if(req.body._id) { delete req.body._id; }
-  Dataset.findById(req.params.id, function (err, dataset) {
-    if (err) { return handleError(res, err); }
+
+  Dataset.find(req.params.id).success(function(dataset){
     if(!dataset) { return res.send(404); }
-    var updated = _.merge(dataset, req.body);
-    updated.save(function (err) {
-      if (err) { return handleError(res, err); }
-      return res.json(200, dataset);
+
+    // Set new header image if needed
+    if (req.body.headerImg){
+      dataset.setHeaderImg(req.body.headerImg);
+    }
+
+    dataset.updateAttributes(req.body).success(function(dataset) {
+      return res.json(dataset);
+    }).error(function(err) {
+      handleError(res,err);
     });
+  }).error(function(err){
+    handleError(res,err);
   });
 };
 
@@ -290,5 +304,6 @@ exports.destroyReference = function(req, res) {
 
 
 function handleError(res, err) {
+  console.log('Dataset error,', err);
   return res.send(500, err);
 }

@@ -32,6 +32,14 @@ angular.module('columbyApp')
         return promise;
       },
 
+      /**
+       * Upload a file to s3
+       */
+      upload: function(file, params){
+
+
+      },
+
       handleS3Response: function(s3Response){
         console.log(s3Response);
         var data = window.xml2json.parser(s3Response);

@@ -60,7 +60,7 @@ module.exports = function(sequelize, DataTypes) {
         // Create associations to other models
         associate: function (models) {
           // An account can have multiple accounts with roles
-          File.belongsTo(models.Account);
+          //File.belongsTo(models.Account);
         }
       }
     }

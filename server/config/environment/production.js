@@ -13,11 +13,8 @@ module.exports = {
             process.env.PORT ||
             8080,
 
-  // MongoDB connection options
-  mongo: {
-    uri:    process.env.MONGOHQ_URL ||
-            process.env.MONGO_URL ||
-            'mongodb://localhost/columby'
+  db:{
+    uri: process.env.DATABASE_URL
   },
 
   jwt: {
@@ -34,12 +31,6 @@ module.exports = {
     secretKey : process.env.AWS_SECRET_ACCESS_KEY,
     bucket    : process.env.S3_BUCKET_NAME,
     endpoint  : process.env.AWS_S3_ENDPOINT
-  },
-
-  // Search service
-  elasticsearch: {
-    host      : process.env.BONSAI_URL || '',
-    logging   : 'error'
   },
 
   embedly: {

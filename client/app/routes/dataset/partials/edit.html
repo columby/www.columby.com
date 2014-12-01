@@ -31,11 +31,10 @@
 	      <div class="visibility setting" ng-show="dataset.id">
           <h3>Visibility
             <button
-              class="right btn-xs btn-tooltip"
+              class="btn btn-defaultright btn-xs btn-tooltip"
               popover="Change visibility settings for your dataset."
               popover-trigger="mouseenter"
-              popover-placement="left"
-              class="btn btn-default"><i class="fa fa-question"></i></button>
+              popover-placement="left"><i class="fa fa-question"></i></button>
           </h3>
 	        <div class="btn-group btn-toggle">
           	<button
@@ -55,11 +54,10 @@
       <div class="slug" ng-show="dataset.id">
         <h3>Custom URL
           <button
-            class="right btn-xs btn-tooltip"
+            class="btn btn-default right btn-xs btn-tooltip"
             popover="Create a custom URL for this dataset that is more memorable than a random string of characters. Many people create a URL that matches the dataset title."
             popover-trigger="mouseenter"
-            popover-placement="left"
-            class="btn btn-default"><i class="fa fa-question"></i>
+            popover-placement="left"><i class="fa fa-question"></i>
           </button>
         </h3>
 				<span>{{hostname}}/d/{{dataset.slug | slugify}}</span>
@@ -77,18 +75,9 @@
             <button
               class="btn btn-xs btn-default"
               ng-click="updateSlug()"
-              placeholder="dataset-name"
               ng-show="slugForm.$valid">update url</button>
           </div>
         </form>
-      </div>
-
-      <div class="header-background">
-        <h3>Custom header background</h3>
-        <div class="btn"
-          ng-file-select="updateHeaderImage($files)"
-          data-multiple="false"><i class="fa fa-cog"></i>
-        </div>
       </div>
     </div>
   </div>
@@ -97,13 +86,17 @@
   <div class="content" ng-class="{show:!contentLoading}">
 
     <div class="header wrapper" ng-style="headerStyle">
+
+      <div class="upload-button" ng-file-select="onFileSelect($files,'header')">
+        <i class="fa fa-cog"></i>
+      </div>
+
       <div class="container">
   			<div class="col-md-12">
 
           <textarea
             class       = "title edit"
             auto-grow
-            type        = "text"
             name        = "title"
             placeholder = "Your title"
             ng-model    = "datasetUpdate.title"
@@ -122,9 +115,8 @@
             <p ng-show="dataset.tags.length>0"><strong>Tags: </strong><span ng-repeat="tag in dataset.tags">{{tag}}</span></p>
           </div>
 
-          <!-- Editable avatar -->
           <div class="avatar img-rounded">
-            <img src="{{dataset.account.avatar}}" alt="{{dataset.owner}}"/>
+            <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" alt="{{dataset.owner}}"/>
           </div>
         </div>
       </div>

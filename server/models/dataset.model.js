@@ -38,6 +38,16 @@ module.exports = function(sequelize, DataTypes) {
     }, {
       classMethods: {
         associate: function (models) {
+          // Header image association
+          models.File.hasOne(Dataset, {
+            foreignKey: 'headerimg_id',
+            as: 'headerImg'
+          });
+          Dataset.belongsTo(models.File,{
+            foreignKey: 'headerimg_id',
+            as: 'headerImg'
+          });
+
           // A dataset can have multiple tags
           Dataset.hasMany(models.Tag);
           // a dataset belongs to a single account

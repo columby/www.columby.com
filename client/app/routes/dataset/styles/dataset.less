@@ -90,9 +90,7 @@
 }
 
 .dataset {
-  &.listing {
-
-  }
+  &.listing {}
   // &.view {
     // General styling for a dataset page (view and edit)
     .loader {
@@ -120,6 +118,15 @@
 			margin-bottom: 40px;
       .header.wrapper{
         height: auto;
+        position:relative;
+        .upload-button {
+          overflow: hidden;
+          position: absolute;
+          right: 10px;
+          bottom: 10px;
+          color: white;
+          cursor: pointer;
+        }
       }
 			.meta{
 				text-align: center;
@@ -153,7 +160,7 @@
 				font-size: 14px;
 				line-height: 28px;
 			}
-			
+
       .uuid{
         text-align: center;
       }
@@ -180,7 +187,7 @@
 			.no-sources-yet{
 				font-style: italic;
 			}
-			
+
 			.sources {
         li {
   				padding-left: 10px;
@@ -366,7 +373,7 @@
         }
       }
     }
-    
+
 		.share, .embed{
 			text-align: center;
 			.fa{
@@ -382,11 +389,11 @@
 			}
 		}
 
-   
+
 
     // Specific styling for dataset view page
     &.view {
-      
+
     }
 
 
@@ -455,28 +462,28 @@
   opacity: 0.95;
   color: #000;
   text-align: center;
-  
+
   h2{
     font-size: 2em;
     margin-top: 20px;
     margin-bottom: 20px;
   }
-  
+
   p{
     color: #999;
     margin-bottom: 20px;
   }
-  
+
   textarea {
     height: 190px;
     width: 450px;
     font-family: "lato", sans-serif;
   }
-  
+
   .ngdialog-overlay{
     display:none;
   }
-  
+
   .ngdialog-close{
     position: absolute;
     top: 10px;
@@ -491,23 +498,23 @@
   .metabar-wrapper{
     display: none;
   }
-  
+
   .actions-bar{
     display: none;
   }
-  
+
   .embed{
     display: none;
   }
-  
+
   .more-about{
     display: none;
   }
-  
+
   .uv-icon{
     display:none;
   }
-  
+
   h1{
     font-size: 2em;
   }

@@ -56,9 +56,9 @@ angular.module('columbyApp')
     }
 
     function updateHeaderImage(){
-			if ($scope.dataset.headerImage) {
+			if ($scope.dataset.headerImg) {
 	      $scope.headerStyle={
-	        'background-image': 'linear-gradient(transparent,transparent), url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImage + ')',
+	        'background-image': 'linear-gradient(transparent,transparent), url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
 	        'background-blend-mode': 'multiply'
 	      };
 	    }
@@ -86,7 +86,7 @@ angular.module('columbyApp')
     }
   }
 )
-  .controller('DatasetEditCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv, $http, $upload) {
+  .controller('DatasetEditCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv, $http, $upload, FileSrv,ngProgress) {
 
     /***   INITIALISATION   ***/
     $scope.hostname = $location.protocol() + '://' + $location.host();
@@ -109,14 +109,9 @@ angular.module('columbyApp')
         $scope.dataset = dataset;
         $window.document.title = 'columby.com | ' + dataset.title;
 
-        // set the avatar
-        if (!dataset.account.avatar) {
-          dataset.account.avatar = $rootScope.user.accounts[ $rootScope.selectedAccount].avatar.url;
-        }
-
         // transition the url from slug to id
-        if ($stateParams.id !== dataset.id) {
-          $state.transitionTo ('dataset.view', { id: dataset.id}, {
+        if ($stateParams.id !== dataset.shortid) {
+          $state.transitionTo ('dataset.view', { id: dataset.shortid}, {
             location: true,
             inherit: true,
             relative: $state.$current,
@@ -142,9 +137,61 @@ angular.module('columbyApp')
 
         $scope.dataset.canEdit= AuthSrv.canEdit({postType:'dataset', id:dataset.account.id});
 
-        updateHeaderImage();
+        if ($scope.dataset.headerImg){
+          updateHeaderImage();
+        }
 
       });
+    }
+
+    /**
+     * Upload a file with a valid signed request
+     *
+     * @param params
+     * @param file
+     */
+    function uploadFile(params, file) {
+
+      file.filename = params.file.filename;
+
+      var xhr = new XMLHttpRequest();
+      var fd = new FormData();
+      // Populate the Post paramters.
+      fd.append('key', params.file.account_id + '/' +file.filename);
+      fd.append('AWSAccessKeyId', params.credentials.key);
+      fd.append('acl', 'public-read');
+      //fd.append('success_action_redirect', "https://attachments.me/upload_callback")
+      fd.append('policy', params.credentials.policy);
+      fd.append('signature', params.credentials.signature);
+      fd.append('Content-Type', params.file.filetype);
+      fd.append('success_action_status', '201');
+      // This file object is retrieved from a file input.
+      fd.append('file', file);
+
+      xhr.upload.addEventListener('progress', function (evt) {
+        ngProgress.set(parseInt(100.0 * evt.loaded / evt.total));
+      }, false);
+
+      xhr.addEventListener('load', function(evt){
+        ngProgress.complete();
+        var parsedData = FileSrv.handleS3Response(evt.target.response);
+        var p = {
+          fid: params.file.id,
+          url: parsedData.location
+        };
+        finishUpload(p);
+      });
+      xhr.addEventListener('error', function(evt){
+        ngProgress.complete();
+        toaster.pop('warning',null,'There was an error attempting to upload the file.' + evt);
+      }, false);
+      xhr.addEventListener("abort", function(){
+        ngProgress.complete();
+        toaster.pop('warning',null,'The upload has been canceled by the user or the browser dropped the connection.');
+      }, false);
+
+      xhr.open('POST', 'https://' + params.credentials.bucket + '.s3.amazonaws.com/', true);
+      xhr.send(fd);
     }
 
     /**
@@ -183,7 +230,7 @@ angular.module('columbyApp')
 
     function updateHeaderImage(){
       $scope.headerStyle={
-        'background-image': 'url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.header_img + ')',
+        'background-image': 'url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
         'background-blend-mode': 'multiply'
       };
     }
@@ -192,6 +239,84 @@ angular.module('columbyApp')
     $scope.toggleOptions = function(){
       $scope.showOptions = !$scope.showOptions;
     };
+
+    /**
+     *
+     * Handle file select
+     *
+     * @param $files
+     * @param target
+     */
+    $scope.onFileSelect = function($files, target) {
+      var file = $files[0];
+      if ($scope.upload){
+        toaster.pop('warning',null,'There is already an upload in progress. ');
+      } else {
+        // Check if the file has the right type
+        if (FileSrv.validateImage(file.type)) {
+          $scope.fileUpload = {
+            file:file,
+            target:target
+          };
+          console.log($scope.fileUpload);
+          ngProgress.start();
+          // Define the parameters to get the right signed request
+          var params = {
+            filetype: file.type,
+            filesize: file.size,
+            filename: file.name,
+            accountId: $rootScope.user.primary.id,
+            type: 'image'
+          };
+          // Request a signed request
+          FileSrv.signS3(params).then(function (signResponse) {
+            if (signResponse.file) {
+              // signed request is valid, send the file to S3
+              uploadFile(signResponse, file);
+            } else {
+              toaster.pop('error', null, 'Sorry, there was an error. Details: ' +  signResponse.msg);
+              console.log(signresponse);
+            }
+          });
+        } else {
+          toaster.pop('warning', null, 'The file you chose is not valid. ' + file.type);
+        }
+      }
+    };
+
+    /**
+     * File is uploaded, finish it at the server.
+     * @param params
+     */
+    function finishUpload(params){
+      FileSrv.finishS3(params).then(function(res){
+        console.log('res', res);
+        if (res.url) {
+          console.log('updating url',res.url);
+          console.log($scope.fileUpload.target);
+          var updated={
+            id  : $scope.dataset.id,
+          };
+          switch($scope.fileUpload.target){
+            case 'header':
+              $scope.dataset.headerImg.url = res.url;
+              updateHeaderImage();
+              updated.headerImg=res.id;
+              console.log('updating header image');
+              break;
+          }
+          $scope.fileUpload = null;
+          toaster.pop('notice',null,'File uploaded, updating account');
+
+          DatasetSrv.update(updated, function(result){
+            //console.log('update', result);
+            //toaster.pop('notice',null,'File uploaded!');
+          });
+        } else {
+          $scope.fileUpload = null;
+        }
+      });
+    }
 
     /* dataset functions */
     $scope.updateTitle = function() {

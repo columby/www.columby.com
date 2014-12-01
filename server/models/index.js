@@ -10,9 +10,8 @@ var config    = require('./../config/environment');
  * Database settings
  *
  **/
-var sequelize = new Sequelize(config.db.name, config.db.username, config.db.password, {
+var sequelize = new Sequelize(config.db.uri, {
     dialect: config.db.dialect,
-    port: config.db.port,
     logging: false,
     define: {
       underscored: true

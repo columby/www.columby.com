@@ -46,7 +46,7 @@ angular.module('columbyApp').controller('AccountCtrl',
 
         $scope.account.canEdit = AuthSrv.canEdit({postType: 'account', _id: result._id});
 
-        if ($scope.account.header_mg) {
+        if ($scope.account.headerImg) {
           updateHeaderImage();
         }
 
@@ -58,7 +58,7 @@ angular.module('columbyApp').controller('AccountCtrl',
 
     function updateHeaderImage(){
     $scope.headerStyle={
-      'background-image': 'url(' + $scope.account.headerPattern + '), url(' + $scope.account.headerImage + ')',
+      'background-image': 'url(/assets/images/default-header.png), url(' + $scope.account.headerImg.url + ')',
       'background-blend-mode': 'multiply'
     };
   }
@@ -95,7 +95,7 @@ angular.module('columbyApp').controller('AccountCtrl',
 
     /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
     function getAccount(){
-      console.log($stateParams);
+      //console.log($stateParams);
       // get account information of user by userSlug
       AccountSrv.get({slug: $stateParams.slug}, function(result){
         $scope.account = result;
@@ -109,7 +109,7 @@ angular.module('columbyApp').controller('AccountCtrl',
 
         $scope.account.canEdit= AuthSrv.canEdit({postType:'account', _id:result._id});
 
-        if ($scope.account.header_img) {
+        if ($scope.account.headerImg) {
           updateHeaderImage();
         }
 
@@ -128,8 +128,8 @@ angular.module('columbyApp').controller('AccountCtrl',
     }
 
     function updateHeaderImage(){
-      $scope.headerStyle={
-        'background-image': 'url(' + $scope.account.headerPattern + '), url(' + $scope.account.headerImage + ')',
+      $scope.headerStyle = {
+        'background-image': 'url(/assets/images/default-header.png), url(' + $scope.account.headerImg.url + ')',
         'background-blend-mode': 'multiply'
       };
     }
@@ -190,32 +190,36 @@ angular.module('columbyApp').controller('AccountCtrl',
      */
     function finishUpload(params){
       FileSrv.finishS3(params).then(function(res){
-        console.log('res', res);
+        //console.log('Finish upload res', res);
         if (res.url) {
-          console.log('updating url',res.url);
-          console.log($scope.fileUpload.target);
+          //console.log('updating url',res.url);
+          //console.log($scope.fileUpload.target);
           var updated={
             id: $scope.account.id,
             slug: $scope.account.slug
           };
           switch($scope.fileUpload.target){
             case 'header':
-              $scope.account.header_img = res.url;
-              updated.header_img=res.url;
               console.log('updating header image');
-                  break;
+              console.log($scope.account);
+              $scope.account.headerImg = res;
+              updated.headerImg=res.id;
+              console.log($scope.account);
+              break;
             case 'avatar':
-              $scope.account.avatar = res.url;
-              console.log('updating avatar');
-              updated.avatar = res.url;
-                  break;
+              $scope.account.avatar = res;
+              //console.log('updating avatar');
+              updated.avatar = res.id;
+              break;
           }
           $scope.fileUpload = null;
           toaster.pop('notice',null,'File uploaded, updating account');
 
-          AccountSrv.update(updated,function(result){
-            console.log('update', result);
-            toaster.pop('notice',null,'File uploaded!');
+          AccountSrv.update(updated, function(result){
+            //$scope.account.avatar.url = res.url;
+            //console.log('update', result);
+            //toaster.pop('notice',null,'File uploaded!');
+            updateHeaderImage();
           });
         } else {
           $scope.fileUpload = null;

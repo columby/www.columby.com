@@ -9,7 +9,8 @@ var _ = require('lodash'),
     Sequelize = require('sequelize'),
     Account = require('../models/index').Account,
     Dataset = require('../models/index').Dataset,
-    Collection = require('../models/index').Collection;
+    Collection = require('../models/index').Collection,
+    File = require('../models/index').File;
 
 
 function slugify(text) {
@@ -65,8 +66,10 @@ exports.show = function(req, res) {
   Account.find({
     where: { slug: req.params.id },
     include: [
-      { model: Collection }
-      //{ model: Dataset }
+      //{ model: Collection },
+      //{ model: Dataset },
+      { model: File, as: 'avatar'},
+      { model: File, as: 'headerImg'}
     ]
   }).success(function(dataset){
     //console.log(dataset);
@@ -105,7 +108,17 @@ exports.create = function(req, res) {
  */
 exports.update = function(req, res) {
   console.log(req.body);
+
   Account.find(req.body.id).success(function(account){
+    // Set new avatar if needed
+    if (req.body.avatar){
+      account.setAvatar(req.body.avatar);
+    }
+    // Set new header image if needed
+    if (req.body.headerImg){
+      account.setHeaderImg(req.body.headerImg);
+    }
+
     //console.log('account', account);
     account.updateAttributes(req.body).success(function(account) {
       console.log('success',account);
@@ -113,6 +126,7 @@ exports.update = function(req, res) {
     }).error(function(err) {
       handleError(res,err);
     });
+
   }).error(function(err){
     handleError(res,err);
   });

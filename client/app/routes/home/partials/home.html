@@ -91,6 +91,7 @@
             <li ng-repeat="dataset in datasets.rows" class="publication-item">
               <h4><a ui-sref="dataset.view({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
               <div class="user-date">
+                <img ng-src="dataset.account.avatar.img" class="img-rounded"/>
                 <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'MMMM d, yyyy'}}</time>
               </div>
             </li>
