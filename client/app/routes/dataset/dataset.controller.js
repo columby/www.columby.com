@@ -299,7 +299,7 @@ angular.module('columbyApp')
           };
           switch($scope.fileUpload.target){
             case 'header':
-              $scope.dataset.headerImg.url = res.url;
+              $scope.dataset.headerImg = res;
               updateHeaderImage();
               updated.headerImg=res.id;
               console.log('updating header image');
