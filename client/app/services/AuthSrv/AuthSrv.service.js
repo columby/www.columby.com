@@ -105,7 +105,13 @@ angular.module('columbyApp')
         return authenticated;
       },
 
-      isAuthorized: function(authorizedRoles) {
+      /**
+       *
+       * Check if a user has a
+       * @param authorizedRoles
+       * @returns {*|boolean}
+       */
+      hasUserRole: function(authorizedRoles) {
         if (!angular.isArray(authorizedRoles)) {
           authorizedRoles = [authorizedRoles];
         }
@@ -124,38 +130,44 @@ angular.module('columbyApp')
         return (this.isAuthenticated() && trustedRole);
       },
 
+      hasAccountRole:function(){
+
+      },
+
       // Check if the current logged in user can edit an item
-      canEdit: function(item){
+      canEdit: function(type, item) {
 
-        var allowEdit = false;
+        var canEdit = false;
 
-        // Admin can edit everything
-        allowEdit = this.isAuthorized('administrator');
-
-        // Define access based on content type
-        if (user && user.accounts) {
-          switch (item.postType) {
-            case 'account':
-              // edit own content
-              for (var i=0; i<user.accounts.length; i++){
-                if (item._id === user.accounts[ i]._id) {
-                  allowEdit = true;
+        if (user.admin === true){
+          return true;
+        }
+        
+        //console.log('checking canEdit', type, item);
+        switch (type){
+          case 'account':
+            for (var i=0;i<user.accounts.length;i++){
+              if (item.id === user.accounts[ i].id){
+                if ( (user.accounts[ i].role === 1) || (user.accounts[ i].role === 2) || (user.accounts[ i].role === 3) ) {
+                  canEdit = true;
                 }
               }
+            }
             break;
-
-            case 'dataset':
-              // check if logged in user is publisher of the account
-              for (i = 0; i < user.accounts.length; i++) {
-                if (user.accounts[ i]._id === item._id) {
-                  allowEdit = true;
+          case 'dataset':
+            console.log(item.account.id);
+            for (var i=0;i<user.accounts.length;i++){
+              if (item.account.id === user.accounts[ i].id){
+                if ( (user.accounts[ i].role === 1) || (user.accounts[ i].role === 2) || (user.accounts[ i].role === 3) ) {
+                  console.log('canedit true: ', user.accounts[ i].role);
+                  canEdit = true;
                 }
               }
+            }
             break;
-          }
         }
 
-        return allowEdit;
+        return canEdit;
       },
 
 

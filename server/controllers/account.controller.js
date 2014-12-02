@@ -73,20 +73,6 @@ exports.show = function(req, res) {
     ]
   }).success(function(dataset){
     //console.log(dataset);
-    // Check access for registered user
-    dataset.canEdit=false;
-    console.log(req.jwt);
-    console.log(req.user);
-    if (req.jwt && req.user && !req.user.id){
-      console.log(req.jwt);
-      console.log(req.user);
-      // check role
-      if (req.user.roles.inArray('administrator') !== -1) {
-        dataset.canEdit = true;
-      }
-      // check user for account
-
-    }
     res.json(dataset);
   }).error(function(err){
     console.log(err);

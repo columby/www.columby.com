@@ -48,7 +48,7 @@ angular.module('columbyApp')
         // }
         // $scope.summary = summary + '</p>';
 
-        $scope.dataset.canEdit= AuthSrv.canEdit({postType:'dataset', id:dataset.account.id});
+        $scope.dataset.canEdit= AuthSrv.canEdit('dataset', dataset);
 
         updateHeaderImage();
 
@@ -122,20 +122,6 @@ angular.module('columbyApp')
         // set draft title and description
         $scope.datasetUpdate.title = $scope.dataset.title;
         $scope.datasetUpdate.description = $scope.dataset.description;
-
-        // create summary
-        var summary = '<p>';
-        // check for file source
-        if (!dataset.sources) {
-          summary += 'There is no data for this dataset available yet. ';
-        } else if (!dataset.sources.primary) {
-          summary += 'There is no primary source for this dataset yet. ';
-        } else if (dataset.sources.primary.type) {
-          summary += 'This dataset if of the type <strong>' + dataset.sources.primary.type + '</strong>.';
-        }
-        $scope.summary = summary + '</p>';
-
-        $scope.dataset.canEdit= AuthSrv.canEdit({postType:'dataset', id:dataset.account.id});
 
         if ($scope.dataset.headerImg){
           updateHeaderImage();

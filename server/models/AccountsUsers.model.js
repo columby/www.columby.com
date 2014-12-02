@@ -14,6 +14,15 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement: true
     },
     role: DataTypes.INTEGER
+
+    /**
+     * 1 primary
+     * 2 owner
+     * 3 admin
+     * 4 publisher
+     * 5 viewer
+     **/
+
     });
 
   return AccountsUsers ;

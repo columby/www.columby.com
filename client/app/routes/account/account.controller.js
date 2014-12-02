@@ -1,6 +1,13 @@
 'use strict';
 
-angular.module('columbyApp').controller('AccountCtrl',
+angular.module('columbyApp')
+
+/**
+ *
+ * Account Edit Controller
+ *
+ **/
+  .controller('AccountCtrl',
   function($window,$rootScope,$scope, $stateParams,$state,toaster, AccountSrv, AuthSrv, CollectionSrv, DatasetSrv){
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
@@ -20,7 +27,7 @@ angular.module('columbyApp').controller('AccountCtrl',
           });
         });
       } else {
-        console.log('no collections');
+        //console.log('no collections');
       }
     }
 
@@ -44,7 +51,7 @@ angular.module('columbyApp').controller('AccountCtrl',
         $scope.contentLoading = false;
         $window.document.title = 'columby.com | ' + result.name;
 
-        $scope.account.canEdit = AuthSrv.canEdit({postType: 'account', _id: result._id});
+        $scope.account.canEdit = AuthSrv.canEdit('account', result);
 
         if ($scope.account.headerImg) {
           updateHeaderImage();
@@ -77,12 +84,12 @@ angular.module('columbyApp').controller('AccountCtrl',
 
 })
 
-/***
+/**
  *
- * Account View Controller
+ * Account Edit Controller
  *
- ***/
-.controller('AccountEditCtrl',
+ **/
+  .controller('AccountEditCtrl',
   function ($window, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, toaster, $upload, FileSrv, ngProgress) {
 
 

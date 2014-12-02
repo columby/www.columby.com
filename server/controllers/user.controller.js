@@ -30,11 +30,16 @@ exports.me = function(req, res) {
       user = user.dataValues;
       user.accounts = [];
       for (var i=0;i<accounts.length;i++){
+        var account = accounts[ i].dataValues;
+        var role = accounts[i].AccountsUser.role;
+        delete account.AccountsUser;
+        account.role = role;
         if (accounts[ i].primary){
-          user.primary = accounts[ i].dataValues;
+          user.primary = account;
         }
-        user.accounts.push(accounts[ i].dataValues);
+        user.accounts.push(account);
       }
+      console.log('user', user);
       return res.json(user);
     }).error(function(err){
       console.log(err);

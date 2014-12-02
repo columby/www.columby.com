@@ -32,6 +32,10 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.BOOLEAN,
         defaultValue: false
       },
+      admin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
       // migration from beta.columby.com
       drupal_name: {
         type: DataTypes.STRING
