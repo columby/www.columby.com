@@ -395,7 +395,7 @@ module.exports = function (grunt) {
       },
       staging: {
         options: {
-          remote: 'dokku',
+          remote: 'staging',
           branch: 'master'
         }
       },
