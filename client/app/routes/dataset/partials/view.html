@@ -47,7 +47,7 @@
     <div class="description wrapper">
       <div class="container">
         <div class="col-md-12">
-          <div class="data-description"
+          <div class="description"
             ng-bind-html="dataset.description || '<p>The publisher of this dataset has not yet provided a description yet.</p>'">
           </div>
         </div>
@@ -198,9 +198,15 @@
       <div class="container">
         <div class="col-md-12">
           <div class="content">
+<<<<<<< Updated upstream
               <h3>About {{dataset.account.name}}</h3>
               <div ng-bind-html="dataset.account.description" class="account-description"></div>
   						<p class="more-about"><a ui-sref="account.view({slug: dataset.account.slug})">more about {{dataset.account.name}}</a></p>
+=======
+              <h3>About {{dataset.Account.name}}</h3>
+              <div ng-bind-html="dataset.Account.description" class="description"></div>
+  						<p class="more-about"><a ui-sref="account.view({slug: dataset.Account.slug})">more about {{dataset.Account.name}}</a></p>
+>>>>>>> Stashed changes
             </div>
           </div>
         </div>
