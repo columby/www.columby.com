@@ -32,6 +32,34 @@ exports.createToken = function(user) {
 
 /**
  *
+ * Check if a user's jwt token is present
+ * And add the user id to req
+ *
+ */
+exports.checkJWT = function(req,res,next){
+  console.log('checking jwt');
+  if (!req.user) { req.user={}; }
+
+  // Decode the token if present
+  if (req.headers.authorization){
+    var token = req.headers.authorization.split(' ')[1];
+    var payload = jwt.decode(token, config.jwt.secret);
+    // Check token expiration date
+    if (payload.exp <= moment().unix()) {
+      console.log('Token has expired');
+    }
+    // Attach user id to req
+    if (!payload.sub) {
+      console.log('No user found from token');
+    }
+    req.jwt = payload;
+  }
+
+  next();
+};
+
+/**
+ *
  * Login Required Middleware
  *
  */

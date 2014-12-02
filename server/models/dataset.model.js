@@ -48,6 +48,12 @@ module.exports = function(sequelize, DataTypes) {
             as: 'headerImg'
           });
 
+          // A dataset can have multiple distributions
+          Dataset.hasMany(models.Distribution, {
+            through: models.DatasetDistributions
+          });
+          models.Distribution.belongsTo(Dataset);
+
           // A dataset can have multiple tags
           Dataset.hasMany(models.Tag);
           // a dataset belongs to a single account

@@ -2,13 +2,27 @@
 
 var express = require('express'),
     controller = require('./../controllers/account.controller'),
+    auth = require('./../controllers/auth.controller'),
     router = express.Router();
 
 module.exports = function(app) {
-  router.get('/', controller.index);
-  router.get('/:id', controller.show);
-  router.post('/', controller.create);
-  router.put('/:id', controller.update);
+
+  router.get('/',
+    auth.checkJWT,
+      controller.index);
+
+  router.get('/:id',
+    auth.checkJWT,
+      controller.show);
+
+  router.post('/',
+    auth.isAdmin,
+      controller.create);
+
+
+  router.put('/:id',
+    auth.isAdmin,
+      controller.update);
   //router.patch('/:id'    , controller.update);
   //router.delete('/:id'   , controller.destroy);
 

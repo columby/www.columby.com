@@ -25,30 +25,33 @@ module.exports = function(sequelize, DataTypes) {
       },
       private: {
         type: DataTypes.BOOLEAN,
-        default: true
+        defaultValue: false
       },
 
       // DCAT
-      description     : { type: DataTypes.STRING },
+      description     : { type: DataTypes.TEXT },
       issued          : { type: DataTypes.DATE },
       modified        : { type: DataTypes.DATE },
       license         : { type: DataTypes.INTEGER },
       rights          : { type: DataTypes.STRING },
-      accessUrl       : { type: DataTypes.STRING },
-      downloadUrl     : { type: DataTypes.STRING },
+      accessUrl       : { type: DataTypes.STRING(500) },
+      downloadUrl     : { type: DataTypes.STRING(500) },
       mediaType       : { type: DataTypes.STRING },
       format          : { type: DataTypes.STRING },
       byteSize        : { type: DataTypes.INTEGER },
 
       // sync status for external api syncs
-      syncPeriod      : { type: DataTypes.INTEGER },
+      syncPeriod: {
+        type: DataTypes.STRING
+        //type: DataTypes.ENUM,
+        //values: [ 'Do not sync', 'Yearly', 'Quarterly', 'Monthly', 'Weekly', 'Daily' ]
+      },
       lastSync        : { type: DataTypes.DATE },
 
     },{
       classMethods: {
         associate: function(models) {
-          Distribution.belongsTo(models.Dataset);
-          Distribution.belongsTo(models.Account);
+          //Distribution.belongsTo(models.Account);
         }
       }
     }
