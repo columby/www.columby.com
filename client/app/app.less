@@ -1,29 +1,3 @@
-@screen-sm: 768px;
-@screen-sm-min: @screen-sm;
-@screen-sm-max: (@screen-md-min - 1);
-@screen-md: 992px;
-@screen-md-min: @screen-md;
-@screen-md-max: (@screen-lg-min - 1);
-@screen-lg: 1200px;
-@screen-lg-min: @screen-lg;
-
-
-@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
-  .container {
-    width: 750px;
-  }
-}
-@media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
-  .container {
-    width: 750px;
-  }
-}
-@media (min-width: @screen-lg-min) {
-  .container {
-    width: 750px;
-  }
-}
-
 
 @import 'bootstrap/less/bootstrap.less';
 @import 'font-awesome/less/font-awesome.less';
@@ -59,6 +33,34 @@
  * App-wide Styles
  */
 
+@screen-sm: 768px;
+@screen-sm-min: @screen-sm;
+@screen-sm-max: (@screen-md-min - 1);
+@screen-md: 992px;
+@screen-md-min: @screen-md;
+@screen-md-max: (@screen-lg-min - 1);
+@screen-lg: 1200px;
+@screen-lg-min: @screen-lg;
+
+
+@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: @screen-lg-min) {
+  .container {
+    width: 750px;
+  }
+}
+
+
+
 .browsehappy {
     margin: 0.2em 0;
     background: #ccc;
@@ -77,6 +79,7 @@
 
 @import '../assets/styles/components/header.less';
 @import '../assets/styles/components/editor-sidebar.less';
+@import '../components/sitenav/sitenav.less';
 
 @import 'components/metabar/metabar.less';
 
