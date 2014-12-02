@@ -66,6 +66,13 @@ button:focus {
   word-wrap: break-word;
 	font-size: 1em;
 	line-height: 2em;
+  &:first-letter {
+    color: #2fccff;
+    font-size: 4em;
+    line-height: 1;
+    margin: 0 7px;
+    float: left;
+  }
 }
 
 textarea.edit{
@@ -96,6 +103,29 @@ h3{
   color: #7a7a7a;
   padding: 6px
 }
+
+
+div > a{
+  color: #2fccff;
+  border-bottom: solid 1px rgba(47, 204, 255, 0.2);
+  text-decoration: none;
+  &:hover{
+    color: #2fccff;
+    border-bottom: solid 1px rgba(47, 204, 255, 1);
+    text-decoration: none;
+  }
+}
+
+li{
+  font-family: "lato", sans-serif;
+  font-weight: 900;
+  label{
+    color: #666;
+    opacity: 0.4;
+    font-weight: 700;
+  }
+}
+
 
 // BUTTONS
 
@@ -255,11 +285,13 @@ button{
   .footer-info{
     margin-top: 11px;
     font-family: "lato", sans-serif;
+    padding-bottom: 3px;
     a{
       color: #fff;
-      text-decoration: underline;
+      text-decoration: none;
+      border-bottom: solid 1px rgba(255, 255, 255, 0.6);
       &:hover{
-        text-decoration: none;
+        border-bottom: solid 1px rgba(255, 255, 255, 1);
         color: #fff;
       }
     }
