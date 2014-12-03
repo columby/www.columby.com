@@ -95,6 +95,7 @@ angular.module('columbyApp')
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading  = true;
+    $scope.showOptions = false;
     $window.document.title = 'columby.com';
 
     /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
@@ -114,7 +115,7 @@ angular.module('columbyApp')
           description : $scope.account.description
         };
 
-        $scope.account.canEdit= AuthSrv.canEdit({postType:'account', _id:result._id});
+        $scope.account.canEdit= AuthSrv.canEdit('account',result);
 
         if ($scope.account.headerImg) {
           updateHeaderImage();
@@ -311,6 +312,11 @@ angular.module('columbyApp')
       }
     };
 
+    $scope.toggleOptions = function() {
+      console.log('toggle');
+      console.log($scope.showOptions);
+      $scope.showOptions = !$scope.showOptions;
+    };
 
     /* ---------- INIT ----------------------------------------------------------------------------- */
     if ($stateParams.slug) {

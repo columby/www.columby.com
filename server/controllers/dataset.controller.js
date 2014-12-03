@@ -6,6 +6,7 @@
  *
  */
 var _ = require('lodash'),
+    models = require('../models/index'),
     Dataset = require('../models/index').Dataset,
     Account = require('../models/index').Account,
     File = require('../models/index').File,
@@ -104,9 +105,10 @@ exports.index = function(req, res) {
  */
 exports.show = function(req, res) {
   console.log('show dataset:', req.params.id);
-  Dataset.find({
+  Dataset.findOne({
     where: { shortid: req.params.id },
     include: [
+      { model: models.Distribution },
       { model: File, as: 'headerImg'},
       { model: Account, include: [
         { model: File, as: 'avatar'},
@@ -117,7 +119,9 @@ exports.show = function(req, res) {
     var d = dataset.dataValues;
     d.account = dataset.Account;
     delete d.Account;
-    res.json(d);
+    d.distributions = dataset.Distributions;
+    delete d.Distributions;
+    return res.json(d);
   }).error(function(err){
     console.log(err);
   });

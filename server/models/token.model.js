@@ -12,6 +12,11 @@ module.exports = function(sequelize, DataTypes) {
       token: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4
+      },
+      created_at:{
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false
       }
     }, {
       classMethods: {

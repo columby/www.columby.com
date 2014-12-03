@@ -28,12 +28,14 @@ module.exports = function(sequelize, DataTypes) {
       description: {
         type: DataTypes.TEXT
       },
-      header_img  : {
-        type: DataTypes.STRING
-      },
       private: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+      },
+      created_at:{
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false
       }
     }, {
       classMethods: {
@@ -49,19 +51,19 @@ module.exports = function(sequelize, DataTypes) {
           });
 
           // A dataset can have multiple distributions
-          Dataset.hasMany(models.Distribution, {
-            through: models.DatasetDistributions
-          });
+          // One dataset to Many distributions
+          Dataset.hasMany(models.Distribution);
           models.Distribution.belongsTo(Dataset);
+
+          //models.Distribution.belongsTo(Dataset,{
+          //  foreignKey: 'dataset_id',
+          //  as:'Distributions'
+          //});
 
           // A dataset can have multiple tags
           Dataset.hasMany(models.Tag);
           // a dataset belongs to a single account
           Dataset.belongsTo(models.Account);
-          // a dataset can belong to multiple collections
-          Dataset.hasMany(models.Collection);
-          // a dataset can have multiple distributions
-          Dataset.hasMany(models.Distribution);
         }
       }
     }

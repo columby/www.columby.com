@@ -16,10 +16,6 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING,
         unique: true
       },
-      uuid:{
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4
-      },
       email : {
         type      : DataTypes.STRING,
         allowNull : false,
@@ -36,12 +32,14 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.BOOLEAN,
         defaultValue: false
       },
-      // migration from beta.columby.com
-      drupal_name: {
+      drupal_uuid:{
         type: DataTypes.STRING
       },
-      drupal_created: {
-        type: DataTypes.STRING
+
+      created_at:{
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false
       }
     },{
       classMethods: {

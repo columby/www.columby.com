@@ -19,13 +19,24 @@ module.exports = function(sequelize, DataTypes) {
       shortid: {
         type: DataTypes.STRING,
         unique: true
+      },
+      description: {
+        type: DataTypes.TEXT
+      },
+      created_at:{
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false
       }
-
     },{
       classMethods: {
         associate: function(models) {
+
+          models.Account.hasMany(Collection);
           Collection.belongsTo(models.Account);
+
           Collection.hasMany(models.Dataset);
+          models.Dataset.hasMany(Collection);
         }
       }
     }

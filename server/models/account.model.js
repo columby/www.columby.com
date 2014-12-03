@@ -48,6 +48,11 @@ module.exports = function(sequelize, DataTypes) {
       primary: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+      },
+      created_at:{
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false
       }
     },{
       classMethods: {
@@ -82,8 +87,6 @@ module.exports = function(sequelize, DataTypes) {
           Account.hasMany(models.Dataset);
 
           Account.hasMany(models.Distribution);
-
-          Account.hasMany(models.Collection);
 
           //Account.hasMany(models.File);
 

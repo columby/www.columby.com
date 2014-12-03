@@ -138,11 +138,13 @@ angular.module('columbyApp')
       canEdit: function(type, item) {
 
         var canEdit = false;
+        console.log('check auth');
 
         if (user.admin === true){
+          console.log('admin true');
           return true;
         }
-        
+
         //console.log('checking canEdit', type, item);
         switch (type){
           case 'account':

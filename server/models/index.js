@@ -14,7 +14,9 @@ var sequelize = new Sequelize(config.db.uri, {
     dialect: config.db.dialect,
     logging: false,
     define: {
-      underscored: true
+      underscored: true,
+      timestamps: true,
+      createdAt: false
     }
   }
 );
@@ -76,7 +78,6 @@ if (config.seedDB === true){
         console.log('An error occurred while creating the table:', err)
       } else {
         console.log('It worked!');
-        console.log('seesing');
         require('./../seed/seed');
       }
     });

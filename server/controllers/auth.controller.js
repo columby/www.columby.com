@@ -95,13 +95,14 @@ exports.ensureAuthenticated = function(req, res, next) {
  * Validate if a user has admin rights
  */
 exports.isAdmin = function(req,res,next) {
-  User.findOne({_id: req.jwt.sub}, function(err,user) {
+  User.find(id).success(function(user){
     if (user && (user.roles.indexOf('admin') !== -1)) {
       req.user = user;
       next();
-    }
-    else {
+    } else {
       res.status(401).json('Administers only.');
     }
+  }).error(function(err){
+    res.json(err);
   });
 };

@@ -32,7 +32,7 @@ module.exports = function(sequelize, DataTypes) {
       description     : { type: DataTypes.TEXT },
       issued          : { type: DataTypes.DATE },
       modified        : { type: DataTypes.DATE },
-      license         : { type: DataTypes.INTEGER },
+      license         : { type: DataTypes.STRING },
       rights          : { type: DataTypes.STRING },
       accessUrl       : { type: DataTypes.STRING(500) },
       downloadUrl     : { type: DataTypes.STRING(500) },
@@ -48,11 +48,16 @@ module.exports = function(sequelize, DataTypes) {
       },
       lastSync        : { type: DataTypes.DATE },
 
+      created_at:{
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false
+      }
     },{
       classMethods: {
-        associate: function(models) {
-          //Distribution.belongsTo(models.Account);
-        }
+        //associate: function(models) {
+        //  Distribution.belongsTo(models.Account);
+        //}
       }
     }
   );

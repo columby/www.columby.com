@@ -15,6 +15,15 @@ module.exports = function(sequelize, DataTypes) {
       shortid: {
         type: DataTypes.STRING,
         unique: true
+      },
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      created_at:{
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false
       }
     },{
       classMethods: {

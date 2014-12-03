@@ -13,7 +13,13 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    role: DataTypes.INTEGER
+    role: DataTypes.INTEGER,
+
+    created_at:{
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+      allowNull: false
+    }
 
     /**
      * 1 primary

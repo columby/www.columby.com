@@ -54,6 +54,11 @@ module.exports = function(sequelize, DataTypes) {
       },
       size: {
         type: DataTypes.INTEGER
+      },
+      created_at:{
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+        allowNull: false
       }
     }, {
       classMethods: {

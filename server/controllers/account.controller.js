@@ -7,7 +7,9 @@
  */
 var _ = require('lodash'),
     Sequelize = require('sequelize'),
+    models = require('../models/index'),
     Account = require('../models/index').Account,
+    AccountsUser = require('../models/index').AccountsUser,
     Dataset = require('../models/index').Dataset,
     Collection = require('../models/index').Collection,
     File = require('../models/index').File;
@@ -24,6 +26,75 @@ function slugify(text) {
     //limit characters
 }
 
+
+function getAccountUsers(account){
+  // fetch users from given account
+
+  // fetch primary account from user and rol for the given account
+
+  console.log(account.id);
+  var accounts=[];
+  account.getUsers().success(function(users){
+    console.log('users', users[0].AccountsUser.dataValues);
+    for (var i=0;i<users.length;i++){
+      var user = users[0];
+      user.getAccounts({
+        where: { primary:true }
+      }).success(function(a){
+        console.log(a);
+        accounts.push(a);
+      }).error(function(err){
+        console.log('err',err);
+      });
+    }
+    console.log('aa', accounts);
+  }).error(function(err){
+    console.log('err',err);
+  });
+}
+
+
+/**
+ * Check if a user can edit a requested publication account.
+ *
+ * @param req
+ * @param res
+ * @param next
+ *
+ */
+exports.canEdit = function(req, res, next) {
+  //console.log(req.params);
+  //console.log(req.body);
+  // publication account id req.body.id
+  // user id: req.jwt.sub
+  if (req.jwt.sub){
+    models.User.findOne(req.jwt.sub).success(function(user){
+      if (user.admin) {
+        //next();
+      }
+      user.getAccounts().success(function(accounts) {
+        // TODO list accounts
+        for (var i=0;i<accounts.length;i++){
+          if (user.id === accounts[ i].id){
+            if ( (accounts[ i].role === 1) || (accounts[ i].role === 2) || (accounts[ i].role === 3) ) {
+              next();
+            }
+          }
+        }
+      }).error(function(err){
+        console.log(err);
+      });
+    });
+  }
+  console.log(req.user);
+  //if (req.user) {
+  //  if ((req.user.roles.indexOf('admin')) || (req.user.id === req.params.id)) {
+  //    next();
+  //  }
+  //} else {
+  //  res.status(401).json('Not authorized');
+  //}
+}
 
 /**
  *
@@ -71,9 +142,9 @@ exports.show = function(req, res) {
       { model: File, as: 'avatar'},
       { model: File, as: 'headerImg'}
     ]
-  }).success(function(dataset){
-    //console.log(dataset);
-    res.json(dataset);
+  }).success(function(account){
+    getAccountUsers(account);
+    res.json(account);
   }).error(function(err){
     console.log(err);
   });
@@ -150,6 +221,7 @@ exports.destroy = function(req, res) {
     });
   });
 };
+
 
 function handleError(res, err) {
   console.log('err',err);

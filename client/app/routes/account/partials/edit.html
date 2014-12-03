@@ -3,17 +3,42 @@
   <!-- Actions -->
   <div class="actions-bar" ng-show="account.canEdit">
 
-    <button class="btn btn-default"
-      type     = "button"
-      ng-show  = "account.id"
-      ui-sref="account.view({slug:account.slug})">Exit edit mode
-    </button>
+    <ul>
+      <li>
+        <button
+          class    = "default-button"
+          ng-show  = "account.id"
+          ng-click = "toggleOptions()">options
+        </button>
+      </li>
+      <li>
+        <button class="btn btn-default"
+          type     = "button"
+          ng-show  = "account.id"
+          ui-sref="account.view({slug:account.slug})">Exit edit mode
+        </button>
+      </li>
+      <li>
+        <button
+          class    = "btn btn-default publish"
+          ng-show  = "!account.id"
+          ng-click = "createAccount()">Publish
+        </button>
+      </li>
+    </ul>
+  </div>
 
-    <button
-      class    = "btn btn-default publish"
-      ng-show  = "!account.id"
-      ng-click = "createAccount()">Publish
-    </button>
+  <!-- Editor Sidebar -->
+  <div class="editorSidebar" ng-show="showOptions">
+    <div class="options-arrow"></div>
+    <div class="editorSidebarContent">
+      <div class="sidebarModule">
+        <div class="editors" ng-show="account.id">
+          <h3>Editors</h3>
+
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Content -->

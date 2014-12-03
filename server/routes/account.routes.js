@@ -5,7 +5,10 @@ var express = require('express'),
     auth = require('./../controllers/auth.controller'),
     router = express.Router();
 
+
+
 module.exports = function(app) {
+
 
   router.get('/',
     auth.checkJWT,
@@ -21,7 +24,8 @@ module.exports = function(app) {
 
 
   router.put('/:id',
-    auth.isAdmin,
+    auth.ensureAuthenticated,
+    controller.canEdit,
       controller.update);
   //router.patch('/:id'    , controller.update);
   //router.delete('/:id'   , controller.destroy);
