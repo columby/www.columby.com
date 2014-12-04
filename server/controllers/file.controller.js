@@ -204,7 +204,10 @@ exports.handleS3Success = function(req,res) {
 };
 
 
-
+exports.createDerivative = function(req,res){
+  console.log(req.query);
+  res.json('ok');
+};
 
 function handleError(res, err) {
   console.log('Error: ', err);

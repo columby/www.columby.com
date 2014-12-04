@@ -128,7 +128,7 @@ angular.module('columbyApp')
       $scope.account = {
         name        : 'New account',
         description : '<p>Account description</p>',
-        owner       : $rootScope.user._id,
+        owner       : $rootScope.user.id,
         canEdit     : true
       };
       $scope.contentLoading = false;
@@ -155,7 +155,7 @@ angular.module('columbyApp')
       var xhr = new XMLHttpRequest();
       var fd = new FormData();
       // Populate the Post paramters.
-      fd.append('key', params.file.account_id + '/' +file.filename);
+      fd.append('key', params.file.accountid + '/' +file.filename);
       fd.append('AWSAccessKeyId', params.credentials.key);
       fd.append('acl', 'public-read');
       //fd.append('success_action_redirect', "https://attachments.me/upload_callback")
@@ -238,12 +238,12 @@ angular.module('columbyApp')
     /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
     $scope.update = function(){
     console.log('updating account.');
-    if (!$scope.account._id) {
+    if (!$scope.account.id) {
       console.log('Name changed, but not yet saved');
     } else {
       var changed = false;
       var account = {
-        _id: $scope.account._id,
+        id: $scope.account.id,
         slug: $scope.account.slug
       };
       if ($scope.accountUpdate.name !== $scope.account.name) {
@@ -257,7 +257,7 @@ angular.module('columbyApp')
       console.log('updating account', account);
       AccountSrv.update(account, function(result){
         console.log(result);
-        if (result._id){
+        if (result.id){
           $scope.accountUpdate.name = result.name;
           $scope.accountUpdate.description = result.description;
           toaster.pop('success', null, 'Account updated.');

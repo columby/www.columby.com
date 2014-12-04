@@ -71,16 +71,16 @@ Object.keys(db).forEach(function(modelName) {
  *
  **/
 if (config.seedDB === true){
-  sequelize
-    .sync({ force: true })
-    .complete(function(err) {
-      if (!!err) {
-        console.log('An error occurred while creating the table:', err)
-      } else {
-        console.log('It worked!');
-        require('./../seed/seed');
-      }
-    });
+  //sequelize
+  //  .sync({ force: true })
+  //  .complete(function(err) {
+  //    if (!!err) {
+  //      console.log('An error occurred while creating the table:', err)
+  //    } else {
+  //      console.log('It worked!');
+  //      require('./../seed/seed');
+  //    }
+  //  });
 }
 
 db.sequelize = sequelize;

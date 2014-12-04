@@ -16,6 +16,7 @@ module.exports = function(app) {
 
   router.get('/:id',
     auth.checkJWT,
+    //controller.canEdit,
       controller.show);
 
   router.post('/',

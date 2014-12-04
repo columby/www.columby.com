@@ -63,38 +63,23 @@ function getAccountUsers(account){
  *
  */
 exports.canEdit = function(req, res, next) {
-  //console.log(req.params);
-  //console.log(req.body);
-  // publication account id req.body.id
-  // user id: req.jwt.sub
-  if (req.jwt.sub){
+  // Check if a jwt is present
+  if (req.jwt && req.jwt.sub){
+    // Check if the user in the jwt exists
     models.User.findOne(req.jwt.sub).success(function(user){
+      // admin can edit everything
       if (user.admin) {
-        //next();
+        next();
       }
-      user.getAccounts().success(function(accounts) {
-        // TODO list accounts
-        for (var i=0;i<accounts.length;i++){
-          if (user.id === accounts[ i].id){
-            if ( (accounts[ i].role === 1) || (accounts[ i].role === 2) || (accounts[ i].role === 3) ) {
-              next();
-            }
-          }
-        }
-      }).error(function(err){
-        console.log(err);
-      });
+      // TODO: Validate if the logged in user has access to the publication account
+
     });
+  } else {
+    return res.json({status:'err', msg:'User not logged in'});
   }
   console.log(req.user);
-  //if (req.user) {
-  //  if ((req.user.roles.indexOf('admin')) || (req.user.id === req.params.id)) {
-  //    next();
-  //  }
-  //} else {
-  //  res.status(401).json('Not authorized');
-  //}
-}
+
+};
 
 /**
  *

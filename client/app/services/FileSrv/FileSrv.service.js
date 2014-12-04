@@ -66,6 +66,19 @@ angular.module('columbyApp')
           return result.data;
         });
         return promise;
+      },
+
+      createDerivative: function(url){
+        return $http({
+          method: 'GET',
+          url: 'api/v2/file/createDerivative',
+          params:{
+            url:url
+          }
+        }).then(function(response) {
+          console.log(response);
+          return response.data;
+        });
       }
     };
   });
