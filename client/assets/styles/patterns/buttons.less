@@ -1,4 +1,4 @@
-button, .default-button, .btn-default{
+button, .default-button{
   display: inline-block;
   padding: 6px 12px;
   margin-bottom: 0;
@@ -46,14 +46,19 @@ button, .default-button, .btn-default{
   &.lightblue{
     border: 2px solid @lightblue;
     color: @lightblue;
+    &:hover{
+      background: none;
+      border: 2px solid @darkblue;
+      color: @darkblue;
+    }
     &.filled{
       background: @lightblue;
       color: #fff;
-    }
-    &:hover{
-      background: @darkblue;
-      border: 2px solid @darkblue;
-      color: #fff;
+      &:hover{
+        background: @darkblue;
+        border: 2px solid @darkblue;
+        color: #fff;
+      }
     }
   }
   
