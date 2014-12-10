@@ -35,19 +35,19 @@ function getAccountUsers(account){
   console.log(account.id);
   var accounts=[];
   account.getUsers().success(function(users){
-    console.log('users', users[0].AccountsUser.dataValues);
+    //console.log('users', users[0].AccountsUser.dataValues);
     for (var i=0;i<users.length;i++){
       var user = users[0];
       user.getAccounts({
         where: { primary:true }
       }).success(function(a){
-        console.log(a);
+        //console.log(a);
         accounts.push(a);
       }).error(function(err){
         console.log('err',err);
       });
     }
-    console.log('aa', accounts);
+    //console.log('aa', accounts);
   }).error(function(err){
     console.log('err',err);
   });
@@ -77,7 +77,7 @@ exports.canEdit = function(req, res, next) {
   } else {
     return res.json({status:'err', msg:'User not logged in'});
   }
-  console.log(req.user);
+  //console.log(req.user);
 
 };
 

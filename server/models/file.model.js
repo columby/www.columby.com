@@ -64,8 +64,26 @@ module.exports = function(sequelize, DataTypes) {
       classMethods: {
         // Create associations to other models
         associate: function (models) {
-          // An account can have multiple accounts with roles
-          //File.belongsTo(models.Account);
+
+          // Avatar association
+          File.hasOne(models.Account, {
+            foreignKey: 'avatar_id',
+            as: 'Avatar'
+          });
+            // Header image association
+          File.hasOne(models.Account, {
+            foreignKey: 'headerimg_id',
+            as: 'headerImg'
+          });
+
+          models.Account.hasOne(File, {
+            foreignKey: 'fii_id',
+            as: 'fiii'
+          });
+
+          //File.belongsTo(models.Account,{
+          //  as: 'file'
+          //});
         }
       }
     }

@@ -5,10 +5,15 @@ var _ = require('lodash'),
     crypto    = require('crypto'),
     config = require('../config/environment/index'),
     AWS = require('aws-sdk'),
-    path = require('path')
+    path = require('path'),
+  fs = require('fs'),
+  gm = require('gm').subClass({ imageMagick: true }),
+  request = require('request')
 ;
 
 /** ------ FUNCTIONS ------------------------------------------------------- **/
+
+var s3bucket = new AWS.S3({params: config.aws.bucket});
 
 function getExpiryTime() {
   var _date = new Date();
@@ -18,12 +23,13 @@ function getExpiryTime() {
 
 function createS3Policy(file, callback) {
   //console.log('file',file);
+  console.log('Creating policy with file: ', file);
   var s3Policy = {
     'expiration': getExpiryTime(),
     'conditions': [
       //['starts-with', '$key', file.owner+'/'],
       //['starts-with', '$key', file.account_id + '/' + file.filename],
-      ['eq', '$key', file.account_id + '/' + file.filename ],
+      ['eq', '$key', file.accountId + '/images/' + file.filename ],
       {'bucket': config.aws.bucket},
       {'acl': 'public-read'},
       ['starts-with', '$Content-Type', file.filetype],
@@ -147,8 +153,9 @@ exports.sign = function(req,res) {
     filetype  : req.query.filetype,
     size      : req.query.filesize,
     filename  : req.query.filename,
-    account_id: req.query.accountId
+    accountId: req.query.accountId
   };
+  console.log('Processing file: ', file);
 
   // Check file type validity
   var validTypes = [];
@@ -205,8 +212,81 @@ exports.handleS3Success = function(req,res) {
 
 
 exports.createDerivative = function(req,res){
-  console.log(req.query);
-  res.json('ok');
+  // Check if request comes from valid host
+  var validHosts = ['localhost', 'www.columby.com', 'columby.com'];
+  console.log(validHosts.indexOf(req.host));
+  if (validHosts.indexOf(req.host) === -1){
+    return handleError(res, req.host + ' is not a valid host. ');
+  }
+
+  var requestedUrl = req.query.url;
+  // url should be in the form:
+  // https://s3.some.aws.com/{{userId}}/images/styles/{{style}}/{{filename.png}}
+  var basename = path.basename(requestedUrl);
+  var extname = path.extname(requestedUrl);
+  var dirname = path.dirname(requestedUrl);
+  console.log('dirnae', dirname);
+  var dirElements = dirname.split('/');
+  console.log(dirElements);
+  var style = dirElements[ dirElements.length -1];
+  var availableStyles={
+    large: { width:800 },
+    medium:{ width:400 },
+    small: { width:200 },
+    avatar:{ width:80 }
+  };
+
+  var width = availableStyles[ style].width;
+  // get account-id
+  var accountId = dirElements[ dirElements.length -2];
+  console.log('accountId', accountId);
+
+  // Create source url for request
+  // URL should be in the form:
+  // https://s3.some.aws.com/{{userId}}/images/{{filename.png}}
+  var regex = new RegExp('/[^/]*$');
+  var originalSource = dirname.replace(regex, '/') + '/images/' + basename;
+  console.log('originalSource', originalSource);
+
+  // This opens up the writeable stream to `output`
+  var localPath = 'server/tmp/' + basename;
+  var writeStream = fs.createWriteStream(localPath);
+  // fetch the file from s3 to local file system
+  request(originalSource).pipe(writeStream);
+  writeStream.on('error', function(err){
+    handleError(res,err);
+  });
+  writeStream.on('finish', function(){
+    // modify the local file
+    gm(localPath)
+      .options({imageMagick: true})
+      .resize(width)
+      // write the new file to a file in the local filesystem
+      .write('server/tmp/'+ style + '/' + basename, function(err){
+        // Send the file to S3
+        fs.readFile('server/tmp/' + style + '/' + basename, function (err, data) {
+          if (err) {
+            handleError(res, err);
+          }
+
+          var s3 = new AWS.S3();
+          s3.putObject({
+            Bucket: config.aws.bucket,
+            Key: accountId + '/' + 'images/styles/' + style + '/' + basename,
+            Body: data,
+            ACL: 'public-read'
+          },function (resp) {
+            console.log(resp);
+            console.log('Successfully uploaded package.');
+            res.json('ok');
+          });
+
+        });
+      });
+  });
+
+  //request(originalSource).pipe(fs.createWriteStream('server/seed/img/' + filename));
+
 };
 
 function handleError(res, err) {

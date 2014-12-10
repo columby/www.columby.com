@@ -279,6 +279,8 @@ angular.module('columbyApp')
       var file = $files[0];
       if ($scope.upload){
         toaster.pop('warning',null,'There is already an upload in progress. ');
+      } else if (!file) {
+        console.log('No file selected. ');
       } else {
         // Check if the file has the right type
         if (FileSrv.validateImage(file.type)) {
@@ -286,9 +288,10 @@ angular.module('columbyApp')
             file:file,
             target:target
           };
-          console.log($scope.fileUpload);
+          //console.log($scope.fileUpload);
           ngProgress.start();
           // Define the parameters to get the right signed request
+          //console.log($scope.account.shortid);
           var params = {
             filetype: file.type,
             filesize: file.size,
@@ -296,6 +299,7 @@ angular.module('columbyApp')
             accountId: $scope.account.id,
             type: 'image'
           };
+          console.log('Uploading with params: ', params);
           // Request a signed request
           FileSrv.signS3(params).then(function (signResponse) {
             if (signResponse.file) {
