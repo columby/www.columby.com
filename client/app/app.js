@@ -21,7 +21,6 @@ angular.module('columbyApp', [
     $locationProvider.html5Mode(true).hashPrefix('!');
   })
 
-
   // Set the JWT if it is stored
   .config(function($httpProvider, jwtInterceptorProvider) {
     jwtInterceptorProvider.tokenGetter = function() {
@@ -29,7 +28,6 @@ angular.module('columbyApp', [
     };
     $httpProvider.interceptors.push('jwtInterceptor');
   })
-
 
   // Run once during startup
   .run(function($rootScope, $http, AuthSrv){

@@ -56,7 +56,11 @@ angular.module('columbyApp')
     }
 
     function updateHeaderImage(){
+
 			if ($scope.dataset.headerImg) {
+        $scope.dataset.headerImg.url = '/api/v2/file/' + $scope.dataset.headerImg.id + '?style=small';
+        console.log('Updating header image: ', $scope.dataset.headerImg.url);
+
 	      $scope.headerStyle={
 	        'background-image': 'linear-gradient(transparent,transparent), url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
 	        'background-blend-mode': 'multiply'
@@ -104,6 +108,9 @@ angular.module('columbyApp')
           $state.go('home');
           return;
         }
+        //console.log(dataset);
+        // Update image styles
+        dataset.headerImg.url = $rootScope.config.aws.endpoint + dataset.account.id + '/images/styles/large/' + dataset.headerImg.filename;;
         // add acquired dataset to the scope
         $scope.contentLoading = false;
         $scope.dataset = dataset;
@@ -139,11 +146,11 @@ angular.module('columbyApp')
     function uploadFile(params, file) {
 
       file.filename = params.file.filename;
-
+      console.log('url: ' + params.file.account_id + '/images/' + params.file.filename);
       var xhr = new XMLHttpRequest();
       var fd = new FormData();
       // Populate the Post paramters.
-      fd.append('key', params.file.account_id + '/' +file.filename);
+      fd.append('key', params.file.account_id + '/images/' + params.file.filename);
       fd.append('AWSAccessKeyId', params.credentials.key);
       fd.append('acl', 'public-read');
       //fd.append('success_action_redirect', "https://attachments.me/upload_callback")
@@ -165,6 +172,7 @@ angular.module('columbyApp')
           fid: params.file.id,
           url: parsedData.location
         };
+        console.log('url: ' + parsedData.location);
         finishUpload(p);
       });
       xhr.addEventListener('error', function(evt){
@@ -188,15 +196,16 @@ angular.module('columbyApp')
     function initiateNewDataset(){
 
       // if user has multiple accounts, show the account-selector.
-      if ($scope.user.accounts.length>1){
+      if ($rootScope.user.accounts.length > 1) {
         $scope.showAccountSelector = true;
       }
 
+      //dataset.account.avatar.url
       $scope.dataset = {
         title: null,
         description: null,
-        avatar: 'assets/images/avatar.png',
-        accountId: $rootScope.user.primary.id,
+        account: $rootScope.user.accounts[ 0],
+        account_id: $rootScope.user.accounts[ 0].id,
         canEdit: true
       };
 
@@ -210,12 +219,14 @@ angular.module('columbyApp')
     $scope.updateDatasetOwner = function(id){
       console.log(id);
       $scope.dataset.account_id = $rootScope.user.accounts[ id].id;
-      $scope.dataset.avatar = $rootScope.user.accounts[ id].avatar;
+      $scope.dataset.account = $rootScope.user.accounts[ id];
       $scope.showAccountSelector = false;
     };
 
     function updateHeaderImage(){
-      $scope.headerStyle={
+
+      $scope.dataset.headerImg.url = '/api/v2/file/' + $scope.dataset.headerImg.id + '?style=small';
+      $scope.headerStyle = {
         'background-image': 'url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
         'background-blend-mode': 'multiply'
       };
@@ -244,19 +255,20 @@ angular.module('columbyApp')
             file:file,
             target:target
           };
-          console.log($scope.fileUpload);
+          //console.log($scope.fileUpload);
           ngProgress.start();
           // Define the parameters to get the right signed request
           var params = {
             filetype: file.type,
             filesize: file.size,
             filename: file.name,
-            accountId: $rootScope.user.primary.id,
+            accountId: $scope.dataset.account.id,
             type: 'image'
           };
           // Request a signed request
           FileSrv.signS3(params).then(function (signResponse) {
             if (signResponse.file) {
+              //console.log('signed response: ', signResponse);
               // signed request is valid, send the file to S3
               uploadFile(signResponse, file);
             } else {
@@ -280,8 +292,8 @@ angular.module('columbyApp')
         if (res.url) {
           console.log('updating url',res.url);
           console.log($scope.fileUpload.target);
-          var updated={
-            id  : $scope.dataset.id,
+          var updated = {
+            id  : $scope.dataset.id
           };
           switch($scope.fileUpload.target){
             case 'header':
@@ -371,11 +383,10 @@ angular.module('columbyApp')
       $scope.dataset.title = $scope.datasetUpdate.title;
       $scope.dataset.description = $scope.datasetUpdate.description;
       DatasetSrv.save($scope.dataset, function(res){
-        console.log(res);
-        //console.log('create',res);
+        console.log('New dataset received: ' + res.id);
         if (res.id) {
           toaster.pop('success', null, 'Your dataset page is created. Now add some data.');
-          $state.go('dataset.edit', {id:res.id});
+          $state.go('dataset.edit', {id:res.shortid});
         }
       });
     };

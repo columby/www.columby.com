@@ -19,6 +19,7 @@
     "gm": "^1.17.0",
     "hashids": "^1.0.1",
     "jwt-simple": "^0.2.0",
+    "knox": "^0.9.1",
     "lodash": "~2.4.1",
     "mandrill-api": "^1.0.41",
     "method-override": "~1.0.0",
@@ -30,7 +31,8 @@
     "pg": "^4.0.0",
     "request": "^2.49.0",
     "sequelize": "^2.0.0-rc2",
-    "serve-favicon": "~2.0.1"
+    "serve-favicon": "~2.0.1",
+    "uuid": "^2.0.1"
   },
   "devDependencies": {
     "grunt": "~0.4.4",

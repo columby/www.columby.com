@@ -11,6 +11,17 @@
 
 angular.module('columbyApp')
 
+.directive('backImg', function(){
+  return function(scope, element, attrs){
+    var url = attrs.backImg;
+    console.log(url);
+    element.css({
+      'background-image': 'url(' + url +')',
+      'background-size' : 'cover'
+    });
+  };
+})
+
   .directive('noImage', function ($rootScope, $http, FileSrv) {
 
     return {
@@ -18,16 +29,9 @@ angular.module('columbyApp')
       link: function (scope, element, attrs) {
 
         element.on('load',function() {
-          console.log('load');
+          //console.log('load');
         }).on('error', function() {
-          console.log('error loading image');
-           //element.attr("src", "/lalabla.png");
-          console.log(attrs.src);
-
-
-
-          var originalSource = 'https://columby-dev.s3.amazonaws.com/undefined/small/unnamed-1.png';
-
+          console.log('No image directive: Error loading image: ', attrs.src);
           // Check if original file exists
           //$http.head(originalSource).success(function(result){
           //  console.log('res', result);
@@ -37,8 +41,10 @@ angular.module('columbyApp')
 
           // request new image from embedly
           //var embedUrl = 'https://i.embed.ly/1/display/resize?key=' + $rootScope.config.embedly.key + '&url=' + originalSource + '&width=' + width
-          FileSrv.createDerivative(originalSource).then(function(response){
+          // Request image from columby server
+          FileSrv.createDerivative(attrs.src).then(function(response){
             console.log(response);
+            attrs.source = response.url;
           });
 
         });

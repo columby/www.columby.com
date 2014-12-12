@@ -5,8 +5,6 @@ angular.module('columbyApp')
 
     // user object
     var user = {};
-    // selected publication account
-    var selectedAccount = 0;
     // Token token for api access
     var columbyToken;
 
@@ -14,6 +12,7 @@ angular.module('columbyApp')
 
       // Getters and setters
       setColumbyToken: function(token) {
+        console.log('setting columby jwt token.', token);
         columbyToken = token;
       },
       columbyToken: function(){
@@ -22,9 +21,6 @@ angular.module('columbyApp')
 
       setUser: function(u) { user = u;    },
       user: function()  { return user; },
-
-      setSelectedAccount: function(a) { selectedAccount = a;    },
-      selectedAccount: function()  { return selectedAccount; },
 
       getConfig:function(){
         var promise = $http.post('api/v2/user/config').then(function(result){
@@ -66,7 +62,6 @@ angular.module('columbyApp')
             if (response.data.user){
               user = response.data.user;
             }
-            console.log(response.data);
             return response.data;
           });
         return promise;
@@ -101,8 +96,7 @@ angular.module('columbyApp')
       },
 
       isAuthenticated: function() {
-        var authenticated = (user && user.hasOwnProperty('_id')) ? true : false;
-        return authenticated;
+        return (user && user.hasOwnProperty('id')) ? true : false;
       },
 
       /**
@@ -117,8 +111,8 @@ angular.module('columbyApp')
         }
         var trustedRole = false;
         var accountRoles = null;
-        if (user && user.accounts && user.accounts[ selectedAccount]){
-          accountRoles = user.accounts[ selectedAccount].roles;
+        if (user && user.accounts){
+          //accountRoles = user.accounts[ selectedAccount].roles;
         }
         if (accountRoles) {
           console.log('user roles,', accountRoles);
@@ -146,6 +140,11 @@ angular.module('columbyApp')
         }
 
         //console.log('checking canEdit', type, item);
+        if (this.isAuthenticated() === false) {
+          console.log('user is not authenticated');
+          return false;
+        }
+
         switch (type){
           case 'account':
             for (var i=0;i<user.accounts.length;i++){
@@ -174,7 +173,7 @@ angular.module('columbyApp')
 
 
       getProfile: function(slug) {
-        var promise = $http.get('/api/v2/user/profile/' + slug, {headers: {'Authorization': columbyToken}})
+        var promise = $http.get('/api/v2/user/profile/' + slug, { headers: { 'Authorization': columbyToken } })
           .then(function(response){
             console.log('profile', response);
             return response.data;

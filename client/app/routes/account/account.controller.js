@@ -48,6 +48,7 @@ angular.module('columbyApp')
         $state.go('home');
       } else {
         $scope.account = result;
+        $scope.account.avatar.url = '/api/v2/file/' + $scope.account.avatar.id + '?style=small';
         $scope.contentLoading = false;
         $window.document.title = 'columby.com | ' + result.name;
 
@@ -61,14 +62,15 @@ angular.module('columbyApp')
         getDatasets();
       }
     });
-  }
 
+    }
     function updateHeaderImage(){
-    $scope.headerStyle={
-      'background-image': 'url(/assets/images/default-header.png), url(' + $scope.account.headerImg.url + ')',
-      'background-blend-mode': 'multiply'
-    };
-  }
+      $scope.account.headerImg.url = '/api/v2/file/' + $scope.account.headerImg.id + '?style=large';
+      $scope.headerStyle={
+        'background-image': 'url(/assets/images/default-header.png), url(' + $scope.account.headerImg.url + ')',
+        'background-blend-mode': 'multiply'
+      };
+    }
 
 
     /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
@@ -107,6 +109,7 @@ angular.module('columbyApp')
       // get account information of user by userSlug
       AccountSrv.get({slug: $stateParams.slug}, function(result){
         $scope.account = result;
+        $scope.account.avatar.url = '/api/v2/file/' + $scope.account.avatar.id + '?style=small';
         $scope.contentLoading = false;
         $window.document.title = 'columby.com | ' + result.name;
 
@@ -136,6 +139,7 @@ angular.module('columbyApp')
     }
 
     function updateHeaderImage(){
+      $scope.account.headerImg.url = '/api/v2/file/' + $scope.account.headerImg.id + '?style=small';
       $scope.headerStyle = {
         'background-image': 'url(/assets/images/default-header.png), url(' + $scope.account.headerImg.url + ')',
         'background-blend-mode': 'multiply'
@@ -149,19 +153,21 @@ angular.module('columbyApp')
      * @param file
      */
     function uploadFile(params, file) {
-
+      console.log('params ', params);
+      console.log('file ', file);
       file.filename = params.file.filename;
 
       var xhr = new XMLHttpRequest();
       var fd = new FormData();
       // Populate the Post paramters.
-      fd.append('key', params.file.accountid + '/' +file.filename);
-      fd.append('AWSAccessKeyId', params.credentials.key);
-      fd.append('acl', 'public-read');
+      //console.log('Key: ' + params.file.account_id + '/images/' + params.file.filename);
+      fd.append('key', params.credentials.file.key);
+      fd.append('AWSAccessKeyId', params.credentials.s3Key);
+      fd.append('acl', params.credentials.file.acl);
       //fd.append('success_action_redirect', "https://attachments.me/upload_callback")
       fd.append('policy', params.credentials.policy);
       fd.append('signature', params.credentials.signature);
-      fd.append('Content-Type', params.file.filetype);
+      fd.append('Content-Type', params.credentials.file.filetype);
       fd.append('success_action_status', '201');
       // This file object is retrieved from a file input.
       fd.append('file', file);
@@ -197,6 +203,7 @@ angular.module('columbyApp')
      * @param params
      */
     function finishUpload(params){
+      console.log('finishUpload, ', params);
       FileSrv.finishS3(params).then(function(res){
         //console.log('Finish upload res', res);
         if (res.url) {
@@ -209,13 +216,13 @@ angular.module('columbyApp')
           switch($scope.fileUpload.target){
             case 'header':
               console.log('updating header image');
-              console.log($scope.account);
               $scope.account.headerImg = res;
               updated.headerImg=res.id;
               console.log($scope.account);
+              updateHeaderImage();
               break;
             case 'avatar':
-              $scope.account.avatar = res;
+              $scope.account.avatar = '/api/v2/file/' + res.id + '?style=small';
               //console.log('updating avatar');
               updated.avatar = res.id;
               break;
@@ -223,12 +230,9 @@ angular.module('columbyApp')
           $scope.fileUpload = null;
           toaster.pop('notice',null,'File uploaded, updating account');
 
-          AccountSrv.update(updated, function(result){
-            //$scope.account.avatar.url = res.url;
-            //console.log('update', result);
-            //toaster.pop('notice',null,'File uploaded!');
-            updateHeaderImage();
-          });
+          // Update Account at server
+          AccountSrv.update(updated, function(result){});
+
         } else {
           $scope.fileUpload = null;
         }
@@ -237,7 +241,7 @@ angular.module('columbyApp')
 
     /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
     $scope.update = function(){
-    console.log('updating account.');
+    console.log('$cope.update()');
     if (!$scope.account.id) {
       console.log('Name changed, but not yet saved');
     } else {
@@ -247,24 +251,32 @@ angular.module('columbyApp')
         slug: $scope.account.slug
       };
       if ($scope.accountUpdate.name !== $scope.account.name) {
+        console.log('The account name was changed. ');
         changed = true;
         account.name = $scope.accountUpdate.name;
+        console.log(account.name);
+        console.log($scope.accountUpdate.name);
       }
-      if ($scope.accountUpdate.description !== $scope.account.description){
+      if ($scope.accountUpdate.description !== $scope.account.description) {
+        console.log('The account description was changed. ');
         changed = true;
         account.description = $scope.accountUpdate.description;
       }
-      console.log('updating account', account);
-      AccountSrv.update(account, function(result){
-        console.log(result);
-        if (result.id){
-          $scope.accountUpdate.name = result.name;
-          $scope.accountUpdate.description = result.description;
-          toaster.pop('success', null, 'Account updated.');
-        } else {
-          toaster.pop('warning', null, 'There was an error updating the account name.');
-        }
-      });
+      if (changed) {
+        console.log('Updating account', account);
+        AccountSrv.update(account, function(result){
+          console.log(result);
+          if (result.id){
+            $scope.accountUpdate.name = result.name;
+            $scope.accountUpdate.description = result.description;
+            $scope.account.name = result.name;
+            $scope.account.description = result.description;
+            toaster.pop('success', null, 'Account updated.');
+          } else {
+            toaster.pop('warning', null, 'There was an error updating the account name.');
+          }
+        });
+      }
     }
   };
 
@@ -317,8 +329,7 @@ angular.module('columbyApp')
     };
 
     $scope.toggleOptions = function() {
-      console.log('toggle');
-      console.log($scope.showOptions);
+      console.log('toggleOptions');
       $scope.showOptions = !$scope.showOptions;
     };
 

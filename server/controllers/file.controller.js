@@ -8,7 +8,17 @@ var _ = require('lodash'),
     path = require('path'),
   fs = require('fs'),
   gm = require('gm').subClass({ imageMagick: true }),
-  request = require('request')
+  request = require('request'),
+  knox = require('knox'),
+  uuid = require('uuid'),
+  client = knox.createClient({
+    key: config.aws.publicKey,
+    secret: config.aws.secretKey,
+    bucket: config.aws.bucket,
+    style: 'path'
+  }),
+
+  s3 = new AWS.S3();
 ;
 
 /** ------ FUNCTIONS ------------------------------------------------------- **/
@@ -24,12 +34,13 @@ function getExpiryTime() {
 function createS3Policy(file, callback) {
   //console.log('file',file);
   console.log('Creating policy with file: ', file);
+  var fileKey = 'accounts/' + file.account_id + '/images/' + file.id ;
   var s3Policy = {
     'expiration': getExpiryTime(),
     'conditions': [
       //['starts-with', '$key', file.owner+'/'],
       //['starts-with', '$key', file.account_id + '/' + file.filename],
-      ['eq', '$key', file.accountId + '/images/' + file.filename ],
+      ['eq', '$key', fileKey ],
       {'bucket': config.aws.bucket},
       {'acl': 'public-read'},
       ['starts-with', '$Content-Type', file.filetype],
@@ -48,12 +59,102 @@ function createS3Policy(file, callback) {
 
   // build the results object
   return {
-      policy: base64Policy,
-      signature: signature,
-      key: config.aws.publicKey,
-      bucket: config.aws.bucket
+    policy: base64Policy,
+    signature: signature,
+    s3Key: config.aws.publicKey,
+    bucket: config.aws.bucket,
+    file: {
+      key: fileKey,
+      acl: 'public-read',
+      filetype: file.filetype
+    }
   };
 }
+
+/**
+ *
+ * Fetch a file from s3 and store it locally in a tmp folder.
+ *
+ * @param uri
+ * @param callback
+ */
+function getImage(file, callback) {
+  var localFile = fs.createWriteStream('server/tmp/' + file.id);
+
+  localFile.on('open', function() {
+    request(file.url).pipe(localFile).on('close', function(){
+      callback(null, localFile);
+    }).on('error', function(err){
+      callback(err, null);
+    });
+  });
+}
+
+function uploadImage(file,callback){
+  fs.readFile(file.source, function (err, data) {
+    if (err) {
+      return callback(err,null);
+    }
+
+    var key = 'styles/' + file.account_id + '/' + file.style.name + '/' + file.id;
+      console.log('s3 key: ' + key);
+      var params = {
+        Bucket: config.aws.bucket,
+        Key: key,
+        Body: data,
+        ACL: 'public-read',
+        ContentType: file.filetype
+      };
+      console.log('params', params);
+      s3.putObject(params, function (err) {
+        console.log('err', err);
+        console.log('Successfully uploaded file.');
+        // Delete source file
+        fs.unlink(file.source);
+        callback(null, true);
+      });
+    });
+}
+
+/**
+ *
+ * Try to create a derivative image based on an external source.
+ *
+ */
+function createDerivative(file, callback) {
+  console.log('Creating a new derivative for: ', file.url);
+  // Get remote image and store it locally
+  getImage(file, function (err, tmpFile) {
+    if (err) {
+      callback('Could not fetch image.', null);
+    }
+
+    if (!err && tmpFile) {
+      // Create a writestream for the derived image
+      var u = 'server/tmp/' + file.id + '_' + file.style.name;
+      console.log('image fetched at ' + tmpFile.path);
+      var writeStream = fs.createWriteStream(u);
+
+      gm('server/tmp/' + file.id)
+        .options({imageMagick: true})
+        .resize(file.style.width)
+        .stream(function (err, stdout, stderr) {
+          stdout.pipe(writeStream).on('error', function (err) {
+            console.log(err);
+            callback(err, null);
+          }).on('close', function () {
+            // Delete the tmp source file
+            fs.unlink('server/tmp/'+file.id);
+            console.log('Local derivative created. ');
+            file.source = u;
+            uploadImage(file, callback);
+          });
+        });
+    }
+  });
+}
+
+
 
 /* ------ ROUTES ---------------------------------------------------------- */
 
@@ -72,12 +173,74 @@ exports.index = function(req, res) {
 
 // Get a single file
 exports.show = function(req, res) {
-  File.findById(req.params.id, function (err, file) {
-    if(err) { return handleError(res, err); }
-    if(!file) { return res.send(404); }
-    return res.json(file);
+  console.log('File requested with id: ', req.params.id);
+  console.log('File requested with style: ', req.query.style);
+
+  File.find(req.params.id).success(function (file) {
+    if (!file || !file.id){
+      return handleError(res, 'The requested image was not found.');
+    }
+    // TODO: make this work with https
+    var s3Endpoint = config.aws.endpoint.replace('https://','http://');
+    // Check for request params
+    if (req.query.style){
+      var style = req.query.style;
+      var availableStyles = {
+        xlarge : { width:1200 },
+        large  : { width:800 },
+        medium : { width:400 },
+        small  : { width:200 },
+        avatar : { width:80 }
+      };
+
+      if (!availableStyles[ req.query.style]){
+        return handleError(res, 'Requested style was not found. ');
+      }
+
+      var width = availableStyles[ req.query.style].width;
+
+      s3Endpoint += 'styles/' + file.account_id + '/' + style + '/' + file.id;
+
+    } else {
+      s3Endpoint += 'accounts/' + file.account_id + '/images/' + file.id;
+    }
+    console.log('Endpoint for file ' + file.id + ': ' + s3Endpoint);
+    // Stream the file to the user
+    var r = request(s3Endpoint);
+    r.on('response', function (response) {
+      console.log('responseCode: ', response.statusCode);
+      if ( (req.query.style) && (response.statusCode === 403 || response.statusCode === 404) ){
+        file = file.dataValues;
+        file.style= {
+          name: style,
+          width: width
+        };
+        file.url = config.aws.endpoint.replace('https://','http://') + 'accounts/' + file.account_id + '/images/' + file.id;
+        console.log('Image style not found, creating a new derivative. ', file.url, file.style);
+        createDerivative(file, function(err, derivative){
+          if (err) { res.status(404).send(err); } else {
+            var r2 = request(s3Endpoint);
+            r2.on('response', function (response) {
+              console.log('responseCode: ', response.statusCode);
+              if (response.statusCode === 200) {
+                r2.pipe(res);
+              } else {
+                handleError(res,response.statusCode);
+              }
+            });
+            r2.on('error', function(err){
+              handleError(res,err);
+            })
+          }
+        });
+      } else {
+        r.pipe(res);
+      }
+    })
   });
 };
+
+
 
 // Creates a new file in the DB.
 exports.create = function(req, res) {
@@ -110,7 +273,7 @@ exports.update = function(req, res) {
 
 // Deletes a file from the DB.
 exports.destroy = function(req, res) {
-  var s3 = new AWS.S3();
+
   // Find the file
   File.findOne({_id: req.file._id}, function (err,file){
     // File found, delete it from s3
@@ -175,7 +338,14 @@ exports.sign = function(req,res) {
   } else {
     // Create a File record in the database
     File.create(file).success(function(file){
+      // Add the owner of the file (publication account)
+      file.setAccount(req.query.accountId,function(err){
+        if (err) { handleError(res, err); }
+        else { console.log('Account attached to file.'); }
+      });
+
       var file = file.dataValues;
+      console.log('Saved file: ', file);
       var credentials = createS3Policy(file);
       // Send back the policy
       return res.json({
@@ -210,84 +380,6 @@ exports.handleS3Success = function(req,res) {
   });
 };
 
-
-exports.createDerivative = function(req,res){
-  // Check if request comes from valid host
-  var validHosts = ['localhost', 'www.columby.com', 'columby.com'];
-  console.log(validHosts.indexOf(req.host));
-  if (validHosts.indexOf(req.host) === -1){
-    return handleError(res, req.host + ' is not a valid host. ');
-  }
-
-  var requestedUrl = req.query.url;
-  // url should be in the form:
-  // https://s3.some.aws.com/{{userId}}/images/styles/{{style}}/{{filename.png}}
-  var basename = path.basename(requestedUrl);
-  var extname = path.extname(requestedUrl);
-  var dirname = path.dirname(requestedUrl);
-  console.log('dirnae', dirname);
-  var dirElements = dirname.split('/');
-  console.log(dirElements);
-  var style = dirElements[ dirElements.length -1];
-  var availableStyles={
-    large: { width:800 },
-    medium:{ width:400 },
-    small: { width:200 },
-    avatar:{ width:80 }
-  };
-
-  var width = availableStyles[ style].width;
-  // get account-id
-  var accountId = dirElements[ dirElements.length -2];
-  console.log('accountId', accountId);
-
-  // Create source url for request
-  // URL should be in the form:
-  // https://s3.some.aws.com/{{userId}}/images/{{filename.png}}
-  var regex = new RegExp('/[^/]*$');
-  var originalSource = dirname.replace(regex, '/') + '/images/' + basename;
-  console.log('originalSource', originalSource);
-
-  // This opens up the writeable stream to `output`
-  var localPath = 'server/tmp/' + basename;
-  var writeStream = fs.createWriteStream(localPath);
-  // fetch the file from s3 to local file system
-  request(originalSource).pipe(writeStream);
-  writeStream.on('error', function(err){
-    handleError(res,err);
-  });
-  writeStream.on('finish', function(){
-    // modify the local file
-    gm(localPath)
-      .options({imageMagick: true})
-      .resize(width)
-      // write the new file to a file in the local filesystem
-      .write('server/tmp/'+ style + '/' + basename, function(err){
-        // Send the file to S3
-        fs.readFile('server/tmp/' + style + '/' + basename, function (err, data) {
-          if (err) {
-            handleError(res, err);
-          }
-
-          var s3 = new AWS.S3();
-          s3.putObject({
-            Bucket: config.aws.bucket,
-            Key: accountId + '/' + 'images/styles/' + style + '/' + basename,
-            Body: data,
-            ACL: 'public-read'
-          },function (resp) {
-            console.log(resp);
-            console.log('Successfully uploaded package.');
-            res.json('ok');
-          });
-
-        });
-      });
-  });
-
-  //request(originalSource).pipe(fs.createWriteStream('server/seed/img/' + filename));
-
-};
 
 function handleError(res, err) {
   console.log('Error: ', err);

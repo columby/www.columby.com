@@ -2,6 +2,7 @@
 
 var _             = require('lodash'),
 
+    models        = require('../models/index'),
     User          = require('../models/index').User,
     Token         = require('../models/index').Token,
     Account       = require('../models/index').Account,
@@ -17,7 +18,7 @@ var _             = require('lodash'),
  *
  */
 exports.me = function(req, res) {
-  console.log('jwt account id', req.jwt.sub);
+  console.log('Handling /me request. for JWT account id', req.jwt.sub);
 
 
   // TODO:
@@ -26,20 +27,28 @@ exports.me = function(req, res) {
   //  order: [ [ Division, DepartmentDivision, 'name' ] ]
   //});
   User.find(req.jwt.sub).success(function(user) {
-    user.getAccounts().success(function(accounts){
+    console.log('User found: ', user.id);
+    user.getAccounts({
+      include: [
+        { model: models.File, as: 'avatar'}
+      ]
+    }).success(function(accounts){
+      //console.log('get accounts: ', accounts);
+      console.log('Found '+ accounts.length + ' account(s)');
       user = user.dataValues;
       user.accounts = [];
-      for (var i=0;i<accounts.length;i++){
+      for (var i=0; i<accounts.length; i++){
         var account = accounts[ i].dataValues;
-        var role = accounts[i].AccountsUser.role;
-        delete account.AccountsUser;
-        account.role = role;
-        if (accounts[ i].primary){
+        //console.log('account,', account);
+        account.role = accounts[ i].AccountsUsers.dataValues.role;
+        delete account.AccountsUsers;
+        //console.log('ava', account.avatar.dataValues);
+        //account.avatar = account.avatar.dataValues;
+        if (accounts[ i].primary) {
           user.primary = account;
         }
         user.accounts.push(account);
       }
-      console.log('user', user);
       return res.json(user);
     }).error(function(err){
       console.log(err);

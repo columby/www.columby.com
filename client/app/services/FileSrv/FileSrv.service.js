@@ -41,10 +41,9 @@ angular.module('columbyApp')
       },
 
       handleS3Response: function(s3Response){
-        console.log(s3Response);
         var data = window.xml2json.parser(s3Response);
         return {
-          location: data.postresponse.location,
+          location: decodeURIComponent(data.postresponse.location),
           bucket: data.postresponse.bucket,
           key: data.postresponse.key,
           etag: data.postresponse.etag

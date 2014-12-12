@@ -16,8 +16,8 @@ module.exports = function(app) {
     auth.ensureAuthenticated,
       controller.handleS3Success);
 
-  router.get('/createDerivative',
-    controller.createDerivative);
+  //router.get('/createDerivative',
+  //  controller.createDerivative);
 
   router.get('/',
     controller.index);

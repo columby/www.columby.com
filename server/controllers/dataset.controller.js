@@ -127,33 +127,29 @@ exports.show = function(req, res) {
   });
 };
 
-// Creates a new dataset in the DB.
+/**
+ *
+ * Create a new dataset.
+ *
+ */
 exports.create = function(req, res) {
+
   var d = req.body;
-  if (d.tags) {
-    d.tags = d.tags.split(',');
-  }
-  var dataset = new Dataset(d);
+  //console.log('Creating new dataset: ', req.body);
+  // Handle tags
+  if (d.tags) { d.tags = d.tags.split(','); }
 
-  dataset.save(function(err) {
-    if(err) { return handleError(res, err); }
-
-    dataset.on('es-indexed', function(err, res){
-      if (err) console.log('err',err);
-      console.log('res',res);
+  // Create a new dataset
+  Dataset.create(req.body).success(function(dataset) {
+    //console.log('Dataset created: ', dataset);
+    dataset.setAccount(req.body.account.id).success(function(dataset) {
+      console.log('Dataset account attached: ', dataset);
+      return res.json(dataset);
+    }).error(function(err) {
+      handleError(res,err);
     });
-
-    // update publication account.
-    Account.findByIdAndUpdate(
-        { _id   : dataset.owner },
-        { $push : { datasets: dataset._id } },
-        { safe  : true, upsert: true },
-        function(err, model) {
-          console.log(err);
-          console.log('model', model);
-        }
-    );
-    return res.json(dataset);
+  }).error(function(err){
+    handleError(res,err);
   });
 };
 
@@ -231,7 +227,6 @@ exports.updateDistribution = function(req, res, id) {
   console.log(req.params);
 };
 
-// Delete a source attached to a dataset
 exports.destroyDistribution = function(req, res) {
 
   var id = String(req.params.id);

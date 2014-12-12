@@ -59,21 +59,24 @@ module.exports = function(sequelize, DataTypes) {
         // Create associations to other models
         associate: function(models) {
 
-          //File.belongsTo(models.Account);
-          //Account.hasMany(models.File,{
-          //  foreignKey: 'some'
-          //});
-
+          // Each account can have a reference to a File (image) as avatarImage
+          // creates Account.avatar_id
           Account.belongsTo(models.File,{
             foreignKey: 'avatar_id',
-            as: 'Avatar'
+            as: 'avatar'
           });
 
-
+          // Each account can have a reference to a File (image) as headerImage
+          // creates Account.headerimg_id
           Account.belongsTo(models.File,{
             foreignKey: 'headerimg_id',
             as: 'headerImg'
           });
+
+          //Account.hasOne(models.File,{
+          //  as: 'lala',
+          //  foreignKey: 'some'
+          //});
 
           // An account can have multiple accounts with roles
           Account.hasMany(models.User, {
@@ -84,13 +87,6 @@ module.exports = function(sequelize, DataTypes) {
 
           Account.hasMany(models.Distribution);
 
-
-
-          // Header image association
-          //models.File.belongsTo(Account,{
-          //  foreignKey: 'file_id',
-          //  as: 'file'
-          //});
         }
       }
     }

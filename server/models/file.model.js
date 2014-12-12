@@ -65,10 +65,11 @@ module.exports = function(sequelize, DataTypes) {
         // Create associations to other models
         associate: function (models) {
 
+
           // Avatar association
           File.hasOne(models.Account, {
             foreignKey: 'avatar_id',
-            as: 'Avatar'
+            as: 'avatar'
           });
             // Header image association
           File.hasOne(models.Account, {
@@ -76,14 +77,11 @@ module.exports = function(sequelize, DataTypes) {
             as: 'headerImg'
           });
 
-          models.Account.hasOne(File, {
-            foreignKey: 'fii_id',
-            as: 'fiii'
+          // Each file should be connected to 1 publication account
+          File.belongsTo(models.Account, {
+            constraints: false,
+            as: 'Account'
           });
-
-          //File.belongsTo(models.Account,{
-          //  as: 'file'
-          //});
         }
       }
     }
