@@ -1,0 +1,44 @@
+<div class="add-reference col-md-offset-3 col-md-6"
+     ng-show="showReferenceForm">
+  <h2>Add a reference</h2>
+  <p>Some descriptive text about adding a reference. </p>
+  <form class="form-horizontal" role="form" name="checkForm">
+    <div class="form-group form-group-lg">
+      <div class="col-sm-10">
+        <input class="form-control form-group-lg"
+               type="url"
+               ng-model="link"
+               placeholder="http://www.yourreference.com"/>
+      </div>
+      <div class="col-md-2">
+        <button
+          ng-disabled="checkForm.$invalid || checkForm.$pristine"
+          class="btn btn-default"
+          ng-click="checkReferenceLink(link)">Check
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div class="preview row"
+       ng-show="reference.result">
+    <div class="col-md-offset-3 col-md-6" style="background: url({{reference.result.images[0].url}}); background-size:cover;background-position">
+      <h3>{{reference.result.title}}</h3>
+      <p>{{reference.result.description}}</p>
+      <p class="small">on {{reference.result.provider_name}}</p>
+    </div>
+  </div>
+
+  <div class="warning" ng-show="reference.checkingLink"><i class="fa fa-spinner fa-spin"></i>Validating link ...</div>
+  <div class="warning">{{reference.error}}</div>
+
+  <form class="form-horizontal" role="form" name="referenceForm">
+    <button
+      type="submit"
+      class="btn btn-default"
+      ng-show="reference.valid"
+      ng-click="saveReference()"
+      ng-disabled="!reference.result">Add Reference</button>
+  </form>
+
+</div>
