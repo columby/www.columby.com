@@ -33,20 +33,20 @@
             <button
               class="btn btn-defaultright btn-xs btn-tooltip"
               popover="Change visibility settings for your dataset."
-              popover-trigger="mouseenter"
-              popover-placement="left"><i class="fa fa-question"></i></button>
+              data-popover-trigger="mouseenter"
+              data-popover-placement="left"><i class="fa fa-question"></i></button>
           </h3>
 	        <div class="btn-group btn-toggle">
           	<button
               ng-click="togglePrivate('true')"
               class="btn btn-xs btn-default btn-private"
               ng-class="{active: dataset.private === true}"
-              ng-disabled="dataset.private === true">Private</button>
+              data-ng-disabled="dataset.private === true">Private</button>
           	<button
               ng-click="togglePrivate('false')"
               class="btn btn-xs btn-default btn-public"
               ng-class="{active: dataset.private === false}"
-              ng-disabled="dataset.private === false">Public</button>
+              data-ng-disabled="dataset.private === false">Public</button>
           	</div>
 	      </div>
 			</div>
@@ -84,17 +84,12 @@
 
   <!-- Main dataset Content -->
   <div class="content" ng-class="{show:!contentLoading}">
-    <div class="header wrapper">
-      <div class="bg-img">
-        <img class="img-responsive" ng-src="{{dataset.headerImg.url}}" no-image/>
-      </div>
+    <div class="header wrapper" ng-style="headerStyle">
       <div class="upload-button"
            ng-file-select="onFileSelect($files,'header')"
            popover="Change the header background image for this dataset."
            data-popover-trigger="mouseenter"
-           data-popover-placement="left"
-        >
-
+           data-popover-placement="left">
         <i class="fa fa-cog"></i>
       </div>
 
@@ -106,8 +101,8 @@
             auto-grow
             name        = "title"
             placeholder = "Your title"
-            ng-model    = "datasetUpdate.title"
-            ng-blur     = "updateTitle()"
+            data-ng-model    = "datasetUpdate.title"
+            ng-blur     = "update()"
             focus       = "true"
             >
           </textarea>
@@ -116,7 +111,7 @@
           <div class="meta" ng-show="dataset.id">
 						<span ng-show="dataset.private === true" class="label bg-primary">private</span>
             <p>A dataset by
-              <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a>,
+              <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a></span>,
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
             </p>
             <p ng-show="dataset.tags.length>0"><strong>Tags: </strong><span ng-repeat="tag in dataset.tags">{{tag}}</span></p>
@@ -150,7 +145,7 @@
             ng-model        = "datasetUpdate.description"
             text-angular
             ta-default-wrap = "p"
-            ng-blur         = "updateDescription()",
+            ng-blur         = "update()",
             ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]">
           </div>
         </div>
@@ -164,11 +159,10 @@
 
           <h3>Sources
             <button
-              class="right btn-xs btn-tooltip"
+              class="right btn btn-default btn-xs btn-tooltip"
               popover="Add some datasources to your dataset. These can be links to webpages and files. But you can also upload your data (xls, csv, etc.) to Columby."
-              popover-trigger="mouseenter"
-              popover-placement="left"
-              class="btn btn-default"><i class="fa fa-question"></i>
+              data-popover-trigger="mouseenter"
+              data-popover-placement="left"><i class="fa fa-question"></i>
             </button>
           </h3>
           <ul ng-hide="!dataset.distributions || dataset.distributions.length===0">
@@ -207,12 +201,8 @@
 						<p>Upload a file to Columby directly or locate a remote file from the internet. Columby will process your data, so it will become available through the API.</p>
 					</div>
 
-          <!-- Datasource Modal -->
-          <button
-            class="btn btn-default btn-add"
-            type="button"
-            ng-click="initNewDistribution()"
-            >Add new data source</button>
+          <!-- Distribution Modal -->
+          <div distribution-popup dataset="dataset"></div>
 
         </div>
       </div>
@@ -222,24 +212,21 @@
     <div class="references wrapper" ng-show="dataset.id">
       <div class="container">
         <div class="col-md-12">
-
           <div class="content">
             <h3>References<button
-              class="right btn-xs btn-tooltip"
+              class="btn btn-default right btn-xs btn-tooltip"
               popover="Did you make a nice App with this data? Have a cool blogpost about this data? Or an infographic? Paste links to these references here."
-              popover-trigger="mouseenter"
-              popover-placement="left"
-              class="btn btn-default"><i class="fa fa-question"></i>
+              data-popover-trigger="mouseenter"
+              data-popover-placement="left"><i class="fa fa-question"></i>
             </button></h3>
 
             <div class="row">
-
               <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
                 <div class="thumbnail dataset-reference">
                   <div class="caption clearfix">
 
                     <h4><a href="{{reference.url}}">{{reference.title}}</a></h4>
-                    <div class="ref-img pull-right" style="background-image:url('{{reference.image}}');background-size:cover;background-position:50% 50%;" ng-show="{{reference.image}}"></div>
+                    <div class="ref-img pull-right" style="background-image:url('{{reference.image}}');background-size:cover;background-position:50% 50%;"></div>
                     <p>{{reference.description}}</p>
                     <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
                   </div>
@@ -248,9 +235,7 @@
                   </div>
                 </div>
               </div>
-
             </div>
-
 
             <div class="highlight" ng-show="!dataset.references || dataset.references.length===0">
 							<!-- <i class="fa fa-exclamation-circle"></i> -->
@@ -259,13 +244,7 @@
 						</div>
 
           <!-- Datasource Modal -->
-          <button
-            class="btn btn-default btn-add"
-            type="button"
-            ng-click="newReference()"
-            >Add new reference</button>
-          </div>
-
+          <div reference-popup dataset="dataset"></div>
         </div>
       </div>
     </div>
@@ -314,4 +293,5 @@
 
   <!-- Account selector -->
   <div account-selector select="updateDatasetOwner(id)" ng-show="showAccountSelector"></div>
+</div>
 </div>

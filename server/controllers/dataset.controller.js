@@ -67,35 +67,22 @@ exports.index = function(req, res) {
   // Set (default) offset
   var offset = req.query.offset || 0;
 
-  Dataset
-    .findAndCountAll({
-      where: filter,
-      limit: limit,
-      offset: offset,
-      order: 'created_at DESC',
-      include: [
-        { model: Account, include: [
-          { model: File, as: 'avatar'}
-        ] }
-      ]
-    })
-    .success(function(datasets) {
-      var r = {};
-      r.count = datasets.count;
-      r.rows = [];
-      for (var i=0;i<datasets.rows.length; i++){
-        var s = datasets.rows[ i].dataValues;
-        s.account = s.Account.dataValues;
-        delete s.Account;
-        r.rows.push(s);
-      }
-      return res.json(r);
-    })
-    .error(function(err){
-      console.log(err);
-      return handleError(res, err);
-    })
-  ;
+  Dataset.findAndCountAll({
+    where: filter,
+    limit: limit,
+    offset: offset,
+    order: 'created_at DESC',
+    include: [
+      { model: Account, as:'account', include: [
+        { model: File, as: 'avatar'}
+      ] }
+    ]
+  }).success(function(datasets) {
+    return res.json(datasets);
+  }).error(function(err){
+    console.log(err);
+    return handleError(res, err);
+  });
 };
 
 /**
@@ -108,20 +95,16 @@ exports.show = function(req, res) {
   Dataset.findOne({
     where: { shortid: req.params.id },
     include: [
-      { model: models.Distribution },
+      { model: models.Distribution, as: 'distributions' },
       { model: File, as: 'headerImg'},
-      { model: Account, include: [
+      { model: Account, as:'account', include: [
         { model: File, as: 'avatar'},
         { model: File, as: 'headerImg'}
-      ] }
+      ] },
+      { model: models.Reference, as: 'references' }
     ]
   }).success(function(dataset){
-    var d = dataset.dataValues;
-    d.account = dataset.Account;
-    delete d.Account;
-    d.distributions = dataset.Distributions;
-    delete d.Distributions;
-    return res.json(d);
+    return res.json(dataset);
   }).error(function(err){
     console.log(err);
   });
@@ -260,21 +243,28 @@ exports.getReference = function(req,res,id){
 exports.createReference = function(req, res) {
   var id = req.params.id;
   var reference = req.body.reference;
-  reference._id = mongoose.Types.ObjectId();
-  Dataset
-    .findOne({_id: id})
-    .exec(function(err,dataset){
-      if (err) return res.json({status:'error', err:err});
-      if (!dataset) return res.json({error:'Failed to load dataset', err:err});
-      if (!dataset.references) {
-        dataset.sources = [ ];
-      }
-      dataset.references.push(reference);
-      dataset.save(function(err){
-        res.json({status:'success', reference: reference});
+  console.log('id',id);
+  console.log('reference', reference);
+
+  // Find the dataset to attach the reference to
+  Dataset.find(id).success(function(dataset){
+    if (!dataset){ return handleError( res, { error:'Failed to load dataset' } ); }
+    // Create a db-entry for the reference
+    models.Reference.create(reference).success(function(reference){
+      console.log('saved reference: ',reference);
+      // Add the reference to the dataset
+      dataset.addReference(reference).success(function(dataset){
+        console.log('dataset', dataset);
+        res.json(dataset);
+      }).error(function(err){
+        return handleError(res,err);
       });
-    })
-  ;
+    }).error(function(err){
+      return handleError(res,err);
+    });
+  }).error(function(err){
+    return handleError(res,err);
+  });
 };
 
 exports.updateReference = function(req, res, id) {
@@ -284,19 +274,21 @@ exports.updateReference = function(req, res, id) {
 // Delete a source attached to a dataset
 exports.destroyReference = function(req, res) {
 
-  var id = String(req.params.id);
-  var referenceId = String(req.params.referenceId);
-
-  Dataset.findOne({_id:id},function(err,dataset){
-    if (err) return res.json({status:'error', err:err});
-    if (!dataset) return res.json({error:'Failed to load dataset', err:err});
-    for (var i=0; i < dataset.references.length; i++){
-      if (String(dataset.references[ i]._id) === referenceId){
-        dataset.references.splice(i,1);
-      }
+  var rid = req.params.rid;
+  models.Reference.find(rid).success(function(reference){
+    console.log('reference', reference);
+    if(reference){
+      reference.destroy().success(function(){
+        console.log('deleted');
+        res.json({status:'success'});
+      }).error(function(err){
+        handleError(res,err);
+      });
+    } else {
+      res.json(reference);
     }
-    dataset.save();
-    res.json({status:'success'});
+  }).error(function(err){
+    handleError(res,err);
   });
 };
 

@@ -17,24 +17,24 @@ angular.module('columbyApp')
 
     return $resource('api/v2/dataset/:id/distribution/:did', {
       id: '@id',
-      did: '@did',
+      did: '@did'
     }, {
       update: {
-        method: 'PUT',
-      },
+        method: 'PUT'
+      }
     }
     );
   })
 
-  .service('DatasetReferencesSrv', function($resource) {
+  .service('DatasetReferenceSrv', function($resource) {
 
     return $resource('api/v2/dataset/:id/reference/:rid', {
       id: '@id',
-      rid: '@rid',
+      rid: '@rid'
     }, {
       update: {
-        method: 'PUT',
-      },
+        method: 'PUT'
+      }
     });
   })
 ;

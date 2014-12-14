@@ -40,11 +40,14 @@ module.exports = function(sequelize, DataTypes) {
     }, {
       classMethods: {
         associate: function (models) {
+
           // Header image association
           models.File.hasOne(Dataset, {
             foreignKey: 'headerimg_id',
             as: 'headerImg'
           });
+
+          //
           Dataset.belongsTo(models.File,{
             foreignKey: 'headerimg_id',
             as: 'headerImg'
@@ -52,18 +55,22 @@ module.exports = function(sequelize, DataTypes) {
 
           // A dataset can have multiple distributions
           // One dataset to Many distributions
-          Dataset.hasMany(models.Distribution);
-          models.Distribution.belongsTo(Dataset);
-
-          //models.Distribution.belongsTo(Dataset,{
-          //  foreignKey: 'dataset_id',
-          //  as:'Distributions'
-          //});
+          Dataset.hasMany(models.Distribution, {
+            as:'distributions'
+          });
 
           // A dataset can have multiple tags
           Dataset.hasMany(models.Tag);
-          // a dataset belongs to a single account
-          Dataset.belongsTo(models.Account);
+
+          //
+          Dataset.belongsTo(models.Account, {
+            as:'account'
+          });
+
+          //
+          Dataset.hasMany(models.Reference, {
+            as:'references'
+          });
         }
       }
     }

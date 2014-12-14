@@ -48,7 +48,9 @@ angular.module('columbyApp')
         $state.go('home');
       } else {
         $scope.account = result;
-        $scope.account.avatar.url = '/api/v2/file/' + $scope.account.avatar.id + '?style=small';
+        if ($scope.account.avatar) {
+          $scope.account.avatar.url = '/api/v2/file/' + $scope.account.avatar.id + '?style=small';
+        }
         $scope.contentLoading = false;
         $window.document.title = 'columby.com | ' + result.name;
 
@@ -139,7 +141,7 @@ angular.module('columbyApp')
     }
 
     function updateHeaderImage(){
-      $scope.account.headerImg.url = '/api/v2/file/' + $scope.account.headerImg.id + '?style=small';
+      $scope.account.headerImg.url = '/api/v2/file/' + $scope.account.headerImg.id + '?style=large';
       $scope.headerStyle = {
         'background-image': 'url(/assets/images/default-header.png), url(' + $scope.account.headerImg.url + ')',
         'background-blend-mode': 'multiply'

@@ -105,9 +105,8 @@ function uploadImage(file,callback){
         ACL: 'public-read',
         ContentType: file.filetype
       };
-      console.log('params', params);
       s3.putObject(params, function (err) {
-        console.log('err', err);
+        if (err){ callback(err,null); }
         console.log('Successfully uploaded file.');
         // Delete source file
         fs.unlink(file.source);

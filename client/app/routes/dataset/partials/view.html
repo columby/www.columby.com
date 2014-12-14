@@ -36,7 +36,7 @@
 
           <div class="avatar">
             <a ui-sref="account.view({slug:dataset.account.slug})">
-              <img class="img-circle" ng-src="http://localhost:9000/api/v2/file/22?style=small" alt="{{dataset.account.name}}"/>
+              <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" alt="{{dataset.account.name}}"/>
             </a>
           </div>
         </div>
@@ -161,7 +161,7 @@
                   <div class="caption clearfix">
 
                     <h4><a href="{{reference.url}}">{{reference.title}}</a></h4>
-                    <div class="ref-img pull-right" style="background-image:url('{{reference.image}}');background-size:cover;background-position:50% 50%;" ng-show="{{reference.image}}"></div>
+                    <div class="ref-img pull-right" style="background-image:url('{{reference.image}}');background-size:cover;background-position:50% 50%;"></div>
                     <p>{{reference.description}}</p>
                     <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
                   </div>

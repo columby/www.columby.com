@@ -2,15 +2,19 @@
 
 angular.module('columbyApp')
 
-  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster, ngDialog) {
+  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferenceSrv, AuthSrv, toaster, ngDialog) {
 
-    /***   INITIALISATION   ***/
+    /* --------- INITIALISATION ------------------------------------------------------------ */
     $scope.hostname = $location.protocol() + '://' + $location.host();
     $scope.embedUrl = $location.absUrl();
     $window.document.title = 'columby.com';
 
 
-    /***   FUNCTIONS   ***/
+    /* --------- FUNCTIONS ------------------------------------------------------------------ */
+    /**
+     * Fetch a dataset
+     *
+     */
     function getDataset(){
       $scope.contentLoading = true;  // show loading message while loading dataset
       DatasetSrv.get({
@@ -50,15 +54,18 @@ angular.module('columbyApp')
 
         $scope.dataset.canEdit= AuthSrv.canEdit('dataset', dataset);
 
-        updateHeaderImage();
-
+        if ($scope.dataset.headerImg && $scope.dataset.headerImg.url) {
+          updateHeaderImage();
+        }
       });
     }
 
+    /**
+     * Update the header image of a dataset
+     */
     function updateHeaderImage(){
-
 			if ($scope.dataset.headerImg) {
-        $scope.dataset.headerImg.url = '/api/v2/file/' + $scope.dataset.headerImg.id + '?style=small';
+        $scope.dataset.headerImg.url = '/api/v2/file/' + $scope.dataset.headerImg.id + '?style=large';
         console.log('Updating header image: ', $scope.dataset.headerImg.url);
 
 	      $scope.headerStyle={
@@ -67,6 +74,7 @@ angular.module('columbyApp')
 	      };
 	    }
     }
+
 
     /* --------- SCOPE FUNCTIONS ------------------------------------------------------------ */
     $scope.showEmbedModal = function(){
@@ -88,16 +96,24 @@ angular.module('columbyApp')
       toaster.pop('danger',null,'Sorry, the requested dataset was not found. ');
       $state.go('home');
     }
-  }
-)
-  .controller('DatasetEditCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferencesSrv, AuthSrv, toaster, Slug, ngDialog,EmbedlySrv, $http, $upload, FileSrv,ngProgress) {
+  })
 
-    /***   INITIALISATION   ***/
+
+/**
+ *
+ *  Controller for a dataset Edit page
+ *
+ */
+  .controller('DatasetEditCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferenceSrv, AuthSrv, toaster, Slug, ngDialog, $http, $upload, FileSrv,ngProgress) {
+
+    /*-------------------   INITIALISATION   ------------------------------------------------------------------*/
     $scope.hostname = $location.protocol() + '://' + $location.host();
     $scope.datasetUpdate = {};
+    $scope.editMode = true;
     $window.document.title = 'columby.com';
 
-    /***   FUNCTIONS   ***/
+
+    /*-------------------   FUNCTIONS   -----------------------------------------------------------------------*/
     function getDataset(){
       $scope.contentLoading = true;  // show loading message while loading dataset
       DatasetSrv.get({
@@ -108,13 +124,6 @@ angular.module('columbyApp')
           $state.go('home');
           return;
         }
-        //console.log(dataset);
-        // Update image styles
-        dataset.headerImg.url = $rootScope.config.aws.endpoint + dataset.account.id + '/images/styles/large/' + dataset.headerImg.filename;;
-        // add acquired dataset to the scope
-        $scope.contentLoading = false;
-        $scope.dataset = dataset;
-        $window.document.title = 'columby.com | ' + dataset.title;
 
         // transition the url from slug to id
         if ($stateParams.id !== dataset.shortid) {
@@ -126,14 +135,66 @@ angular.module('columbyApp')
           });
         }
 
+        // Update document title
+        $window.document.title = 'columby.com | ' + dataset.title;
+        $scope.contentLoading = false;
+
+        // Update image styles
+        if (dataset.headerImg){
+          dataset.headerImg.url = $rootScope.config.aws.endpoint + dataset.account.id + '/images/styles/large/' + dataset.headerImg.filename;
+        }
+
+        // Make sure there is a reference array
+        if (!dataset.references){
+          dataset.references = [];
+        }
+
+        // Add the dataset to the scope
+        $scope.dataset = dataset;
+
         // set draft title and description
         $scope.datasetUpdate.title = $scope.dataset.title;
         $scope.datasetUpdate.description = $scope.dataset.description;
 
+        // Update the header image
         if ($scope.dataset.headerImg){
           updateHeaderImage();
         }
 
+      });
+    }
+
+    /**
+     * File is uploaded, finish it at the server.
+     *
+     * @param params
+     */
+    function finishUpload(params){
+      FileSrv.finishS3(params).then(function(res){
+        console.log('res', res);
+        if (res.url) {
+          console.log('updating url',res.url);
+          console.log($scope.fileUpload.target);
+          var updated = {
+            id  : $scope.dataset.id
+          };
+          switch($scope.fileUpload.target){
+            case 'header':
+              $scope.dataset.headerImg = res;
+              updated.headerImg=res.id;
+              updateHeaderImage();
+              break;
+          }
+          $scope.fileUpload = null;
+          toaster.pop('notice',null,'File uploaded, updating account');
+
+          DatasetSrv.update(updated, function(result){
+            //console.log('update', result);
+            //toaster.pop('notice',null,'File uploaded!');
+          });
+        } else {
+          $scope.fileUpload = null;
+        }
       });
     }
 
@@ -150,9 +211,9 @@ angular.module('columbyApp')
       var xhr = new XMLHttpRequest();
       var fd = new FormData();
       // Populate the Post paramters.
-      fd.append('key', params.file.account_id + '/images/' + params.file.filename);
-      fd.append('AWSAccessKeyId', params.credentials.key);
-      fd.append('acl', 'public-read');
+      fd.append('key', params.credentials.file.key);
+      fd.append('AWSAccessKeyId', params.credentials.s3Key);
+      fd.append('acl', params.credentials.file.acl);
       //fd.append('success_action_redirect', "https://attachments.me/upload_callback")
       fd.append('policy', params.credentials.policy);
       fd.append('signature', params.credentials.signature);
@@ -189,7 +250,6 @@ angular.module('columbyApp')
     }
 
     /**
-     *
      * Start with a new dataset, published on the user's primary account.
      *
      */
@@ -212,10 +272,35 @@ angular.module('columbyApp')
       toaster.pop('notice',null,'Here\'s your new dataset!');
     }
 
-    $scope.changeAccount = function(){
-      $scope.showAccountSelector = true;
+    /**
+     * Update the header background image
+     *
+     */
+    function updateHeaderImage(){
+
+      $scope.dataset.headerImg.url = '/api/v2/file/' + $scope.dataset.headerImg.id + '?style=large';
+      $scope.headerStyle = {
+        'background-image': 'url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
+        'background-blend-mode': 'multiply'
+      };
+    }
+
+
+    /*-------------------   SCOPE FUNCTIONS   -----------------------------------------------------------------*/
+
+    /**
+     * Initiate the account change popup
+     *
+     */
+    $scope.toggleAccountSelector = function(){
+      $scope.showAccountSelector = !$scope.showAccountSelector;
     };
 
+    /**
+     * Change the owner of the dataset.
+     *
+     * @param id
+     */
     $scope.updateDatasetOwner = function(id){
       console.log(id);
       $scope.dataset.account_id = $rootScope.user.accounts[ id].id;
@@ -223,22 +308,40 @@ angular.module('columbyApp')
       $scope.showAccountSelector = false;
     };
 
-    function updateHeaderImage(){
-
-      $scope.dataset.headerImg.url = '/api/v2/file/' + $scope.dataset.headerImg.id + '?style=small';
-      $scope.headerStyle = {
-        'background-image': 'url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
-        'background-blend-mode': 'multiply'
-      };
-    }
-
-    /***   SCOPE FUNCTIONS   ***/
+    /**
+     *
+     * Show or hide the options menu
+     *
+     */
     $scope.toggleOptions = function(){
       $scope.showOptions = !$scope.showOptions;
     };
 
     /**
      *
+     * Toggle private mode for a dataset.
+     *
+     * @param status
+     */
+    $scope.togglePrivate = function(status){
+      if (status !== $scope.dataset.private) {
+        $scope.visibilityStatusMessage = 'updating';
+        console.log('setting private to', status);
+        var dataset = {
+          id: $scope.dataset.id,
+          private: status
+        };
+        DatasetSrv.update({id: dataset.id}, dataset, function(res){
+          $scope.visibilityStatusMessage = 'updated';
+          if (res.id){
+            $scope.dataset.visibilityStatus = status;
+            toaster.pop('success', null, 'Dataset visibility status updated to  ' + status);
+          }
+        });
+      }
+    };
+
+    /**
      * Handle file select
      *
      * @param $files
@@ -282,103 +385,12 @@ angular.module('columbyApp')
       }
     };
 
+
     /**
-     * File is uploaded, finish it at the server.
-     * @param params
+     *
+     * Create a new dataset
+     *
      */
-    function finishUpload(params){
-      FileSrv.finishS3(params).then(function(res){
-        console.log('res', res);
-        if (res.url) {
-          console.log('updating url',res.url);
-          console.log($scope.fileUpload.target);
-          var updated = {
-            id  : $scope.dataset.id
-          };
-          switch($scope.fileUpload.target){
-            case 'header':
-              $scope.dataset.headerImg = res;
-              updated.headerImg=res.id;
-              updateHeaderImage();
-              break;
-          }
-          $scope.fileUpload = null;
-          toaster.pop('notice',null,'File uploaded, updating account');
-
-          DatasetSrv.update(updated, function(result){
-            //console.log('update', result);
-            //toaster.pop('notice',null,'File uploaded!');
-          });
-        } else {
-          $scope.fileUpload = null;
-        }
-      });
-    }
-
-    /* dataset functions */
-    $scope.updateTitle = function() {
-      if (!$scope.dataset.id) {
-        //console.log('Title changed, but not yet saved');
-      } else {
-        if ($scope.datasetUpdate.title === $scope.dataset.title) {
-          //console.log('Dataset saved, but no title change');
-        } else {
-          var dataset = {
-            id: $scope.dataset.id,
-            title: $scope.datasetUpdate.title
-          };
-          //console.log('updating dataset title', dataset);
-
-          DatasetSrv.update({id:dataset.id},dataset,function(res){
-            if (res.id){
-              $scope.datasetUpdate.title = res.title;
-              toaster.pop('success', null, 'Dataset title updated.');
-            }
-          });
-        }
-      }
-    };
-
-    $scope.updateDescription = function() {
-      //console.log('updating dataset description');
-      if (!$scope.dataset.id) {
-        //console.log('Dataset not yet saved');
-      } else {
-        if ($scope.datasetUpdate.description === $scope.dataset.description) {
-          //console.log('Dataset saved, but no description change');
-        } else {
-          var dataset = {
-            id         : $scope.dataset.id,
-            description : $scope.datasetUpdate.description
-          };
-          DatasetSrv.update({id:dataset.id},dataset,function(res){
-            if (res.id){
-              $scope.datasetUpdate.description = res.description;
-              toaster.pop('success', null, 'Dataset description updated.');
-            } else {
-              //console.log('error updating description', res);
-            }
-          });
-        }
-      }
-    };
-
-    $scope.update = function(){
-
-      var dataset = {
-        id: $scope.dataset.id,
-        title: $scope.dataset.title,
-        description: $scope.dataset.description
-      };
-
-      DatasetSrv.update({id: dataset.id}, dataset,function(res){
-        if (res.id){
-          $scope.dataset = res;
-          toaster.pop('success', null, 'Dataset updated.');
-        }
-      });
-    };
-
     $scope.create = function() {
       $scope.dataset.title = $scope.datasetUpdate.title;
       $scope.dataset.description = $scope.datasetUpdate.description;
@@ -389,6 +401,46 @@ angular.module('columbyApp')
           $state.go('dataset.edit', {id:res.shortid});
         }
       });
+    };
+
+    /**
+     *
+     * Update an existing dataset.
+     *
+     */
+    $scope.update = function(){
+      console.log('Updating dataset.');
+      if (!$scope.account.id) {
+        console.log('unpublished. ');
+      } else {
+        var changed = false;
+        var dataset = {
+          id: $scope.dataset.id,
+          title: $scope.dataset.title,
+          description: $scope.dataset.description
+        };
+        if (dataset.title !== $scope.datasetUpdate.name) {
+          console.log('name changed');
+          dataset.title = $scope.datasetUpdate.title;
+          changed = true;
+        }
+        if (dataset.description !== $scope.datasetUpdate.description){
+          console.log('description changed');
+          dataset.description = $scope.datasetUpdate.description;
+          changed = true;
+        }
+        if (changed){
+          DatasetSrv.update({id: dataset.id}, dataset,function(res){
+            if (res.id){
+              $scope.datasetUpdate.title = result.title;
+              $scope.datasetUpdate.description = result.description;
+              toaster.pop('success', null, 'Dataset updated.');
+            } else {
+              toaster.pop('warning', null, 'There was an error updating the dataset.');
+            }
+          });
+        }
+      }
     };
 
     $scope.updateSlug = function(){
@@ -411,65 +463,29 @@ angular.module('columbyApp')
     };
 
 
+    /**
+     *
+     * Delete an attached reference
+     *
+     * @param index
+     */
+    $scope.deleteReference = function(index){
+      console.log(index);
+      var id = $scope.dataset.id;
+      var referenceId = $scope.dataset.references[ index].id;
+
+      DatasetReferenceSrv.delete({id:id, rid:referenceId}, function(res){
+        if (res.status === 'success') {
+          $scope.dataset.references.splice(index,1);
+          toaster.pop('success', null, 'Reference deleted.');
+        } else {
+          toaster.pop('success', null, 'There was a problem deleting the reference.');
+        }
+      });
+
+    };
 
     /*** Distribution functions */
-    $scope.initNewDistribution = function (){
-      //console.log('Starting new distribution');
-      $scope.newDistribution = {};
-      ngDialog.open({
-        template: 'app/routes/dataset/partials/addDistributionModal.html',
-        className: 'ngdialog-theme-default fullscreenDialog',
-        scope: $scope
-      });
-    };
-
-    $scope.checkLink = function(){
-      // validate
-      $scope.newDistribution.validationMessage = 'The link was validated!';
-      $scope.newDistribution.distributionType = 'link';
-      $scope.newDistribution.valid = true;
-    };
-
-    $scope.createDistribution = function() {
-      //console.log('Creating ditribution');
-      // validate link
-      if ($scope.newDistribution){
-        if ($scope.newDistribution.valid) {
-          // add link to model
-          if (!$scope.dataset.hasOwnProperty('distributions')) {
-            $scope.dataset.distributions = [];
-          }
-
-          var distribution = {
-            // Columby Stuff
-            uploader          : $rootScope.user.id,
-            distributionType  : $scope.newDistribution.distributionType,
-            publicationStatus : 'public',
-            // DCAT stuff
-            accessUrl         : $scope.newDistribution.link
-          };
-          //console.log('attaching distribution', distribution);
-
-          DatasetDistributionSrv.save({
-            id:$scope.dataset.id,
-            distribution: distribution}, function(res){
-              //console.log('res', res);
-              if (res.status === 'success'){
-                $scope.dataset.distributions.push(res.distribution);
-                toaster.pop('success', 'Updated', 'New dataset added.');
-                ngDialog.closeAll();
-                $scope.newDistribution = null;
-              } else {
-                toaster.pop('danger', 'Error', 'Something went wrong.');
-              }
-            }
-          );
-        }
-      } else {
-        toaster.pop('danger', 'Error', 'No new distribution attached');
-      }
-    };
-
     $scope.deleteDistribution = function(index){
       var id = $scope.dataset.id;
       var distributionId = $scope.dataset.distributions[ index].id;
@@ -481,6 +497,7 @@ angular.module('columbyApp')
         }
       });
     };
+
 
     $scope.updateHeaderImage = function($files) {
       $scope.upload=[];
@@ -587,102 +604,6 @@ angular.module('columbyApp')
           console.log('Error message', data.err);
           console.log(status);
         });
-    };
-
-
-    /*** Reference functions */
-    $scope.newReference = function() {
-
-      ngDialog.open({
-        template: 'app/routes/dataset/partials/addReferenceModal.html',
-        className: 'ngdialog-theme-default fullscreenDialog',
-        scope: $scope
-      });
-    };
-
-    $scope.checkReferenceLink = function(link){
-
-      $scope.reference = {
-        link   : link,
-        valid  : false,
-        error  : null,
-        result : null
-      };
-
-      $scope.reference.checkingLink = true;
-
-      EmbedlySrv.extract($scope.reference.link)
-        .then(function(result){
-          console.log(result);
-          $scope.reference.result = result;
-          $scope.reference.valid = true;
-          $scope.reference.checkingLink = false;
-        }, function(err){
-          $scope.reference.error = err;
-          $scope.reference.valid = null;
-          $scope.reference.checkingLink = false;
-      });
-    };
-
-    $scope.saveReference = function() {
-
-      // construct the reference
-      var reference = {
-        description      : $scope.reference.result.description,
-        url              : $scope.reference.result.url,
-        title            : $scope.reference.result.title,
-        provider_name    : $scope.reference.result.provider_name,
-        provider_display : $scope.reference.result.provider_dis
-      };
-
-      if ($scope.reference.result.images[0]){
-        reference.image = $scope.reference.result.images[0].url;
-      }
-
-      console.log('saving reference', reference);
-
-      // save reference
-      DatasetReferencesSrv.save({id:$scope.dataset.id, reference: reference}, function(res){
-        if (res.status==='success') {
-          $scope.dataset.references.push(reference);
-          ngDialog.closeAll();
-        } else {
-          $scope.reference.error = 'Something went wrong.';
-        }
-      });
-    };
-
-    $scope.deleteReference = function(index){
-      console.log(index);
-      var id = $scope.dataset.id;
-      var referenceId = $scope.dataset.references[ index].id;
-
-      DatasetReferencesSrv.delete({id:id, referenceId:referenceId}, function(res){
-        console.log(res);
-        if (res.status === 'success') {
-          $scope.dataset.references.splice(index,1);
-        }
-      });
-
-    };
-
-
-    $scope.togglePrivate = function(status){
-      if (status !== $scope.dataset.private) {
-        $scope.visibilityStatusMessage = 'updating';
-        console.log('setting private to', status);
-        var dataset = {
-          id: $scope.dataset.id,
-          private: status
-        };
-        DatasetSrv.update({id: dataset.id}, dataset, function(res){
-          $scope.visibilityStatusMessage = 'updated';
-          if (res.id){
-            $scope.dataset.visibilityStatus = status;
-            toaster.pop('success', null, 'Dataset visibility status updated to  ' + status);
-          }
-        });
-      }
     };
 
 

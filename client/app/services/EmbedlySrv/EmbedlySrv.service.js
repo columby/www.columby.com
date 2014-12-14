@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
   .service('EmbedlySrv', function ($rootScope, $http, $q) {
-    console.log($rootScope.config);
+
     var key = $rootScope.config.embedly.key;
 
     this.setKey = function(userKey) {

@@ -55,9 +55,10 @@ module.exports = function(sequelize, DataTypes) {
       }
     },{
       classMethods: {
-        //associate: function(models) {
-        //  Distribution.belongsTo(models.Account);
-        //}
+        associate: function(models) {
+          Distribution.belongsTo(models.Dataset, { as: 'dataset' });
+          //Distribution.belongsTo(models.Account);
+        }
       }
     }
   );
