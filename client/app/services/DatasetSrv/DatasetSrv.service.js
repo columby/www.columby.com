@@ -4,7 +4,8 @@ angular.module('columbyApp')
 
   .service('DatasetSrv', function ($resource) {
     return $resource('api/v2/dataset/:id', {
-        id: '@id'
+        id: '@id',
+        offset: '@offset'
       }, {
         query: { method: 'GET', isArray: false, responseType: 'json' },
         index: { method: 'GET', isArray: false, responseType: 'json' },

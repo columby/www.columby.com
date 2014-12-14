@@ -1,29 +1,26 @@
 'use strict';
 
+/**
+ * Module dependencies
+ *
+ * @type {exports}
+ * @private
+ */
 var _ = require('lodash'),
-    File = require('../models/index').File,
+    models = require('../models/index'),
+    File = models.File,
     crypto    = require('crypto'),
     config = require('../config/environment/index'),
     AWS = require('aws-sdk'),
     path = require('path'),
-  fs = require('fs'),
-  gm = require('gm').subClass({ imageMagick: true }),
-  request = require('request'),
-  knox = require('knox'),
-  uuid = require('uuid'),
-  client = knox.createClient({
-    key: config.aws.publicKey,
-    secret: config.aws.secretKey,
-    bucket: config.aws.bucket,
-    style: 'path'
-  }),
-
-  s3 = new AWS.S3();
+    fs = require('fs'),
+    gm = require('gm').subClass({ imageMagick: true }),
+    request = require('request')
 ;
 
-/** ------ FUNCTIONS ------------------------------------------------------- **/
+var s3 = new AWS.S3();
 
-var s3bucket = new AWS.S3({params: config.aws.bucket});
+/** ------ FUNCTIONS ------------------------------------------------------- **/
 
 function getExpiryTime() {
   var _date = new Date();
@@ -159,7 +156,7 @@ function createDerivative(file, callback) {
 
 // Get list of files
 exports.index = function(req, res) {
-  File
+  models.File
     .find()
     .sort('-createdAt')
     .populate('owner', 'username')
@@ -243,12 +240,10 @@ exports.show = function(req, res) {
 
 // Creates a new file in the DB.
 exports.create = function(req, res) {
-  if (!req.user) {
-    res.json({err:'No user id'});
-  }
+  if (!req.user) { return handleError(res, {err:'No user id'});  }
 
   var file = req.body;
-  file.owner = req.user._id;
+  file.owner = req.user.id;
 
   File.create(file, function(err, file) {
     if(err) { return handleError(res, err); }

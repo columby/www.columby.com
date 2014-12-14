@@ -13,7 +13,10 @@ angular.module('columbyApp')
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading  = true;
     $window.document.title = 'columby.com';
-
+    $scope.datasets = {
+      currentPage:1,
+      numberOfItems:10
+    };
 
     /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
 
@@ -32,9 +35,12 @@ angular.module('columbyApp')
     }
 
     function getDatasets(){
-
-      DatasetSrv.index({accountId: $scope.account.id}, function(d){
-        $scope.datasets = d.rows;
+      $scope.datasets.loading = true;
+      var offset = ($scope.datasets.currentPage -1) *10;
+      DatasetSrv.index({accountId: $scope.account.id, offset:offset}, function(d){
+        $scope.datasets.rows = d.rows;
+        $scope.datasets.count = d.count;
+        $scope.datasets.loading = false;
       });
 
     }
@@ -76,7 +82,10 @@ angular.module('columbyApp')
 
 
     /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
-
+    $scope.pageChanged = function() {
+      console.log('Page changed to: ' + $scope.datasets.currentPage);
+      getDatasets();
+    };
 
     /* ---------- INIT ----------------------------------------------------------------------------- */
     if (!$stateParams.slug){
