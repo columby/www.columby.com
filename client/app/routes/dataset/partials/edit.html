@@ -37,16 +37,14 @@
               data-popover-placement="left"><i class="fa fa-question"></i></button>
           </h3>
 	        <div class="btn-group btn-toggle">
-          	<button
-              ng-click="togglePrivate('true')"
-              class="btn btn-xs btn-default btn-private"
-              ng-class="{active: dataset.private === true}"
-              data-ng-disabled="dataset.private === true">Private</button>
-          	<button
-              ng-click="togglePrivate('false')"
-              class="btn btn-xs btn-default btn-public"
-              ng-class="{active: dataset.private === false}"
-              data-ng-disabled="dataset.private === false">Public</button>
+          	<button class="btn btn-lg btn-default btn-private"
+              ng-click="toggleDatasetPrivacy()"
+              ng-model="dataset.private"
+              data-ng-disabled="dataset.private">Private</button>
+          	<button class="btn btn-lg btn-success"
+              ng-click="toggleDatasetPrivacy()"
+              ng-model="dataset.private"
+              data-ng-disabled="!dataset.private">Public</button>
           	</div>
 	      </div>
 			</div>

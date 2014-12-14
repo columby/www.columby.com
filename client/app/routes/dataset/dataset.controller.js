@@ -323,22 +323,21 @@ angular.module('columbyApp')
      *
      * @param status
      */
-    $scope.togglePrivate = function(status){
-      if (status !== $scope.dataset.private) {
-        $scope.visibilityStatusMessage = 'updating';
-        console.log('setting private to', status);
-        var dataset = {
-          id: $scope.dataset.id,
-          private: status
-        };
-        DatasetSrv.update({id: dataset.id}, dataset, function(res){
-          $scope.visibilityStatusMessage = 'updated';
-          if (res.id){
-            $scope.dataset.visibilityStatus = status;
-            toaster.pop('success', null, 'Dataset visibility status updated to  ' + status);
-          }
-        });
-      }
+    $scope.toggleDatasetPrivacy = function(){
+      var newStatus = !$scope.dataset.private;
+      console.log('setting status to: ' + newStatus);
+      $scope.dialogMsg = 'Setting visibility status to ' + !newStatus;
+      var dataset = {
+        id: $scope.dataset.id,
+        private: newStatus
+      };
+      DatasetSrv.update({id: dataset.id}, dataset, function(res){
+        console.log(res);
+        if (res.id){
+          $scope.dataset.private = newStatus;
+          toaster.pop('success', null, 'Dataset visibility status updated to  ' + newStatus);
+        }
+      });
     };
 
     /**
@@ -409,8 +408,7 @@ angular.module('columbyApp')
      *
      */
     $scope.update = function(){
-      console.log('Updating dataset.');
-      if (!$scope.account.id) {
+      if (!$scope.dataset.id) {
         console.log('unpublished. ');
       } else {
         var changed = false;
@@ -419,7 +417,7 @@ angular.module('columbyApp')
           title: $scope.dataset.title,
           description: $scope.dataset.description
         };
-        if (dataset.title !== $scope.datasetUpdate.name) {
+        if (dataset.title !== $scope.datasetUpdate.title) {
           console.log('name changed');
           dataset.title = $scope.datasetUpdate.title;
           changed = true;

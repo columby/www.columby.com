@@ -21,7 +21,7 @@ angular.module('columbyApp')
 
      // TODO: Marcel, zoeken op dataset titel en beschrijving van een dataset, titel van een account, tags.
      // Resultaat gegroepeerdspot
-    $scope.search = function(){
+    $scope.doSearch = function(){
 
       if ($scope.search.searchTerm.length>2){
         $scope.search.message = 'Searching for: ' + $scope.search.searchTerm;
@@ -29,7 +29,7 @@ angular.module('columbyApp')
           text: $scope.search.searchTerm
         }).then(function (response) {
           console.log(response);
-          $scope.search.hits = response.hits.hits;
+          $scope.search.hits = response;
           $scope.search.message = null;
         }, function(err){
           $scope.search.message = 'Error: ' + err.data.message;
