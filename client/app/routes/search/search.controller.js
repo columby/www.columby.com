@@ -13,26 +13,20 @@ angular.module('columbyApp')
 
 
     /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
-    $scope.search = function(){
+    $scope.doSearch = function(){
+      $scope.search.hits = null;
       if ($scope.search.searchTerm.length>2){
+        $scope.search.message = 'Searching for: ' + $scope.search.searchTerm;
         SearchSrv.query({
-          index: 'datasets',
-          size: 50,
-          body: {
-            'query': {
-              'match': {
-                '_all': String($scope.search.term)
-              }
-            }
-          }
+          text: $scope.search.searchTerm
         }).then(function (response) {
-          $scope.search.hits = response.hits.hits;
-          $scope.search.message = 'Search result: ' + response.hits.hits.length + ' results';
+          $scope.search.hits = response;
+          $scope.search.message = null;
         }, function(err){
           $scope.search.message = 'Error: ' + err.data.message;
         });
       } else {
-        $scope.search.message = 'Type at least 3 characters. ';
+        $scope.search.message = 'Type at least 3 characters.';
       }
     };
 

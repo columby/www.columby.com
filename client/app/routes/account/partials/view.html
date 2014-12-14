@@ -61,7 +61,11 @@
       <div class="container">
         <div class="col-md-12">
 
-					<input type="text" ng-model="search.$" placeholder="Search this dataset list" class="searchbox" ng-show="datasets.rows.length>1">
+					<input class="searchbox"
+                 type="text"
+                 ng-model="search.$"
+                 placeholder="Search this dataset list"
+                 ng-show="datasets.rows.length>1">
 
           <h3>Datasets [{{datasets.count}}]</h3>
           <p ng-show="!datasets">No datasets for this user</p>
