@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferenceSrv, AuthSrv, toaster, ngDialog) {
+  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, DatasetReferenceSrv, AuthSrv, toaster, ngDialog) {
 
     /* --------- INITIALISATION ------------------------------------------------------------ */
     $scope.hostname = $location.protocol() + '://' + $location.host();
@@ -104,7 +104,7 @@ angular.module('columbyApp')
  *  Controller for a dataset Edit page
  *
  */
-  .controller('DatasetEditCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DatasetDistributionSrv, DatasetReferenceSrv, AuthSrv, toaster, Slug, ngDialog, $http, $upload, FileSrv,ngProgress) {
+  .controller('DatasetEditCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, DatasetReferenceSrv, AuthSrv, toaster, Slug, ngDialog, $http, $upload, FileSrv,ngProgress) {
 
     /*-------------------   INITIALISATION   ------------------------------------------------------------------*/
     $scope.hostname = $location.protocol() + '://' + $location.host();
@@ -325,17 +325,17 @@ angular.module('columbyApp')
      */
     $scope.toggleDatasetPrivacy = function(){
       var newStatus = !$scope.dataset.private;
-      console.log('setting status to: ' + newStatus);
       $scope.dialogMsg = 'Setting visibility status to ' + !newStatus;
       var dataset = {
         id: $scope.dataset.id,
         private: newStatus
       };
       DatasetSrv.update({id: dataset.id}, dataset, function(res){
-        console.log(res);
         if (res.id){
           $scope.dataset.private = newStatus;
           toaster.pop('success', null, 'Dataset visibility status updated to  ' + newStatus);
+        } else {
+          toaster.pop('error', null, 'There was an error updating the setting.');
         }
       });
     };
@@ -485,13 +485,12 @@ angular.module('columbyApp')
 
     /*** Distribution functions */
     $scope.deleteDistribution = function(index){
-      var id = $scope.dataset.id;
-      var distributionId = $scope.dataset.distributions[ index].id;
-
-      DatasetDistributionSrv.delete({id:id, distributionId:distributionId}, function(res){
+      DistributionSrv.delete({id: $scope.dataset.distributions[ index].id}, function(res){
         if (res.status === 'success') {
           $scope.dataset.distributions.splice(index,1);
           toaster.pop('success', 'Done', 'Distribution deleted.');
+        } else {
+          toaster.pop('danger', null, 'There was a problem deleting the distribution.');
         }
       });
     };

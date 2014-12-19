@@ -188,26 +188,36 @@ exports.createDistribution = function(req, res) {
   console.log(req.body);
   var id = req.params.id;
   var distribution = req.body.distribution;
-  console.log('d', distribution);
-  distribution._id = mongoose.Types.ObjectId();
-  Dataset
-    .findOne({_id: id})
-    .exec(function(err,dataset){
-      if (err) return res.json({status:'error', err:err});
-      if (!dataset) return res.json({error:'Failed to load dataset', err:err});
-      if (!dataset.distributions) {
-        dataset.distributions = [ ];
-      }
-      dataset.distributions.push(distribution);
-      dataset.save(function(err){
-        res.json({status:'success', distribution: distribution});
+
+  Dataset.find(id).success(function(dataset) {
+    if (!dataset){ return handleError( res, { error:'Failed to load dataset' } ); }
+    models.Distribution.create(distribution).success(function(distribution){
+      console.log('saved distribution', distribution);
+      dataset.addDistribution(distribution).success(function(dataset){
+        console.log('dataset', dataset);
+        res.json(dataset);
+      }).error(function(err){
+        return handleError(res,err);
+      }).error(function(err){
+        return handleError(res,err);
       });
-    })
-  ;
+    }).error(function(err){
+      return handleError(res,err);
+    });
+  }).error(function(err){
+    return handleError(res,err);
+  });
 };
 
 exports.updateDistribution = function(req, res, id) {
   console.log(req.params);
+  models.Distribution.find(req.params.did).success(function(distribution){
+    distribution.updateAttributes(req.params.distribution).success(function(distribution){
+      res.json(distribution.id);
+    })
+  }).error(function(err){
+    return handleError(res,err);
+  })
 };
 
 exports.destroyDistribution = function(req, res) {
@@ -268,7 +278,7 @@ exports.createReference = function(req, res) {
 };
 
 exports.updateReference = function(req, res, id) {
-  console.log(req.params);
+
 };
 
 // Delete a source attached to a dataset

@@ -107,7 +107,7 @@
 
           <!-- Meta -->
           <div class="meta" ng-show="dataset.id">
-						<span ng-show="dataset.private === true" class="label bg-primary">private</span>
+						<span ng-show="dataset.status === true" class="label bg-primary">private</span>
             <p>A dataset by
               <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a></span>,
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
@@ -174,16 +174,16 @@
               </div>
 
               <ul class="properties">
-                <li><label>Datasource type</label>File</li>
-                <li><label>License</label>cc0</li>
-                <li><label>Media type</label>application/csv</li>
-                <li><label>File size</label>20.34 MB</li>
+                <li><label>Datasource type</label>{{distribution.type}}</li>
+                <li><label>License</label>{{distribution.license}}</li>
+                <li><label>Media type</label>{{distribution.type}}</li>
+                <li ng-show="distribution.byteSize"><label>File size</label>{{distribution.byteSize | bytes}}</li>
                 <br/>
-                <li><label>Issued</label>20-10-2014</li>
-                <li><label>Modified</label>20-10-2014</li>
+                <li><label>Issued</label>{{distribution.created_at | date:'d MMMM yyyy'}}</li>
+                <li ng-show="distribution.created_at !== distribution.updated_at"><label>Modified</label>{{distribution.updated_at | date:'d MMMM yyyy'}}</li>
                 <br/>
-                <li><label>Sync</label>Every 24 hours</li>
-                <li><label>Last sync</label>2 hours ago</li>
+                <li ng-show="distribution.sync_period"><label>Sync</label>{{distribution.sync_period}}</li>
+                <li ng-show="distribution.sync_date"><label>Last sync</label>{{distribution.sync_date}}</li>
               </ul>
 
 
