@@ -17,16 +17,21 @@ module.exports = function(sequelize, DataTypes) {
         unique: true
       },
       title: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        defaultValue: 'Datasource'
       },
       type: {
         // external link, internal storage, internal api
         type: DataTypes.STRING
       },
-      private: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
+      status: {
+        type: DataTypes.ENUM,
+        values: ['draft','private','public'],
+        defaultValue: 'draft'
       },
+
+      // is valid for api
+
 
       // DCAT
       description     : { type: DataTypes.TEXT },
@@ -57,7 +62,9 @@ module.exports = function(sequelize, DataTypes) {
       classMethods: {
         associate: function(models) {
           Distribution.belongsTo(models.Dataset, { as: 'dataset' });
-          //Distribution.belongsTo(models.Account);
+          Distribution.belongsTo(models.File, {
+            as:'file'
+          });
         }
       }
     }

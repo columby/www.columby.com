@@ -1,6 +1,8 @@
 'use strict';
 
-var path = require('path');
+var path = require('path'),
+    Hashids = require('hashids'),
+    hashids = new Hashids('Salt', 8);
 
 module.exports = function(sequelize, DataTypes) {
 
@@ -26,6 +28,11 @@ module.exports = function(sequelize, DataTypes) {
    *
    */
   var File = sequelize.define('File', {
+
+      shortid: {
+        type: DataTypes.STRING,
+        unique: true
+      },
 
       type: {
         type: DataTypes.ENUM,
@@ -101,12 +108,16 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   File.afterCreate(function(model,fn) {
+
+    // update filename and shortid
+
     var filename = model.filename;
     var id = model.id;
     var ext = path.extname(filename);
     var basename = path.basename(filename, ext);
     model.updateAttributes({
-      filename: basename + '-' + id + ext
+      filename: basename + '-' + id + ext,
+      shortid: hashids.encode(parseInt(String(Date.now()) + String(model.id)))
     }).success(function () {
 
     }).error(function () {

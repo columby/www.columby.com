@@ -28,10 +28,18 @@ function getExpiryTime() {
     (_date.getDate() + 1) + 'T' + (_date.getHours() + 3) + ':' + '00:00.000Z';
 }
 
-function createS3Policy(file, callback) {
-  //console.log('file',file);
-  console.log('Creating policy with file: ', file);
-  var fileKey = 'accounts/' + file.account_id + '/images/' + file.id ;
+function createS3Policy(file) {
+
+  var fileKey;
+  if (file.type === 'datafile'){
+    fileKey = 'accounts/' + file.account_id + '/datafiles/' + file.id ;
+  } else if (file.type === 'image') {
+    fileKey = 'accounts/' + file.account_id + '/images/' + file.id ;
+  } else {
+    console.log('No valid file.type. ');
+    return null
+  }
+
   var s3Policy = {
     'expiration': getExpiryTime(),
     'conditions': [
@@ -322,13 +330,19 @@ exports.sign = function(req,res) {
       validTypes = [ 'image/png', 'image/jpg', 'image/jpeg' ];
       maxSize = 10000000; //10 mb
       break;
+    case 'datafile':
+      validTypes = ['text/csv'];
+      break;
   }
 
+  console.log('vlidtypes', validTypes);
+  console.log('type', file.type);
+  console.log(validTypes.indexOf(file.filetype));
   if (validTypes.indexOf(file.filetype) === -1) {
-    return res.status(400).json({status: 'error', err: 'File type ' + file.type + ' is not allowed. '});
+    return res.json({status: 'error', err: 'File type ' + file.filetype + ' is not allowed. '});
   } else if (file.filesize > maxSize){
     console.log('the file is valid');
-    return res.json({status: 'error', err: 'File size ' + file.size + ' is too big. ' + maxSize + ' allowed. '});
+    return res.json({status: 'error', err: 'File size ' + file.filesize + ' is too big. ' + maxSize + ' allowed. '});
   } else {
     // Create a File record in the database
     File.create(file).success(function(file){
