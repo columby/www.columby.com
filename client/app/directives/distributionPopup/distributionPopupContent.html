@@ -38,14 +38,38 @@
   <!-- Sync a url -->
   <div class="" ng-show="wizard.step === 3">
     <h3>Sync a url</h3>
-    <div class="col-xs-4">
-      <label>Enter your url</label>
-    </div>
-    <div class="col-xs-6">
-      <input class="form-control"
-             placeholder="http://yourlink.url"
-             ng-model="distribution.url"/>
-    </div>
+    <form class="form-horizontal" novalidate name="syncForm" role="form">
+      <div class="col-xs-3">
+        <label>Enter your url</label>
+      </div>
+      <div class="col-xs-6">
+        <input class="form-control"
+               type="url"
+               placeholder="http://yourlink.url"
+               ng-model="distribution.accessUrl"
+               name="url"/>
+      </div>
+      <div class="col-xs-3">
+        <button class="btn btn-default"
+                ng-disabled="syncForm.url.$invalid || syncForm.url.$pristine || distribution.validation.status==='inprogress'"
+                ng-click="validateLink()"><div class="" ng-show="distribution.validation.status==='inprogress'"><i class="fa fa-spin fa-spinner"></i></i></div> Validate</button>
+      </div>
+      <span ng-show="syncForm.url.$invalid && !syncForm.url.$pristine">Please provide a valid url</span>
+      <div class="col-xs-12" ng-show="distribution.validation.status==='done'">
+        <div class="invalid-source bg-warning"
+          ng-show="distribution.validation.result.valid===false">
+          <p>You have entered an URL that we can't process. You can still add it as a source, but you won't be able to make API.</p>
+        </div>
+        <div class="valid-source bg-success"
+             ng-show="distribution.validation.result.valid===true">
+          <p>You have entered a valid URL! Go next and we make API. </p>
+        </div>
+        <button class="btn btn-default"
+                ng-click="submitLink()"
+          >Next</button>
+      </div>
+      </div>
+    </form>
   </div>
 
   <!-- Add metadata -->
@@ -60,11 +84,11 @@
         <p><strong>issued:</strong> {{distribution.created_at}}<br />
         <p><strong>modified:</strong> {{distribution.updated_at}}<br />
         <p><strong>rights:</strong><br />
-        <p ng-show="distribution.type==='sync'"><strong>accessUrl:</strong><br />
+        <p ng-show="distribution.type==='url'"><strong>accessUrl:</strong> {{distribution.accessUrl}}<br />
         <p ng-show="distribution.type==='file'"><strong>downloadUrl:</strong> /file/{{distribution.id}}<br />
-        <p><strong>mediaType:</strong> {{distribution.filetype}}<br/>
-        <p><strong>format:</strong> { type: DataTypes.STRING }<br />
-        <p><strong>byteSize:</strong> {{distribution.filesize}}</p>
+        <p><strong>mediaType:</strong> {{distribution.mediaType}}<br/>
+        <p><strong>format:</strong> {{ distribution.format}} <br />
+        <p ng-show="distribution.type==='file'"><strong>byteSize:</strong> {{distribution.filesize}}</p>
       </div>
 
       <div class="form-group">
@@ -87,7 +111,7 @@
           <textarea class="form-control"
             rows="5"
             placeholder="Please add your description"
-            model="distribution.description"></textarea>
+            ng-model="distribution.description"></textarea>
         </div>
       </div>
 
@@ -126,6 +150,7 @@
       </form>
 
   </div>
-  <!-- File Upload -->
+
+
   <!-- URL reference -->
 </div>

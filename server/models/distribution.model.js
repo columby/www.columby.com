@@ -21,8 +21,9 @@ module.exports = function(sequelize, DataTypes) {
         defaultValue: 'Datasource'
       },
       type: {
-        // external link, internal storage, internal api
-        type: DataTypes.STRING
+        type: DataTypes.ENUM,
+        values: ['localFile', 'remoteService', 'remoteFile'],
+        comment: 'The type of source: uploaded file, a remote service for synchronization, a remote file for processing. '
       },
       status: {
         type: DataTypes.ENUM,
@@ -31,7 +32,11 @@ module.exports = function(sequelize, DataTypes) {
       },
 
       // is valid for api
-
+      valid: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        comment: 'Flag for a valid source for processing.'
+      },
 
       // DCAT
       description     : { type: DataTypes.TEXT },
@@ -45,14 +50,6 @@ module.exports = function(sequelize, DataTypes) {
       format          : { type: DataTypes.STRING },
       byteSize        : { type: DataTypes.INTEGER },
 
-      // sync status for external api syncs
-      syncPeriod: {
-        type: DataTypes.STRING
-        //type: DataTypes.ENUM,
-        //values: [ 'Do not sync', 'Yearly', 'Quarterly', 'Monthly', 'Weekly', 'Daily' ]
-      },
-      lastSync        : { type: DataTypes.DATE },
-
       created_at:{
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
@@ -62,9 +59,7 @@ module.exports = function(sequelize, DataTypes) {
       classMethods: {
         associate: function(models) {
           Distribution.belongsTo(models.Dataset, { as: 'dataset' });
-          Distribution.belongsTo(models.File, {
-            as:'file'
-          });
+          Distribution.belongsTo(models.File   , { as: 'file' });
         }
       }
     }

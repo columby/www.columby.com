@@ -104,7 +104,7 @@ angular.module('columbyApp')
  *  Controller for a dataset Edit page
  *
  */
-  .controller('DatasetEditCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, DatasetReferenceSrv, AuthSrv, toaster, Slug, ngDialog, $http, $upload, FileSrv,ngProgress) {
+  .controller('DatasetEditCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, toaster, Slug, ngDialog, $http, $upload, FileSrv,ngProgress, $timeout) {
 
     /*-------------------   INITIALISATION   ------------------------------------------------------------------*/
     $scope.hostname = $location.protocol() + '://' + $location.host();
@@ -112,6 +112,9 @@ angular.module('columbyApp')
     $scope.editMode = true;
     $window.document.title = 'columby.com';
 
+    $scope.status = {
+      isopen: false
+    };
 
     /*-------------------   FUNCTIONS   -----------------------------------------------------------------------*/
     function getDataset(){
@@ -461,6 +464,10 @@ angular.module('columbyApp')
     };
 
 
+    $scope.confirmDeleteReference = function(index){
+      $scope.dataset.references[ index].confirmDelete = true;
+    };
+
     /**
      *
      * Delete an attached reference
@@ -483,11 +490,29 @@ angular.module('columbyApp')
 
     };
 
-    /*** Distribution functions */
-    $scope.deleteDistribution = function(index){
-      DistributionSrv.delete({id: $scope.dataset.distributions[ index].id}, function(res){
+    /**
+     *
+     * Confirm the deletion of a distribution
+     *
+     * @param index
+     */
+    $scope.confirmDeleteDistribution = function(index){
+      $scope.dataset.distributions[ index].confirmDelete = true;
+      // turn the confirmation off automatically
+      $timeout(function(){$scope.dataset.distributions[ index].confirmDelete = false}, 5000);
+    };
+
+    /**
+     *
+     * Delete a distriubtion from the server
+     *
+     * @param index
+     */
+    $scope.deleteDistribution = function(distribution){
+      var idx = $scope.dataset.distributions.indexOf(distribution);
+      DistributionSrv.delete({id: $scope.dataset.distributions[ idx].id}, function(res){
         if (res.status === 'success') {
-          $scope.dataset.distributions.splice(index,1);
+          $scope.dataset.distributions.splice(idx,1);
           toaster.pop('success', 'Done', 'Distribution deleted.');
         } else {
           toaster.pop('danger', null, 'There was a problem deleting the distribution.');
@@ -495,6 +520,85 @@ angular.module('columbyApp')
       });
     };
 
+    /**
+     *
+     * Handle Primary Source Initialization
+     *
+     * @param $files
+     */
+    $scope.addSource = function(){
+      console.log('yyyy');
+
+    };
+
+    /**
+     *
+     * Handle the request to convert a distribution to a primary source.
+     *
+     * @param dist
+     */
+    $scope.convertPrimary = function(dist){
+      var idx = $scope.dataset.distributions.indexOf(dist);
+      $scope.newPrimary = {
+        dataset_id: $scope.dataset.id,
+        distribution_id: $scope.dataset.distributions[ idx].id,
+        syncPeriod: null
+      };
+      console.log('newPrimary: ', $scope.newPrimary);
+      // Open the dialog
+      ngDialog.openConfirm({
+        template: 'app/routes/dataset/partials/addPrimarySource.html',
+        controller: 'DatasetEditCtrl',
+        scope: $scope
+      }).then(function(value){
+        PrimaryService.save(value, function(result){
+          if (result.id){
+            ngDialog.closeAll();
+            toaster.pop('success',null,'The primary source was created successfully');
+            $scope.dataset.primary = result;
+
+          } else {
+            toaster.pop('warning',null,'There was an error creating the primary source.');
+          }
+        });
+      },function(reject){
+        console.log(reject);
+      });
+    };
+
+    /**
+     * Create a new primary source
+     */
+    $scope.createPrimary = function(){
+      var primary = {
+        syncperiod: $scope.newPrimary.syncPeriod,
+        dataset_id: $scope.newPrimary.dataset_id,
+        distribution_id: $scope.newPrimary.distribution_id
+      };
+      console.log('new Primary: ', primary);
+
+    };
+
+    /**
+     * Delete a primary source
+     */
+    $scope.deletePrimary = function(){
+      if ($scope.dataset.primary.id){
+        PrimaryService.delete({id: $scope.dataset.primary.id}, function(result){
+          console.log(result);
+          if (result.status === 'success'){
+            $scope.dataset.primary = null;
+            toaster.pop('success',null,'The primary source was deleted successfully');
+          } else {
+            toaster.pop('warning',null,'There was an error deleting the primary source.');
+          }
+        })
+      }
+    }
+
+    $scope.closeDialog = function(){
+      ngDialog.closeAll();
+    };
 
     $scope.updateHeaderImage = function($files) {
       $scope.upload=[];

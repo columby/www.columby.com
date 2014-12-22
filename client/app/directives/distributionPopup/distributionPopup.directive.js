@@ -139,7 +139,7 @@ angular.module('columbyApp')
 
         /** ---------- SCOPE FUNCTIONS ------------------------------------------------ **/
         $scope.initUpload = function(){
-          $scope.distribution.type = 'file';
+          $scope.distribution.type = 'Download';
           $scope.wizard.step = 2;
         };
 
@@ -194,61 +194,49 @@ angular.module('columbyApp')
         };
 
         $scope.initSync = function(){
-          $scope.distribution.type = 'sync';
+          $scope.distribution.type = 'remoteService';
           $scope.wizard.step = 3;
         };
 
 
 
+        $scope.validateLink = function(){
+          // validate if we can read the source
+          $scope.distribution.validation = {
+            status: 'inprogress',
+            valid: false,
+            result: null
+          };
 
+          DistributionSrv.validateLink({url:$scope.distribution.accessUrl}, function(response){
+            $scope.distribution.validation = {
+              status: 'done',
+              result: response
+            };
+            $scope.distribution.valid = response.valid;
+            // TODO: what mediatype for a link?
+            $scope.distribution.mediaType = 'link';
+            // TODO: Wat format for a link?
+            $scope.distribution.format = 'link';
 
-
-
-        $scope.checkLink = function(){
-          // validate
-          $scope.newDistribution.validationMessage = 'The link was validated!';
-          $scope.newDistribution.distributionType = 'link';
-          $scope.newDistribution.valid = true;
+          });
         };
 
-        $scope.createDistribution = function() {
-          //console.log('Creating ditribution');
-          // validate link
-          if ($scope.newDistribution){
-            if ($scope.newDistribution.valid) {
-              // add link to model
-              if (!$scope.dataset.hasOwnProperty('distributions')) {
-                $scope.dataset.distributions = [];
-              }
+        $scope.submitLink = function(){
+          console.log('submitting link.');
 
-              var distribution = {
-                // Columby Stuff
-                uploader          : $rootScope.user.id,
-                distributionType  : $scope.newDistribution.distributionType,
-                publicationStatus : 'public',
-                // DCAT stuff
-                accessUrl         : $scope.newDistribution.link
-              };
-              //console.log('attaching distribution', distribution);
-
-              DatasetDistributionSrv.save({
-                  id:$scope.dataset.id,
-                  distribution: distribution}, function(res){
-                  //console.log('res', res);
-                  if (res.id){
-                    $scope.dataset.distributions.push(res.distribution);
-                    toaster.pop('success', 'Updated', 'New dataset added.');
-                    $scope.distribution = res;
-                  } else {
-                    toaster.pop('danger', 'Error', 'Something went wrong.');
-                  }
-                }
-              );
+          // Update the distribution (save the url and validity
+          DistributionSrv.update($scope.distribution, function(response){
+            console.log('submitlink respononse, ', response);
+            if (response.id){
+              toaster.pop('success',null,'Distribution updated.');
+              // Go to metadata screen
+              $scope.wizard.step = 4;
             }
-          } else {
-            toaster.pop('danger', 'Error', 'No new distribution attached');
-          }
+          });
         };
+
+
 
         //initNew
         $scope.initNewDistribution = function() {

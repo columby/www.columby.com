@@ -20,6 +20,13 @@ angular.module('columbyApp')
        *
        * Request a signed request for uploading to S3 from the server.
        *
+       * @params: Object: {
+       *  filetype,
+       *  size,
+       *  filename,
+       *  accountId
+       * }
+       *
        **/
       signS3: function(params) {
         var promise = $http({

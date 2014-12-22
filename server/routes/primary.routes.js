@@ -1,7 +1,7 @@
 'use strict';
 
 var express = require('express'),
-  controller = require('../controllers/distribution.controller'),
+  controller = require('../controllers/primary.controller'),
   auth = require('../controllers/auth.controller'),
   router = express.Router();
 
@@ -9,7 +9,7 @@ var express = require('express'),
 module.exports = function(app){
 
   /**
-   * Distribution Routes
+   * Primary Routes
    *
    **/
   router.get('/',
@@ -18,10 +18,6 @@ module.exports = function(app){
   router.post('/',
     auth.ensureAuthenticated,
     controller.create);
-
-  router.post('/validate-link',
-    auth.ensureAuthenticated,
-    controller.validateLink);
 
   router.get('/:id',
     controller.show);
@@ -35,6 +31,6 @@ module.exports = function(app){
     controller.destroy);
 
 
-  app.use('/api/v2/distribution',router);
+  app.use('/api/v2/primary', router);
 
 };

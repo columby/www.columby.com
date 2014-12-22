@@ -96,6 +96,7 @@ exports.show = function(req, res) {
     where: { shortid: req.params.id },
     include: [
       { model: models.Distribution, as: 'distributions' },
+      { model: models.Primary, as: 'primary' },
       { model: File, as: 'headerImg'},
       { model: Account, as:'account', include: [
         { model: File, as: 'avatar'},
@@ -179,7 +180,7 @@ exports.listDistributions = function(req, res) {
   console.log(id);
 };
 
-exports.getDistribution = function(req,res,id){
+exports.getDistribution = function(req,res){
   console.log(req.params);
 };
 
@@ -246,7 +247,7 @@ exports.listReferences = function(req, res) {
   console.log(id);
 };
 
-exports.getReference = function(req,res,id){
+exports.getReference = function(req,res){
   console.log(req.params);
 };
 
@@ -277,7 +278,7 @@ exports.createReference = function(req, res) {
   });
 };
 
-exports.updateReference = function(req, res, id) {
+exports.updateReference = function(req, res) {
 
 };
 

@@ -14,20 +14,6 @@ angular.module('columbyApp')
     );
   })
 
-  .service('DatasetDistributionSrv', function($resource) {
-
-    return $resource('api/v2/dataset/:id/distribution/:did', {
-        id: '@id',
-        did: '@did',
-        distribution: '@distribution'
-    }, {
-      update: {
-        method: 'PUT'
-      }
-    }
-    );
-  })
-
   .service('DatasetReferenceSrv', function($resource) {
 
     return $resource('api/v2/dataset/:id/reference/:rid', {

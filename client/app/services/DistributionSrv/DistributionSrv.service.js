@@ -9,6 +9,10 @@ angular.module('columbyApp')
       }, {
         update: {
           method: 'PUT'
+        },
+        validateLink: {
+          method: 'POST',
+          url: 'api/v2/distribution/validate-link'
         }
       }
     );

@@ -71,6 +71,10 @@ module.exports = function(sequelize, DataTypes) {
           Dataset.hasMany(models.Reference, {
             as:'references'
           });
+
+          Dataset.hasOne(models.Primary, {
+            as: 'primary'
+          });
         }
       }
     }

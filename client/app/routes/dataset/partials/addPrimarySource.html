@@ -1,0 +1,37 @@
+<div class="add-primary-source col-xs-offset-3 col-xs-6">
+  <h1>Add primarySource</h1>
+
+  <div class="" ng-show="dataset.primary.id">
+    <p>This dataset already has a primary source. Please delete this source first</p>
+    <a href="" ng-click="closeDialog()">cancel</a>
+  </div>
+
+  <div class="" ng-hide="dataset.primary.id">
+    <!-- file -->
+    <div ng-show="newPrimary.type==='localFile'">
+      From the file distribution: {{newPrimary.title}}
+    </div>
+
+    <!-- sync -->
+    <div ng-show="newPrimary.type==='remoteService'">
+      From the url distribution: {{newPrimary.title}} with source {{newPrimary.accessUrl}}.
+      <h3>Synchronisation</h3>
+      <p>How often would you like to sync the data? </p>
+      <div class="btn-group">
+        <label class="btn btn-default" ng-model="newPrimary.syncPeriod" btn-radio="0">Do not sync</label>
+        <label class="btn btn-default" ng-model="newPrimary.syncPeriod" btn-radio="1">Yearly</label>
+        <label class="btn btn-default" ng-model="newPrimary.syncPeriod" btn-radio="2">Quarterly</label>
+        <label class="btn btn-default" ng-model="newPrimary.syncPeriod" btn-radio="3">Monthly</label>
+        <label class="btn btn-default" ng-model="newPrimary.syncPeriod" btn-radio="4">Weekly</label>
+      </div>
+    </div>
+
+    <h3>Create distribution</h3>
+    <button class="btn btn-success" ng-click="confirm(newPrimary)">Create primary source</button>
+
+    <a href="" ng-click="closeThisDialog()">cancel</a>
+  </div>
+</div>
+
+
+<div class="col-md-12"><pre>{{newPrimary}}</pre></div>
