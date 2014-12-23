@@ -13,7 +13,8 @@ angular.module('columbyApp', [
   'angularFileUpload',
   'textAngular',
   'td.easySocialShare',
-  'ngProgress'
+  'ngProgress',
+  'ngTagsInput'
 ])
 
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {

@@ -59,9 +59,6 @@ module.exports = function(sequelize, DataTypes) {
             as:'distributions'
           });
 
-          // A dataset can have multiple tags
-          Dataset.hasMany(models.Tag);
-
           //
           Dataset.belongsTo(models.Account, {
             as:'account'

@@ -97,6 +97,7 @@ exports.show = function(req, res) {
     include: [
       { model: models.Distribution, as: 'distributions' },
       { model: models.Primary, as: 'primary' },
+      { model: models.Tag, as:'tags' },
       { model: File, as: 'headerImg'},
       { model: Account, as:'account', include: [
         { model: File, as: 'avatar'},
@@ -110,6 +111,7 @@ exports.show = function(req, res) {
     console.log(err);
   });
 };
+
 
 /**
  *
@@ -172,6 +174,42 @@ exports.destroy = function(req, res) {
   });
 };
 
+exports.addTag = function(req,res){
+  Dataset.find(req.params.id).success(function(dataset) {
+    if (dataset) {
+      dataset.addTag(req.body.tagId).success(function (dataset) {
+        return res.json(dataset);
+      }).error(function (err) {
+        return res.json(res, err);
+      });
+    } else {
+      return res.json(dataset);
+    }
+  }).error(function(err){
+    return handleError(res,err);
+  })
+};
+
+exports.removeTag = function(req,res){
+  console.log(req.body);
+  console.log(req.params);
+  console.log(req.query);
+  Dataset.find(req.params.id).success(function(dataset) {
+    if (dataset) {
+      console.log('dataset found. ', dataset.id);
+      dataset.removeTag(req.body.tagId).success(function() {
+        console.log('Tag removed. ');
+        return res.json({status:'success'});
+      }).error(function (err) {
+        return res.json(res, err);
+      });
+    } else {
+      return res.json(dataset);
+    }
+  }).error(function(err){
+    return handleError(res,err);
+  })
+};
 
 /*-------------- DISTRIBUTIONS ---------------------------------------------------------------*/
 exports.listDistributions = function(req, res) {

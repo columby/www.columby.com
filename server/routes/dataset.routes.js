@@ -77,6 +77,13 @@ module.exports = function(app){
     auth.ensureAuthenticated,
     controller.destroy);
 
+  router.post('/:id/addTag',
+    auth.ensureAuthenticated,
+    controller.addTag);
+  router.post('/:id/removeTag',
+    auth.ensureAuthenticated,
+    controller.removeTag);
+
   /**
    * Distribution Routes
    *

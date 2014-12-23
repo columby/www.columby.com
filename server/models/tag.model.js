@@ -1,7 +1,12 @@
 'use strict';
 
-var Hashids = require('hashids'),
-  hashids = new Hashids('Salt', 8);
+
+/**
+ *
+ * Tags
+ *
+ *
+ */
 
 module.exports = function(sequelize, DataTypes) {
 
@@ -12,14 +17,12 @@ module.exports = function(sequelize, DataTypes) {
    */
   var Tag = sequelize.define('Tag',
     {
-      shortid: {
-        type: DataTypes.STRING,
+      text: {
+        type: DataTypes.STRING(32),
+        allowNull: false,
         unique: true
       },
-      title: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
+
       created_at:{
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
@@ -28,22 +31,14 @@ module.exports = function(sequelize, DataTypes) {
     },{
       classMethods: {
         associate: function(models) {
-          Tag.hasMany(models.Dataset);
+          Tag.hasMany(models.Dataset,{as:'tags'});
+          models.Dataset.hasMany(Tag,{as:'tags'});
+
+
         }
       }
     }
   );
-
-  /**
-   *
-   * Set shortid after creating a new account
-   *
-   */
-  Tag.afterCreate( function(model) {
-    model.updateAttributes({
-      shortid: hashids.encode(parseInt(String(Date.now()) + String(model.id)))
-    }).success(function(){}).error(function(){});
-  });
 
   return Tag;
 };

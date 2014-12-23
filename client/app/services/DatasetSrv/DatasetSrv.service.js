@@ -9,7 +9,15 @@ angular.module('columbyApp')
       }, {
         query: { method: 'GET', isArray: false, responseType: 'json' },
         index: { method: 'GET', isArray: false, responseType: 'json' },
-        update: { method: 'PUT' }
+        update: { method: 'PUT' },
+        addTag: {
+          method: 'POST',
+          url: 'api/v2/dataset/:id/addTag'
+        },
+        removeTag: {
+          method: 'POST',
+          url: 'api/v2/dataset/:id/removeTag'
+        }
       }
     );
   })
