@@ -104,7 +104,7 @@ angular.module('columbyApp')
  *  Controller for a dataset Edit page
  *
  */
-  .controller('DatasetEditCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, toaster, Slug, ngDialog, $http, $upload, FileSrv,ngProgress, $timeout) {
+  .controller('DatasetEditCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, TagService, toaster, Slug, ngDialog, $http, $upload, FileSrv,ngProgress, $timeout) {
 
     /*-------------------   INITIALISATION   ------------------------------------------------------------------*/
     $scope.hostname = $location.protocol() + '://' + $location.host();
@@ -705,6 +705,29 @@ angular.module('columbyApp')
           console.log('Error message', data.err);
           console.log(status);
         });
+    };
+
+
+    $scope.loadTags = function(query) {
+      //console.log('querying, ', query);
+      //var r=TagService.query(query);
+      //console.log(r);
+    };
+    $scope.addTag = function(tag){
+      console.log('adding tag',tag);
+      TagService.save(tag, function(result){
+        tag.id=result.id;
+        DatasetSrv.addTag({id:$scope.dataset.id, tagId:result.id}, function(result){
+          console.log('dtaset addtag result: ', result);
+        });
+      });
+
+    };
+    $scope.removeTag = function(tag){
+      console.log('removind tag, ', tag);
+      DatasetSrv.removeTag({id:$scope.dataset.id, tagId:tag.id},function(result){
+        console.log('dataset remove result: ', result);
+      })
     };
 
 

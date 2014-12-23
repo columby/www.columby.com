@@ -31,7 +31,7 @@
               <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a>,
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
             </p>
-            <p ng-show="dataset.tags.length>0"><strong>Tags: </strong><span ng-repeat="tag in dataset.tags">{{tag}}</span></p>
+            <p ng-show="dataset.tags.length>0"><strong>Tags: </strong><span ng-repeat="tag in dataset.tags">{{tag.text}}</span></p>
           </div>
 
           <div class="avatar">
@@ -72,6 +72,34 @@
         <div class="col-md-12">
 
           <h3>Sources</h3>
+
+          <!-- Primary source (Columby API) -->
+          <h2 class="datasource-title">Primary source</h2>
+          <ul>
+            <li>
+              <div ng-hide="dataset.primary.id">
+                <p>This dataset is missing a primary source!</p>
+              </div>
+              <div ng-show="dataset.primary.id">
+
+                <h4 class="datasource-title">Primary source</h4>
+                <div class="download datasource-icon">
+                  <a href="download"><i class="fa fa-download"></i></a>
+                </div>
+                <div class="link datasource-icon">
+                  <a href="{{distribution.accessUrl}}"><i class="fa fa-external-link"></i></a>
+                </div>
+
+                <ul class="properties">
+                  <li><label>Datasource status</label>{{dataset.primary.status}}</li>
+                  <li><label>Issued</label>{{dataset.primary.created_at | date:'d MMMM yyyy'}}</li>
+                  <li ng-show="dataset.primary.created_at !== dataset.primary.updated_at"><label>Modified</label>{{dataset.primary.updated_at | date:'d MMMM yyyy'}}</li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+          <hr/>
+
           <ul ng-hide="!dataset.distributions || dataset.distributions.length===0">
             <li ng-repeat="distribution in dataset.distributions">
               <h4 class="datasource-title">{{distribution.title}}</h4>

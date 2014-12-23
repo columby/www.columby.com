@@ -1,40 +1,48 @@
 angular.module('columbyApp')
 
-  .directive('confirmClick', function($timeout) {
+  .directive('confirmDelete', function($timeout) {
 
     return {
-      scope: {},
+      replace: true,
+      scope: {
+        onConfirm: '&'
+      },
+      templateUrl: 'app/directives/confirmDelete/deleteConfirmation.html',
 
       link: function(scope,element,attrs){
-        var actionText = element.text();
-        var promise;
-
-        scope.confirmAction = false;
-
-        scope.$watch('confirmingAction', function (newVal, oldVal) {
-          console.log('confirmAction', newVal, oldVal);
+        element.bind('mouseenter', function() {
+          scope.hover=true;
         });
+        element.parent().bind('mouseleave', function() {
+          scope.$apply(function() {
+            scope.hover=false;
+            return scope.isDeleting = false;
+          });
+        });
+      },
 
-        return element.bind('click', function () {
-          console.log('click');
-          if (!scope.confirmingAction) {
-            scope.$apply(function () {
-              return scope.confirmingAction = true;
-            });
-            return promise = $timeout(function () {
-              return scope.confirmingAction = false;
-            }, 1500);
-          } else {
-            if (hasConfirmed) {
-              return;
+      controller: function($scope, $timeout){
+
+        $scope.isDeleting = false;
+
+        $scope.startDelete = function() {
+          $scope.isDeleting = true;
+          console.log($scope.hover);
+          // Set a timeout
+          $timeout(function(){
+            if ($scope.hover === false) {
+              $scope.isDeleting = false;
             }
-            hasConfirmed = true;
-            $timeout.cancel(promise);
-            element.css({ opacity: '0.5' });
-            element.removeClass('confirming');
-            return scope.$parent.$apply(attrs.confirmClick);
-          }
-        });
+          }, 1500);
+        };
+
+        $scope.cancel = function() {
+          $scope.isDeleting = false;
+        };
+
+        $scope.confirm = function() {
+          $scope.onConfirm();
+        };
       }
     }
   });
