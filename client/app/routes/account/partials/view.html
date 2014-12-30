@@ -106,8 +106,38 @@
       </div>
     </div>
 
+    <!-- General account files -->
+    <div class="files-wrapper">
+      <div class="container">
+        <div class="col-md-12">
+          <h3>Account Files</h3>
+          <p>A list of files connected to your account. For example to be used for general organisation policy files. </p>
 
-
-
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>id</th>
+              <th>shortid</th>
+              <th>download</th>
+              <th>type</th>
+              <th>size</th>
+              <th>created</th>
+              <th>updated</th>
+            </tr>
+            </thead>
+            <tr ng-repeat="file in account.files">
+              <td>{{file.id}}</td>
+              <td>{{file.shortid}}</td>
+              <td><a href="{{file.url}}" target="_blank">{{file.filename}}</a></td>
+              <td>{{file.filetype}}</td>
+              <td>{{file.size | bytes}}</td>
+              <td>{{file.created_at | date:'d MMMM yyyy'}}</td>
+              <td>{{file.updated_at | date:'d MMMM yyyy'}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
 </section>

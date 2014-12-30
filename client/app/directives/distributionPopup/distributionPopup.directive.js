@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .directive('distributionPopup', function($rootScope, EmbedlySrv, DistributionSrv, ngDialog, FileSrv, toaster, ngProgress){
+  .directive('distributionPopup', function($rootScope, EmbedlySrv, DistributionSrv, ngDialog, FileService, toaster, ngProgress){
     return {
       templateUrl: 'app/directives/distributionPopup/distributionPopup.html',
       restrict: 'EA',
@@ -31,7 +31,7 @@ angular.module('columbyApp')
          * @param params
          */
         function finishUpload(params){
-          FileSrv.finishS3(params).then(function(res){
+          FileService.finishS3(params).then(function(res){
             console.log('res', res);
             if (res.id) {
               $scope.upload.file = null;
@@ -88,7 +88,7 @@ angular.module('columbyApp')
           xhr.addEventListener('load', function(evt){
             ngProgress.complete();
             $scope.distribution.uploadProgress = 100;
-            var parsedData = FileSrv.handleS3Response(evt.target.response);
+            var parsedData = FileService.handleS3Response(evt.target.response);
             var p = {
               fid: params.file.id,
               url: parsedData.location
@@ -157,7 +157,7 @@ angular.module('columbyApp')
               accountId: $scope.dataset.account.id
             };
 
-            FileSrv.signS3(f).then(function(response){
+            FileService.signS3(f).then(function(response){
               if (response.credentials){
                 $scope.upload.s3response = response;
                 uploadFile();

@@ -87,7 +87,7 @@ module.exports = function(sequelize, DataTypes) {
           // Each file should be connected to 1 publication account
           File.belongsTo(models.Account, {
             constraints: false,
-            as: 'Account'
+            as: 'account'
           });
         }
       }

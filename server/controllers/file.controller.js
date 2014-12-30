@@ -29,22 +29,25 @@ function getExpiryTime() {
 }
 
 function createS3Policy(file) {
+  console.log('Creating policy file. ', file);
+
+  if (!file.account_id){
+    console.log('No account id found. ');
+    return null;
+  }
 
   var fileKey;
   if (file.type === 'datafile'){
-    fileKey = 'accounts/' + file.account_id + '/datafiles/' + file.id ;
+    fileKey = 'accounts/' + file.account_id + '/datafiles/' + file.filename;
   } else if (file.type === 'image') {
-    fileKey = 'accounts/' + file.account_id + '/images/' + file.id ;
+    fileKey = 'accounts/' + file.account_id + '/images/' + file.filename;
   } else {
-    console.log('No valid file.type. ');
-    return null
+    fileKey = 'accounts/' + file.account_id + '/files/' + file.filename;
   }
 
   var s3Policy = {
     'expiration': getExpiryTime(),
     'conditions': [
-      //['starts-with', '$key', file.owner+'/'],
-      //['starts-with', '$key', file.account_id + '/' + file.filename],
       ['eq', '$key', fileKey ],
       {'bucket': config.aws.bucket},
       {'acl': 'public-read'},
@@ -314,56 +317,69 @@ exports.sign = function(req,res) {
 
   // Handle the supplied query parameters
   var file = {
-    type      : req.query.type,
-    filetype  : req.query.filetype,
-    size      : req.query.filesize,
-    filename  : req.query.filename,
-    accountId: req.query.accountId
+    type: req.query.type,
+    filetype: req.query.filetype,
+    size: req.query.filesize,
+    filename: req.query.filename,
+    account_id: req.query.accountId
   };
   console.log('Processing file: ', file);
 
   // Check file type validity
-  var validTypes = [];
-  var maxSize =0;
-  switch (req.query.type){
+  var validFileType = false;
+  var validFileSize = false;
+  var maxSize = 0;
+  switch (req.query.type) {
     case 'image':
-      validTypes = [ 'image/png', 'image/jpg', 'image/jpeg' ];
+      var validTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+      if (validTypes.indexOf(file.filetype) !== -1) {
+        validFileType = true;
+      }
       maxSize = 10000000; //10 mb
       break;
     case 'datafile':
       validTypes = ['text/csv'];
+      if (validTypes.indexOf(file.filetype) !== -1) {
+        validFileType = true;
+      }
+      break;
+    default:
+      validFileType = true;
       break;
   }
 
-  console.log('vlidtypes', validTypes);
-  console.log('type', file.type);
-  console.log(validTypes.indexOf(file.filetype));
-  if (validTypes.indexOf(file.filetype) === -1) {
+  if (!validFileType) {
     return res.json({status: 'error', err: 'File type ' + file.filetype + ' is not allowed. '});
-  } else if (file.filesize > maxSize){
-    console.log('the file is valid');
-    return res.json({status: 'error', err: 'File size ' + file.filesize + ' is too big. ' + maxSize + ' allowed. '});
-  } else {
-    // Create a File record in the database
-    File.create(file).success(function(file){
-      // Add the owner of the file (publication account)
-      file.setAccount(req.query.accountId,function(err){
-        if (err) { handleError(res, err); }
-        else { console.log('Account attached to file.'); }
-      });
-
-      var file = file.dataValues;
-      console.log('Saved file: ', file);
-      var credentials = createS3Policy(file);
-      // Send back the policy
-      return res.json({
-        file: file,
-        credentials: credentials
-      });
-    }).error(function(error){
-      handleError(res,error);
-    });
   }
+  // TODO: check account file size
+  if (!validFileSize) {
+    //return res.json({status: 'error', err: 'File size ' + file.filesize + ' is too big. ' + maxSize + ' allowed. '});
+  }
+
+  // Create a File record in the database
+  File.create(file).success(function (file) {
+    console.log('File created: ', file.dataValues);
+    // Add the owner of the file (publication account)
+    file.setAccount(req.query.accountId).success(function (owner) {
+      console.log('owner, ', owner.dataValues);
+      var credentials = createS3Policy(file.dataValues);
+      console.log('credentials', credentials);
+      if (!credentials) {
+        return handleError(res, 'Error creating policy file.');
+      } else {
+        // Send back the policy
+        return res.json({
+          file: file,
+          credentials: credentials
+        });
+      }
+    }).error(function (err) {
+      // delete the file again
+      return handleError(res, err);
+    });
+  }).error(function (error) {
+    return handleError(res, error);
+  });
 };
 
 /**

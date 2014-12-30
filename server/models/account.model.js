@@ -73,12 +73,18 @@ module.exports = function(sequelize, DataTypes) {
             as: 'headerImg'
           });
 
-          //Account.hasOne(models.File,{
-          //  as: 'lala',
-          //  foreignKey: 'some'
-          //});
+          // An account can have files attached
+          Account.hasMany(models.File, {
+            through: 'AccountFiles',
+            as: 'files'
+          });
+          models.File.hasMany(Account, {
+            through: 'AccountFiles',
+            as: 'accountFiles'
+          });
 
-          // An account can have multiple accounts with roles
+
+          // A user can have multiple accounts with roles
           Account.hasMany(models.User, {
             through: models.AccountsUsers
           });

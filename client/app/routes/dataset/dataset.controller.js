@@ -104,7 +104,7 @@ angular.module('columbyApp')
  *  Controller for a dataset Edit page
  *
  */
-  .controller('DatasetEditCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, TagService, toaster, Slug, ngDialog, $http, $upload, FileSrv,ngProgress, $timeout) {
+  .controller('DatasetEditCtrl', function($log,$window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, TagService, toaster, Slug, ngDialog, $http, $upload, FileService,ngProgress, $timeout) {
 
     /*-------------------   INITIALISATION   ------------------------------------------------------------------*/
     $scope.hostname = $location.protocol() + '://' + $location.host();
@@ -173,7 +173,7 @@ angular.module('columbyApp')
      * @param params
      */
     function finishUpload(params){
-      FileSrv.finishS3(params).then(function(res){
+      FileService.finishS3(params).then(function(res){
         console.log('res', res);
         if (res.url) {
           console.log('updating url',res.url);
@@ -207,50 +207,50 @@ angular.module('columbyApp')
      * @param params
      * @param file
      */
-    function uploadFile(params, file) {
-
-      file.filename = params.file.filename;
-      console.log('url: ' + params.file.account_id + '/images/' + params.file.filename);
-      var xhr = new XMLHttpRequest();
-      var fd = new FormData();
-      // Populate the Post paramters.
-      fd.append('key', params.credentials.file.key);
-      fd.append('AWSAccessKeyId', params.credentials.s3Key);
-      fd.append('acl', params.credentials.file.acl);
-      //fd.append('success_action_redirect', "https://attachments.me/upload_callback")
-      fd.append('policy', params.credentials.policy);
-      fd.append('signature', params.credentials.signature);
-      fd.append('Content-Type', params.file.filetype);
-      fd.append('success_action_status', '201');
-      // This file object is retrieved from a file input.
-      fd.append('file', file);
-
-      xhr.upload.addEventListener('progress', function (evt) {
-        ngProgress.set(parseInt(100.0 * evt.loaded / evt.total));
-      }, false);
-
-      xhr.addEventListener('load', function(evt){
-        ngProgress.complete();
-        var parsedData = FileSrv.handleS3Response(evt.target.response);
-        var p = {
-          fid: params.file.id,
-          url: parsedData.location
-        };
-        console.log('url: ' + parsedData.location);
-        finishUpload(p);
-      });
-      xhr.addEventListener('error', function(evt){
-        ngProgress.complete();
-        toaster.pop('warning',null,'There was an error attempting to upload the file.' + evt);
-      }, false);
-      xhr.addEventListener("abort", function(){
-        ngProgress.complete();
-        toaster.pop('warning',null,'The upload has been canceled by the user or the browser dropped the connection.');
-      }, false);
-
-      xhr.open('POST', 'https://' + params.credentials.bucket + '.s3.amazonaws.com/', true);
-      xhr.send(fd);
-    }
+    //function uploadFile(params, file) {
+    //
+    //  file.filename = params.file.filename;
+    //  console.log('url: ' + params.file.account_id + '/images/' + params.file.filename);
+    //  var xhr = new XMLHttpRequest();
+    //  var fd = new FormData();
+    //  // Populate the Post paramters.
+    //  fd.append('key', params.credentials.file.key);
+    //  fd.append('AWSAccessKeyId', params.credentials.s3Key);
+    //  fd.append('acl', params.credentials.file.acl);
+    //  //fd.append('success_action_redirect', "https://attachments.me/upload_callback")
+    //  fd.append('policy', params.credentials.policy);
+    //  fd.append('signature', params.credentials.signature);
+    //  fd.append('Content-Type', params.file.filetype);
+    //  fd.append('success_action_status', '201');
+    //  // This file object is retrieved from a file input.
+    //  fd.append('file', file);
+    //
+    //  xhr.upload.addEventListener('progress', function (evt) {
+    //    ngProgress.set(parseInt(100.0 * evt.loaded / evt.total));
+    //  }, false);
+    //
+    //  xhr.addEventListener('load', function(evt){
+    //    ngProgress.complete();
+    //    var parsedData = FileService.handleS3Response(evt.target.response);
+    //    var p = {
+    //      fid: params.file.id,
+    //      url: parsedData.location
+    //    };
+    //    console.log('url: ' + parsedData.location);
+    //    finishUpload(p);
+    //  });
+    //  xhr.addEventListener('error', function(evt){
+    //    ngProgress.complete();
+    //    toaster.pop('warning',null,'There was an error attempting to upload the file.' + evt);
+    //  }, false);
+    //  xhr.addEventListener("abort", function(){
+    //    ngProgress.complete();
+    //    toaster.pop('warning',null,'The upload has been canceled by the user or the browser dropped the connection.');
+    //  }, false);
+    //
+    //  xhr.open('POST', 'https://' + params.credentials.bucket + '.s3.amazonaws.com/', true);
+    //  xhr.send(fd);
+    //}
 
     /**
      * Start with a new dataset, published on the user's primary account.
@@ -347,20 +347,21 @@ angular.module('columbyApp')
      * Handle file select
      *
      * @param $files
-     * @param target
+     * @param type (file, image, datafile)
+     * @param target (headerImage, accountFile, avatar)
      */
-    $scope.onFileSelect = function($files, target) {
+    $scope.onFileSelect = function($files, type, target) {
       var file = $files[0];
       if ($scope.upload){
         toaster.pop('warning',null,'There is already an upload in progress. ');
       } else {
         // Check if the file has the right type
-        if (FileSrv.validateImage(file.type)) {
+        if (FileService.validateFiletype(file.type, type, target)) {
           $scope.fileUpload = {
             file:file,
             target:target
           };
-          //console.log($scope.fileUpload);
+          // Initiate the progress bar
           ngProgress.start();
           // Define the parameters to get the right signed request
           var params = {
@@ -368,10 +369,13 @@ angular.module('columbyApp')
             filesize: file.size,
             filename: file.name,
             accountId: $scope.dataset.account.id,
-            type: 'image'
+            type: type
           };
+          $log.log(params);
+
           // Request a signed request
-          FileSrv.signS3(params).then(function (signResponse) {
+          FileService.signS3(params).then(function (signResponse) {
+            $log.log(signResponse);
             if (signResponse.file) {
               //console.log('signed response: ', signResponse);
               // signed request is valid, send the file to S3

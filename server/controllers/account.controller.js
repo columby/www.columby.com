@@ -125,7 +125,8 @@ exports.show = function(req, res) {
       //{ model: Collection },
       //{ model: Dataset },
       { model: File, as: 'avatar'},
-      { model: File, as: 'headerImg'}
+      { model: File, as: 'headerImg'},
+      { model: File, as: 'files'}
     ]
   }).success(function(account){
     getAccountUsers(account);
@@ -204,6 +205,22 @@ exports.destroy = function(req, res) {
       if(err) { return handleError(res, err); }
       return res.send(204);
     });
+  });
+};
+
+
+exports.addFile = function(req,res){
+  console.log(req.body);
+  Account.find(req.body.account_id).success(function(account){
+    console.log('account: ', account.dataValues);
+    account.addFile(req.body.id).success(function(model){
+      console.log('model: ', model);
+      return res.json({status: 'success'});
+    }).error(function(err){
+      return handleError(res,err);
+    });
+  }).error(function(err){
+    return handleError(res,err);
   });
 };
 

@@ -23,6 +23,10 @@ module.exports = function(app) {
     auth.isAdmin,
       controller.create);
 
+  router.post('/addFile',
+    auth.ensureAuthenticated,
+    controller.canEdit,
+    controller.addFile);
 
   router.put('/:id',
     auth.ensureAuthenticated,
