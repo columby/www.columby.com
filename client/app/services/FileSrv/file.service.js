@@ -12,7 +12,7 @@
 
 angular.module('columbyApp')
 
-  .service('FileService', function ($http, $q) {
+  .service('FileService', function ($log, $http, $q) {
 
     ///**
     //*
@@ -179,6 +179,7 @@ angular.module('columbyApp')
        *
        **/
       validateFile: function(filetype, type, target) {
+        $log.log('validating filetype: ' + filetype + ' with type: ' + type);
         var validTypes;
         if (type === 'image') {
           validTypes = ['image/png', 'image/jpg', 'image/jpeg'];

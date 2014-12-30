@@ -119,7 +119,7 @@ angular.module('columbyApp')
       //console.log($stateParams);
       // get account information of user by userSlug
       AccountSrv.get({slug: $stateParams.slug}, function(result){
-        console.log(result);
+        $log.log('Fetched result: ' , result);
         $scope.account = result;
         if (result.avatar){
           $scope.account.avatar.url = '/api/v2/file/' + $scope.account.avatar.id + '?style=small';
@@ -135,6 +135,7 @@ angular.module('columbyApp')
         $scope.account.canEdit= AuthSrv.canEdit('account',result);
 
         if ($scope.account.headerImg) {
+          $log.log('updating header image. ');
           updateHeaderImage();
         }
 
@@ -243,7 +244,7 @@ angular.module('columbyApp')
               updateHeaderImage();
               break;
             case 'avatar':
-              $scope.account.avatar = '/api/v2/file/' + res.id + '?style=small';
+              $scope.account.avatar.url = '/api/v2/file/' + res.id + '?style=small';
               //console.log('updating avatar');
               updated.avatar = res.id;
               break;
@@ -256,10 +257,12 @@ angular.module('columbyApp')
               break;
           }
           $scope.fileUpload = null;
-          toaster.pop('notice',null,'File uploaded, updating account');
+          toaster.pop('notice',null,'File uploaded, updating account...');
 
           // Update Account at server
-          AccountSrv.update(updated, function(result){});
+          AccountSrv.update(updated, function(result){
+            $log.log('Account updated, ', result);
+          });
 
         } else {
           $scope.fileUpload = null;
@@ -274,7 +277,6 @@ angular.module('columbyApp')
      * Update an existing account
      */
     $scope.update = function(){
-      console.log('$cope.update()');
       if (!$scope.account.id) {
         console.log('Name changed, but not yet saved');
       } else {

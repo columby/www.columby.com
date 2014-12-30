@@ -90,6 +90,7 @@ function getImage(file, callback) {
   var localFile = fs.createWriteStream('server/tmp/' + file.id);
 
   localFile.on('open', function() {
+    console.log('Fetching file: ', file.url);
     request(file.url).pipe(localFile).on('close', function(){
       callback(null, localFile);
     }).on('error', function(err){
@@ -104,7 +105,7 @@ function uploadImage(file,callback){
       return callback(err,null);
     }
 
-    var key = 'styles/' + file.account_id + '/' + file.style.name + '/' + file.id;
+    var key = 'styles/' + file.account_id + '/' + file.style.name + '/' + file.filename;
       console.log('s3 key: ' + key);
       var params = {
         Bucket: config.aws.bucket,
@@ -129,7 +130,7 @@ function uploadImage(file,callback){
  *
  */
 function createDerivative(file, callback) {
-  console.log('Creating a new derivative for: ', file.url);
+  console.log('Creating a new derivative for: ', file);
   // Get remote image and store it locally
   getImage(file, function (err, tmpFile) {
     if (err) {
@@ -206,10 +207,10 @@ exports.show = function(req, res) {
 
       var width = availableStyles[ req.query.style].width;
 
-      s3Endpoint += 'styles/' + file.account_id + '/' + style + '/' + file.id;
+      s3Endpoint += 'styles/' + file.account_id + '/' + style + '/' + file.filename;
 
     } else {
-      s3Endpoint += 'accounts/' + file.account_id + '/images/' + file.id;
+      s3Endpoint += 'accounts/' + file.account_id + '/images/' + file.filename;
     }
     console.log('Endpoint for file ' + file.id + ': ' + s3Endpoint);
     // Stream the file to the user
@@ -222,16 +223,18 @@ exports.show = function(req, res) {
           name: style,
           width: width
         };
-        file.url = config.aws.endpoint.replace('https://','http://') + 'accounts/' + file.account_id + '/images/' + file.id;
+        file.url = config.aws.endpoint.replace('https://','http://') + 'accounts/' + file.account_id + '/images/' + file.filename;
         console.log('Image style not found, creating a new derivative. ', file.url, file.style);
         createDerivative(file, function(err, derivative){
           if (err) { res.status(404).send(err); } else {
             var r2 = request(s3Endpoint);
             r2.on('response', function (response) {
+              console.log(response);
               console.log('responseCode: ', response.statusCode);
               if (response.statusCode === 200) {
                 r2.pipe(res);
               } else {
+
                 handleError(res,response.statusCode);
               }
             });

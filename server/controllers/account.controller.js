@@ -164,7 +164,6 @@ exports.create = function(req, res) {
  *
  */
 exports.update = function(req, res) {
-  console.log(req.body);
 
   Account.find(req.body.id).success(function(account){
     // Set new avatar if needed
@@ -178,7 +177,7 @@ exports.update = function(req, res) {
 
     //console.log('account', account);
     account.updateAttributes(req.body).success(function(account) {
-      console.log('success',account);
+      console.log('success', account.dataValues);
       res.json(account);
     }).error(function(err) {
       handleError(res,err);
