@@ -104,7 +104,7 @@ angular.module('columbyApp')
  *  Controller for a dataset Edit page
  *
  */
-  .controller('DatasetEditCtrl', function($log,$window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, TagService, toaster, Slug, ngDialog, $http, $upload, FileService,ngProgress, $timeout) {
+  .controller('DatasetEditCtrl', function($log,$window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, TagService, toaster, Slug, ngDialog, $http, $upload, FileService,ngProgress, $timeout,$modal) {
 
     /*-------------------   INITIALISATION   ------------------------------------------------------------------*/
     $scope.hostname = $location.protocol() + '://' + $location.host();
@@ -172,29 +172,36 @@ angular.module('columbyApp')
      *
      * @param params
      */
-    function finishUpload(params){
+    function finishUpload(){
+
+      $log.log('fileUpload: ', $scope.fileUpload);
+      var params = {
+        fid: $scope.fileUpload.file.id,
+        url: 'https://' + $scope.fileUpload.credentials.bucket + '.s3.amazonaws.com/' + $scope.fileUpload.credentials.file.key
+      };
+      $log.log('params', params);
+
       FileService.finishS3(params).then(function(res){
-        console.log('res', res);
         if (res.url) {
-          console.log('updating url',res.url);
-          console.log($scope.fileUpload.target);
-          var updated = {
-            id  : $scope.dataset.id
+          var updated={
+            id: $scope.dataset.id
           };
           switch($scope.fileUpload.target){
             case 'header':
+              console.log('updating header image');
               $scope.dataset.headerImg = res;
               updated.headerImg=res.id;
               updateHeaderImage();
               break;
           }
           $scope.fileUpload = null;
-          toaster.pop('notice',null,'File uploaded, updating account');
+          toaster.pop('notice',null,'File uploaded, updating dataset...');
 
+          // Update Account at server
           DatasetSrv.update(updated, function(result){
-            //console.log('update', result);
-            //toaster.pop('notice',null,'File uploaded!');
+            $log.log('Account updated, ', result);
           });
+
         } else {
           $scope.fileUpload = null;
         }
@@ -351,44 +358,72 @@ angular.module('columbyApp')
      * @param target (headerImage, accountFile, avatar)
      */
     $scope.onFileSelect = function($files, type, target) {
-      var file = $files[0];
-      if ($scope.upload){
-        toaster.pop('warning',null,'There is already an upload in progress. ');
-      } else {
-        // Check if the file has the right type
-        if (FileService.validateFiletype(file.type, type, target)) {
-          $scope.fileUpload = {
-            file:file,
-            target:target
-          };
-          // Initiate the progress bar
-          ngProgress.start();
-          // Define the parameters to get the right signed request
-          var params = {
-            filetype: file.type,
-            filesize: file.size,
-            filename: file.name,
-            accountId: $scope.dataset.account.id,
-            type: type
-          };
-          $log.log(params);
+      $log.log('type',type);
 
-          // Request a signed request
-          FileService.signS3(params).then(function (signResponse) {
-            $log.log(signResponse);
-            if (signResponse.file) {
-              //console.log('signed response: ', signResponse);
-              // signed request is valid, send the file to S3
-              uploadFile(signResponse, file);
+      var file = $files[0];
+
+      $scope.fileUpload = {
+        type: type,
+        target: target
+      };
+
+      // Check if there is a file
+      if (!file) {
+        return toaster.pop('warning',null,'No file selected.');
+      }
+      // Check if there is already an upload in progress
+      if ($scope.upload){
+        return toaster.pop('warning',null,'There is already an upload in progress. ');
+      }
+      // Check if the file has the right type
+      if (!FileService.validateFile(file.type,type,target)) {
+        return toaster.pop('warning', null, 'The file you chose is not valid. ' + file.type);
+      }
+
+      ngProgress.start();
+
+      var params = {
+        filetype: file.type,
+        filesize: file.size,
+        filename: file.name,
+        accountId: $scope.dataset.account.id,
+        type: type,
+        target: target
+      };
+
+      $log.log('Uploading with params: ', params);
+
+      // Sign the upload request
+      FileService.signS3(params).then(function(signedResponse) {
+        console.log('Response sign: ', signedResponse);
+        // signed request is valid, send the file to S3
+        if (signedResponse.file) {
+          // Initiate the upload
+          FileService.upload($scope, signedResponse, file).then(function(res){
+            // File upload is done
+            if (res.status === 201 && res.statusText==='Created') {
+              ngProgress.complete();
+              $log.log($scope.fileUpload);
+              $scope.fileUpload.file = signedResponse.file;
+              $scope.fileUpload.credentials = signedResponse.credentials;
+              console.log('Finishing uploading. ');
+
+              finishUpload();
             } else {
-              toaster.pop('error', null, 'Sorry, there was an error. Details: ' +  signResponse.msg);
-              console.log(signresponse);
+              return toaster.pop('warning',null,'Something went wrong finishing the upload. ');
             }
+          }, function(error){
+            console.log('Error', error);
+
+          }, function(evt) {
+            console.log('Progress: ' + evt.value);
+            ngProgress.set(evt.value);
           });
         } else {
-          toaster.pop('warning', null, 'The file you chose is not valid. ' + file.type);
+          toaster.pop('error', null, 'Sorry, there was an error. Details: ' +  signedResponse.msg);
+          console.log(signedResponse);
         }
-      }
+      });
     };
 
 
@@ -494,8 +529,32 @@ angular.module('columbyApp')
 
     };
 
+
+    $scope.editDistribution = function(distribution){
+      console.log(distribution);
+
+      var modalInstance = $modal.open({
+        templateUrl: 'app/routes/dataset/partials/editDistribution.html',
+        controller: 'DistributionEditCtrl',
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        resolve: {
+          distribution: function () {
+            return distribution;
+          }
+        }
+      });
+
+      modalInstance.result.then(function (selectedItem) {
+        console.log(selectedItem);
+        $scope.selected = selectedItem;
+      }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+    };
+
     /**
-     *
      * Confirm the deletion of a distribution
      *
      * @param index
@@ -524,13 +583,16 @@ angular.module('columbyApp')
       });
     };
 
+
+
+    /************* PRIMARY SOURCE ***************/
+
     /**
-     *
      * Handle Primary Source Initialization
      *
      * @param $files
      */
-    $scope.addSource = function(){
+    $scope.addPrimarySource = function(){
       console.log('yyyy');
 
     };
@@ -599,6 +661,31 @@ angular.module('columbyApp')
         })
       }
     }
+
+    $scope.editPrimarySource = function(){
+      console.log($scope.dataset.primary);
+
+      var modalInstance = $modal.open({
+        templateUrl: 'app/routes/dataset/partials/editPrimarySource.html',
+        controller: 'EditPrimarySourceCtrl',
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        resolve: {
+          primary: function() {
+            return $scope.dataset.primary;
+          }
+        }
+      });
+
+      modalInstance.result.then(function (primary) {
+        console.log(primary);
+        $scope.dataset.primary = primary;
+      }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+    };
+
 
     $scope.closeDialog = function(){
       ngDialog.closeAll();

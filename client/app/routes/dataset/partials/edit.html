@@ -84,7 +84,7 @@
   <div class="content" ng-class="{show:!contentLoading}">
     <div class="header wrapper" ng-style="headerStyle">
       <div class="upload-button"
-           ng-file-select="onFileSelect($files,'header')"
+           ng-file-select="onFileSelect($files,'image','header')"
            popover="Change the header background image for this dataset."
            data-popover-trigger="mouseenter"
            data-popover-placement="left">
@@ -112,7 +112,14 @@
               <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a></span>,
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
             </p>
-            <p ng-show="dataset.tags.length>0"><strong>Tags: </strong><span ng-repeat="tag in dataset.tags">{{tag.text}}</span></p>
+            <div class="tags" ng-show="dataset.tags.length>0">
+              <strong class="col-md-2">Tags: </strong>
+              <tags-input ng-model="dataset.tags"
+                          on-tag-added="addTag($tag)"
+                          on-tag-removed="removeTag($tag)">
+                <!--<auto-complete source="loadTags($query)"></auto-complete>-->
+              </tags-input>
+            </div>
           </div>
 
           <div class="avatar img-rounded">
@@ -124,19 +131,6 @@
 
     <div class="change-account" ng-hide="dataset.id">
       <p>Published on: {{dataset.account.name}} <a ng-click="changeAccount()" ng-show="$root.user.accounts.length>1">Change</a></p>
-    </div>
-
-    <div class="tags-wrapper">
-      <div class="container">
-        <div class="col-md-12">
-          <h3>Tags</h3>
-          <tags-input ng-model="dataset.tags"
-                      on-tag-added="addTag($tag)"
-                      on-tag-removed="removeTag($tag)">
-            <!--<auto-complete source="loadTags($query)"></auto-complete>-->
-          </tags-input>
-        </div>
-      </div>
     </div>
 
     <!-- Dataset Description -->
@@ -200,12 +194,16 @@
                   <li><label>Issued</label>{{dataset.primary.created_at | date:'d MMMM yyyy'}}</li>
                   <li ng-show="dataset.primary.created_at !== dataset.primary.updated_at"><label>Modified</label>{{dataset.primary.updated_at | date:'d MMMM yyyy'}}</li>
                 </ul>
-                <div class="actions">
-                  <button>Delete</button>
 
-                  <a href="" ng-click="editPrimary()"><i class="fa fa-edit"></i></a>
-                  <a href="" ng-click="deletePrimary()" ng-hide="primary.confirmDelete"><i class="fa fa-trash"></i></a>
-                  <!--<div ng-show="primary.confirmDelete">Are you sure? <a href="" ng-click="deletePrimary()"><i class="fa fa-trash"></i></a>&nbsp;<a href="" ng-click="distribution.confirmDelete=false">cancel</a></a></div>-->
+
+
+                <div class="actions">
+                  <div class="col-xs-1">
+                    <button type="button" class="btn btn-warning btn-xs" ng-click="editPrimarySource()"><i class="fa fa-edit"></i> Edit</button>
+                  </div>
+                  <div class="col-xs-5 confirm-delete"
+                       confirm-delete
+                       on-confirm="deletePrimarySource()"></div>
                 </div>
               </div>
             </li>
@@ -217,7 +215,6 @@
           <ul ng-show="dataset.distributions.length > 0">
             <li ng-repeat="distribution in dataset.distributions">
               <h4 class="datasource-title">{{distribution.title}}</h4>
-              <p>id: {{distribution.id}}</p>
               <div class="download datasource-icon" ng-show="distribution.downloadUrl">
                 <a href="{{distribution.downloadUrl}}"><i class="fa fa-download"></i></a>
               </div>
@@ -241,10 +238,16 @@
                 <li ng-show="distribution.created_at !== distribution.updated_at"><label>Modified</label>{{distribution.updated_at | date:'d MMMM yyyy'}}</li>
               </ul>
 
-              <div class="actions">
-                <button type="button" class="btn btn-warning btn-xs" ng-click="editDistribution(distribution)"><i class="fa fa-edit"></i> Edit</button>
-                <div confirm-delete on-confirm="deleteDistribution(distribution)"></div>
-
+              <div class="row actions">
+                <div class="col-xs-1">
+                  <button type="button"
+                          class="btn btn-warning btn-xs"
+                          ng-click="editDistribution(distribution)"><i class="fa fa-edit"></i> Edit</button>
+                </div>
+                <div class="col-xs-5 confirm-delete"
+                     ng-hide="distribution.id === dataset.primary.distribution_id"
+                     confirm-delete
+                     on-confirm="deleteDistribution(distribution)"></div>
               </div>
 
   					</li>

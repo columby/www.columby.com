@@ -1,0 +1,108 @@
+
+  <div class="modal-header">
+    <h3 class="modal-title">Edit datasource: {{distribution.title}}</h3>
+  </div>
+  <div class="modal-body">
+
+
+
+    <form class="form-horizontal novalidate" role="form" name="metadataForm">
+
+      <div class="form-group">
+        <div class="col-xs-4"><label>Datasource Type</label></div>
+        <div class="col-xs-8">
+          {{distribution.type}}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-xs-4"><label>Title</label></div>
+        <div class="col-xs-8">
+          <input class="form-control"
+                 name="title"
+                 ng-model="distribution.title"
+                 ng-minlength="3"
+                 ng-maxlength="30"/>
+          <span class="error" ng-show="slugForm.slug.$error.maxlength">Too long!</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-xs-4">
+          <label>Description</label>
+        </div>
+        <div class="col-xs-8">
+          <textarea class="form-control"
+                    rows="5"
+                    placeholder="Please add your description"
+                    ng-model="distribution.description"></textarea>
+        </div>
+      </div>
+
+      <!-- remote URL -->
+      <div class="form-group" ng-show="distribution.type==='remoteService'">
+        <div class="col-xs-4">
+          <label>Url</label>
+        </div>
+        <div class="col-xs-8">
+          <input class="form-control"
+                 ng-model="distribution.accessUrl"/>
+        </div>
+      </div>
+
+      <!-- License -->
+      <div class="form-group">
+        <div class="col-xs-4">
+          <label>License</label>
+        </div>
+        <div class="col-xs-8">
+          <div class="btn-group">
+            <label class="btn btn-primary" ng-model="distribution.license" btn-radio="'dontKnow'">I don't know</label>
+            <label class="btn btn-primary" ng-model="distribution.license" btn-radio="'CC0'">CC0</label>
+            <label class="btn btn-primary" ng-model="distribution.license" btn-radio="'CCBYND'">CC-BY-ND</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-xs-4">
+          <label>Visibility</label>
+        </div>
+        <div class="col-xs-8">
+          <div class="btn-group">
+            <label class="btn btn-primary" ng-model="distribution.status" btn-radio="'draft'">Draft</label>
+            <label class="btn btn-primary" ng-model="distribution.status" btn-radio="'private'">Private</label>
+            <label class="btn btn-primary" ng-model="distribution.status" btn-radio="'public'">Public</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-xs-4">
+          <label>Valid</label>
+        </div>
+        <div class="col-xs-8">
+          {{distribution.valid}}
+          <button class="btn btn-primary" ng-click="checkValidity()" ng-disabled="distribution.validation.inProgress"><span ng-show="distribution.validation.inProgress"><i class="fa fa-spin fa-spinner"></i></span> Check</button>
+        </div>
+      </div>
+
+      <div class="form-group" ng-show="distribution.downloadUrl">
+        <div class="col-xs-4">
+          <label>Data file</label>
+        </div>
+        <div class="col-xs-8">
+          <a href="{{distribution.downloadUrl}}">download</a>
+          <a class="btn btn-primary" ng-click="updateFile()">Update file</a>
+        </div>
+      </div>
+
+
+    </form>
+    <!--<p>Rights: {{distribution.rights}}</p>-->
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="update()">Update</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+  </div>

@@ -16,19 +16,25 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING,
         unique: true
       },
+
       status: {
         type: DataTypes.ENUM,
-        values: ['draft', 'processing', 'error', 'private', 'public'],
+        values: ['draft', 'processing', 'error', 'done'],
         defaultValue: 'draft'
       },
 
+      statusMsg: {
+        type: DataTypes.STRING
+      },
+
       // sync status for external api syncs
-      syncperiod: {
+      syncPeriod: {
         type: DataTypes.STRING
         //type: DataTypes.ENUM,
         //values: [ 'Do not sync', 'Yearly', 'Quarterly', 'Monthly', 'Weekly', 'Daily' ]
       },
-      syncdate: { type: DataTypes.DATE },
+
+      syncDate: { type: DataTypes.DATE },
 
       created_at:{
         type: DataTypes.DATE,

@@ -123,6 +123,8 @@ angular.module('columbyApp')
         $scope.account = result;
         if (result.avatar){
           $scope.account.avatar.url = '/api/v2/file/' + $scope.account.avatar.id + '?style=small';
+        } else {
+          $scope.account.avatar = {};
         }
         $scope.contentLoading = false;
         $window.document.title = 'columby.com | ' + result.name;

@@ -91,7 +91,7 @@
                 </div>
 
                 <ul class="properties">
-                  <li><label>Datasource status</label>{{dataset.primary.status}}</li>
+                  <!--<li><label>Datasource status</label>{{dataset.primary.status}}</li>-->
                   <li><label>Issued</label>{{dataset.primary.created_at | date:'d MMMM yyyy'}}</li>
                   <li ng-show="dataset.primary.created_at !== dataset.primary.updated_at"><label>Modified</label>{{dataset.primary.updated_at | date:'d MMMM yyyy'}}</li>
                 </ul>

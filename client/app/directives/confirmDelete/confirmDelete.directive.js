@@ -14,10 +14,12 @@ angular.module('columbyApp')
           scope.hover=true;
         });
         element.parent().bind('mouseleave', function() {
-          scope.$apply(function() {
-            scope.hover=false;
-            return scope.isDeleting = false;
-          });
+          $timeout(function(){
+            scope.$apply(function() {
+              scope.hover = false;
+              return scope.isDeleting = false;
+            });
+          }, 500);
         });
       },
 
@@ -27,7 +29,6 @@ angular.module('columbyApp')
 
         $scope.startDelete = function() {
           $scope.isDeleting = true;
-          console.log($scope.hover);
           // Set a timeout
           $timeout(function(){
             if ($scope.hover === false) {

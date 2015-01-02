@@ -229,7 +229,6 @@ exports.show = function(req, res) {
           if (err) { res.status(404).send(err); } else {
             var r2 = request(s3Endpoint);
             r2.on('response', function (response) {
-              console.log(response);
               console.log('responseCode: ', response.statusCode);
               if (response.statusCode === 200) {
                 r2.pipe(res);
