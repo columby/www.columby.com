@@ -31,7 +31,7 @@ angular.module('columbyApp', [
   })
 
   // Run once during startup
-  .run(function($rootScope, $http, AuthSrv){
+  .run(function($rootScope, $http, AuthSrv, configSrv){
 
     $rootScope.bodyClasses = {};
     $rootScope.user = {};
@@ -53,15 +53,6 @@ angular.module('columbyApp', [
         }
       });
     }
-
-    // Get environment vars from the server
-    $http.post('/api/v2/user/config').success(function(data){
-      if (data){
-        $rootScope.config = data;
-      }
-    }).error(function(data) {
-      console.log(data);
-    });
   })
 
   .controller('ColumbyCtrl', function($window, $rootScope, $location, $anchorScroll){

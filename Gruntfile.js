@@ -17,14 +17,72 @@ module.exports = function (grunt) {
     cdnify: 'grunt-google-cdn',
     protractor: 'grunt-protractor-runner',
     injector: 'grunt-asset-injector',
-    buildcontrol: 'grunt-build-control'
+    buildcontrol: 'grunt-build-control',
+    replace: 'grunt-replace'
   });
 
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
+
   // Define the configuration for all the tasks
   grunt.initConfig({
+
+    // Replace configuration settings
+    replace: {
+      local: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./client/config/environments/local.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./client/config/config.service.js'],
+          dest: '<%= yeoman.client %>/app/services/'
+        }]
+      },
+      development: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./client/config/environments/development.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./client/config/config.service.js'],
+          dest: '<%= yeoman.client %>/app/services/'
+        }]
+      },
+      staging: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./client/config/environments/staging.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./client/config/config.service.js'],
+          dest: '<%= yeoman.client %>/app/services/'
+        }]
+      },
+      production: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./client/config/environments/production.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./client/config.service.js'],
+          dest: '<%= yeoman.client %>/app/services/'
+        }]
+      }
+    },
 
     // Project settings
     pkg: grunt.file.readJSON('package.json'),
@@ -223,7 +281,7 @@ module.exports = function (grunt) {
       target: {
         src: '<%= yeoman.client %>/index.html',
         ignorePath: '<%= yeoman.client %>/',
-        exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/', /bootstrap.css/, /font-awesome.css/ ]
+        exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/', /bootstrap.css/, /font-awesome.css/]
       }
     },
 
@@ -480,19 +538,17 @@ module.exports = function (grunt) {
       },
       server: {
         files: {
-          '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.less'
+          '.tmp/app/app.css': '<%= yeoman.client %>/app/app.less'
         }
-      },
+      }
     },
 
     injector: {
-      options: {
-
-      },
+      options: {},
       // Inject application script files into index.html (doesn't include bower)
       scripts: {
         options: {
-          transform: function(filePath) {
+          transform: function (filePath) {
             filePath = filePath.replace('/client/', '');
             filePath = filePath.replace('/.tmp/', '');
             return '<script src="' + filePath + '"></script>';
@@ -513,7 +569,7 @@ module.exports = function (grunt) {
       // Inject component less into app.less
       less: {
         options: {
-          transform: function(filePath) {
+          transform: function (filePath) {
             filePath = filePath.replace('/client/app/', '');
             filePath = filePath.replace('/client/components/', '');
             return '@import \'' + filePath + '\';';
@@ -522,9 +578,9 @@ module.exports = function (grunt) {
           endtag: '// endinjector'
         },
         files: {
-          '<%= yeoman.client %>/app/app.less': [
+          '<%= yeoman.client %>/styles/app.less': [
             '<%= yeoman.client %>/{app,components}/**/*.less',
-            '!<%= yeoman.client %>/app/app.less'
+            '!<%= yeoman.client %>/styles/app.less'
           ]
         }
       },
@@ -532,7 +588,7 @@ module.exports = function (grunt) {
       // Inject component css into index.html
       css: {
         options: {
-          transform: function(filePath) {
+          transform: function (filePath) {
             filePath = filePath.replace('/client/', '');
             filePath = filePath.replace('/.tmp/', '');
             return '<link rel="stylesheet" href="' + filePath + '">';
@@ -546,7 +602,9 @@ module.exports = function (grunt) {
           ]
         }
       }
-    },
+    }
+
+
   });
 
   // Used for delaying livereload until after server has restarted
@@ -563,44 +621,6 @@ module.exports = function (grunt) {
 
   grunt.registerTask('express-keepalive', 'Keep grunt running', function() {
     this.async();
-  });
-
-  grunt.registerTask('serve', function (target) {
-    if (target === 'dist') {
-      return grunt.task.run(['build', 'env:all', 'env:prod', 'express:prod', 'wait', 'open', 'express-keepalive']);
-    }
-
-    if (target === 'debug') {
-      return grunt.task.run([
-        'clean:server',
-        'env:all',
-        'injector:less',
-        'concurrent:server',
-        'injector',
-        'wiredep',
-        'autoprefixer',
-        'concurrent:debug'
-      ]);
-    }
-
-    grunt.task.run([
-      'clean:server',
-      'env:all',
-      'injector:less',
-      'concurrent:server',
-      'injector',
-      'wiredep',
-      'autoprefixer',
-      'express:dev',
-      'wait',
-      'open',
-      'watch'
-    ]);
-  });
-
-  grunt.registerTask('server', function () {
-    grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-    grunt.task.run(['serve']);
   });
 
   grunt.registerTask('test', function(target) {
@@ -669,4 +689,99 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+  grunt.registerTask('serve', function (target) {
+    if (target === 'dist') {
+      return grunt.task.run([
+        'build',
+        'env:all',
+        'env:prod',
+        'express:prod',
+        'replace:prod',
+        'wait',
+        'open',
+        'express-keepalive'
+      ]);
+    }
+
+    if (target === 'debug') {
+      return grunt.task.run([
+        'clean:server',
+        'env:all',
+        'injector:less',
+        'concurrent:server',
+        'injector',
+        'wiredep',
+        'autoprefixer',
+        'concurrent:debug'
+      ]);
+    }
+
+    if (target === 'local') {
+      grunt.task.run([
+        'clean:server',
+        'env:all',
+        'injector:less',
+        'concurrent:server',
+        'injector',
+        'wiredep',
+        'autoprefixer',
+        'express:dev',
+        'replace:local',
+        'wait',
+        'open',
+        'watch'
+      ]);
+    }
+
+    if (target === 'staging') {
+      grunt.task.run([
+        'clean:server',
+        'env:all',
+        'injector:less',
+        'replace:staging',
+        'concurrent:server',
+        'injector',
+        'wiredep',
+        'autoprefixer',
+        'express:dev',
+
+        'wait',
+        'open',
+        'watch'
+      ]);
+    }
+
+    if (target === 'development') {
+      grunt.task.run([
+        'clean:server',
+        'env:all',
+        'injector:less',
+        'concurrent:server',
+        'injector',
+        'wiredep',
+        'autoprefixer',
+        'express:dev',
+        'replace:dev',
+        'wait',
+        'open',
+        'watch'
+      ]);
+    }
+
+    grunt.task.run([
+      'clean:server',
+      'env:all',
+      'injector:less',
+      'concurrent:server',
+      'injector',
+      'wiredep',
+      'autoprefixer',
+      'express:dev',
+      'replace:development',
+      'wait',
+      'open',
+      'watch'
+    ]);
+  });
 };

@@ -1,0 +1,111 @@
+<section class="page page-home">
+
+  <div class="actions-bar"
+    scroll-position="scroll"
+    ng-class="{top: scroll<562}">
+  </div>
+
+  <div class="page-header">
+    <div class="container">
+      <div class="col-md-12">
+        <img src="/images/logo.png" class="logo img-responsive" />
+        <h2 class="page-subtitle">publish and discover data</h2>
+        <button type="button" class="big-button" ng-show="$root.user.id"  ui-sref="dataset.create">Publish new dataset</button>
+        <button type="button" class="big-button" ng-hide="$root.user.id"  ui-sref='signin'>Login or Signup</button>
+        <p>or</p>
+        <a ui-sref="about">Read about Columby</a>
+        <div class="arrow animated bounce"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="news-flash">
+    <div class="container">
+      <div class="col-md-12">
+        <h2 class="news-flash-title">Welcome to the new Columby! <a ui-sref="columby-update">Read more about our major update</a>.</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="showcase-presentation" ng-hide="$root.user.id">
+
+      <div class="container-fluid">
+        <div class="col-xs-12 col-sm-6 col-md-offset-1 col-md-5 col-lg-offset-1 col-lg-5">
+          <h3>Publish your data in a beautiful way.</h3>
+          <p>You carefully gather your data. We help you to present it in it's best way. Attach beautiful pictures, describe your dataset and add some references.</p>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <img src="/images/showcase-presentation.png" class="img-responsive pull-right"/>
+        </div>
+      </div>
+
+        <div class="container-fluid">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <img src="/images/showcase-presentation-embed.png" class="img-responsive pull-left"/>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
+          <h3>Embed your data with ease.</h3>
+          <p>Distributing your data has become easy. Use our API to integrate your data in your apps or embed datasets on your website.</p>
+        </div>
+      </div>
+
+
+  </div>
+
+  <div class="page-content">
+    <div class="container">
+
+      <div class="searchbox col-md-offset-1 col-md-10">
+        <label for="search-datasets" class="sr-only">Search datasets</label>
+        <input id="search-datasets" class="input-large"
+          type="text"
+          ng-model="search.searchTerm"
+          placeholder="Search datasets"
+          ng-change="doSearch()"
+          ng-model-options="{debounce: 250}">
+        <div class="search-message">{{search.message}}</div>
+      </div>
+
+      <!-- Search result -->
+      <div class="col-md-offset-1 col-md-10 results recent-publications">
+        <h3 ng-show="search.hits">Search results</h3>
+        <div class="result publication-listing">
+          <div class="no-result" ng-show="search.hits.length === 0">
+            No Result
+          </div>
+					<ul>
+            <li ng-repeat="result in search.hits" class="publication-item">
+              <h4><a ui-sref="dataset.view({id: result.id})">{{result.title}}</a><em>{{result._source.publishStatus}}</em></h4>
+              <div class="user-date"><!-- {{result._source.account.name || '[Oops! No publisher found]'}} on  --><time class="post-date">{{result._source.created_at | date:'d MMMM yyyy'}}</time></div>
+            </li>
+        	</ul>
+        </div>
+      </div>
+
+
+      <div class="col-md-offset-1 col-md-10 recent-publications" ng-hide="search.hits.length">
+        <h3>Recently published</h3>
+        <div class="publication-listing">
+					<ul>
+            <li ng-repeat="dataset in datasets.rows" class="publication-item">
+              <h4><a ui-sref="dataset.view({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
+              <div class="user-date">
+                <!-- <img ng-src="dataset.account.avatar.img" class="img-rounded"/> -->
+                <img class="img-circle avatar-small" ng-src="/api/v2/file/{{dataset.account.avatar.id}}?style=small" alt="{{dataset.account.name}}"/>
+                <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'MMMM d, yyyy'}}</time>
+              </div>
+            </li>
+        	</ul>
+				</div>
+        <!-- <nav>
+          <ul class="pager">
+            <li><a href="#">Previous</a></li>
+            <li><a href="#">Next</a></li>
+          </ul>
+        </nav> -->
+      </div>
+
+
+    </div>
+  </div>
+</section>

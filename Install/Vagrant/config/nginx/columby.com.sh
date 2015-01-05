@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-SITE_COLUMBY="server { \n\t listen 80; \n\t server_name $HOSTNAME; \n\t location / { \n\t\t proxy_pass http://localhost:$NGINX_WEBSITE_PORT; \n\t\t proxy_http_version 1.1; \n\t\t proxy_set_header Upgrade \$http_upgrade; \n\t\t proxy_set_header Connection 'upgrade'; \n\t\t proxy_set_header Host \$host; \n\t\t proxy_cache_bypass \$http_upgrade; \n\t } \n }"
-SITE_WORKER="server { \n\t listen 80; \n\t server_name worker.$HOSTNAME; \n\t location / { \n\t\t proxy_pass http://localhost:$NGINX_WORKER_PORT; \n\t\t proxy_http_version 1.1; \n\t\t proxy_set_header Upgrade \$http_upgrade; \n\t\t proxy_set_header Connection 'upgrade'; \n\t\t proxy_set_header Host \$host; \n\t\t proxy_cache_bypass \$http_upgrade; \n\t } \n }"
-SITE_API="server { \n\t listen 80; \n\t server_name api.$HOSTNAME; \n\t location / { \n\t\t proxy_pass http://localhost:$NGINX_API_PORT; \n\t\t proxy_http_version 1.1; \n\t\t proxy_set_header Upgrade \$http_upgrade; \n\t\t proxy_set_header Connection 'upgrade'; \n\t\t proxy_set_header Host \$host; \n\t\t proxy_cache_bypass \$http_upgrade; \n\t } \n }"
