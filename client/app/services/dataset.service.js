@@ -22,7 +22,8 @@ angular.module('columbyApp')
     );
   })
 
-  .service('DatasetReferenceSrv', function($resource) {
+
+  .service('DatasetReferenceSrv', function($resource, configSrv) {
 
     return $resource(configSrv.apiRoot + '/v2/dataset/:id/reference/:rid', {
       id: '@id',

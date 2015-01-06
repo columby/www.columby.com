@@ -4,6 +4,7 @@ angular.module('columbyApp')
 
   .constant('configSrv', {
 
-    apiRoot: '@@apiRoot'
+    apiRoot: '@@apiRoot',
+    embedlyKey: '@@embedlyKey'
 
   });

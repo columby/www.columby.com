@@ -161,7 +161,7 @@ module.exports = function (grunt) {
           '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         options: {
-          livereload: true
+          livereload: 1137
         }
       },
       express: {
@@ -170,7 +170,7 @@ module.exports = function (grunt) {
         ],
         tasks: ['express:dev', 'wait'],
         options: {
-          livereload: true,
+          livereload: 1337,
           nospawn: true //Without this option specified express won't be reloaded
         }
       }
@@ -246,7 +246,8 @@ module.exports = function (grunt) {
     'node-inspector': {
       custom: {
         options: {
-          'web-host': 'localhost'
+          'web-host': 'localhost',
+          'debug-port': 5856
         }
       }
     },
@@ -268,7 +269,7 @@ module.exports = function (grunt) {
             // opens browser on initial server start
             nodemon.on('config:update', function () {
               setTimeout(function () {
-                require('open')('http://localhost:8080/debug?port=5858');
+                require('open')('http://localhost:8080/debug?port=5859');
               }, 500);
             });
           }
@@ -538,7 +539,7 @@ module.exports = function (grunt) {
       },
       server: {
         files: {
-          '.tmp/app/app.css': '<%= yeoman.client %>/app/app.less'
+          '.tmp/app/app.css': '<%= yeoman.client %>/styles/app.less'
         }
       }
     },

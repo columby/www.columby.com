@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('columbyApp')
-  .service('EmbedlySrv', function ($rootScope, $http, $q) {
+  .service('EmbedlySrv', function ($rootScope, $http, $q, configSrv) {
 
-    var key = $rootScope.config.embedly.key;
+    var key = configSrv.embedlyKey;
 
     this.setKey = function(userKey) {
       key = userKey;
