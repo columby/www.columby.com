@@ -12,7 +12,7 @@
 
 angular.module('columbyApp')
 
-  .service('FileService', function ($log, $http, $q) {
+  .service('FileService', function ($log, $http, $q, configSrv) {
 
     ///**
     //*
@@ -43,7 +43,7 @@ angular.module('columbyApp')
       signS3: function (params) {
         return $http({
           method: 'GET',
-          url: 'api/v2/file/sign',
+          url: configSrv.apiRoot + '/v2/file/sign',
           params: params
         }).then(function (result) {
           return result.data;
@@ -162,7 +162,7 @@ angular.module('columbyApp')
       finishS3: function(params) {
         return $http({
           method: 'POST',
-          url: 'api/v2/file/s3success',
+          url: configSrv.apiRoot + '/v2/file/s3success',
           data: {
             fileId: params.fid,
             url: params.url

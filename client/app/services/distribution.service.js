@@ -2,9 +2,9 @@
 
 angular.module('columbyApp')
 
-  .service('DistributionSrv', function($resource) {
+  .service('DistributionSrv', function($resource, configSrv) {
 
-    return $resource('api/v2/distribution/:id', {
+    return $resource(configSrv.apiRoot + '/v2/distribution/:id', {
         id: '@id'
       }, {
         update: {
@@ -12,7 +12,7 @@ angular.module('columbyApp')
         },
         validateLink: {
           method: 'POST',
-          url: 'api/v2/distribution/validate-link'
+          url: configSrv.apiRoot + '/v2/distribution/validate-link'
         }
       }
     );

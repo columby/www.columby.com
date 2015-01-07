@@ -26,7 +26,7 @@ angular.module('columbyApp')
         url: '/d/:id/edit',
         templateUrl: '/views/dataset/edit.html',
         controller: 'DatasetEditCtrl',
-        authorization: { authorizedRoles: ['authenticated'] },
+        authorization: { authorizedRoles: ['authenticated'] }
       })
     ;
   });

@@ -82,6 +82,8 @@
 
   <!-- Main dataset Content -->
   <div class="content" ng-class="{show:!contentLoading}">
+
+    <!-- Dataset header -->
     <div class="header wrapper" ng-style="headerStyle">
       <div class="upload-button"
            ng-file-select="onFileSelect($files,'image','header')"
@@ -302,8 +304,9 @@
 							<p>Did you get creative with your data? Add some references of output like a Data visualisation, app or website.</p>
 						</div>
 
-          <!-- Datasource Modal -->
-          <div reference-popup dataset="dataset"></div>
+            <!-- Datasource Modal -->
+            <div reference-popup dataset="dataset"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -326,7 +329,6 @@
       </div>
     </div>
 
-
 		<!-- Create new dataset -->
 		<div class="step1 wrapper" ng-hide="dataset.id">
 			<div class="container">
@@ -346,11 +348,9 @@
 			</div>
 		</div>
 
-
-
   </div>
 
   <!-- Account selector -->
   <div account-selector select="updateDatasetOwner(id)" ng-show="showAccountSelector"></div>
-</div>
+
 </div>

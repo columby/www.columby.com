@@ -69,7 +69,7 @@ angular.module('columbyApp')
         console.log('Updating header image: ', $scope.dataset.headerImg.url);
 
 	      $scope.headerStyle={
-	        'background-image': 'linear-gradient(transparent,transparent), url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
+	        'background-image': 'linear-gradient(transparent,transparent), url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
 	        'background-blend-mode': 'multiply'
 	      };
 	    }
@@ -79,7 +79,7 @@ angular.module('columbyApp')
     /* --------- SCOPE FUNCTIONS ------------------------------------------------------------ */
     $scope.showEmbedModal = function(){
       ngDialog.open({
-        template: 'app/routes/dataset/partials/embedModal.html',
+        template: 'views/dataset/embedModal.html',
         className: 'ngDialog-theme-default fullscreenDialog embedModal',
         scope: $scope
       });
@@ -208,63 +208,13 @@ angular.module('columbyApp')
       });
     }
 
-    /**
-     * Upload a file with a valid signed request
-     *
-     * @param params
-     * @param file
-     */
-    //function uploadFile(params, file) {
-    //
-    //  file.filename = params.file.filename;
-    //  console.log('url: ' + params.file.account_id + '/images/' + params.file.filename);
-    //  var xhr = new XMLHttpRequest();
-    //  var fd = new FormData();
-    //  // Populate the Post paramters.
-    //  fd.append('key', params.credentials.file.key);
-    //  fd.append('AWSAccessKeyId', params.credentials.s3Key);
-    //  fd.append('acl', params.credentials.file.acl);
-    //  //fd.append('success_action_redirect', "https://attachments.me/upload_callback")
-    //  fd.append('policy', params.credentials.policy);
-    //  fd.append('signature', params.credentials.signature);
-    //  fd.append('Content-Type', params.file.filetype);
-    //  fd.append('success_action_status', '201');
-    //  // This file object is retrieved from a file input.
-    //  fd.append('file', file);
-    //
-    //  xhr.upload.addEventListener('progress', function (evt) {
-    //    ngProgress.set(parseInt(100.0 * evt.loaded / evt.total));
-    //  }, false);
-    //
-    //  xhr.addEventListener('load', function(evt){
-    //    ngProgress.complete();
-    //    var parsedData = FileService.handleS3Response(evt.target.response);
-    //    var p = {
-    //      fid: params.file.id,
-    //      url: parsedData.location
-    //    };
-    //    console.log('url: ' + parsedData.location);
-    //    finishUpload(p);
-    //  });
-    //  xhr.addEventListener('error', function(evt){
-    //    ngProgress.complete();
-    //    toaster.pop('warning',null,'There was an error attempting to upload the file.' + evt);
-    //  }, false);
-    //  xhr.addEventListener("abort", function(){
-    //    ngProgress.complete();
-    //    toaster.pop('warning',null,'The upload has been canceled by the user or the browser dropped the connection.');
-    //  }, false);
-    //
-    //  xhr.open('POST', 'https://' + params.credentials.bucket + '.s3.amazonaws.com/', true);
-    //  xhr.send(fd);
-    //}
 
     /**
      * Start with a new dataset, published on the user's primary account.
      *
      */
     function initiateNewDataset(){
-
+      console.log($rootScope);
       // if user has multiple accounts, show the account-selector.
       if ($rootScope.user.accounts.length > 1) {
         $scope.showAccountSelector = true;
@@ -290,7 +240,7 @@ angular.module('columbyApp')
 
       $scope.dataset.headerImg.url = '/api/v2/file/' + $scope.dataset.headerImg.id + '?style=large';
       $scope.headerStyle = {
-        'background-image': 'url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
+        'background-image': 'url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
         'background-blend-mode': 'multiply'
       };
     }
@@ -534,7 +484,7 @@ angular.module('columbyApp')
       console.log(distribution);
 
       var modalInstance = $modal.open({
-        templateUrl: 'app/routes/dataset/partials/editDistribution.html',
+        templateUrl: 'views/dataset/editDistribution.html',
         controller: 'DistributionEditCtrl',
         size: 'lg',
         backdrop: 'static',
@@ -613,7 +563,7 @@ angular.module('columbyApp')
       console.log('newPrimary: ', $scope.newPrimary);
       // Open the dialog
       ngDialog.openConfirm({
-        template: 'app/routes/dataset/partials/addPrimarySource.html',
+        template: 'views/dataset/addPrimarySource.html',
         controller: 'DatasetEditCtrl',
         scope: $scope
       }).then(function(value){
@@ -666,7 +616,7 @@ angular.module('columbyApp')
       console.log($scope.dataset.primary);
 
       var modalInstance = $modal.open({
-        templateUrl: 'app/routes/dataset/partials/editPrimarySource.html',
+        templateUrl: 'views/dataset/editPrimarySource.html',
         controller: 'EditPrimarySourceCtrl',
         size: 'lg',
         backdrop: 'static',
@@ -828,8 +778,10 @@ angular.module('columbyApp')
     /* --------- INIT ------------------------------------------------------------------------ */
     if ($stateParams.id) {
       getDataset();
-    } else {
+    } else if($rootScope.user.id){
       initiateNewDataset();
+    } else {
+      $state.go('home');
     }
   }
 );
