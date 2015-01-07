@@ -69,7 +69,7 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.client %>/app/services/'
         }]
       },
-      production: {
+      prod: {
         options: {
           patterns: [{
             json: grunt.file.readJSON('./client/config/environments/production.json')

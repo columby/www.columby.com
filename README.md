@@ -6,7 +6,9 @@ This is the front-end for the columby.com website. It is based on [Angularjs](ht
 
 Install [gruntJS](http://www.grunjs.com)  
 
-    npm install -g grunt-cli  
+    npm install -g grunt-cli
+    npm install
+    bower install
 
 Create a file [environment.js] in ./client/config/environment with the proper environment variables. Possible environments: local, development, staging, dist Use grunt serve:environment for creating the right files. E.g. 
     
