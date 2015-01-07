@@ -5,20 +5,20 @@ angular.module('columbyApp')
     $stateProvider
       .state('signin', {
         url: '/u/signin',
-        templateUrl: 'app/routes/user/partials/signin.html',
+        templateUrl: 'views/user/signin.html',
         controller: 'SigninCtrl'
       })
 
       .state('register', {
         url: '/u/register',
-        templateUrl: 'app/routes/user/partials/register.html',
+        templateUrl: 'views/user/register.html',
         controller: 'RegisterCtrl'
       })
 
       // Edit user settings
       .state('settings', {
         url:'/u/settings',
-        templateUrl: 'app/routes/user/partials/view.html',
+        templateUrl: 'views/user/view.html',
         authorization: {
           authorizedRoles: ['authenticated'],
         },

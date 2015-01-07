@@ -140,12 +140,12 @@ module.exports = function (grunt) {
       },
       injectLess: {
         files: [
-          '<%= yeoman.client %>/{app,components,assets}/**/*.less'],
+          '<%= yeoman.client %>/{styles,components}/**/*.less'],
         tasks: ['injector:less']
       },
       less: {
         files: [
-          '<%= yeoman.client %>/{app,components,assets}/**/*.less'],
+          '<%= yeoman.client %>/{styles,components}/**/*.less'],
         tasks: ['less', 'autoprefixer']
       },
       gruntfile: {

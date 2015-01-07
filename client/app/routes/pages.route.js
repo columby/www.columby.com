@@ -6,31 +6,31 @@ angular.module('columbyApp')
 
       .state('terms', {
         url: '/terms',
-        templateUrl: 'app/routes/pages/views/terms.html',
+        templateUrl: 'views/pages/terms.html',
         controller : 'PagesCtrl'
       })
 
       .state('about', {
         url: '/about',
-        templateUrl: 'app/routes/pages/views/about.html',
+        templateUrl: 'views/pages/about.html',
         controller : 'PagesCtrl'
       })
 
       .state('roadmap', {
         url: '/roadmap',
-        templateUrl: 'app/routes/pages/views/roadmap.html',
+        templateUrl: 'views/pages/roadmap.html',
         controller : 'PagesCtrl'
       })
 
       .state('features', {
         url: '/features',
-        templateUrl: 'app/routes/pages/views/features.html',
+        templateUrl: 'views/pages/features.html',
         controller : 'PagesCtrl'
       })
       
       .state('columby-update', {
         url: '/columby-update',
-        templateUrl: 'app/routes/pages/views/columby-update.html',
+        templateUrl: 'views/pages/columby-update.html',
         controller : 'PagesCtrl'
       });
   });

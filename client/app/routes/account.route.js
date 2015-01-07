@@ -8,27 +8,27 @@ angular.module('columbyApp')
         template: '<ui-view />'
       })
 
-      .state('account.create', {
-        url: '/a/new',
-        templateUrl: 'app/routes/account/partials/account.html',
-        authorization: {
-          authorizedRoles: ['authenticated']
-        },
-        data: {
-          editMode: true
-        },
-        controller: 'AccountCtrl'
-      })
+      // .state('account.create', {
+      //   url: '/a/new',
+      //   templateUrl: 'app/routes/account/partials/account.html',
+      //   authorization: {
+      //     authorizedRoles: ['authenticated']
+      //   },
+      //   data: {
+      //     editMode: true
+      //   },
+      //   controller: 'AccountCtrl'
+      // })
 
       .state('account.view', {
         url: '/a/:slug',
-        templateUrl: 'app/routes/account/partials/view.html',
+        templateUrl: 'views/account/view.html',
         controller: 'AccountCtrl'
       })
 
       .state('account.edit', {
         url: '/a/:slug/edit',
-        templateUrl: 'app/routes/account/partials/edit.html',
+        templateUrl: 'views/account/edit.html',
         authorization: {
           authorizedRoles: ['authenticated']
         },
