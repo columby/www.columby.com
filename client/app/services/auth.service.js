@@ -24,7 +24,7 @@ angular.module('columbyApp')
 
       // Login a user using an email-address
       login: function(credentials) {
-        var promise = $http.post(configSrv.apiRoot + '/api/v2/user/login', credentials)
+        var promise = $http.post(configSrv.apiRoot + '/v2/user/login', credentials)
           .then(function (response) {
             if (response.data.user){
               user = response.data.user;
@@ -37,7 +37,7 @@ angular.module('columbyApp')
 
       // Register a new user with email and username
       register: function(credentials) {
-        var promise = $http.post(configSrv.apiRoot + '/api/v2/user/register', credentials)
+        var promise = $http.post(configSrv.apiRoot + '/v2/user/register', credentials)
           .then(function (response) {
             if (response.data.user){
               user = response.data.user;
@@ -49,7 +49,7 @@ angular.module('columbyApp')
 
       // Verify a login token at the server and receive a JWT.
       verify: function(token){
-        var promise = $http.get(configSrv.apiRoot + '/api/v2/user/verify?token='+token)
+        var promise = $http.get(configSrv.apiRoot + '/v2/user/verify?token='+token)
           .then(function (response) {
             if (response.data.user){
               user = response.data.user;
@@ -79,7 +79,7 @@ angular.module('columbyApp')
       // Get information about a given user by user-id
       getUser: function(){
         console.log('getting the user srv');
-        var promise = $http.get(configSrv.apiRoot + '/api/v2/user')
+        var promise = $http.get(configSrv.apiRoot + '/v2/user')
           .then(function(result){
             console.log('fetched user', result.data);
             return result.data[0];
@@ -165,7 +165,7 @@ angular.module('columbyApp')
 
 
       getProfile: function(slug) {
-        var promise = $http.get(configSrv.apiRoot + '/api/v2/user/profile/' + slug, { headers: { 'Authorization': columbyToken } })
+        var promise = $http.get(configSrv.apiRoot + '/v2/user/profile/' + slug, { headers: { 'Authorization': columbyToken } })
           .then(function(response){
             console.log('profile', response);
             return response.data;
@@ -175,7 +175,7 @@ angular.module('columbyApp')
 
       updateProfile: function(profile) {
         console.log('profile', profile);
-        var promise = $http.put(configSrv.apiRoot + '/api/v2/user/profile', profile, {headers: {'Authorization': columbyToken}})
+        var promise = $http.put(configSrv.apiRoot + '/v2/user/profile', profile, {headers: {'Authorization': columbyToken}})
           .then(function(result){
             return result.data;
           });
