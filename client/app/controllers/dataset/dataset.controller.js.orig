@@ -96,6 +96,9 @@ angular.module('columbyApp')
       toaster.pop('danger',null,'Sorry, the requested dataset was not found. ');
       $state.go('home');
     }
+<<<<<<< HEAD
+  });
+=======
   })
 
 
@@ -290,7 +293,7 @@ angular.module('columbyApp')
 
       $scope.dataset.headerImg.url = '/api/v2/file/' + $scope.dataset.headerImg.id + '?style=large';
       $scope.headerStyle = {
-        'background-image': 'url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
+        'background-image': 'url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
         'background-blend-mode': 'multiply'
       };
     }
@@ -833,3 +836,4 @@ angular.module('columbyApp')
     }
   }
 );
+>>>>>>> 131ecd58e6101334035df48de6f9e0df62c8175b
