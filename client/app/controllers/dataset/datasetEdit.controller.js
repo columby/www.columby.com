@@ -343,8 +343,8 @@ angular.module('columbyApp')
           changed = true;
         }
         if (changed){
-          DatasetSrv.update({id: dataset.id}, dataset,function(res){
-            if (res.id){
+          DatasetSrv.update({id: dataset.id}, dataset,function(result){
+            if (result.id){
               $scope.datasetUpdate.title = result.title;
               $scope.datasetUpdate.description = result.description;
               toaster.pop('success', null, 'Dataset updated.');

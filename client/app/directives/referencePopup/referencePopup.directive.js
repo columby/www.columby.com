@@ -4,6 +4,11 @@ angular.module('columbyApp')
 
 
   .controller('ReferenceNewCtrl', function($log, $scope, $modalInstance, dataset, DatasetReferenceSrv, EmbedlySrv) {
+
+    $scope.close = function(){
+      $modalInstance.dismiss('cancel');
+    };
+
     $scope.checkReferenceLink = function(link){
 
       $scope.dataset = dataset;
@@ -71,7 +76,7 @@ angular.module('columbyApp')
         dataset: '='
       },
 
-      controller: function($scope, toaster){
+      controller: function($scope, toaster, $log){
 
         $scope.newReference = function() {
 

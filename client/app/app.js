@@ -35,6 +35,7 @@ angular.module('columbyApp', [
 
     $rootScope.bodyClasses = {};
     $rootScope.user = {};
+    $rootScope.config = configSrv;
 
     // On initial run, check the user (with the JWT required from config).
     if (localStorage.getItem('columby_token')) {

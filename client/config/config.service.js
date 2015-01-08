@@ -5,6 +5,9 @@ angular.module('columbyApp')
   .constant('configSrv', {
 
     apiRoot: '@@apiRoot',
-    embedlyKey: '@@embedlyKey'
+    embedlyKey: '@@embedlyKey',
+    aws: {
+      endpoint: '@@awsEndpoint'
+    }
 
   });
