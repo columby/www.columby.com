@@ -1,10 +1,7 @@
 <pre>Distribution: {{distribution}}</pre>
 
-<div class="col-md-offset-3 col-md-6">
-
   <h2>Add a new datasource</h2>
   <div ng-bind-html="statusText"></div>
-
   <!-- Select the type of data upload -->
   <div class="type-select" ng-show="wizard.step === 1">
     <h2>Select the type of datasource</h2>
@@ -36,7 +33,7 @@
   </div>
 
   <!-- Sync a url -->
-  <div class="" ng-show="wizard.step === 3">
+  <div class="row" ng-show="wizard.step === 3">
     <h3>Sync a url</h3>
     <form class="form-horizontal" novalidate name="syncForm" role="form">
       <div class="col-xs-3">
@@ -148,9 +145,6 @@
               ng-click="updateMetadata()">Save</button>
 
       </form>
-
+  <button class="btn btn-default" ng-click="cancel()">Close</button>
   </div>
 
-
-  <!-- URL reference -->
-</div>

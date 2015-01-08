@@ -386,14 +386,14 @@ angular.module('columbyApp')
      *
      * @param index
      */
-    $scope.deleteReference = function(index){
-      console.log(index);
+    $scope.deleteReference = function(reference){
+      var idx = $scope.dataset.references.indexOf(reference);
       var id = $scope.dataset.id;
-      var referenceId = $scope.dataset.references[ index].id;
+      var referenceId = reference.id;
 
       DatasetReferenceSrv.delete({id:id, rid:referenceId}, function(res){
         if (res.status === 'success') {
-          $scope.dataset.references.splice(index,1);
+          $scope.dataset.references.splice(idx, 1);
           toaster.pop('success', null, 'Reference deleted.');
         } else {
           toaster.pop('success', null, 'There was a problem deleting the reference.');

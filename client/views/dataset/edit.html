@@ -291,8 +291,9 @@
                     <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
                   </div>
                   <div class="actions" ng-show="editMode">
-                    <a href="" ng-click="deleteReference(reference)"><i class="fa fa-trash"></i></a>
-                    <!--<div ng-show="reference.confirmDelete">are you sure? <a href="" ng-click="deleteReference($index)"><i class="fa fa-trash"></i></a></div>-->
+                    <div class="col-xs-5 confirm-delete"
+                         confirm-delete
+                         on-confirm="deleteReference(reference)"></div>
                   </div>
                 </div>
               </div>

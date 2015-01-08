@@ -1,6 +1,6 @@
 angular.module('columbyApp')
   .controller('DistributionEditCtrl',
-  function ($scope, $modalInstance, distribution, DistributionSrv, toaster) {
+  function ($log, $scope, $modalInstance, distribution, DistributionSrv, toaster) {
 
     /* Initialize */
     $scope.upload = {
