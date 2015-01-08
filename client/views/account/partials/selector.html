@@ -1,0 +1,15 @@
+<div class="accountSelector">
+  <div class="switcher">
+    <h3>Select your publication account</h3>
+    <ul>
+      <li ng-repeat="account in $root.user.accounts">
+        <a href="" ng-click="selectAccount($index)">
+          <div>
+            <img src="{{account.avatar.url}}"/>
+            <span class="account">{{account.name}}</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -114,7 +114,7 @@
               <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a></span>,
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
             </p>
-            <div class="tags" ng-show="dataset.tags.length>0">
+            <div class="tags">
               <strong class="col-md-2">Tags: </strong>
               <tags-input ng-model="dataset.tags"
                           on-tag-added="addTag($tag)"
@@ -132,7 +132,7 @@
     </div>
 
     <div class="change-account" ng-hide="dataset.id">
-      <p>Published on: {{dataset.account.name}} <a ng-click="changeAccount()" ng-show="$root.user.accounts.length>1">Change</a></p>
+      <p>Published on: {{dataset.account.name}} <a ng-click="showAccountSelector()" ng-show="$root.user.accounts.length>1">Change</a></p>
     </div>
 
     <!-- Dataset Description -->
@@ -347,10 +347,5 @@
 				</div>
 			</div>
 		</div>
-
   </div>
-
-  <!-- Account selector -->
-  <div account-selector select="updateDatasetOwner(id)" ng-show="showAccountSelector"></div>
-
 </div>

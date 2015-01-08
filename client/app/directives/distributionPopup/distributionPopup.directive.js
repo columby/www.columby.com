@@ -2,7 +2,24 @@
 
 angular.module('columbyApp')
 
-  .directive('distributionPopup', function($rootScope, EmbedlySrv, DistributionSrv, ngDialog, FileService, toaster, ngProgress){
+  .controller('DistributionNewCtrl', function($scope, distribution){
+
+    $scope.distribution = distribution;
+    $scope.upload = {
+      inProgress: false,
+      finished: false
+    };
+    $scope.licenseToggle = {
+      isopen: false
+    };
+    $scope.wizard={
+      step:1
+    };
+
+
+  })
+
+  .directive('distributionPopup', function($modal,  $rootScope, EmbedlySrv, DistributionSrv, ngDialog, FileService, toaster, ngProgress){
     return {
       templateUrl: 'app/directives/distributionPopup/distributionPopup.html',
       restrict: 'EA',
@@ -10,19 +27,9 @@ angular.module('columbyApp')
         dataset: '='
       },
 
-      controller: function($scope){
+      controller: function($scope ){
 
         /* Initialize */
-        $scope.upload = {
-          inProgress: false,
-          finished: false
-        };
-        $scope.wizard={
-          step:1
-        };
-        $scope.licenseToggle = {
-          isopen: false
-        };
 
 
         /**
@@ -111,6 +118,7 @@ angular.module('columbyApp')
         }
 
         function initiate() {
+
           $scope.distribution = {
             dataset_id: $scope.dataset.id
           };
@@ -120,11 +128,26 @@ angular.module('columbyApp')
               $scope.distribution = res;
               $scope.dataset.distributions.push(res);
               toaster.pop('success', null, 'New source created.');
-              ngDialog.open({
-                template: 'app/directives/distributionPopup/distributionPopupContent.html',
-                className: 'ngdialog-theme-default fullscreenDialog',
-                scope: $scope
+
+              var modalInstance = $modal.open({
+                templateUrl: 'app/directives/distributionPopup/distributionPopupContent.html',
+                controller: 'DistributionNewCtrl',
+                size: 'lg',
+                backdrop: 'static',
+                keyboard: false,
+                resolve: {
+                  distribution: function() {
+                    return res;
+                  }
+                }
               });
+              modalInstance.result.then(function (selectedItem) {
+                console.log(selectedItem);
+                $scope.selected = selectedItem;
+              }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+              });
+
             } else {
               toaster.pop('danger', null, 'Something went wrong.');
             }
