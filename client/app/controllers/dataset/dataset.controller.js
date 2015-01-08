@@ -69,7 +69,7 @@ angular.module('columbyApp')
         console.log('Updating header image: ', $scope.dataset.headerImg.url);
 
 	      $scope.headerStyle={
-	        'background-image': 'linear-gradient(transparent,transparent), url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
+	        'background-image': 'linear-gradient(transparent,transparent), url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
 	        'background-blend-mode': 'multiply'
 	      };
 	    }
@@ -290,7 +290,7 @@ angular.module('columbyApp')
 
       $scope.dataset.headerImg.url = '/api/v2/file/' + $scope.dataset.headerImg.id + '?style=large';
       $scope.headerStyle = {
-        'background-image': 'url(/assets/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
+        'background-image': 'url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
         'background-blend-mode': 'multiply'
       };
     }

@@ -75,7 +75,7 @@ angular.module('columbyApp')
     function updateHeaderImage(){
       $scope.account.headerImg.url = '/api/v2/file/' + $scope.account.headerImg.id + '?style=large';
       $scope.headerStyle={
-        'background-image': 'url(/assets/images/default-header.png), url(' + $scope.account.headerImg.url + ')',
+        'background-image': 'url(/images/default-header.png), url(' + $scope.account.headerImg.url + ')',
         'background-blend-mode': 'multiply'
       };
     }
@@ -158,7 +158,7 @@ angular.module('columbyApp')
     function updateHeaderImage(){
       $scope.account.headerImg.url = '/api/v2/file/' + $scope.account.headerImg.id + '?style=large';
       $scope.headerStyle = {
-        'background-image': 'url(/assets/images/default-header.png), url(' + $scope.account.headerImg.url + ')',
+        'background-image': 'url(/images/default-header.png), url(' + $scope.account.headerImg.url + ')',
         'background-blend-mode': 'multiply'
       };
     }
