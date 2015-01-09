@@ -28,9 +28,29 @@
   </div>
 
   <div class="showcase-presentation" ng-hide="$root.user.id">
-
-      <div class="container-fluid">
-        <div class="col-xs-12 col-sm-6 col-md-offset-1 col-md-5 col-lg-offset-1 col-lg-5">
+			
+			<div class="container-fluid about-facts-columby">
+				<div class="about-columby col-xs-12 col-sm-6">
+          <h3>About Columby</h3>
+          <p>Columby helps you create an online page per dataset with all relevant information in one clear overview which you can use as a unique source in all your communications. We process your data and make them available for downloading, embedded previews or distribution via our API.</p>
+					<button type="button" class="" ng-hide="$root.user.id"  ui-sref='signin'>Login or Signup</button>
+        </div>
+        <div class="facts-columby col-xs-12 col-sm-6 col-md-6 col-lg-6">
+					<ul>
+						<li><i class="fa fa-check"></i>Create dataset pages</li>
+						<li><i class="fa fa-check"></i>Upload or sync your data</li>
+						<li><i class="fa fa-check"></i>Add references</li>
+						<li><i class="fa fa-check"></i>Distribute your data with our API</li>
+						<li><i class="fa fa-check"></i>Create collections</li>
+						<li><i class="fa fa-check"></i>Manage your account with colleagues</li>
+						<li><i class="fa fa-check"></i>Register for free</li>
+					</ul>
+        </div>
+      </div>
+			
+			
+      <div class="container-fluid slide">
+        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
           <h3>Publish your data in a beautiful way.</h3>
           <p>You carefully gather your data. We help you to present it in it's best way. Attach beautiful pictures, describe your dataset and add some references.</p>
         </div>
@@ -39,7 +59,7 @@
         </div>
       </div>
 
-        <div class="container-fluid">
+        <div class="container-fluid slide">
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
           <img src="/images/showcase-presentation-embed.png" class="img-responsive pull-left"/>
         </div>
