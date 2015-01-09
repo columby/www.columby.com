@@ -74,9 +74,9 @@
           <h3>Sources</h3>
 
           <!-- Primary source (Columby API) -->
-          <h2 class="datasource-title">Primary source</h2>
+          <!-- <h2 class="datasource-title">Primary source</h2> -->
           <ul>
-            <li>
+            <li class="dataset-primary">
               <div ng-hide="dataset.primary.id">
                 <p>This dataset is missing a primary source!</p>
               </div>
@@ -240,7 +240,7 @@
         <div class="col-md-12 content">
 					<h3>Embed this dataset</h3>
           <div class="link datasource-icon">
-            <a href="#" ng-click="showEmbedModal()"><i class="fa fa-code"></i></a>
+            <a href="#" ng-click="showEmbedModal()" class="fa fa-code"></a>
           </div>
 
         </div>
