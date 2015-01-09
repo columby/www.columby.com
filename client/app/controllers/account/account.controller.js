@@ -55,7 +55,7 @@ angular.module('columbyApp')
       } else {
         $scope.account = result;
         if ($scope.account.avatar) {
-          $scope.account.avatar.url = '/api/v2/file/' + $scope.account.avatar.id + '?style=small';
+          $scope.account.avatar.url = $rootScope.config.apiRoot + '/v2/file/' + $scope.account.avatar.id + '?style=small';
         }
         $scope.contentLoading = false;
         $window.document.title = 'columby.com | ' + result.name;
@@ -73,7 +73,7 @@ angular.module('columbyApp')
 
     }
     function updateHeaderImage(){
-      $scope.account.headerImg.url = '/api/v2/file/' + $scope.account.headerImg.id + '?style=large';
+      $scope.account.headerImg.url = $rootScope.config.apiRoot + '/v2/file/' + $scope.account.headerImg.id + '?style=large';
       $scope.headerStyle={
         'background-image': 'url(/images/default-header.png), url(' + $scope.account.headerImg.url + ')',
         'background-blend-mode': 'multiply'
@@ -122,7 +122,7 @@ angular.module('columbyApp')
         $log.log('Fetched result: ' , result);
         $scope.account = result;
         if (result.avatar){
-          $scope.account.avatar.url = '/api/v2/file/' + $scope.account.avatar.id + '?style=small';
+          $scope.account.avatar.url = $rootScope.config.apiRoot + '/v2/file/' + $scope.account.avatar.id + '?style=small';
         } else {
           $scope.account.avatar = {};
         }
@@ -156,7 +156,7 @@ angular.module('columbyApp')
     }
 
     function updateHeaderImage(){
-      $scope.account.headerImg.url = '/api/v2/file/' + $scope.account.headerImg.id + '?style=large';
+      $scope.account.headerImg.url = $rootScope.config.apiRoot + '/v2/file/' + $scope.account.headerImg.id + '?style=large';
       $scope.headerStyle = {
         'background-image': 'url(/images/default-header.png), url(' + $scope.account.headerImg.url + ')',
         'background-blend-mode': 'multiply'
@@ -246,7 +246,7 @@ angular.module('columbyApp')
               updateHeaderImage();
               break;
             case 'avatar':
-              $scope.account.avatar.url = '/api/v2/file/' + res.id + '?style=small';
+              $scope.account.avatar.url = $rootScope.config.apiRoot + '/v2/file/' + res.id + '?style=small';
               //console.log('updating avatar');
               updated.avatar = res.id;
               break;

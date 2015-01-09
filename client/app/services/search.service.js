@@ -2,14 +2,14 @@
 
 angular.module('columbyApp')
 
-.service('SearchSrv', function ($http) {
+.service('SearchSrv', function ($http, configSrv) {
 
   return {
     // TODO: Marcel. universele service naar columby search api
     query: function(query){
       return $http({
         method: 'get',
-        url: 'api/v2/search',
+        url: configSrv.apiRoot + '/v2/search',
         params: {
           query: query.text,
           options: query.options
