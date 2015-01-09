@@ -2,21 +2,23 @@
 
 angular.module('columbyApp')
 
-  .service('DatasetSrv', function ($resource, configSrv) {
+  .service('DatasetSrv', function($resource, configSrv) {
+
     return $resource(configSrv.apiRoot + '/v2/dataset/:id', {
         id: '@id',
-        offset: '@offset'
+        offset: '@offset',
+        tid: '@tid'
       }, {
         query: { method: 'GET', isArray: false, responseType: 'json' },
         index: { method: 'GET', isArray: false, responseType: 'json' },
         update: { method: 'PUT' },
         addTag: {
           method: 'POST',
-          url: 'api/v2/dataset/:id/addTag'
+          url: configSrv.apiRoot + '/v2/dataset/:id/tag'
         },
         removeTag: {
-          method: 'POST',
-          url: 'api/v2/dataset/:id/removeTag'
+          method: 'DELETE',
+          url: configSrv.apiRoot + '/v2/dataset/:id/tag/:tid'
         }
       }
     );

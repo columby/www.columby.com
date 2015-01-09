@@ -409,7 +409,7 @@ angular.module('columbyApp')
         controller: 'DistributionCreateCtrl',
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: false
         //resolve: {
         //  distribution: function () {
         //    return distribution;
@@ -704,20 +704,20 @@ angular.module('columbyApp')
     };
 
     $scope.addTag = function(tag){
-      console.log('adding tag',tag);
-      TagService.save(tag, function(result){
-        tag.id=result.id;
-        DatasetSrv.addTag({id:$scope.dataset.id, tagId:result.id}, function(result){
+      console.log('adding tag', tag);
+      DatasetSrv.addTag({
+        id:$scope.dataset.id,
+        tag:tag
+      }, function(result){
           console.log('dtaset addtag result: ', result);
-        });
       });
     };
 
     $scope.removeTag = function(tag){
-      console.log('removind tag, ', tag);
-      DatasetSrv.removeTag({id:$scope.dataset.id, tagId:tag.id},function(result){
+      console.log('removing tag, ', tag);
+      DatasetSrv.removeTag({id:$scope.dataset.id, tid:tag.id},function(result){
         console.log('dataset remove result: ', result);
-      })
+      });
     };
 
 
