@@ -2,9 +2,9 @@
 
 angular.module('columbyApp')
 
-  .service('PrimaryService', function($resource) {
+  .service('PrimaryService', function($resource, configSrv) {
 
-    return $resource('api/v2/primary/:id', {
+    return $resource(configSrv.apiRoot + '/v2/primary/:id', {
         id: '@id'
       }, {
         update: {

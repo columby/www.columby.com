@@ -483,16 +483,6 @@ angular.module('columbyApp')
     /************* PRIMARY SOURCE ***************/
 
     /**
-     * Handle Primary Source Initialization
-     *
-     * @param $files
-     */
-    $scope.addPrimarySource = function(){
-      console.log('yyyy');
-
-    };
-
-    /**
      *
      * Handle the request to convert a distribution to a primary source.
      *
@@ -503,42 +493,55 @@ angular.module('columbyApp')
       $scope.newPrimary = {
         dataset_id: $scope.dataset.id,
         distribution_id: $scope.dataset.distributions[ idx].id,
-        syncPeriod: null
+        syncPeriod: 0
       };
       console.log('newPrimary: ', $scope.newPrimary);
-      // Open the dialog
-      ngDialog.openConfirm({
-        template: 'views/dataset/addPrimarySource.html',
-        controller: 'DatasetEditCtrl',
-        scope: $scope
-      }).then(function(value){
-        PrimaryService.save(value, function(result){
+
+      var modalInstance = $modal.open({
+        templateUrl: 'views/dataset/primary/new.html',
+        controller: 'DatasetPrimaryCtrl',
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        resolve: {
+          distribution: function () {
+            return $scope.dataset.distributions[ idx];
+          },
+          primary: function(){
+            return $scope.newPrimary;
+          }
+        }
+      });
+
+      modalInstance.result.then(function(primary) {
+        console.log(primary);
+        //$scope.selected = selectedItem;
+        PrimaryService.save(primary, function(result){
+          console.log(result);
           if (result.id){
-            ngDialog.closeAll();
             toaster.pop('success',null,'The primary source was created successfully');
             $scope.dataset.primary = result;
-
           } else {
             toaster.pop('warning',null,'There was an error creating the primary source.');
           }
         });
-      },function(reject){
-        console.log(reject);
+      }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
       });
     };
 
-    /**
-     * Create a new primary source
-     */
-    $scope.createPrimary = function(){
-      var primary = {
-        syncperiod: $scope.newPrimary.syncPeriod,
-        dataset_id: $scope.newPrimary.dataset_id,
-        distribution_id: $scope.newPrimary.distribution_id
-      };
-      console.log('new Primary: ', primary);
-
-    };
+    ///**
+    // * Create a new primary source
+    // */
+    //$scope.createPrimary = function(){
+    //  var primary = {
+    //    syncperiod: $scope.newPrimary.syncPeriod,
+    //    dataset_id: $scope.newPrimary.dataset_id,
+    //    distribution_id: $scope.newPrimary.distribution_id
+    //  };
+    //  console.log('new Primary: ', primary);
+    //
+    //};
 
     /**
      * Delete a primary source
@@ -561,8 +564,8 @@ angular.module('columbyApp')
       console.log($scope.dataset.primary);
 
       var modalInstance = $modal.open({
-        templateUrl: 'views/dataset/editPrimarySource.html',
-        controller: 'EditPrimarySourceCtrl',
+        templateUrl: 'views/dataset/primary/edit.html',
+        controller: 'DatasetPrimaryEditCtrl',
         size: 'lg',
         backdrop: 'static',
         keyboard: false,

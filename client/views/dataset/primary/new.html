@@ -1,0 +1,34 @@
+<div class="modal-header">
+  <h3 class="modal-title">New Primary</h3>
+</div>
+
+<div class="modal-body add-primary-source">
+  <!-- file -->
+  <div ng-show="distribution.type==='localFile'">
+    From the file distribution: {{distribution.title}}
+  </div>
+
+  <!-- sync -->
+  <div ng-show="distribution.type==='remoteService'">
+    <p>From the url distribution: {{distribution.title || 'No title'}}<br />
+      with source {{distribution.accessUrl}}.
+    <h3>Synchronisation</h3>
+    <p>How often would you like to sync the data? </p>
+    <div class="btn-group">
+      <label class="btn btn-default" ng-model="primary.syncPeriod" btn-radio="0">Do not sync</label>
+      <label class="btn btn-default" ng-model="primary.syncPeriod" btn-radio="1">Yearly</label>
+      <label class="btn btn-default" ng-model="primary.syncPeriod" btn-radio="2">Quarterly</label>
+      <label class="btn btn-default" ng-model="primary.syncPeriod" btn-radio="3">Monthly</label>
+      <label class="btn btn-default" ng-model="primary.syncPeriod" btn-radio="4">Weekly</label>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-primary" ng-click="confirm()">Create primary source</button>
+  <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
+
+
+
+<div class="col-md-12"><pre>{{primary}}</pre></div>

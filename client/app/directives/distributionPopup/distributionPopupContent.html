@@ -1,4 +1,8 @@
-<pre>Distribution: {{distribution}}</pre>
+
+<div class="modal-header">
+  <h3 class="modal-title">Add a datasource</h3>
+</div>
+<div class="modal-body">
 
   <h2>Add a new datasource</h2>
   <div ng-bind-html="statusText"></div>
@@ -145,6 +149,8 @@
               ng-click="updateMetadata()">Save</button>
 
       </form>
-  <button class="btn btn-default" ng-click="cancel()">Close</button>
   </div>
+<div class="modal-footer">
+  <button class="btn btn-warning" ng-click="close()">Cancel</button>
+</div>
 
