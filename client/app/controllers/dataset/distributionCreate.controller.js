@@ -1,6 +1,8 @@
+'use strict';
+
 angular.module('columbyApp')
   .controller('DistributionEditCtrl',
-  function ($log, $scope, $modalInstance, distribution, DistributionSrv, toaster) {
+  function ($log, $scope, $modalInstance, distribution, FileService, DistributionSrv, ngProgress, ngDialog, toaster) {
 
     /* Initialize */
     $scope.upload = {
@@ -100,26 +102,26 @@ angular.module('columbyApp')
       xhr.send(fd);
     }
 
-    function initiate() {
-      $scope.distribution = {
-        dataset_id: $scope.dataset.id
-      };
-
-      DistributionSrv.save($scope.distribution, function (res) {
-        if (res.id) {
-          $scope.distribution = res;
-          $scope.dataset.distributions.push(res);
-          toaster.pop('success', null, 'New source created.');
-          ngDialog.open({
-            template: 'app/directives/distributionPopup/distributionPopupContent.html',
-            className: 'ngdialog-theme-default fullscreenDialog',
-            scope: $scope
-          });
-        } else {
-          toaster.pop('danger', null, 'Something went wrong.');
-        }
-      });
-    }
+    //function initiate() {
+    //  $scope.distribution = {
+    //    dataset_id: $scope.dataset.id
+    //  };
+    //
+    //  DistributionSrv.save($scope.distribution, function (res) {
+    //    if (res.id) {
+    //      $scope.distribution = res;
+    //      $scope.dataset.distributions.push(res);
+    //      toaster.pop('success', null, 'New source created.');
+    //      ngDialog.open({
+    //        template: 'app/directives/distributionPopup/distributionPopupContent.html',
+    //        className: 'ngdialog-theme-default fullscreenDialog',
+    //        scope: $scope
+    //      });
+    //    } else {
+    //      toaster.pop('danger', null, 'Something went wrong.');
+    //    }
+    //  });
+    //}
 
     function closeDistribution() {
       ngDialog.closeAll();
@@ -222,6 +224,7 @@ angular.module('columbyApp')
           $scope.wizard.step = 4;
         }
       });
-    }
+    };
+
   });
 

@@ -29,13 +29,13 @@ angular.module('columbyApp')
             result: result,
             valid: true,
             checkingLink: false
-          }
+          };
         }, function(err){
           $scope.reference = {
             error: err,
             valid: false,
             checkingLink: false
-          }
+          };
         });
     };
 

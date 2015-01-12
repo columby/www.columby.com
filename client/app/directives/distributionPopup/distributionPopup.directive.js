@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .controller('DistributionNewCtrl', function($log, $scope, $modalInstance, distribution, DistributionSrv){
+  .controller('DistributionNewCtrl', function($log, $scope, $modalInstance, distribution, FileService, toaster, ngProgress, DistributionSrv){
 
     $scope.distribution = distribution;
     $scope.upload = {
@@ -208,12 +208,12 @@ angular.module('columbyApp')
 
     $scope.close = function(){
       $modalInstance.close($scope.distribution);
-    }
+    };
   })
 
 
 
-  .directive('distributionPopup', function($modal,  $rootScope, EmbedlySrv, DistributionSrv, ngDialog, FileService, toaster, ngProgress){
+  .directive('distributionPopup', function($modal,  $rootScope, EmbedlySrv, DistributionSrv, ngDialog, FileService, toaster){
     return {
       templateUrl: 'app/directives/distributionPopup/distributionPopup.html',
       restrict: 'EA',

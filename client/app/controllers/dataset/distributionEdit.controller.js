@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('columbyApp')
   .controller('DistributionEditCtrl',
   function ($scope, $modalInstance, distribution, DistributionSrv, toaster) {

@@ -149,7 +149,7 @@ angular.module('columbyApp')
             break;
           case 'dataset':
             console.log(item.account.id);
-            for (var i=0;i<user.accounts.length;i++){
+            for (i=0;i<user.accounts.length;i++){
               if (item.account.id === user.accounts[ i].id){
                 if ( (user.accounts[ i].role === 1) || (user.accounts[ i].role === 2) || (user.accounts[ i].role === 3) ) {
                   console.log('canedit true: ', user.accounts[ i].role);

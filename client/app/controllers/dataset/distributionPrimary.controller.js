@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('columbyApp')
 
   // Controller for a new primary source modal
@@ -10,7 +12,7 @@ angular.module('columbyApp')
     console.log(primary);
 
     $scope.confirm = function(){
-      $modalInstance.close($scope.primary)
+      $modalInstance.close($scope.primary);
     };
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
@@ -23,7 +25,7 @@ angular.module('columbyApp')
     $scope.primary = primary;
 
     $scope.confirm = function(){
-      $modalInstance.close($scope.primary)
+      $modalInstance.close($scope.primary);
     };
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');

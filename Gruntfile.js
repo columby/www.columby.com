@@ -30,19 +30,6 @@ module.exports = function (grunt) {
 
     // Replace configuration settings
     replace: {
-      local: {
-        options: {
-          patterns: [{
-            json: grunt.file.readJSON('./client/config/environments/local.json')
-          }]
-        },
-        files: [{
-          expand: true,
-          flatten: true,
-          src: ['./client/config/config.service.js'],
-          dest: '<%= yeoman.client %>/app/services/'
-        }]
-      },
       development: {
         options: {
           patterns: [{
@@ -56,20 +43,7 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.client %>/app/services/'
         }]
       },
-      staging: {
-        options: {
-          patterns: [{
-            json: grunt.file.readJSON('./client/config/environments/staging.json')
-          }]
-        },
-        files: [{
-          expand: true,
-          flatten: true,
-          src: ['./client/config/config.service.js'],
-          dest: '<%= yeoman.client %>/app/services/'
-        }]
-      },
-      prod: {
+      dist: {
         options: {
           patterns: [{
             json: grunt.file.readJSON('./client/config/environments/production.json')
@@ -78,7 +52,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           flatten: true,
-          src: ['./client/config.service.js'],
+          src: ['./client/config/config.service.js'],
           dest: '<%= yeoman.client %>/app/services/'
         }]
       }
@@ -334,9 +308,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.client %>/assets/images',
-          src: '{,*/}*.{png,jpg,jpeg,gif}',
-          dest: '<%= yeoman.dist %>/public/assets/images'
+          cwd: '<%= yeoman.client %>/images/',
+          src: '**/*.{png,jpg,jpeg,gif}',
+          dest: '<%= yeoman.dist %>/public/images'
         }]
       }
     },
@@ -383,12 +357,12 @@ module.exports = function (grunt) {
       },
       main: {
         cwd: '<%= yeoman.client %>',
-        src: ['{app,components}/**/*.html'],
+        src: ['{app,components,views}/**/*.html'],
         dest: '.tmp/templates.js'
       },
       tmp: {
         cwd: '.tmp',
-        src: ['{app,components}/**/*.html'],
+        src: ['{app,components,views}/**/*.html'],
         dest: '.tmp/tmp-templates.js'
       }
     },
@@ -668,6 +642,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'replace:dist',
     'injector:less',
     'concurrent:dist',
     'injector',
@@ -698,7 +673,6 @@ module.exports = function (grunt) {
         'env:all',
         'env:prod',
         'express:prod',
-        'replace:prod',
         'wait',
         'open',
         'express-keepalive'
@@ -735,27 +709,10 @@ module.exports = function (grunt) {
       ]);
     }
 
-    if (target === 'staging') {
-      grunt.task.run([
-        'clean:server',
-        'env:all',
-        'injector:less',
-        'replace:staging',
-        'concurrent:server',
-        'injector',
-        'wiredep',
-        'autoprefixer',
-        'express:dev',
-
-        'wait',
-        'open',
-        'watch'
-      ]);
-    }
-
     if (target === 'development') {
       grunt.task.run([
         'clean:server',
+        'replace:development',
         'env:all',
         'injector:less',
         'concurrent:server',
@@ -763,7 +720,6 @@ module.exports = function (grunt) {
         'wiredep',
         'autoprefixer',
         'express:dev',
-        'replace:dev',
         'wait',
         'open',
         'watch'
@@ -779,7 +735,6 @@ module.exports = function (grunt) {
       'wiredep',
       'autoprefixer',
       'express:dev',
-      'replace:development',
       'wait',
       'open',
       'watch'

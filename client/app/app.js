@@ -47,7 +47,6 @@ angular.module('columbyApp', [
         }
         // Attached the user object to the rootscope.
         if (response.id) {
-          var user = response;
           // set primary account
           $rootScope.user = response;
         }
@@ -55,7 +54,7 @@ angular.module('columbyApp', [
     }
   })
 
-  .controller('ColumbyCtrl', function($window, $rootScope, $location, $anchorScroll){
+  .controller('ColumbyCtrl', function($window, $rootScope, $location){
     $rootScope.$on('$stateChangeSuccess',  function(event, toState){
       // send to analytics
       //$window.ga('send', 'pageview', { page: $location.path() });
@@ -64,8 +63,6 @@ angular.module('columbyApp', [
       stateName = stateName.replace('.','-');
       $rootScope.bodyClasses.state = stateName;
       $rootScope.bodyClasses.embed = $location.search().embed;
-
-      $anchorScroll();
 
     });
   })

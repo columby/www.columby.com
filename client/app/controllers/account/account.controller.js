@@ -254,8 +254,8 @@ angular.module('columbyApp')
               console.log('updating account file');
               AccountSrv.addFile($scope.fileUpload.file, function(result){
                 $log.log('result: ', result);
+                $scope.account.files.push(result);
               });
-              $scope.account.files.push(result);
               break;
           }
           $scope.fileUpload = null;

@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('columbyApp')
 
   .directive('confirmDelete', function($timeout) {
@@ -9,7 +11,7 @@ angular.module('columbyApp')
       },
       templateUrl: 'app/directives/confirmDelete/deleteConfirmation.html',
 
-      link: function(scope,element,attrs){
+      link: function(scope,element){
         element.bind('mouseenter', function() {
           scope.hover=true;
         });
@@ -17,7 +19,8 @@ angular.module('columbyApp')
           $timeout(function(){
             scope.$apply(function() {
               scope.hover = false;
-              return scope.isDeleting = false;
+              scope.isDeleting = false;
+              return scope.isDeleting;
             });
           }, 500);
         });
@@ -45,5 +48,5 @@ angular.module('columbyApp')
           $scope.onConfirm();
         };
       }
-    }
+    };
   });

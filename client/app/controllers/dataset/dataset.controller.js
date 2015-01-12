@@ -470,8 +470,8 @@ angular.module('columbyApp')
           changed = true;
         }
         if (changed){
-          DatasetSrv.update({id: dataset.id}, dataset,function(res){
-            if (res.id){
+          DatasetSrv.update({id: dataset.id}, dataset,function(result){
+            if (result.id){
               $scope.datasetUpdate.title = result.title;
               $scope.datasetUpdate.description = result.description;
               toaster.pop('success', null, 'Dataset updated.');
@@ -562,7 +562,9 @@ angular.module('columbyApp')
     $scope.confirmDeleteDistribution = function(index){
       $scope.dataset.distributions[ index].confirmDelete = true;
       // turn the confirmation off automatically
-      $timeout(function(){$scope.dataset.distributions[ index].confirmDelete = false}, 5000);
+      $timeout(function(){
+        $scope.dataset.distributions[ index].confirmDelete = false;
+      }, 5000);
     };
 
     /**
@@ -658,9 +660,9 @@ angular.module('columbyApp')
           } else {
             toaster.pop('warning',null,'There was an error deleting the primary source.');
           }
-        })
+        });
       }
-    }
+    };
 
     $scope.editPrimarySource = function(){
       console.log($scope.dataset.primary);
@@ -799,11 +801,11 @@ angular.module('columbyApp')
     };
 
 
-    $scope.loadTags = function(query) {
-      //console.log('querying, ', query);
-      //var r=TagService.query(query);
-      //console.log(r);
-    };
+    //$scope.loadTags = function(query) {
+    //  //console.log('querying, ', query);
+    //  //var r=TagService.query(query);
+    //  //console.log(r);
+    //};
     $scope.addTag = function(tag){
       console.log('adding tag',tag);
       TagService.save(tag, function(result){
@@ -818,7 +820,7 @@ angular.module('columbyApp')
       console.log('removind tag, ', tag);
       DatasetSrv.removeTag({id:$scope.dataset.id, tagId:tag.id},function(result){
         console.log('dataset remove result: ', result);
-      })
+      });
     };
 
 

@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('columbyApp')
   .controller('AccountSelectorCtrl',
   function ($scope, $modalInstance, user) {

@@ -159,7 +159,7 @@ angular.module('columbyApp')
         keyboard: false,
         resolve: {
           user: function () {
-            return $rootScope.user.accounts
+            return $rootScope.user.accounts;
           }
         }
       });
@@ -189,7 +189,7 @@ angular.module('columbyApp')
       $scope.dataset.account_id = $rootScope.user.accounts[ id].id;
       $scope.dataset.account = $rootScope.user.accounts[ id];
       //$scope.showAccountSelector = false;
-    };
+    }
 
     /**
      *
@@ -457,7 +457,9 @@ angular.module('columbyApp')
     $scope.confirmDeleteDistribution = function(index){
       $scope.dataset.distributions[ index].confirmDelete = true;
       // turn the confirmation off automatically
-      $timeout(function(){$scope.dataset.distributions[ index].confirmDelete = false}, 5000);
+      $timeout(function(){
+        $scope.dataset.distributions[ index].confirmDelete = false;
+      }, 5000);
     };
 
     /**
@@ -556,9 +558,9 @@ angular.module('columbyApp')
           } else {
             toaster.pop('warning',null,'There was an error deleting the primary source.');
           }
-        })
+        });
       }
-    }
+    };
 
     $scope.editPrimarySource = function(){
       console.log($scope.dataset.primary);
@@ -697,11 +699,11 @@ angular.module('columbyApp')
     };
 
 
-    $scope.loadTags = function(query) {
-      //console.log('querying, ', query);
-      //var r=TagService.query(query);
-      //console.log(r);
-    };
+    //$scope.loadTags = function(query) {
+    //  //console.log('querying, ', query);
+    //  //var r=TagService.query(query);
+    //  //console.log(r);
+    //};
 
     $scope.addTag = function(tag){
       console.log('adding tag', tag);

@@ -75,14 +75,7 @@ angular.module('columbyApp')
         fd.append('policy',s3Response.credentials.policy);
         fd.append('signature',s3Response.credentials.signature);
         fd.append('success_action_status', '201');
-        fd.append("file", file);
-
-        var xhr = new XMLHttpRequest();
-        xhr.upload.addEventListener("progress", uploadProgress, false);
-        xhr.addEventListener("load", uploadComplete, false);
-        xhr.addEventListener("error", uploadFailed, false);
-        xhr.addEventListener("abort", uploadCanceled, false);
-        scope.$emit('s3upload:start', xhr);
+        fd.append('file', file);
 
         // Define event handlers
         function uploadProgress(e) {
@@ -105,7 +98,7 @@ angular.module('columbyApp')
         function uploadComplete(e) {
           var xhr = e.srcElement || e.target;
           scope.$apply(function () {
-            self.uploads--;
+            this.uploads--;
             scope.uploading = false;
             if (xhr.status === 201) { // successful upload
               console.log('Upload finished. ');
@@ -123,7 +116,7 @@ angular.module('columbyApp')
         function uploadFailed(e) {
           var xhr = e.srcElement || e.target;
           scope.$apply(function () {
-            self.uploads--;
+            this.uploads--;
             scope.uploading = false;
             scope.success = false;
             deferred.reject(xhr);
@@ -134,13 +127,20 @@ angular.module('columbyApp')
         function uploadCanceled(e) {
           var xhr = e.srcElement || e.target;
           scope.$apply(function () {
-            self.uploads--;
+            this.uploads--;
             scope.uploading = false;
             scope.success = false;
             deferred.reject(xhr);
             scope.$emit('s3upload:abort', xhr);
           });
         }
+
+        var xhr = new XMLHttpRequest();
+        xhr.upload.addEventListener('progress', uploadProgress, false);
+        xhr.addEventListener('load', uploadComplete, false);
+        xhr.addEventListener('error', uploadFailed, false);
+        xhr.addEventListener('abort', uploadCanceled, false);
+        scope.$emit('s3upload:start', xhr);
 
         // Send the file
         scope.uploading = true;
@@ -178,7 +178,7 @@ angular.module('columbyApp')
        * Check if the file is an image
        *
        **/
-      validateFile: function(filetype, type, target) {
+      validateFile: function(filetype, type) {
         $log.log('validating filetype: ' + filetype + ' with type: ' + type);
         var validTypes;
         if (type === 'image') {

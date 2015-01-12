@@ -7,7 +7,7 @@ angular.module('columbyApp')
 
       .state('home', {
         url: '/',
-        templateUrl: '/views/home/home.html',
+        templateUrl: 'views/home/home.html',
         controller: 'HomeCtrl'
       });
   });

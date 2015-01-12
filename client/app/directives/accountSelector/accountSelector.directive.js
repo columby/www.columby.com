@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .directive('accountSelector', function($rootScope){
+  .directive('accountSelector', function(){
     return {
       templateUrl: 'app/directives/accountSelector/accountSelector.html',
       restrict: 'EA',
