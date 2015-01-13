@@ -7,7 +7,7 @@ angular.module('columbyApp')
  *  Controller for a dataset Edit page
  *
  */
-.controller('DatasetEditCtrl', function($log,$window, $rootScope, $scope, configSrv, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, TagService, toaster, Slug, ngDialog, $http, $upload, FileService,ngProgress, $timeout,$modal) {
+.controller('DatasetEditCtrl', function($log,$window, $rootScope, $scope, configSrv, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, TagService, toaster, Slug, ngDialog, $http, FileService,ngProgress, $timeout,$modal) {
 
     /*-------------------   INITIALISATION   ------------------------------------------------------------------*/
     $scope.hostname = $location.protocol() + '://' + $location.host();
@@ -22,6 +22,7 @@ angular.module('columbyApp')
     /*-------------------   FUNCTIONS   -----------------------------------------------------------------------*/
     function getDataset(){
       $scope.contentLoading = true;  // show loading message while loading dataset
+
       DatasetSrv.get({
         id: $stateParams.id
       }, function(dataset) {
@@ -45,11 +46,6 @@ angular.module('columbyApp')
         $window.document.title = 'columby.com | ' + dataset.title;
         $scope.contentLoading = false;
 
-        // Update image styles
-        if (dataset.headerImg){
-          dataset.headerImg.url = $rootScope.config.aws.endpoint + dataset.account.id + '/images/styles/large/' + dataset.headerImg.filename;
-        }
-
         // Make sure there is a reference array
         if (!dataset.references){
           dataset.references = [];
@@ -63,7 +59,7 @@ angular.module('columbyApp')
         $scope.datasetUpdate.description = $scope.dataset.description;
 
         // Update the header image
-        if ($scope.dataset.headerImg){
+        if ($scope.dataset.headerImg && $scope.dataset.headerImg.url) {
           updateHeaderImage();
         }
 
@@ -141,13 +137,15 @@ angular.module('columbyApp')
      *
      */
     function updateHeaderImage(){
-
-      $scope.dataset.headerImg.url = configSrv.apiRoot + '/v2/file/' + $scope.dataset.headerImg.id + '?style=large';
-      $scope.headerStyle = {
-        'background-image': 'url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
-        'background-blend-mode': 'multiply'
-      };
+      if ($scope.dataset.headerImg) {
+        $scope.dataset.headerImg.url = configSrv.apiRoot + '/v2/file/' + $scope.dataset.headerImg.id + '?style=large';
+        $scope.headerStyle = {
+          'background-image': 'linear-gradient(transparent,transparent), url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
+          'background-blend-mode': 'multiply'
+        };
+      }
     }
+
 
     function showAccountSelector(){
       console.log('show selector');
@@ -588,114 +586,6 @@ angular.module('columbyApp')
     $scope.closeDialog = function(){
       ngDialog.closeAll();
     };
-
-    $scope.updateHeaderImage = function($files) {
-      $scope.upload=[];
-      var file = $files[0];
-      file.progress = parseInt(0);
-      //console.log('file', file);
-
-      // check if the file is an image
-      var validTypes = [ 'image/png', 'image/jpg', 'image/jpeg' ];
-
-      if (validTypes.indexOf(file.type) === -1) {
-        toaster.pop('alert',null,'File type ' + file.type + ' is not allowed');
-        return;
-      }
-
-      // First get a signed request from the Columby server
-      $http({
-        method: 'GET',
-        url: 'api/v2/files/sign',
-        params: {
-          type: file.type,
-          size: file.size,
-          name: file.name,
-          accountId: $scope.dataset.account.id
-        }
-      })
-        .success(function(response){
-          var s3Params = response.credentials;
-          var fileResponse = response.file;
-          // Initiate upload
-          $scope.upload = $upload.upload({
-            url: 'https://s3.amazonaws.com/' + $rootScope.config.aws.bucket,
-            method: 'POST',
-            data: {
-              'key' : $scope.dataset.account.id + '/' + response.file.filename,
-              'acl' : 'public-read',
-              'Content-Type' : file.type,
-              'AWSAccessKeyId': s3Params.AWSAccessKeyId,
-              'success_action_status' : '201',
-              'Policy' : s3Params.s3Policy,
-              'Signature' : s3Params.s3Signature
-            },
-            file: file
-          }).then(function(response) {
-            //console.log(response.data);
-            file.progress = parseInt(100);
-            if (response.status === 201) {
-              // convert xml response to json
-              var data = window.xml2json.parser(response.data),
-                parsedData;
-              parsedData = {
-                location: data.postresponse.location,
-                bucket: data.postresponse.bucket,
-                key: data.postresponse.key,
-                etag: data.postresponse.etag
-              };
-
-              // upload finished, update the file reference
-              $http({
-                method: 'POST',
-                url: 'api/v2/files/s3success',
-                data: {
-                  fileId: fileResponse.id,
-                  url: parsedData.location
-                }
-              })
-                .success(function(response){
-                  //console.log('res', response);
-                  $scope.dataset.headerImage = response.url;
-                  var d = {
-                    id: $scope.dataset.id,
-                    headerImage: response.url
-                  };
-                  //console.log('datasetUpdate', d);
-                  DatasetSrv.update(d, function(result){
-                    //console.log('r',result);
-                    if (result.id) {
-                      toaster.pop('success', 'Updated', 'Account updated.');
-                      updateHeaderImage();
-                    } else {
-                      toaster.pop('warning', 'Updated', 'Account There was an error updating.');
-                    }
-                  });
-                })
-                .error(function(data, status, headers, config){
-                  console.log('res', data);
-                  console.log(status);
-                  console.log(headers);
-                  console.log(config);
-                });
-              // $scope.imageUploads.push(parsedData);
-
-            } else {
-              console.log('Upload Failed');
-            }
-          }, function(e){
-            console.log(e);
-          }, function(evt) {
-            console.log(evt);
-            file.progress =  parseInt(100.0 * evt.loaded / evt.total);
-          });
-        })
-        .error(function(data, status){
-          console.log('Error message', data.err);
-          console.log(status);
-        });
-    };
-
 
     //$scope.loadTags = function(query) {
     //  //console.log('querying, ', query);
