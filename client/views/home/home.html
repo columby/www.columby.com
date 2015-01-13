@@ -112,7 +112,7 @@
               <div class="user-date">
                 <!-- <img ng-src="dataset.account.avatar.img" class="img-rounded"/> -->
                 <img class="img-circle avatar-small" ng-src="/api/v2/file/{{dataset.account.avatar.id}}?style=small" alt="{{dataset.account.name}}"/>
-                <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'MMMM d, yyyy'}}</time>
+                <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
               </div>
             </li>
         	</ul>
