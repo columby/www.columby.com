@@ -50,6 +50,7 @@ angular.module('columbyApp')
         });
       },
 
+      
       /******
        * Upload a file to s3 with a signed request
        *
@@ -98,7 +99,6 @@ angular.module('columbyApp')
         function uploadComplete(e) {
           var xhr = e.srcElement || e.target;
           scope.$apply(function () {
-            this.uploads--;
             scope.uploading = false;
             if (xhr.status === 201) { // successful upload
               console.log('Upload finished. ');
@@ -116,7 +116,6 @@ angular.module('columbyApp')
         function uploadFailed(e) {
           var xhr = e.srcElement || e.target;
           scope.$apply(function () {
-            this.uploads--;
             scope.uploading = false;
             scope.success = false;
             deferred.reject(xhr);
@@ -127,7 +126,6 @@ angular.module('columbyApp')
         function uploadCanceled(e) {
           var xhr = e.srcElement || e.target;
           scope.$apply(function () {
-            this.uploads--;
             scope.uploading = false;
             scope.success = false;
             deferred.reject(xhr);
@@ -144,7 +142,6 @@ angular.module('columbyApp')
 
         // Send the file
         scope.uploading = true;
-        this.uploads++;
         xhr.open('POST', uri, true);
         xhr.send(fd);
 

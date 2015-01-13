@@ -7,7 +7,7 @@ angular.module('columbyApp')
  *  Controller for a dataset Edit page
  *
  */
-.controller('DatasetEditCtrl', function($log,$window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, TagService, toaster, Slug, ngDialog, $http, $upload, FileService,ngProgress, $timeout,$modal) {
+.controller('DatasetEditCtrl', function($log,$window, $rootScope, $scope, configSrv, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, TagService, toaster, Slug, ngDialog, $http, $upload, FileService,ngProgress, $timeout,$modal) {
 
     /*-------------------   INITIALISATION   ------------------------------------------------------------------*/
     $scope.hostname = $location.protocol() + '://' + $location.host();
@@ -142,7 +142,7 @@ angular.module('columbyApp')
      */
     function updateHeaderImage(){
 
-      $scope.dataset.headerImg.url = '/api/v2/file/' + $scope.dataset.headerImg.id + '?style=large';
+      $scope.dataset.headerImg.url = configSrv.apiRoot + '/v2/file/' + $scope.dataset.headerImg.id + '?style=large';
       $scope.headerStyle = {
         'background-image': 'url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
         'background-blend-mode': 'multiply'
