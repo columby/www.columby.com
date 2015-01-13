@@ -65,7 +65,7 @@
                  type="text"
                  ng-model="search.$"
                  placeholder="Search this dataset list"
-                 ng-show="datasets.rows.length>1">
+                 ng-show="datasets.count>10">
 
           <h3>{{datasets.count}} Datasets</h3>
           <p ng-show="!datasets">No datasets for this user</p>
@@ -97,7 +97,8 @@
               class="pagination-sm"
               boundary-links="true"
               rotate="false"
-              num-pages="datasets.numPages">
+              num-pages="datasets.numPages"
+              ng-show="dataset.numPages>0">
             </pagination>
 
           </div>
@@ -107,7 +108,7 @@
     </div>
 
     <!-- General account files -->
-    <div class="files-wrapper">
+    <div class="files-wrapper" ng-show="account.files.length>0">
       <div class="container">
         <div class="col-md-12">
           <h3>Account Files</h3>

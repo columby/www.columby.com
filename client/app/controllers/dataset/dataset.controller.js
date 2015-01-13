@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, DatasetReferenceSrv, AuthSrv, toaster, ngDialog) {
+  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, DatasetReferenceSrv, AuthSrv, toaster, ngDialog, configSrv) {
 
     /* --------- INITIALISATION ------------------------------------------------------------ */
     $scope.hostname = $location.protocol() + '://' + $location.host();
@@ -65,7 +65,7 @@ angular.module('columbyApp')
      */
     function updateHeaderImage(){
 			if ($scope.dataset.headerImg) {
-        $scope.dataset.headerImg.url = '/api/v2/file/' + $scope.dataset.headerImg.id + '?style=large';
+        $scope.dataset.headerImg.url = configSrv.apiRoot + '/v2/file/' + $scope.dataset.headerImg.id + '?style=large';
         console.log('Updating header image: ', $scope.dataset.headerImg.url);
 
 	      $scope.headerStyle={
