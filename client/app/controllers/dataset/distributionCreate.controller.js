@@ -199,6 +199,8 @@ angular.module('columbyApp')
       };
 
       DistributionSrv.validateLink({url: $scope.distribution.accessUrl}, function (response) {
+        console.log('validation result');
+        console.log(response);
         $scope.distribution.validation = {
           status: 'done',
           result: response

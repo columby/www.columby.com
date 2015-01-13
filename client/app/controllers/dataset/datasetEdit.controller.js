@@ -429,7 +429,7 @@ angular.module('columbyApp')
     $scope.editDistribution = function(distribution){
 
       var modalInstance = $modal.open({
-        templateUrl: 'views/dataset/editDistribution.html',
+        templateUrl: 'views/dataset/distribution/edit.html',
         controller: 'DistributionEditCtrl',
         size: 'lg',
         backdrop: 'static',
@@ -492,10 +492,15 @@ angular.module('columbyApp')
      */
     $scope.convertPrimary = function(dist){
       var idx = $scope.dataset.distributions.indexOf(dist);
+      // Create an object to send to the primaryController
       $scope.newPrimary = {
         dataset_id: $scope.dataset.id,
         distribution_id: $scope.dataset.distributions[ idx].id,
-        syncPeriod: 0
+        syncPeriod: 0,
+        dataset: {
+          shortid: $scope.dataset.shortid,
+          title: $scope.dataset.title
+        }
       };
       console.log('newPrimary: ', $scope.newPrimary);
 
@@ -517,16 +522,9 @@ angular.module('columbyApp')
 
       modalInstance.result.then(function(primary) {
         console.log(primary);
+        console.log($scope.dataset);
         //$scope.selected = selectedItem;
-        PrimaryService.save(primary, function(result){
-          console.log(result);
-          if (result.id){
-            toaster.pop('success',null,'The primary source was created successfully');
-            $scope.dataset.primary = result;
-          } else {
-            toaster.pop('warning',null,'There was an error creating the primary source.');
-          }
-        });
+        $scope.dataset.primary = primary;
       }, function () {
         $log.info('Modal dismissed at: ' + new Date());
       });
@@ -548,7 +546,7 @@ angular.module('columbyApp')
     /**
      * Delete a primary source
      */
-    $scope.deletePrimary = function(){
+    $scope.deletePrimarySource = function(){
       if ($scope.dataset.primary.id){
         PrimaryService.delete({id: $scope.dataset.primary.id}, function(result){
           console.log(result);

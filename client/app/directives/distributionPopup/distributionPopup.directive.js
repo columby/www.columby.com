@@ -175,6 +175,7 @@ angular.module('columbyApp')
       };
 
       DistributionSrv.validateLink({url:$scope.distribution.accessUrl}, function(response){
+        console.log('r', response);
         $scope.distribution.validation = {
           status: 'done',
           result: response
@@ -210,7 +211,6 @@ angular.module('columbyApp')
       $modalInstance.close($scope.distribution);
     };
   })
-
 
 
   .directive('distributionPopup', function($modal,  $rootScope, EmbedlySrv, DistributionSrv, ngDialog, FileService, toaster){
