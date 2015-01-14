@@ -115,10 +115,10 @@
                 <li ng-show="distribution.license"><label>License</label>{{distribution.license}}</li>
                 <li ng-show="distribution.mediaType"><label>Media type</label>{{distribution.type}}</li>
                 <li ng-show="distribution.fileSize"><label>File size</label>{{distribution.size}}</li>
-                <br/>
                 <li ng-show="distribution.issueDate"><label>Issued</label>{{distribution.issueDate}}</li>
                 <li ng-show="distribution.modifiedDate"><label>Modified</label>{{distribution.modifiedDate}}</li>
-                <br/>
+                <li><label>Issued</label>{{distribution.created_at | date:'d MMMM yyyy'}}</li>
+                <li ng-show="distribution.created_at !== distribution.updated_at"><label>Modified</label>{{distribution.updated_at | date:'d MMMM yyyy'}}</li>
                 <li ng-show="distribution.syncPeriod"><label>Sync</label>{{distribution.syncPeriod}}</li>
                 <li ng-show="distribution.lastSync"><label>Last sync</label>{{distribution.lastSync}}</li>
               </ul>
