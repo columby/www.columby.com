@@ -23,7 +23,7 @@
         <label>Upload a datafile: </label>
       </div>
       <div class="col-xs-8">
-        <input class="btn btn-default"
+        <input class="browse-button"
                type="file"
                name="file"
                ng-file-select="onFileSelect($files)">
@@ -37,7 +37,7 @@
 
   <!-- Sync a url -->
   <div class="row" ng-show="wizard.step === 3">
-    <h2>2. Sync a url</h2>
+    <h2>2. Sync an url</h2>
     <form class="form-horizontal" novalidate name="syncForm" role="form">
       <div class="col-xs-3">
         <label>Enter your url</label>
@@ -50,7 +50,7 @@
                name="url"/>
       </div>
       <div class="col-xs-3">
-        <button class="btn btn-default"
+        <button class="default-button lightblue filled"
                 ng-disabled="syncForm.url.$invalid || syncForm.url.$pristine || distribution.validation.status==='inprogress'"
                 ng-click="validateLink()"><div class="" ng-show="distribution.validation.status==='inprogress'"><i class="fa fa-spin fa-spinner"></i></i></div> Validate</button>
       </div>
@@ -58,26 +58,22 @@
       <div class="col-xs-12" ng-show="distribution.validation.status==='done'">
         <div class="invalid-source bg-warning"
           ng-show="distribution.validation.result.valid===false">
-          <p>You have entered an URL that we can't process. You can still add it as a source, but you won't be able to make API.</p>
+          <p>You have entered an URL that we can't process. You can still add it as a source, but you won't be able to use our API.</p>
         </div>
         <div class="valid-source bg-success"
              ng-show="distribution.validation.result.valid===true">
-          <p>You have entered a valid URL! Go next and we make API. </p>
+          <p>You have entered a valid URL! Go next and we make you an API. </p>
         </div>
-        <button class="btn btn-default"
-                ng-click="submitLink()"
-          >Next</button>
-      </div>
       </div>
     </form>
   </div>
 
   <!-- Add metadata -->
-  <div class="" ng-show="wizard.step === 4" style="text-align:left;">
+  <div class="row" ng-show="wizard.step === 4">
     <h2>3. Add metadata</h2>
     <form class="form-horizontal novalidate" role="form" name="metadataForm">
 
-      <div class="small">
+      <!-- <div class="small">
         <div class="file-reference" ng-show="distribution.file_id">File: {{distribution.file.filename}} / {{distribution.file.filetype}}</div>
         <p><strong>Shortid:</strong>{{distribution.shortid}}<br />
         <p><strong>Type:</strong> {{distribution.type}}<br />
@@ -90,7 +86,7 @@
         <p><strong>mediaType:</strong> {{distribution.mediaType}}<br/>
         <p><strong>format:</strong> {{ distribution.format}} <br />
         <p ng-show="distribution.type==='file'"><strong>byteSize:</strong> {{distribution.filesize}}</p>
-      </div>
+      </div> -->
 
       <div class="form-group">
         <div class="col-xs-4"><label>Title</label></div>
@@ -131,27 +127,32 @@
 
       <div class="form-group">
         <div class="col-xs-4">
-          <label>Visibility</label>
+          <label>Hide?</label>
         </div>
         <div class="col-xs-8">
           <div class="btn-group">
-            <label class="btn btn-success" ng-model="distribution.status" btn-radio="'draft'">Draft</label>
+            <!-- <label class="btn btn-success" ng-model="distribution.status" btn-radio="'draft'">Draft</label>
             <label class="btn btn-success" ng-model="distribution.status" btn-radio="'private'">Private</label>
-            <label class="btn btn-success" ng-model="distribution.status" btn-radio="'public'">Public</label>
+            <label class="btn btn-success" ng-model="distribution.status" btn-radio="'public'">Public</label> -->
+            <label>
+              <input type="checkbox"> Don't show this datasource
+            </label>
           </div>
         </div>
       </div>
 
       <p ng-show="distribution.type==='sync'"><strong>Sync Period:</strong> {{distribution.syncperiod}}</p>
 
-
-      <button class="btn btn-default col-xs-offset-4"
-              ng-click="updateMetadata()">Save</button>
-
       </form>
+    </div>
   </div>
 <div class="modal-footer">
-  <button class="btn lightgrey pull-left">Back</button>
-  <button class="btn orange" ng-click="close()">Cancel</button>
+  <button class="btn orange pull-left" ng-click="close()">Cancel</button>
+  <button class="default-button lightblue filled pull-right"
+          ng-click="updateMetadata()">Save</button>
+  <button class="default-button lightblue filled pull-right"
+          ng-click="submitLink()"
+    >Next</button>
+  <button class="default-button lightgrey pull-right">Back</button>
 </div>
 
