@@ -4,20 +4,19 @@
 </div>
 <div class="modal-body">
 
-  <h2>Add a new datasource</h2>
   <div ng-bind-html="statusText"></div>
   <!-- Select the type of data upload -->
   <div class="type-select" ng-show="wizard.step === 1">
-    <h2>Select the type of datasource</h2>
-    <button class="btn btn-default"
+    <h2>1. Select the type of datasource</h2>
+    <button class="default-button lightblue filled"
       ng-click="initSync()">Synchronise an external service</button>
-    <button class="btn btn-default"
+    <button class="default-button lightblue filled"
       ng-click="initUpload()">Upload a file from your computer</button>
   </div>
 
   <!-- Upload a file -->
   <div class="" ng-show="wizard.step === 2">
-    <h3>Upload a file</h3>
+    <h2>2. Upload a file</h2>
     <!--<div class="dropzone">Dropzone</div>-->
     <div class="row">
       <div class="col-xs-4">
@@ -38,7 +37,7 @@
 
   <!-- Sync a url -->
   <div class="row" ng-show="wizard.step === 3">
-    <h3>Sync a url</h3>
+    <h2>2. Sync a url</h2>
     <form class="form-horizontal" novalidate name="syncForm" role="form">
       <div class="col-xs-3">
         <label>Enter your url</label>
@@ -75,6 +74,7 @@
 
   <!-- Add metadata -->
   <div class="" ng-show="wizard.step === 4" style="text-align:left;">
+    <h2>3. Add metadata</h2>
     <form class="form-horizontal novalidate" role="form" name="metadataForm">
 
       <div class="small">
@@ -151,6 +151,7 @@
       </form>
   </div>
 <div class="modal-footer">
-  <button class="btn btn-warning" ng-click="close()">Cancel</button>
+  <button class="btn lightgrey pull-left">Back</button>
+  <button class="btn orange" ng-click="close()">Cancel</button>
 </div>
 

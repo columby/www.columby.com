@@ -76,16 +76,59 @@ button, .default-button{
     }
   }
   
+  
+  &.lightgrey{
+    border: 2px solid @lightgrey;
+    color: @lightgrey;
+    &:hover{
+      background: @lightgrey;
+      border: 2px solid @lightgrey;
+      color: #FFF;
+    }
+    &.filled{
+      background: @lightgrey;
+      color: #fff;
+      &:hover{
+        background: @darkgrey;
+        border: 2px solid @darkgrey;
+        color: #fff;
+      }
+    }
+  }
+  
+  &.darkgrey{
+    border: 2px solid @darkgrey;
+    color: @darkgrey;
+    &:hover{
+      background: none;
+      border: 2px solid @lightgrey;
+      color: @lightgrey;
+    }
+    &.filled{
+      background: @darkgrey;
+      color: #fff;
+      &:hover{
+        background: @lightgrey;
+        border: 2px solid @lightgrey;
+        color: #fff;
+      }
+    }
+  }
+  
+  &.orange{
+    border: 2px solid @orange;
+    color: @orange;
+    &.filled{
+      background: @orange;
+    }
+    &:hover{
+      background: @orange;
+      color: #FFF;
+    }
+  }
+  
 }
 
-// .btn-add {
-//   color: #fff;
-//   background: #345;
-//   border: 0;
-//   border-radius: 4px;
-//   font-weight: bold;
-// }
-//
 .btn-tooltip{
   float: right;
   display: block;
