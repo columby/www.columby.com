@@ -1,3 +1,5 @@
 {
-  "foo": "some-development"
+  "foo": "some-development",
+  "apiRoot": "//api.columby.dev/api",
+  "workerRoot": "//worker.columby.dev"
 }
