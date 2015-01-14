@@ -53,7 +53,7 @@ angular.module('columbyApp')
             toaster.pop('error', null,'There was an error sending the primary for processing...');
             PrimaryService.delete({id: primary.id}, function(result){
               console.log('result', result);
-            })
+            });
           });
 
         } else {

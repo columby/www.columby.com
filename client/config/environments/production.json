@@ -1,4 +1,4 @@
 {
-  "foo": "bar-production",
-  "apiRoot": "//api.columby.production"
+  "apiRoot": "//api.columby.prod/api",
+  "workerRoot": "//worker.columby.prod"
 }

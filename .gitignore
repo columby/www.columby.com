@@ -5,9 +5,7 @@ public
 .idea
 client/bower_components
 server/config/local.env.js
-server/seed
 
-Install/Vagrant/config/parameters.sh
 
 /client/config/environments/local.json
 /client/app/services/config.service.js
