@@ -28,9 +28,11 @@ angular.module('columbyApp')
         localStorage.setItem('columby_token', JSON.stringify(response.token));
 
         AuthSrv.setUser(response.user);
+        console.log(response.user);
 
-        // Let the app know
+        // Let the app know§
         $rootScope.user = AuthSrv.user();
+
 
         toaster.pop('success', null, 'You have succesfully signed in.');
 

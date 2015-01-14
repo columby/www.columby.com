@@ -66,9 +66,7 @@ angular.module('columbyApp')
     function updateHeaderImage(){
 			if ($scope.dataset.headerImg) {
         $scope.dataset.headerImg.url = configSrv.apiRoot + '/v2/file/' + $scope.dataset.headerImg.id + '?style=large';
-        console.log('Updating header image: ', $scope.dataset.headerImg.url);
-
-	      $scope.headerStyle={
+        $scope.headerStyle={
 	        'background-image': 'linear-gradient(transparent,transparent), url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
 	        'background-blend-mode': 'multiply'
 	      };

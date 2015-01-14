@@ -42,6 +42,8 @@ angular.module('columbyApp')
           });
         }
 
+        console.log(dataset);
+
         // Update document title
         $window.document.title = 'columby.com | ' + dataset.title;
         $scope.contentLoading = false;
@@ -596,8 +598,8 @@ angular.module('columbyApp')
     $scope.addTag = function(tag){
       console.log('adding tag', tag);
       DatasetSrv.addTag({
-        id:$scope.dataset.id,
-        tag:tag
+        id: $scope.dataset.id,
+        tag: tag
       }, function(result){
           console.log('dtaset addtag result: ', result);
       });

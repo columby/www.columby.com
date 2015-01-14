@@ -554,7 +554,7 @@ module.exports = function (grunt) {
         },
         files: {
           '<%= yeoman.client %>/styles/app.less': [
-            '<%= yeoman.client %>/{app,components}/**/*.less',
+            '<%= yeoman.client %>/{app,components,styles}/**/*.less',
             '!<%= yeoman.client %>/styles/app.less'
           ]
         }
@@ -573,7 +573,7 @@ module.exports = function (grunt) {
         },
         files: {
           '<%= yeoman.client %>/index.html': [
-            '<%= yeoman.client %>/{app,components}/**/*.css'
+            '<%= yeoman.client %>/{app,components,styles}/**/*.css'
           ]
         }
       }

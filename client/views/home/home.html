@@ -28,7 +28,7 @@
   </div>
 
   <div class="showcase-presentation" ng-hide="$root.user.id">
-			
+
 			<div class="container-fluid about-facts-columby">
 				<div class="about-columby col-xs-12 col-sm-6">
           <h3>About Columby</h3>
@@ -47,8 +47,8 @@
 					</ul>
         </div>
       </div>
-			
-			
+
+
       <div class="container-fluid slide">
         <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
           <h3>Publish your data in a beautiful way.</h3>
@@ -111,7 +111,7 @@
               <h4><a ui-sref="dataset.view({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
               <div class="user-date">
                 <!-- <img ng-src="dataset.account.avatar.img" class="img-rounded"/> -->
-                <img class="img-circle avatar-small" ng-src="/api/v2/file/{{dataset.account.avatar.id}}?style=small" alt="{{dataset.account.name}}"/>
+                <img class="img-circle avatar-small" ng-src="{{dataset.account.avatar.url}}" alt="{{dataset.account.name}}"/>
                 <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
               </div>
             </li>
