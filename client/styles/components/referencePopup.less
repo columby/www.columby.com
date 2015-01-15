@@ -1,0 +1,64 @@
+.accountSelector {
+  position: absolute;
+  left:0;
+  top:0;
+  right: 0;
+  bottom:0;
+  .switcher {
+    color: #333;
+    text-align: center;
+    padding-top: 80px;
+    a {
+      color: #333;
+    }
+  }
+}
+
+.reference{
+	.placeholder{
+		overflow: hidden;
+		display: block;
+		max-width: 100%;
+		height: 160px;
+	}
+	.reference-image{
+		background-size: cover;
+		position: absolute;
+		background-position: 50% 50%;
+		top: 0;
+		left: 0;
+		width: 100%;
+		border-radius: 10px;
+		overflow: hidden;
+		display: block;
+		height: 100%;
+		&:before {
+	    content: '';
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			background-image: linear-gradient(to bottom right,#002f4b,rgba(47, 204, 255, 0.29));
+			opacity: .6; 
+		}
+		.reference-title{
+			color: #fff;
+			border: 0;
+			position: absolute;
+			bottom: 10px;
+			left: 17px;
+		}
+		.reference-source{
+			position: absolute;
+			bottom: 0px;
+			left: 25px;
+			color: #fff;
+			opacity: 0.5;
+		}
+	}
+}
+.reference-text {
+	margin-top: 20px;
+	line-height: 2em;
+}

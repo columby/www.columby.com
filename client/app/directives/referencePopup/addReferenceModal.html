@@ -26,28 +26,35 @@
 
   <div class="preview row"
        ng-show="reference.result">
-    <div class="col-md-offset-3 col-md-6" style="background: url({{reference.result.images[0].url}}); background-size:cover;background-position">
-      <h3>{{reference.result.title}}</h3>
-      <p>{{reference.result.description}}</p>
-      <p class="small">on {{reference.result.provider_name}}</p>
-    </div>
+    <div class="col-md-offset-3 col-md-6 reference">
+			<div>
+				<img src="../../../images/reference-spaceholder.png" class="placeholder">
+				<div class="reference-image" style="background: url({{reference.result.images[0].url}}); background-size:cover;">
+		      <h3 class="reference-title">{{reference.result.title}}</h3>
+		      <p class="small reference-source">on {{reference.result.provider_name}}</p>
+		    </div>
+			</div>
+		</div>
+		<div class="col-md-offset-3 col-md-6">
+			<div class="small reference-text">{{reference.result.description}}</div>
+		</div>
   </div>
 
   <div class="warning" ng-show="reference.checkingLink"><i class="fa fa-spinner fa-spin"></i>Validating link ...</div>
   <div class="warning">{{reference.error}}</div>
 
-  <form class="form-horizontal" role="form" name="referenceForm">
-    <button
-      type="submit"
-      class="btn btn-default"
-      ng-show="reference.valid"
-      ng-click="saveReference()"
-      ng-disabled="!reference.result">Add Reference</button>
-  </form>
 
 </div>
 </div>
 
 <div class="modal-footer">
-  <button class="btn btn-warning" ng-click="close()">Cancel</button>
+  <button class="btn orange pull-left" ng-click="close()">Cancel</button>
+  <form class="form-horizontal" role="form" name="referenceForm">
+    <button
+      type="submit"
+      class="default-button lightblue filled pull-right"
+      ng-show="reference.valid"
+      ng-click="saveReference()"
+      ng-disabled="!reference.result">Add Reference</button>
+  </form>
 </div>

@@ -284,7 +284,17 @@
 
             <div class="row">
               <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
-                <div class="thumbnail dataset-reference">
+									<div class="reference">
+										<img src="../../../images/reference-spaceholder.png" class="placeholder">
+										<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;">
+								      <h3 class="reference-title">{{reference.title}}</h3>
+								      <p class="small reference-source"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
+								    </div>
+									</div>
+									<div class="small reference-text">{{reference.description}}</div>
+								
+								
+                <!-- <div class="thumbnail dataset-reference">
                   <div class="caption clearfix">
 
                     <h4><a href="{{reference.url}}">{{reference.title}}</a></h4>
@@ -297,7 +307,7 @@
                          confirm-delete
                          on-confirm="deleteReference(reference)"></div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
 
