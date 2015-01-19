@@ -10,6 +10,13 @@ angular.module('columbyApp')
       finished: false
     };
     $scope.wizard = {
+      showCancel: true,
+      showPrevious: false,
+      previousDisabled: true,
+      showNext:false,
+      nextDisabled: true,
+      showFinish:false,
+      finishDisabled: true,
       step: 1
     };
     $scope.licenseToggle = {
@@ -135,6 +142,7 @@ angular.module('columbyApp')
       $scope.wizard.step = 2;
     };
 
+
     $scope.onFileSelect = function (files) {
       $scope.uploadInProgress = true;
       if (files[0]) {
@@ -162,6 +170,7 @@ angular.module('columbyApp')
       }
     };
 
+
     $scope.updateMetadata = function () {
 
       $scope.updateInProgress = true;
@@ -183,6 +192,7 @@ angular.module('columbyApp')
 // else continue to distribution
 
     };
+
 
     $scope.initSync = function () {
       $scope.distribution.type = 'remoteService';
@@ -214,12 +224,13 @@ angular.module('columbyApp')
       });
     };
 
+
     $scope.submitLink = function () {
       console.log('submitting link.');
 
 // Update the distribution (save the url and validity
       DistributionSrv.update($scope.distribution, function (response) {
-        console.log('submitlink respononse, ', response);
+        console.log('submitlink responnse, ', response);
         if (response.id) {
           toaster.pop('success', null, 'Distribution updated.');
 // Go to metadata screen

@@ -101,7 +101,7 @@
           <hr/>
 
           <ul ng-hide="!dataset.distributions || dataset.distributions.length===0">
-            <li ng-repeat="distribution in dataset.distributions">
+            <li ng-repeat="distribution in dataset.distributions | filter: {status:!'draft'}">
               <h4 class="datasource-title">{{distribution.title}}</h4>
               <div class="download datasource-icon" ng-show="distribution.downloadUrl">
                 <a href="{{distribution.downloadUrl}}"><i class="fa fa-download"></i></a>

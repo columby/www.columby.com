@@ -5,6 +5,7 @@
 <div class="modal-body">
 
   <div ng-bind-html="statusText"></div>
+
   <!-- Select the type of data upload -->
   <div class="type-select" ng-show="wizard.step === 1">
     <h2>1. Select the type of datasource</h2>
@@ -118,16 +119,19 @@
         </div>
         <div class="col-xs-8">
           <div class="btn-group">
-            <label class="btn btn-success" ng-model="distribution.license" btn-radio="'dontKnow'">I don't know</label>
-            <label class="btn btn-success" ng-model="distribution.license" btn-radio="'CC0'">CC0</label>
-            <label class="btn btn-success" ng-model="distribution.license" btn-radio="'CCBYND'">CC-BY-ND</label>
+            <label class="col-xs-6 btn btn-success" ng-model="distribution.license" btn-radio="'cc0'">CC0</label>
+            <label class="col-xs-6 btn btn-success" ng-model="distribution.license" btn-radio="'Other'">Other</label>
           </div>
+          <input class="col-xs-6 form-control"
+                 ng-show="distribution.license!=='cc0'"
+                 ng-model="distribution.license"
+                 placeholder="Your license">
         </div>
       </div>
 
       <div class="form-group">
         <div class="col-xs-4">
-          <label>Hide?</label>
+          <!--<label>Hide?</label>-->
         </div>
         <div class="col-xs-8">
           <div class="btn-group">
@@ -135,7 +139,7 @@
             <label class="btn btn-success" ng-model="distribution.status" btn-radio="'private'">Private</label>
             <label class="btn btn-success" ng-model="distribution.status" btn-radio="'public'">Public</label> -->
             <label>
-              <input type="checkbox"> Don't show this datasource
+              <input type="checkbox">Hide this datasource for the public
             </label>
           </div>
         </div>
@@ -145,14 +149,25 @@
 
       </form>
     </div>
-  </div>
+
+</div>
+
 <div class="modal-footer">
-  <button class="btn orange pull-left" ng-click="close()">Cancel</button>
+  <button class="btn orange pull-left"
+          ng-show="wizard.cancelShow"
+          ng-disabled="wizard.cancelDisabled"
+          ng-click="cancel()">Cancel</button>
   <button class="default-button lightblue filled pull-right"
+          ng-show="wizard.finishShow"
+          ng-disabled="wizard.finishDisabled"
           ng-click="updateMetadata()">Save</button>
   <button class="default-button lightblue filled pull-right"
-          ng-click="submitLink()"
-    >Next</button>
-  <button class="default-button lightgrey pull-right">Back</button>
+          ng-show="wizard.nextShow"
+          ng-disabed="wizard.nextDisabled"
+          ng-click="next()">Next</button>
+  <button class="default-button lightgrey pull-right"
+          ng-show="wizard.backShow"
+          ng-disabed="wizard.previousDisabled"
+          ng-click="previous()">Back</button>
 </div>
 

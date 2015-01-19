@@ -82,7 +82,9 @@ angular.module('columbyApp')
           updateHeaderImage();
         }
 
-        processData();
+        if($scope.dataset.primary){
+          processData();
+        }
       });
     }
 

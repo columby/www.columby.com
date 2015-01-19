@@ -5,15 +5,22 @@ angular.module('columbyApp')
   .controller('DistributionNewCtrl', function($log, $scope, $modalInstance, distribution, FileService, toaster, ngProgress, DistributionSrv){
 
     $scope.distribution = distribution;
+    $scope.distribution.license="cc0";
     $scope.upload = {
       inProgress: false,
       finished: false
     };
-    $scope.licenseToggle = {
-      isopen: false
-    };
     $scope.wizard={
-      step:1
+
+      steps: ['start','data','metadata','finish'],
+      step:1,
+      cancelShow: true,
+      previousShow: false,
+      previousDisabled: true,
+      nextShow: false,
+      nextDisabled: true,
+      finishShow: false,
+      finishDisabled: true
     };
 
 
@@ -186,6 +193,8 @@ angular.module('columbyApp')
         // TODO: Wat format for a link?
         $scope.distribution.format = 'link';
 
+        $scope.wizard.nextShow = true;
+        $scope.wizard.nextDisabled = false;
       });
     };
 
@@ -201,6 +210,16 @@ angular.module('columbyApp')
           $scope.wizard.step = 4;
         }
       });
+    };
+
+    $scope.next = function(){
+      console.log($scope.wizard.step);
+      if ($scope.wizard.step === 3){
+        $scope.wizard.step = 4;
+        $scope.wizard.nextShow=false;
+        $scope.wizard.finishShow=true;
+        $scope.wizard.finishDisabled=false;
+      }
     };
 
     $scope.cancel = function () {
@@ -233,8 +252,8 @@ angular.module('columbyApp')
           DistributionSrv.save($scope.distribution, function(res){
             if (res.id){
               $scope.distribution = res;
-              $scope.dataset.distributions.push(res);
-              toaster.pop('success', null, 'New source created.');
+              //$scope.dataset.distributions.push(res);
+              //toaster.pop('success', null, 'New source created.');
 
               var modalInstance = $modal.open({
                 templateUrl: 'app/directives/distributionPopup/distributionPopupContent.html',
@@ -252,6 +271,11 @@ angular.module('columbyApp')
                 toaster.pop('info', null, 'Datasource saved.');
                 console.log(distribution);
               }, function () {
+                // Delete the created datasource
+                DistributionSrv.delete($scope.distribution, function(res){
+                  console.log('deleted');
+                  console.log(res);
+                });
                 $log.info('Modal dismissed at: ' + new Date());
               });
 
