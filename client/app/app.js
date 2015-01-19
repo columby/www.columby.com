@@ -57,6 +57,7 @@ angular.module('columbyApp', [
 
   .controller('ColumbyCtrl', function($window, $rootScope, $location){
     $rootScope.$on('$stateChangeSuccess',  function(event, toState){
+
       // send to analytics
       //$window.ga('send', 'pageview', { page: $location.path() });
       // Add state to body class

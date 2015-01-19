@@ -45,7 +45,7 @@
       <!-- include metabar -->
       <div class="metabar-wrapper" ng-include="'components/metabar/metabar.html'"></div>
 
-      <ui-view></ui-view>
+      <div ui-view autoscroll="true"></div>
 
       <!-- include footer -->
       <div class="footer-wrapper" ng-include="'components/footer/footer.html'"></div>
@@ -138,6 +138,7 @@
           <script src="app/services/auth.service.js"></script>
           <script src="app/services/collection.service.js"></script>
           <script src="app/services/config.service.js"></script>
+          <script src="app/services/data.service.js"></script>
           <script src="app/services/dataset.service.js"></script>
           <script src="app/services/distribution.service.js"></script>
           <script src="app/services/embedly.service.js"></script>

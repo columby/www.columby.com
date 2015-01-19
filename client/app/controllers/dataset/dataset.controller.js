@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, DatasetReferenceSrv, AuthSrv, toaster, ngDialog, configSrv) {
+  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, DatasetReferenceSrv, AuthSrv, toaster, ngDialog, configSrv, DataService) {
 
     /* --------- INITIALISATION ------------------------------------------------------------ */
     $scope.hostname = $location.protocol() + '://' + $location.host();
@@ -11,6 +11,30 @@ angular.module('columbyApp')
 
 
     /* --------- FUNCTIONS ------------------------------------------------------------------ */
+    function processData(){
+      if (!$scope.dataset.primary){
+        return;
+      }
+
+      var q = {
+        type: 'select',
+        table: 'primary_1',
+        fields: '*',
+        limit: '10'
+      };
+
+      DataService.sql(q).then(function(result){
+
+        $scope.datapreview = {
+          header: Object.keys(result[ 0])
+        };
+
+        $scope.datapreview.data = result;
+
+      });
+    }
+
+
     /**
      * Fetch a dataset
      *
@@ -57,6 +81,8 @@ angular.module('columbyApp')
         if ($scope.dataset.headerImg && $scope.dataset.headerImg.url) {
           updateHeaderImage();
         }
+
+        processData();
       });
     }
 
