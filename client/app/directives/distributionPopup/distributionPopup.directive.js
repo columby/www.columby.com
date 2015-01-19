@@ -29,86 +29,35 @@ angular.module('columbyApp')
      *
      * @param params
      */
-    function finishUpload(params){
+    function finishUpload(params) {
+      $log.log('upload: ', $scope.upload);
+      var params = {
+        fid: $scope.upload.file.id,
+        url: 'https://' + $scope.upload.credentials.bucket + '.s3.amazonaws.com/' + $scope.upload.credentials.file.key
+      };
+      $log.log('params', params);
+
       FileService.finishS3(params).then(function(res){
-        console.log('res', res);
-        if (res.id) {
-          $scope.upload.file = null;
-          toaster.pop('notice',null,'File uploaded, updating distribution');
-
-          // Update distribution with the uploaded file.
-          $scope.distribution.file_id = res.id;
-          $scope.distribution.byteSize = res.size;
-          $scope.distribution.mediaType = res.filetype;
-
-          DistributionSrv.update($scope.distribution, function(response){
-            console.log(response);
-            // Go to the next step.
-            $scope.wizard.step = 4;
-            $scope.upload.finished = true;
+        $log.log('upload finished',res);
+        $scope.upload.file = null;
+        if (res.id){
+          var d = {
+            id: $scope.distribution.id,
+            file_id: res.id
+          };
+          DistributionSrv.update(d, function(result){
+            console.log(result);
+            if (result.id){
+              $scope.distribution.file_id = result.file_id;
+              $scope.wizard.step = 4;
+              $scope.wizard.finishShow = true;
+              $scope.wizard.finishDisabled = false;
+            }
           });
-
-        } else {
-          $scope.upload.file = null;
         }
       });
     }
 
-
-    /**
-     *
-     * Upload a file with a signed request.
-     *
-     */
-    function uploadFile(){
-      var params = $scope.upload.s3response;
-      var file = $scope.upload.file;
-      file.filename = params.file.filename;
-
-      var xhr = new XMLHttpRequest();
-      var fd = new FormData();
-      // Populate the Post parameters.
-      fd.append('key', params.credentials.file.key);
-      fd.append('AWSAccessKeyId', params.credentials.s3Key);
-      fd.append('acl', params.credentials.file.acl);
-      fd.append('policy', params.credentials.policy);
-      fd.append('signature', params.credentials.signature);
-      fd.append('Content-Type', params.file.filetype);
-      fd.append('success_action_status', '201');
-      // This file object is retrieved from a file input.
-      fd.append('file', file);
-
-      // Upload progress
-      xhr.upload.addEventListener('progress', function (evt) {
-        ngProgress.set(parseInt(100.0 * evt.loaded / evt.total));
-        $scope.distribution.uploadProgress = parseInt(100.0 * evt.loaded / evt.total);
-      }, false);
-
-      // Upload done
-      xhr.addEventListener('load', function(evt){
-        ngProgress.complete();
-        $scope.distribution.uploadProgress = 100;
-        var parsedData = FileService.handleS3Response(evt.target.response);
-        var p = {
-          fid: params.file.id,
-          url: parsedData.location
-        };
-        finishUpload(p);
-      });
-      xhr.addEventListener('error', function(evt){
-        ngProgress.complete();
-        $scope.distribution.uploadProgress = 0;
-        toaster.pop('warning',null,'There was an error attempting to upload the file.' + evt);
-      }, false);
-      xhr.addEventListener('abort', function(){
-        ngProgress.complete();
-        $scope.distribution.uploadProgress = 0;
-        toaster.pop('warning',null,'The upload has been canceled by the user or the browser dropped the connection.');
-      }, false);
-
-      xhr.open('POST', 'https://' + params.credentials.bucket + '.s3.amazonaws.com/', true);
-      xhr.send(fd);
-    }
 
 
     /** ---------- SCOPE FUNCTIONS ------------------------------------------------ **/
@@ -119,39 +68,81 @@ angular.module('columbyApp')
       $scope.wizard.step = 2;
     };
 
+    /**
+     *
+     * Handle file select
+     *
+     * @param files
+     */
     $scope.onFileSelect = function(files) {
-      $scope.uploadInProgress = true;
-      if (files[0]) {
-        $scope.upload.file = files[0];
-        // Check file properties
-
-        var f = {
-          filetype: $scope.upload.file.type,
-          type: 'datafile',
-          filename: $scope.upload.file.name,
-          filesize: $scope.upload.file.size,
-          accountId: $scope.dataset.account.id
-        };
-
-        FileService.signS3(f).then(function(response){
-          if (response.credentials){
-            $scope.upload.s3response = response;
-            uploadFile();
-          } else {
-            console.log(response);
-          }
-        });
-      } else {
-        $scope.uploadInProgress = false;
+      var file = files[0];
+      // Check if there is a file
+      if (!file) {
+        return toaster.pop('warning',null,'No file selected.');
       }
+      // Check if there is already an upload in progress
+      if ($scope.upload.file){
+        return toaster.pop('warning',null,'There is already an upload in progress. ');
+      }
+
+      $scope.upload.file = file;
+
+      ngProgress.start();
+
+      var params = {
+        filetype: file.type,
+        type: 'datafile',
+        filesize: file.size,
+        filename: file.name,
+        accountId: $scope.distribution.account_id
+      };
+
+      $log.log('Uploading with params: ', params);
+
+      FileService.signS3(params).then(function(response) {
+        console.log('Response sign: ', response);
+        // signed request is valid, send the file to S3
+        if (response.file) {
+          // Initiate the upload
+          FileService.upload($scope, response, file).then(function (res) {
+            console.log(res);
+            // File upload is done
+            if (res.status === 201 && res.statusText === 'Created') {
+              ngProgress.complete();
+              $log.log($scope.upload);
+              $scope.upload.file = response.file;
+              $scope.upload.credentials = response.credentials;
+              console.log('Finishing uploading. ');
+              finishUpload();
+            } else {
+              return toaster.pop('warning', null, 'Something went wrong finishing the upload. ');
+            }
+          }, function (error) {
+            console.log('Error', error);
+
+          }, function (evt) {
+            console.log('Progress: ' + evt.value);
+            ngProgress.set(evt.value);
+          });
+        } else {
+          toaster.pop('error', null, 'Sorry, there was an error. Details: ' + reesponse.msg);
+          console.log(response);
+        }
+      });
     };
 
-    $scope.updateMetadata = function(){
-
+    $scope.save = function(){
+      console.log('saving');
       $scope.updateInProgress = true;
+      $scope.distribution.status='draft';
+      var d = {
+        id: $scope.distribution.id,
+        status: 'public'
+      };
       // save metadata
-      DistributionSrv.update($scope.distribution, function(response){
-        $scope.updateInProgress = true;
+      DistributionSrv.update(d, function(response){
+        console.log(response);
+        $scope.updateInProgress = false;
         if (response.id){
           // all is well, next step.
           // close distribution
@@ -160,11 +151,6 @@ angular.module('columbyApp')
           toaster.pop('warning', null, 'Something went wrong. ' + response);
         }
       });
-
-      // if source is readable, process dialog
-
-      // else continue to distribution
-
     };
 
     // Initialize a source link
@@ -252,6 +238,8 @@ angular.module('columbyApp')
           DistributionSrv.save($scope.distribution, function(res){
             if (res.id){
               $scope.distribution = res;
+              $scope.distribution.account_id = $scope.dataset.account_id;
+
               //$scope.dataset.distributions.push(res);
               //toaster.pop('success', null, 'New source created.');
 
@@ -269,6 +257,7 @@ angular.module('columbyApp')
               });
               modalInstance.result.then(function (distribution) {
                 toaster.pop('info', null, 'Datasource saved.');
+                $scope.dataset.distributions.push(distribution);
                 console.log(distribution);
               }, function () {
                 // Delete the created datasource

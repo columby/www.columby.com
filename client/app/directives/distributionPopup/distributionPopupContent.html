@@ -74,21 +74,6 @@
     <h2>3. Add metadata</h2>
     <form class="form-horizontal novalidate" role="form" name="metadataForm">
 
-      <!-- <div class="small">
-        <div class="file-reference" ng-show="distribution.file_id">File: {{distribution.file.filename}} / {{distribution.file.filetype}}</div>
-        <p><strong>Shortid:</strong>{{distribution.shortid}}<br />
-        <p><strong>Type:</strong> {{distribution.type}}<br />
-        <p><strong>Status:</strong> {{distribution.status}}<br />
-        <p><strong>issued:</strong> {{distribution.created_at}}<br />
-        <p><strong>modified:</strong> {{distribution.updated_at}}<br />
-        <p><strong>rights:</strong><br />
-        <p ng-show="distribution.type==='url'"><strong>accessUrl:</strong> {{distribution.accessUrl}}<br />
-        <p ng-show="distribution.type==='file'"><strong>downloadUrl:</strong> /file/{{distribution.id}}<br />
-        <p><strong>mediaType:</strong> {{distribution.mediaType}}<br/>
-        <p><strong>format:</strong> {{ distribution.format}} <br />
-        <p ng-show="distribution.type==='file'"><strong>byteSize:</strong> {{distribution.filesize}}</p>
-      </div> -->
-
       <div class="form-group">
         <div class="col-xs-4"><label>Title</label></div>
         <div class="col-xs-8">
@@ -160,7 +145,7 @@
   <button class="default-button lightblue filled pull-right"
           ng-show="wizard.finishShow"
           ng-disabled="wizard.finishDisabled"
-          ng-click="updateMetadata()">Save</button>
+          ng-click="save()">Save</button>
   <button class="default-button lightblue filled pull-right"
           ng-show="wizard.nextShow"
           ng-disabed="wizard.nextDisabled"

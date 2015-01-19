@@ -417,9 +417,9 @@ angular.module('columbyApp')
         //}
       });
 
-      modalInstance.result.then(function (selectedItem) {
-        console.log(selectedItem);
-        $scope.selected = selectedItem;
+      modalInstance.result.then(function(item) {
+        console.log(item);
+        $scope.dataset.distributions.push(item)
       }, function () {
         $log.info('Modal dismissed at: ' + new Date());
       });
