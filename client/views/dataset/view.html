@@ -83,10 +83,11 @@
               <div ng-show="dataset.primary.id">
 
                 <h4 class="datasource-title">Primary source</h4>
-                <div class="download datasource-icon">
+                <div class="download datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
+                  <i class="fa fa-download"></i>
                   <a href="download"><i class="fa fa-download"></i></a>
                 </div>
-                <div class="link datasource-icon">
+                <div class="link datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
                   <a href="{{distribution.accessUrl}}" target="_blank"><i class="fa fa-external-link"></i></a>
                 </div>
 
@@ -94,7 +95,9 @@
                   <!--<li><label>Datasource status</label>{{dataset.primary.status}}</li>-->
                   <li><label>Issued</label>{{dataset.primary.created_at | date:'d MMMM yyyy'}}</li>
                   <li ng-show="dataset.primary.created_at !== dataset.primary.updated_at"><label>Modified</label>{{dataset.primary.updated_at | date:'d MMMM yyyy'}}</li>
+                  <li ng-show="dataset.primary.jobStatus">Jobstatus: {{dataset.primary.jobStatus}}</li>
                 </ul>
+                <p ng-show="dataset.primary.jobStatus==='error">There was an error processing this dataset. The data is currently unavailable.</p>
               </div>
             </li>
           </ul>

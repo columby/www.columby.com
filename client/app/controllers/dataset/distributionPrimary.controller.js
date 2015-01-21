@@ -11,6 +11,7 @@ angular.module('columbyApp')
     $scope.primary.valid = false;
     $scope.primary.jobType = null;
 
+    // Determine the job type
     if ($scope.distribution.accessUrl){
       DistributionSrv.validateLink({url:$scope.distribution.accessUrl}, function(response){
         $scope.primary.valid = response.valid;
@@ -18,6 +19,12 @@ angular.module('columbyApp')
         $scope.primary.jobStatus = 'draft';
         $scope.loading = false;
       });
+    } else if (distribution.file_id){
+      // For now we assume each valid file is CSV
+      $scope.loading = false;
+      $scope.primary.jobType='csv';
+      $scope.primary.valid = true;
+      $scope.primary.jobStatus = 'draft';
     }
 
     $scope.confirm = function() {

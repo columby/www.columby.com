@@ -18,13 +18,13 @@ angular.module('columbyApp')
 
       var q = {
         type: 'select',
-        table: 'primary_1',
+        table: 'primary_' + $scope.dataset.primary.id,
         fields: '*',
         limit: '10'
       };
 
       DataService.sql(q).then(function(result){
-
+        console.log(result);
         $scope.datapreview = {
           header: Object.keys(result[ 0])
         };

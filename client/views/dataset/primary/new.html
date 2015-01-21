@@ -3,13 +3,9 @@
 </div>
 
 <div class="modal-body add-primary-source">
-  <!-- file -->
-  <div ng-show="distribution.type==='localFile'">
-    From the file distribution: {{distribution.title}}
-  </div>
 
   <!-- sync -->
-  <div ng-show="distribution.type==='remoteService'">
+  <div ng-show="primary.jobType==='remoteService'">
     <p>From the url distribution: {{distribution.title || 'No title'}}<br />
       with source {{distribution.accessUrl}}.
     <h3>Synchronisation</h3>
@@ -22,6 +18,12 @@
       <label class="btn btn-default" ng-model="primary.syncPeriod" btn-radio="4">Weekly</label>
     </div>
   </div>
+
+  <!-- csv -->
+  <div ng-show="primary.jobType==='csv'">
+    <p>The distribution you are about to convert to a primary source is a CSV file. The file will be sent to the processing queue and converted to the Columby API. Depending on the size this can take a while. This process happens in the background. <br />
+    Please select <em>create primary source</em> to start the process. </p>
+  </div>
 </div>
 
 <div class="modal-footer">
@@ -30,7 +32,3 @@
           ng-disabled="!primary.valid">Create primary source</button>
   <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </div>
-
-
-
-<div class="col-md-12"><pre>{{primary}}</pre></div>

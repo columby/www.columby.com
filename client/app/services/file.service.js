@@ -50,7 +50,7 @@ angular.module('columbyApp')
         });
       },
 
-      
+
       /******
        * Upload a file to s3 with a signed request
        *
@@ -183,6 +183,9 @@ angular.module('columbyApp')
           return (validTypes.indexOf(filetype) !== -1);
         } else if(type === 'file'){
           validTypes = ['application/pdf'];
+          return (validTypes.indexOf(filetype) !== -1);
+        } else if (type === 'datafile'){
+          validTypes = ['text/csv']
           return (validTypes.indexOf(filetype) !== -1);
         }
 

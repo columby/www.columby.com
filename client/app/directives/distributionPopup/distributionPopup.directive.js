@@ -39,22 +39,27 @@ angular.module('columbyApp')
 
       FileService.finishS3(params).then(function(res){
         $log.log('upload finished',res);
-        $scope.upload.file = null;
         if (res.id){
           var d = {
             id: $scope.distribution.id,
             file_id: res.id
           };
+          if (res.filetype === 'text/csv'){
+            d.valid = true;
+            $scope.distribution.valid=true;
+          }
           DistributionSrv.update(d, function(result){
-            console.log(result);
+            $log.log('Finish upload result:', result);
             if (result.id){
               $scope.distribution.file_id = result.file_id;
+
               $scope.wizard.step = 4;
               $scope.wizard.finishShow = true;
               $scope.wizard.finishDisabled = false;
             }
           });
         }
+        $scope.upload.file = null;
       });
     }
 
@@ -83,6 +88,11 @@ angular.module('columbyApp')
       // Check if there is already an upload in progress
       if ($scope.upload.file){
         return toaster.pop('warning',null,'There is already an upload in progress. ');
+      }
+
+      // Check if the file has the right type
+      if (!FileService.validateFile(file.type, 'datafile')) {
+        return toaster.pop('warning', null, 'The file you chose is not valid. ' + file.type);
       }
 
       $scope.upload.file = file;
