@@ -1,14 +1,29 @@
-<div class="collection view">
+<div class="collection edit">
 
   <div class="actions-bar"
        scroll-position="scroll"
        ng-class="{top: scroll<315}">
 
     <ul>
+      <!--<li>-->
+        <!--<button-->
+          <!--class    = "default-button"-->
+          <!--ng-show  = "dataset.id"-->
+
+          <!--ng-click = "toggleOptions()">options-->
+        <!--</button>-->
+      <!--</li>-->
+
       <li>
-        <a class="default-button edit"
-           ng-show  = "collection.canEdit"
-           ui-sref="collection.edit({id:collection.shortid})">edit
+        <div class="confirm-delete btn btn-danger"
+             confirm-delete
+             on-confirm="delete()"></div>
+      </li>
+
+      <li>
+        <a class="default-button"
+           ng-show  = "collection.id"
+           ui-sref="collection.view({id:collection.shortid})">view collection
         </a>
       </li>
     </ul>
@@ -18,8 +33,16 @@
     <div class="header wrapper" ng-style="headerStyle">
       <div class="container">
         <div class="col-md-12">
-
-          <h1 class="title" ng-bind-html="collection.title"></h1>
+          <textarea
+            class       = "title edit"
+            auto-grow
+            name        = "title"
+            placeholder = "Your title"
+            data-ng-model    = "collectionUpdate.title"
+            ng-blur     = "update()"
+            focus       = "true"
+            >
+          </textarea>
 
           <!-- Meta -->
           <div class="meta" ng-show="collection.id">
@@ -39,10 +62,24 @@
 
     <!-- Collection Description -->
     <div class="description wrapper">
+      <!-- Editable description -->
       <div class="container">
         <div class="col-md-12">
-          <div class="collection-description"
-            ng-bind-html="collection.description || '<p>The publisher of this collection has not yet provided a description yet.</p>'">
+          <h3>Description
+            <button
+              class="right btn-tooltip"
+              popover="Add a nice description to your collection. "
+              data-popover-trigger="mouseenter"
+              data-popover-placement="left"><i class="fa fa-question"></i>
+            </button>
+          </h3>
+          <div
+            placeholder="some placeholder"
+            ng-model        = "collectionUpdate.description"
+            text-angular
+            ta-default-wrap = "p"
+            ng-blur         = "update()",
+            ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]">
           </div>
         </div>
       </div>
@@ -62,7 +99,7 @@
                  ng-show="collection.Datasets.length>10">
 
 
-          <p ng-show="collection.Datasets.length === 0">No datasets for this collection</p>
+          <p ng-show="collection.Datasets.length === 0">No datasets for this collection. You can add datasets to this collection at a dataset page. </p>
 
           <div class="dataset-listing">
             <ul>

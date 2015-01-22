@@ -154,22 +154,40 @@
       </div>
     </div> -->
 
-    <!-- <div class="collections wrapper" ng-hide="editMode">
+    <div class="collections wrapper">
       <div class="container">
         <div class="col-md-12">
           <h3>Collections</h3>
-          <p ng-show="account.collections.length === 0">No collections for this user</p>
+          <p ng-show="account.Collections.length === 0">No collections for this account</p>
           <ul>
-            <li ng-repeat="collection in account.collections">
-                <h4><a ui-sref="collection.view({id: collection._id})">{{collection.title}}</a></h4>
+            <li ng-repeat="collection in account.Collections">
+                <h4><a ui-sref="collection.view({id: collection.shortid})">{{collection.title}}</a></h4>
                 <p>{{collection.description}}</p>
-            </li>
-            <li>
-              <h4><a ui-sref="collection.create({accountId: account._id})" class="new">+ Create a collection</a></h4>
             </li>
           </ul>
         </div>
+
+        <div class="col-md-12">
+
+          <form class="form-horizontal novalidate" role="form" name="newCollectionForm">
+              <div class="form-group col-md-6">
+                <input class="form-control"
+                       name="title"
+                       ng-model="newCollection.title"
+                       placeholder="New collection"
+                       ng-minlength="3"
+                       ng-maxlength="30"/>
+                <span class="error" ng-show="newCollectionForm.title.$error.maxlength">Too long!</span>
+                <span class="error" ng-show="newCollectionForm.title.$error.minlength">Too short!</span>
+              </div>
+            <button
+              class="btn btn-default col-md-4"
+              ng-click="newCollection()"
+              ng-show="newCollectionForm.$valid && !newCollectionForm.$pristine">Create a new collection</button>
+            </form>
+            </div>
+        </div>
       </div>
-    </div> -->
+    </div>
   </div>
 </div>

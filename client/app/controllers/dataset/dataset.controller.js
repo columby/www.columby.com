@@ -52,7 +52,8 @@ angular.module('columbyApp')
         // add acquired dataset to the scope
         $scope.contentLoading = false;
         $scope.dataset = dataset;
-        $window.document.title = 'columby.com | ' + dataset.title;
+        $scope.pageTitle = 'columby.com | ' + dataset.title;
+        $window.document.title = $scope.pageTitle;
 
         // transition the url from slug to id
         if ($stateParams.id !== dataset.shortid) {

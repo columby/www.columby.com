@@ -8,10 +8,13 @@ angular.module('columbyApp')
 
   })
 
-  .controller('CollectionViewCtrl', function ($scope, $stateParams, CollectionSrv) {
-    console.log($stateParams);
+  .controller('CollectionViewCtrl', function ($scope, $stateParams, AuthSrv, CollectionSrv) {
 
-    $scope.collection = CollectionSrv.show({id:$stateParams.id });
+    CollectionSrv.show({id:$stateParams.id }, function(result){
+      console.log(result);
+      $scope.collection = result;
+      $scope.collection.canEdit= AuthSrv.canEdit('collection', result);
+    });
 
   })
 

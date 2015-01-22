@@ -23,12 +23,15 @@ angular.module('columbyApp')
 
     /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
     function getCollections(){
-      if ($scope.account.collections && $scope.account.collections.length >0){
-        angular.forEach($scope.account.collections, function(value, key) {
-          CollectionSrv.get({id:value}, function(result){
+      if ($scope.account.Collections && $scope.account.Collections.length >0){
+        $scope.account.collections = [];
+        angular.forEach($scope.account.Collections, function(value, key) {
+          CollectionSrv.get({id:value.shortid}, function(result){
             $scope.account.collections[ key] = result;
           });
         });
+        delete $scope.account.Collections;
+        console.log($scope.account.collections);
       } else {
         //console.log('no collections');
       }
@@ -53,6 +56,7 @@ angular.module('columbyApp')
         toaster.pop('warning', null, 'The requested account was not found. ');
         $state.go('home');
       } else {
+        console.log(result);
         $scope.account = result;
         if ($scope.account.avatar) {
           $scope.account.avatar.url = $rootScope.config.apiRoot + '/v2/file/' + $scope.account.avatar.id + '?style=small';
@@ -103,7 +107,7 @@ angular.module('columbyApp')
  *
  **/
   .controller('AccountEditCtrl',
-  function ($log, $window, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, toaster, $upload, FileService, ngProgress) {
+  function ($log, $window, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, CollectionSrv, toaster, $upload, FileService, ngProgress) {
 
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
@@ -163,57 +167,6 @@ angular.module('columbyApp')
       };
     }
 
-    ///**
-    // * Upload a file with a valid signed request
-    // *
-    // * @param params
-    // * @param file
-    // */
-    //function uploadFile(params, file) {
-    //  console.log('params ', params);
-    //  console.log('file ', file);
-    //  file.filename = params.file.filename;
-    //
-    //  var xhr = new XMLHttpRequest();
-    //  var fd = new FormData();
-    //  // Populate the Post paramters.
-    //  //console.log('Key: ' + params.file.account_id + '/images/' + params.file.filename);
-    //  fd.append('key', params.credentials.file.key);
-    //  fd.append('AWSAccessKeyId', params.credentials.s3Key);
-    //  fd.append('acl', params.credentials.file.acl);
-    //  //fd.append('success_action_redirect', "https://attachments.me/upload_callback")
-    //  fd.append('policy', params.credentials.policy);
-    //  fd.append('signature', params.credentials.signature);
-    //  fd.append('Content-Type', params.credentials.file.filetype);
-    //  fd.append('success_action_status', '201');
-    //  // This file object is retrieved from a file input.
-    //  fd.append('file', file);
-    //
-    //  xhr.upload.addEventListener('progress', function (evt) {
-    //    ngProgress.set(parseInt(100.0 * evt.loaded / evt.total));
-    //  }, false);
-    //
-    //  xhr.addEventListener('load', function(evt){
-    //    ngProgress.complete();
-    //    var parsedData = FileSrv.handleS3Response(evt.target.response);
-    //    var p = {
-    //      fid: params.file.id,
-    //      url: parsedData.location
-    //    };
-    //    finishUpload(p);
-    //  });
-    //  xhr.addEventListener('error', function(evt){
-    //    ngProgress.complete();
-    //    toaster.pop('warning',null,'There was an error attempting to upload the file.' + evt);
-    //  }, false);
-    //  xhr.addEventListener("abort", function(){
-    //    ngProgress.complete();
-    //    toaster.pop('warning',null,'The upload has been canceled by the user or the browser dropped the connection.');
-    //  }, false);
-    //
-    //  xhr.open('POST', 'https://' + params.credentials.bucket + '.s3.amazonaws.com/', true);
-    //  xhr.send(fd);
-    //}
 
     /**
      * File is uploaded, finish it at the server.
@@ -394,6 +347,24 @@ angular.module('columbyApp')
       console.log('toggleOptions');
       $scope.showOptions = !$scope.showOptions;
     };
+
+    /**
+     * Create a new collection for this account
+     */
+    $scope.newCollection = function(){
+      CollectionSrv.save({
+        accountId: $scope.account.id,
+        title: $scope.newCollection.title
+      }, function(result){
+        if (result.id){
+          $scope.account.Collections.push(result);
+          $scope.newCollection = null;
+        } else {
+          toaster.pop('warning', null, 'There was an error creating the collection. ');
+        }
+      });
+    };
+
 
     /* ---------- INIT ----------------------------------------------------------------------------- */
     if ($stateParams.slug) {

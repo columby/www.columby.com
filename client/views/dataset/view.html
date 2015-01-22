@@ -97,7 +97,7 @@
                   <li ng-show="dataset.primary.created_at !== dataset.primary.updated_at"><label>Modified</label>{{dataset.primary.updated_at | date:'d MMMM yyyy'}}</li>
                   <li ng-show="dataset.primary.jobStatus">Jobstatus: {{dataset.primary.jobStatus}}</li>
                 </ul>
-                <p ng-show="dataset.primary.jobStatus==='error">There was an error processing this dataset. The data is currently unavailable.</p>
+                <p ng-show="dataset.primary.jobStatus==='error'">There was an error processing this dataset. The data is currently unavailable.</p>
               </div>
             </li>
           </ul>

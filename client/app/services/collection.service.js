@@ -2,9 +2,9 @@
 
 angular.module('columbyApp')
 
-  .service('CollectionSrv', function ($resource) {
+  .service('CollectionSrv', function ($resource, configSrv) {
 
-    return $resource('api/v2/collection/:id', {
+    return $resource(configSrv.apiRoot + '/v2/collection/:id', {
       id: '@id'
     }, {
       index:   { method: 'GET', isArray: true, responseType: 'json' },

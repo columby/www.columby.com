@@ -158,6 +158,17 @@ angular.module('columbyApp')
               }
             }
             break;
+          case 'collection':
+            console.log('checking access for: ', item.account.id);
+            for (i=0;i<user.accounts.length;i++){
+              if (item.account.id === user.accounts[ i].id){
+                if ( (user.accounts[ i].role === 1) || (user.accounts[ i].role === 2) || (user.accounts[ i].role === 3) ) {
+                  console.log('canedit true: ', user.accounts[ i].role);
+                  canEdit = true;
+                }
+              }
+            }
+            break;
         }
 
         return canEdit;

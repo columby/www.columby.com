@@ -43,7 +43,7 @@
 
 					<ul>
             <li ng-repeat="collection in account.collections" class="collection">
-                <h4><a ui-sref="collection.view({id: collection.id})">{{collection.title}}</a></h4>
+                <h4><a ui-sref="collection.view({id: collection.shortid})">{{collection.title}}</a></h4>
                 <p>{{collection.description}}</p>
             </li>
     				<!-- <li>
