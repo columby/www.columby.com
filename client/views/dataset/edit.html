@@ -289,8 +289,9 @@
               <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
 									<div class="reference">
 										<img src="../../../images/reference-spaceholder.png" class="placeholder">
-										<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;">
-								      <h3 class="reference-title">{{reference.title}}</h3>
+										<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
+											<div class="reference-top"></div>
+								      <h3 class="reference-title"><a href="{{reference.url}}">{{reference.title}}</a></h3>
 								      <p class="small reference-source"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
 								    </div>
 									</div>
