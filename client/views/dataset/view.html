@@ -75,13 +75,9 @@
 
           <!-- Primary source (Columby API) -->
           <!-- <h2 class="datasource-title">Primary source</h2> -->
-          <ul>
+          <ul ng-show="dataset.primary.id">
             <li class="dataset-primary">
-              <div ng-hide="dataset.primary.id">
-                <p>This dataset is missing a primary source!</p>
-              </div>
-              <div ng-show="dataset.primary.id">
-
+              <div>
                 <h4 class="datasource-title">Primary source</h4>
                 <div class="download datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
                   <i class="fa fa-download"></i>
@@ -100,8 +96,8 @@
                 <p ng-show="dataset.primary.jobStatus==='error'">There was an error processing this dataset. The data is currently unavailable.</p>
               </div>
             </li>
+						<hr/>
           </ul>
-          <hr/>
 
           <ul ng-hide="!dataset.distributions || dataset.distributions.length===0">
             <li ng-repeat="distribution in dataset.distributions | filter: {status:!'draft'}">
