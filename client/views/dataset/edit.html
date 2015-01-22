@@ -229,6 +229,8 @@
               </div>
 
               <div class="label label-success" ng-show="distribution.id === dataset.primary.distribution_id">Source for Primary</div>
+							<div class="label label-warning" ng-show="distribution.status === 'draft'">Draft</div>
+							<div class="label label-primary" ng-show="distribution.status === 'private'">Private</div>
 
               <ul class="properties">
                 <li><label>Datasource status</label>{{distribution.status}}</li>
