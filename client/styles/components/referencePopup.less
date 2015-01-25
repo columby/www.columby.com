@@ -28,7 +28,7 @@
 		top: 0;
 		left: 0;
 		width: 100%;
-		border-radius: 10px;
+		border-radius: 5px;
 		overflow: hidden;
 		display: block;
 		height: 100%;
@@ -39,8 +39,16 @@
 			right: 0;
 			bottom: 0;
 			left: 0;
-			background-image: linear-gradient(to bottom right,#002f4b,rgba(47, 204, 255, 0.29));
+			background-image: linear-gradient(to top, rgba(0, 0, 0, 0.56), rgba(0, 0, 0, 0));
 			opacity: .6; 
+		}
+		.reference-top {
+			background: url('/images/default-header.svg');
+			background-size: 100%;
+			height: 12px;
+			-webkit-box-shadow: 0px 3px 20px 0px rgba(0,0,0,0.33);
+			-moz-box-shadow: 0px 3px 20px 0px rgba(0,0,0,0.33);
+			box-shadow: 0px 3px 20px 0px rgba(0,0,0,0.33);
 		}
 		.reference-title{
 			color: #fff;
@@ -48,6 +56,9 @@
 			position: absolute;
 			bottom: 10px;
 			left: 17px;
+			a{
+				color: #fff;
+			}
 		}
 		.reference-source{
 			position: absolute;
@@ -55,10 +66,12 @@
 			left: 25px;
 			color: #fff;
 			opacity: 0.5;
+			line-height: 0;
+			padding-bottom: 20px;
 		}
 	}
 }
 .reference-text {
-	margin-top: 20px;
+	margin-top: 5px;
 	line-height: 2em;
 }

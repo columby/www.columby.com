@@ -219,7 +219,7 @@
           <!-- Other distributions list -->
           <!-- <h2>Other sources</h2> -->
           <ul ng-show="dataset.distributions.length > 0">
-            <li ng-repeat="distribution in dataset.distributions">
+            <li class="distribution" ng-repeat="distribution in dataset.distributions">
               <h4 class="datasource-title">{{distribution.title}}</h4>
               <div class="download datasource-icon" ng-show="distribution.downloadUrl">
                 <a href="{{distribution.downloadUrl}}"><i class="fa fa-download"></i></a>
@@ -229,10 +229,8 @@
               </div>
 
               <div class="label label-success" ng-show="distribution.id === dataset.primary.distribution_id">Source for Primary</div>
-
-              <button class="valid-api btn btn-primary"
-                ng-click="convertPrimary(distribution)"
-                ng-hide="!distribution.valid || distribution.primary.id || distribution.id === dataset.primary.distribution_id">Convert to API</button>
+							<div class="label label-warning" ng-show="distribution.status === 'draft'">Draft</div>
+							<div class="label label-primary" ng-show="distribution.status === 'private'">Private</div>
 
               <ul class="properties">
                 <li><label>Datasource status</label>{{distribution.status}}</li>
@@ -255,6 +253,13 @@
                      confirm-delete
                      on-confirm="deleteDistribution(distribution)"></div>
               </div>
+							<div class="row actions">
+                <div class="col-xs-1">
+		              <button class="valid-api btn btn-primary btn-xs"
+		                ng-click="convertPrimary(distribution)"
+		                ng-hide="!distribution.valid || distribution.primary.id || distribution.id === dataset.primary.distribution_id">Convert to API</button>
+								</div>
+							</div>
 
   					</li>
           </ul>
@@ -289,8 +294,9 @@
               <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
 									<div class="reference">
 										<img src="../../../images/reference-spaceholder.png" class="placeholder">
-										<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;">
-								      <h3 class="reference-title">{{reference.title}}</h3>
+										<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
+											<div class="reference-top"></div>
+								      <h3 class="reference-title"><a href="{{reference.url}}">{{reference.title}}</a></h3>
 								      <p class="small reference-source"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
 								    </div>
 									</div>

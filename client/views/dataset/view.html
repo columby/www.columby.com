@@ -31,7 +31,7 @@
               <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a>,
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
             </p>
-            <p ng-show="dataset.tags.length>0"><strong>Tags: </strong><span ng-repeat="tag in dataset.tags">{{tag.text}}</span></p>
+            <p ng-show="dataset.tags.length>0"><strong>Tags: </strong><span class="tag" ng-repeat="tag in dataset.tags">{{tag.text}}</span></p>
           </div>
 
           <div class="avatar">
@@ -75,13 +75,9 @@
 
           <!-- Primary source (Columby API) -->
           <!-- <h2 class="datasource-title">Primary source</h2> -->
-          <ul>
+          <ul ng-show="dataset.primary.id">
             <li class="dataset-primary">
-              <div ng-hide="dataset.primary.id">
-                <p>This dataset is missing a primary source!</p>
-              </div>
-              <div ng-show="dataset.primary.id">
-
+              <div>
                 <h4 class="datasource-title">Primary source</h4>
                 <div class="download datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
                   <i class="fa fa-download"></i>
@@ -100,8 +96,8 @@
                 <p ng-show="dataset.primary.jobStatus==='error'">There was an error processing this dataset. The data is currently unavailable.</p>
               </div>
             </li>
+						<hr/>
           </ul>
-          <hr/>
 
           <ul ng-hide="!dataset.distributions || dataset.distributions.length===0">
             <li ng-repeat="distribution in dataset.distributions | filter: {status:!'draft'}">
@@ -198,8 +194,9 @@
               <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
 								<div class="reference">
 									<img src="../../../images/reference-spaceholder.png" class="placeholder">
-									<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;">
-							      <h3 class="reference-title">{{reference.title}}</h3>
+									<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
+										<div class="reference-top"></div>
+							      <h3 class="reference-title"><a href="{{reference.url}}">{{reference.title}}</a></h3>
 							      <p class="small reference-source"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
 							    </div>
 								</div>
