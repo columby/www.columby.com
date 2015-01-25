@@ -56,7 +56,6 @@ angular.module('columbyApp')
         toaster.pop('warning', null, 'The requested account was not found. ');
         $state.go('home');
       } else {
-        console.log(result);
         $scope.account = result;
         if ($scope.account.avatar) {
           $scope.account.avatar.url = $rootScope.config.apiRoot + '/v2/file/' + $scope.account.avatar.id + '?style=small';

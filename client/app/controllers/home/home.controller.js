@@ -13,7 +13,6 @@ angular.module('columbyApp')
       DatasetSrv.query(function(response){
         $scope.datasets = response;
         $scope.contentLoading = false;
-        console.log(response);
       });
     }
 
