@@ -7,7 +7,11 @@ angular.module('columbyApp')
     return $resource(configSrv.apiRoot + '/v2/primary/:id', {
         id: '@id'
       }, {
-        update: { method: 'PUT' }
+        update: { method: 'PUT' },
+        sync: {
+          url: configSrv.apiRoot + '/v2/primary/:id/sync',
+          method: 'POST'
+        }
       }
     );
   })

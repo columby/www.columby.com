@@ -1,5 +1,8 @@
 {
   "version": "1.0.1",
   "apiRoot": "//api.columby.prod/api",
-  "workerRoot": "//worker.columby.prod"
+  "workerRoot": "//worker.columby.prod",
+  "embedlyKey": "844b2c4d25334b4db2c327f10c70cb54",
+  "awsEndpoint": "https://s3.amazonaws.com/columby/"
 }
+

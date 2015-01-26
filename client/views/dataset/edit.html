@@ -179,6 +179,7 @@
           <!-- <h2 class="datasource-title">Primary source</h2> -->
           <ul>
             <li>
+
               <div ng-hide="dataset.primary.id">
                 <p>This dataset is missing a primary source! Create and convert a valid datasource below.</p>
               </div>
@@ -191,12 +192,13 @@
                 <div class="link datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
                   <a href="{{distribution.accessUrl}}"><i class="fa fa-external-link"></i></a>
                 </div>
-
+                
                 <ul class="properties">
                   <li><label>Datasource status</label>{{dataset.primary.status}}</li>
                   <li><label>Issued</label>{{dataset.primary.created_at | date:'d MMMM yyyy'}}</li>
                   <li ng-show="dataset.primary.created_at !== dataset.primary.updated_at"><label>Modified</label>{{dataset.primary.updated_at | date:'d MMMM yyyy'}}</li>
                   <li ng-show="dataset.primary.jobStatus"><label>Jobstatus</label>{{dataset.primary.jobStatus}}</li>
+                  <li ng-show="dataset.primary.syncDate"><label>Last synchronisation</label>{{dataset.primary.syncDate | date:'d MMMM yyyy - H:mm'}}</li>
                 </ul>
 
                 <p ng-show="dataset.primary.jobStatus==='error'">There was an error processing this dataset. The data is currently unavailable.</p>
@@ -204,6 +206,11 @@
 
 
                 <div class="actions">
+                  <!-- sync a datasource if possible -->
+                  {{}}
+                  <div class="col-xs-1">
+                    <button type="button" class="btn btn-info btn-xs" ng-click="syncPrimarySource()"><i class="fa fa-refresh"></i> Sync</button>
+                  </div>
                   <div class="col-xs-1">
                     <button type="button" class="btn btn-warning btn-xs" ng-click="editPrimarySource()"><i class="fa fa-edit"></i> Edit</button>
                   </div>
