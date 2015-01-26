@@ -192,7 +192,7 @@
                 <div class="link datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
                   <a href="{{distribution.accessUrl}}"><i class="fa fa-external-link"></i></a>
                 </div>
-                
+
                 <ul class="properties">
                   <li><label>Datasource status</label>{{dataset.primary.status}}</li>
                   <li><label>Issued</label>{{dataset.primary.created_at | date:'d MMMM yyyy'}}</li>
@@ -209,7 +209,10 @@
                   <!-- sync a datasource if possible -->
                   {{}}
                   <div class="col-xs-1">
-                    <button type="button" class="btn btn-info btn-xs" ng-click="syncPrimarySource()"><i class="fa fa-refresh"></i> Sync</button>
+                    <button class="btn btn-info btn-xs"
+                            type="button"
+                            ng-disabled="dataset.primary.jobStatus!=='done'"
+                            ng-click="syncPrimarySource()"><i class="fa fa-refresh"></i> Sync</button>
                   </div>
                   <div class="col-xs-1">
                     <button type="button" class="btn btn-warning btn-xs" ng-click="editPrimarySource()"><i class="fa fa-edit"></i> Edit</button>

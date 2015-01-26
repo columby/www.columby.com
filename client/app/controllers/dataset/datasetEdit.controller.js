@@ -591,6 +591,7 @@ angular.module('columbyApp')
      *
      */
     $scope.syncPrimarySource = function(){
+      $scope.syncInProgress=true;
       // Check if the primary is valid for resyncing
       // type (fortes,csv,arcgis
       var job = {
@@ -602,6 +603,8 @@ angular.module('columbyApp')
 
       // Send request to api
       PrimaryService.sync(job, function(r){
+        toaster.pop('info', null, 'The primary source will be synchronised. ');
+        $scope.dataset.primary.jobStatus = 'active';
         // Process response
         console.log('result', r);
       });
