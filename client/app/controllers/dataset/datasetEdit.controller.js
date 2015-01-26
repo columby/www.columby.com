@@ -560,6 +560,7 @@ angular.module('columbyApp')
       }
     };
 
+
     $scope.editPrimarySource = function(){
       console.log($scope.dataset.primary);
 
@@ -582,6 +583,30 @@ angular.module('columbyApp')
       }, function () {
         $log.info('Modal dismissed at: ' + new Date());
       });
+    };
+
+    /**
+     *
+     * Sync a primary source
+     *
+     */
+    $scope.syncPrimarySource = function(){
+      // Check if the primary is valid for resyncing
+      // type (fortes,csv,arcgis
+      var job = {
+        id: $scope.dataset.primary.id,
+        jobType: $scope.dataset.primary.jobType,
+        datasetId: $scope.dataset.id,
+        primaryId: $scope.dataset.primary.id
+      };
+
+      // Send request to api
+      PrimaryService.sync(job, function(r){
+        // Process response
+        console.log('result', r);
+      });
+
+
     };
 
 

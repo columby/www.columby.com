@@ -30,6 +30,19 @@ module.exports = function (grunt) {
 
     // Replace configuration settings
     replace: {
+      local: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./client/config/environments/local.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./client/config/config.service.js'],
+          dest: '<%= yeoman.client %>/app/services/'
+        }]
+      },
       development: {
         options: {
           patterns: [{
@@ -426,12 +439,6 @@ module.exports = function (grunt) {
           branch: 'master'
         }
       },
-      staging: {
-        options: {
-          remote: 'staging',
-          branch: 'master'
-        }
-      },
       openshift: {
         options: {
           remote: 'openshift',
@@ -692,9 +699,10 @@ module.exports = function (grunt) {
       ]);
     }
 
-    if (target === 'local') {
+    if (target === 'development') {
       grunt.task.run([
         'clean:server',
+        'replace:development',
         'env:all',
         'injector:less',
         'concurrent:server',
@@ -702,17 +710,16 @@ module.exports = function (grunt) {
         'wiredep',
         'autoprefixer',
         'express:dev',
-        'replace:local',
         'wait',
         'open',
         'watch'
       ]);
     }
 
-    if (target === 'development') {
+    if (target === 'local') {
       grunt.task.run([
         'clean:server',
-        'replace:development',
+        'replace:local',
         'env:all',
         'injector:less',
         'concurrent:server',
