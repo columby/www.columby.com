@@ -18,8 +18,12 @@ angular.module('columbyApp', [
 ])
 
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
-    $urlRouterProvider.otherwise('/');
+
+    $urlRouterProvider
+      .otherwise('/');
+
     $locationProvider.html5Mode(true).hashPrefix('!');
+
   })
 
   // Set the JWT if it is stored
