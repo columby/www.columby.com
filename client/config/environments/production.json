@@ -1,4 +1,5 @@
 {
+  "version": "1.0.1",
   "apiRoot": "//api.columby.prod/api",
   "workerRoot": "//worker.columby.prod"
 }

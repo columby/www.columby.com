@@ -1,6 +1,6 @@
 {
   "name": "columby-ui",
-  "version": "0.10.0",
+  "version": "1.0.1",
   "main": "server/app.js",
   "dependencies": {
     "aws-sdk": "^2.0.30",
