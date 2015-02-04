@@ -8,6 +8,7 @@ angular.module('columbyApp')
     $scope.hostname = $location.protocol() + '://' + $location.host();
     $scope.embedUrl = $location.absUrl();
     $window.document.title = 'columby.com';
+    $scope.datasetLoading = true;
 
 
     /* --------- FUNCTIONS ------------------------------------------------------------------ */
@@ -40,7 +41,7 @@ angular.module('columbyApp')
      *
      */
     function getDataset(){
-      $scope.contentLoading = true;  // show loading message while loading dataset
+
       DatasetSrv.get({
         id: $stateParams.id
       }, function(dataset) {
@@ -50,7 +51,7 @@ angular.module('columbyApp')
           return;
         }
         // add acquired dataset to the scope
-        $scope.contentLoading = false;
+        $scope.datasetLoading = false;
         $scope.dataset = dataset;
         $scope.pageTitle = 'columby.com | ' + dataset.title;
         $window.document.title = $scope.pageTitle;
