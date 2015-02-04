@@ -1,6 +1,6 @@
 {
   "version"     : "release-1.1",
-  "apiRoot"     : "//dev-api.columby.com/api",
-  "workerRoot"  : "//dev-worker.columby.com",
+  "apiRoot"     : "https://dev-api.columby.com/api",
+  "workerRoot"  : "https://dev-worker.columby.com",
 	"embedlyKey"  : "844b2c4d25334b4db2c327f10c70cb54"
 }

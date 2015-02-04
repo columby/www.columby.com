@@ -26,12 +26,12 @@ angular.module('columbyApp')
 
       DataService.sql(q).then(function(result){
         console.log(result);
-        $scope.datapreview = {
-          header: Object.keys(result[ 0])
-        };
-
-        $scope.datapreview.data = result;
-
+        if (result.status === 'success') {
+          $scope.datapreview = {
+            header: Object.keys(result[0])
+          };
+          $scope.datapreview.data = result;
+        }
       });
     }
 

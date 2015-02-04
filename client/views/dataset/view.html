@@ -14,8 +14,10 @@
     </ul>
   </div>
 
+  <div class="page-loading" ng-show="datasetLoading"><i class="fa fa-spinner fa-spin"></i> Loading dataset...</div>
+
   <!-- Main dataset Content -->
-  <div class="content" ng-class="{show:!contentLoading}">
+  <div class="content" ng-hide="datasetLoading">
 
     <div class="header wrapper" ng-style="headerStyle">
       <div class="container">
@@ -283,4 +285,5 @@
       </div>
     </div>
   </div>
+
 </div>

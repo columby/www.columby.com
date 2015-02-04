@@ -87,6 +87,11 @@
 
 }
 
+.ng-hide-add, .ng-hide-remove {
+  /* ensure visibility during the transition */
+  display: block !important; /* yes, important */
+}
+
 .dataset {
   &.listing {}
   // &.view {
@@ -109,11 +114,15 @@
       }
     }
     .content {
-      -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
-      -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
-      -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
-      transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
-			margin-bottom: 40px;
+      &.ng-hide{
+        opacity:0;
+      }
+      -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+      -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+      -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+      transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+      opacity: 1;
+      margin-bottom: 40px;
       .header.wrapper{
         height: auto;
         position:relative;
@@ -387,9 +396,9 @@
         }
       }
     }
-		
+
 		/* DATASET REFERENCE */
-		
+
 		.reference{
 			.placeholder{
 				overflow: hidden;
@@ -417,7 +426,7 @@
 					bottom: 0;
 					left: 0;
 					// background-image: linear-gradient(to bottom right,#002f4b,rgba(47, 204, 255, 0.29));
-					opacity: .6; 
+					opacity: .6;
 				}
 				.reference-title{
 					color: #fff;
@@ -447,7 +456,7 @@
 			height: 210px;
 		}
 
-		
+
     .dataset-reference{
       border-radius: 0;
       padding: 0;
