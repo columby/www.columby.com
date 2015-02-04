@@ -10,6 +10,8 @@ angular.module('columbyApp')
 .controller('DatasetEditCtrl', function($log,$window, $rootScope, $scope, configSrv, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, TagService, toaster, Slug, ngDialog, $http, FileService,ngProgress, $timeout,$modal) {
 
     /*-------------------   INITIALISATION   ------------------------------------------------------------------*/
+    var modalOpened=false; // Boolean to check if only 1 modal is opened at a time.
+
     $scope.hostname = $location.protocol() + '://' + $location.host();
     $scope.datasetUpdate = {};
     $scope.editMode = true;
@@ -409,6 +411,10 @@ angular.module('columbyApp')
 
 
     $scope.newDistribution = function() {
+
+      // Make sure only 1 modal is opened at a time. 
+      if (modalOpened) { return; }
+
       var modalInstance = $modal.open({
         templateUrl: 'views/dataset/distribution/new.html',
         controller: 'DistributionCreateCtrl',
@@ -422,11 +428,15 @@ angular.module('columbyApp')
         //}
       });
 
+      modalOpened=true;
+
       modalInstance.result.then(function(item) {
         console.log(item);
         $scope.dataset.distributions.push(item)
+        modalOpened=false;
       }, function () {
         $log.info('Modal dismissed at: ' + new Date());
+        modalOpened=false;
       });
     };
 
