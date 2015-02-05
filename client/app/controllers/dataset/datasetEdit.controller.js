@@ -10,6 +10,8 @@ angular.module('columbyApp')
 .controller('DatasetEditCtrl', function($log,$window, $rootScope, $scope, configSrv, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, TagService, toaster, Slug, ngDialog, $http, FileService,ngProgress, $timeout,$modal) {
 
     /*-------------------   INITIALISATION   ------------------------------------------------------------------*/
+    var modalOpened=false; // Boolean to check if only 1 modal is opened at a time.
+
     $scope.hostname = $location.protocol() + '://' + $location.host();
     $scope.datasetUpdate = {};
     $scope.editMode = true;
@@ -19,9 +21,10 @@ angular.module('columbyApp')
       isopen: false
     };
 
+    $scope.datasetLoading = true;  // show loading message while loading dataset
+
     /*-------------------   FUNCTIONS   -----------------------------------------------------------------------*/
-    function getDataset(){
-      $scope.contentLoading = true;  // show loading message while loading dataset
+    function getDataset() {
 
       DatasetSrv.get({
         id: $stateParams.id
@@ -30,6 +33,12 @@ angular.module('columbyApp')
           toaster.pop('danger',null,'Sorry, the requested dataset was not found. ');
           $state.go('home');
           return;
+        }
+
+        // check if user has edit-access
+        if (!AuthSrv.canEdit()) {
+          toaster.pop('danger', null, 'You do not have the permission to edit this post. ');
+          $state.go('dataset.view', {id: $stateParams.id});
         }
 
         // transition the url from slug to id
@@ -42,14 +51,12 @@ angular.module('columbyApp')
           });
         }
 
-        console.log(dataset);
-
         // Update document title
         $window.document.title = 'columby.com | ' + dataset.title;
-        $scope.contentLoading = false;
+        $scope.datasetLoading  = false;
 
         // Make sure there is a reference array
-        if (!dataset.references){
+        if (!dataset.references) {
           dataset.references = [];
         }
 
@@ -404,6 +411,10 @@ angular.module('columbyApp')
 
 
     $scope.newDistribution = function() {
+
+      // Make sure only 1 modal is opened at a time.
+      if (modalOpened) { return; }
+
       var modalInstance = $modal.open({
         templateUrl: 'views/dataset/distribution/new.html',
         controller: 'DistributionCreateCtrl',
@@ -417,11 +428,15 @@ angular.module('columbyApp')
         //}
       });
 
+      modalOpened=true;
+
       modalInstance.result.then(function(item) {
         console.log(item);
         $scope.dataset.distributions.push(item)
+        modalOpened=false;
       }, function () {
         $log.info('Modal dismissed at: ' + new Date());
+        modalOpened=false;
       });
     };
 
@@ -645,7 +660,11 @@ angular.module('columbyApp')
 
 
     /* --------- INIT ------------------------------------------------------------------------ */
-    if ($stateParams.id) {
+    // Check if user is authenticated
+    if (!AuthSrv.isAuthenticated()){
+      toaster.pop('danger',null,'You need to be authenticated to be able to edit this post. ');
+      $state.go('dataset.view', { id: $stateParams.id });
+    } else if ($stateParams.id) {
       getDataset();
     } else if($rootScope.user.id){
       initiateNewDataset();

@@ -4,6 +4,7 @@ angular.module('columbyApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
+  'ngAnimate',
   'ui.router',
   'ui.bootstrap',
   'angular-jwt',

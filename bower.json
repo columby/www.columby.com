@@ -1,6 +1,6 @@
 {
-  "name": "columby",
-  "version": "0.0.0",
+  "name": "columby-ui",
+  "version": "1.0.2",
   "dependencies": {
     "angular": "~1.3.0",
     "json3": "~3.3.1",

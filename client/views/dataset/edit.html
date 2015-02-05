@@ -23,8 +23,11 @@
     </ul>
   </div>
 
+
+  <div class="page-loading" ng-show="datasetLoading"><i class="fa fa-spinner fa-spin"></i> Loading dataset...</div>
+
   <!-- Editor Sidebar -->
-  <div class="editorSidebar" ng-show="showOptions">
+  <div class="editorSidebar" ng-show="showOptions && !datasetLoading">
     <div class="options-arrow"></div>
     <div class="editorSidebarContent">
       <div class="sidebarModule">
@@ -81,7 +84,7 @@
   </div>
 
   <!-- Main dataset Content -->
-  <div class="content" ng-class="{show:!contentLoading}">
+  <div class="content" ng-hide="datasetLoading">
 
     <!-- Dataset header -->
     <div class="header wrapper" ng-style="headerStyle">
