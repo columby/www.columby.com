@@ -412,7 +412,7 @@ angular.module('columbyApp')
 
     $scope.newDistribution = function() {
 
-      // Make sure only 1 modal is opened at a time. 
+      // Make sure only 1 modal is opened at a time.
       if (modalOpened) { return; }
 
       var modalInstance = $modal.open({
