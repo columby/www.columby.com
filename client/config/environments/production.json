@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
-  "apiRoot": "//acc-api.columby.prod/api",
-  "workerRoot": "//acc-worker.columby.prod"
+  "version": "1.0.2",
+  "apiRoot": "https//acc-api.columby.com",
+  "workerRoot": "https//acc-worker.columby.com"
 }
