@@ -36,7 +36,8 @@ angular.module('columbyApp')
         }
 
         // check if user has edit-access
-        if (!AuthSrv.canEdit()) {
+        var canEdit = AuthSrv.canEdit('dataset', dataset);
+        if (canEdit === false) {
           toaster.pop('danger', null, 'You do not have the permission to edit this post. ');
           $state.go('dataset.view', {id: $stateParams.id});
         }
