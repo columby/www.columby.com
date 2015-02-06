@@ -40,7 +40,7 @@ angular.module('columbyApp', [
     //IE console
     window.console = window.console || {};
     window.console.log = window.console.log || function() {};
-    
+
     $rootScope.bodyClasses = {};
     $rootScope.user = {};
     $rootScope.config = configSrv;

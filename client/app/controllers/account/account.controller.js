@@ -297,6 +297,7 @@ angular.module('columbyApp')
         return toaster.pop('warning', null, 'The file you chose is not valid. ' + file.type);
       }
 
+      ngProgress.color('#2FCCFF');
       ngProgress.start();
       var params = {
         filetype: file.type,
