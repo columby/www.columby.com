@@ -80,6 +80,29 @@
           </div>
         </form>
       </div>
+      
+      <h3>Background image
+        <button
+          class="btn btn-default right btn-xs btn-tooltip"
+          popover="Upload a background image for your dataset"
+          popover-trigger="mouseenter"
+          popover-placement="left"><i class="fa fa-question"></i>
+        </button>
+      </h3>
+      
+      <div>
+        <button
+          class="btn btn-xs btn-default upload-button"
+          ng-file-select="onFileSelect($files,'image','header')">upload your image</button>
+      </div>
+      <!-- <div class="upload-button"
+           ng-file-select="onFileSelect($files,'image','header')"
+           popover="Change the header background image for this dataset."
+           data-popover-trigger="mouseenter"
+           data-popover-placement="left">
+        <i class="fa fa-cog"></i><span>Upload an image</span>
+      </div> -->
+      
     </div>
   </div>
 
@@ -88,13 +111,6 @@
 
     <!-- Dataset header -->
     <div class="header wrapper" ng-style="headerStyle">
-      <div class="upload-button"
-           ng-file-select="onFileSelect($files,'image','header')"
-           popover="Change the header background image for this dataset."
-           data-popover-trigger="mouseenter"
-           data-popover-placement="left">
-        <i class="fa fa-cog"></i>
-      </div>
 
       <div class="container">
   			<div class="col-md-12">
