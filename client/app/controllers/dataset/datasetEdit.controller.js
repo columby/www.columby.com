@@ -122,7 +122,7 @@ angular.module('columbyApp')
      *
      */
     function initiateNewDataset(){
-      console.log($rootScope);
+      console.log('Initiating new dataset.');
       // if user has multiple accounts, show the account-selector.
       if ($rootScope.user.accounts.length > 1) {
         //$scope.showAccountSelector = true;
@@ -137,6 +137,8 @@ angular.module('columbyApp')
         account_id: $rootScope.user.accounts[ 0].id,
         canEdit: true
       };
+
+      $scope.datasetLoading  = false;
 
       toaster.pop('notice',null,'Here\'s your new dataset!');
     }
