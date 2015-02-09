@@ -37,17 +37,29 @@
           <h3>Editors</h3>
 
         </div>
+        <h3>Background image
+          <button
+            class="btn btn-default right btn-xs btn-tooltip"
+            popover="Upload a background image for your account"
+            popover-trigger="mouseenter"
+            popover-placement="left"><i class="fa fa-question"></i>
+          </button>
+        </h3>
+      
+        <div>
+          <button
+            class="btn btn-xs btn-default upload-button"
+            ng-file-select="onFileSelect($files,'image','header')">upload your image</button>
+        </div>
+        
       </div>
+
     </div>
   </div>
 
   <!-- Content -->
   <div class="content" ng-hide="contentLoading">
     <div class="header wrapper" ng-style="headerStyle">
-
-      <div class="upload-button" ng-file-select="onFileSelect($files,'image','header')">
-        <i class="fa fa-cog"></i>
-      </div>
 
       <div class="container">
 
