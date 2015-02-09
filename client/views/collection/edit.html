@@ -68,18 +68,17 @@
           <h3>Description
             <button
               class="right btn-tooltip"
-              popover="Add a nice description to your collection. "
+              data-popover="Add a nice description to your collection. "
               data-popover-trigger="mouseenter"
               data-popover-placement="left"><i class="fa fa-question"></i>
             </button>
           </h3>
           <div
-            placeholder="some placeholder"
-            ng-model        = "collectionUpdate.description"
+            data-ng-model        = "collectionUpdate.description"
             text-angular
-            ta-default-wrap = "p"
-            ng-blur         = "update()",
-            ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]">
+            data-ta-default-wrap = "p"
+            data-ng-blur         = "update()"
+            data-ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]">
           </div>
         </div>
       </div>
@@ -94,12 +93,12 @@
 
           <input class="searchbox"
                  type="text"
-                 ng-m odel="search.$"
+                 data-ng-model="search.$"
                  placeholder="Search this collection"
-                 ng-show="collection.Datasets.length>10">
+                 data-ng-show="collection.Datasets.length>10">
 
 
-          <p ng-show="collection.Datasets.length === 0">No datasets for this collection. You can add datasets to this collection at a dataset page. </p>
+          <p data-ng-show="collection.Datasets.length === 0">No datasets for this collection. You can add datasets to this collection at a dataset page. </p>
 
           <div class="dataset-listing">
             <ul>

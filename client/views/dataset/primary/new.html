@@ -5,17 +5,17 @@
 <div class="modal-body add-primary-source">
 
   <!-- sync -->
-  <div ng-show="primary.jobType==='arcgis'">
+  <div data-ng-show="primary.jobType==='arcgis'">
     <p>From the url distribution: {{distribution.title || 'No title'}}<br />
       with source {{distribution.accessUrl}}.
     <h3>Synchronisation</h3>
     <p>How often would you like to sync the data? </p>
     <div class="btn-group">
-      <label class="btn btn-default" ng-model="primary.syncPeriod" btn-radio="0">Do not sync</label>
-      <label class="btn btn-default" ng-model="primary.syncPeriod" btn-radio="1">Yearly</label>
-      <label class="btn btn-default" ng-model="primary.syncPeriod" btn-radio="2">Quarterly</label>
-      <label class="btn btn-default" ng-model="primary.syncPeriod" btn-radio="3">Monthly</label>
-      <label class="btn btn-default" ng-model="primary.syncPeriod" btn-radio="4">Weekly</label>
+      <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="0">Do not sync</label>
+      <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="1">Yearly</label>
+      <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="2">Quarterly</label>
+      <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="3">Monthly</label>
+      <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="4">Weekly</label>
     </div>
   </div>
 

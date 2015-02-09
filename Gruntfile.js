@@ -18,7 +18,8 @@ module.exports = function (grunt) {
     protractor: 'grunt-protractor-runner',
     injector: 'grunt-asset-injector',
     buildcontrol: 'grunt-build-control',
-    replace: 'grunt-replace'
+    replace: 'grunt-replace',
+    htmlangular: 'grunt-html-angular-validate'
   });
 
   // Time how long tasks take. Can help when optimizing build times
@@ -212,6 +213,28 @@ module.exports = function (grunt) {
         }]
       },
       server: '.tmp'
+    },
+
+
+    htmlangular: {
+      options: {
+        // Task-specific options go here.
+        tmplext: '.html',
+        customtags: [
+          'top-nav',
+          'left-bar',
+          'right-bar',
+          'client-footer',
+          'progressbar'
+        ],
+        customattrs: [
+          'text-angular',
+          'progressbar'
+        ]
+      },
+      files: {
+        src: ['<%= yeoman.client %>/views/**/*.html']
+      }
     },
 
     // Add vendor prefixed styles
@@ -562,7 +585,7 @@ module.exports = function (grunt) {
         files: {
           '<%= yeoman.client %>/styles/app.less': [
             '<%= yeoman.client %>/{app,components,styles}/**/*.less',
-            '!<%= yeoman.client %>/styles/app.less'
+            '!<%= yeoman.client %>/styles/app.less',
           ]
         }
       },
@@ -705,6 +728,7 @@ module.exports = function (grunt) {
         'replace:development',
         'env:all',
         'injector:less',
+        
         'concurrent:server',
         'injector',
         'wiredep',

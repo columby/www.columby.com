@@ -35,7 +35,7 @@
           <h3>Visibility
             <button
               class="btn btn-defaultright btn-xs btn-tooltip"
-              popover="Change visibility settings for your dataset."
+              data-popover="Change visibility settings for your dataset."
               data-popover-trigger="mouseenter"
               data-popover-placement="left"><i class="fa fa-question"></i></button>
           </h3>
@@ -56,9 +56,9 @@
         <h3>Custom URL
           <button
             class="btn btn-default right btn-xs btn-tooltip"
-            popover="Create a custom URL for this dataset that is more memorable than a random string of characters. Many people create a URL that matches the dataset title."
-            popover-trigger="mouseenter"
-            popover-placement="left"><i class="fa fa-question"></i>
+            data-popover="Create a custom URL for this dataset that is more memorable than a random string of characters. Many people create a URL that matches the dataset title."
+            data-popover-trigger="mouseenter"
+            data-popover-placement="left"><i class="fa fa-question"></i>
           </button>
         </h3>
 				<span>{{hostname}}/d/{{dataset.slug | slugify}}</span>
@@ -80,16 +80,16 @@
           </div>
         </form>
       </div>
-      
+
       <h3>Background image
         <button
           class="btn btn-default right btn-xs btn-tooltip"
-          popover="Upload a background image for your dataset"
-          popover-trigger="mouseenter"
-          popover-placement="left"><i class="fa fa-question"></i>
+          data-popover="Upload a background image for your dataset"
+          data-popover-trigger="mouseenter"
+          data-popover-placement="left"><i class="fa fa-question"></i>
         </button>
       </h3>
-      
+
       <div>
         <button
           class="btn btn-xs btn-default upload-button"
@@ -102,7 +102,7 @@
            data-popover-placement="left">
         <i class="fa fa-cog"></i><span>Upload an image</span>
       </div> -->
-      
+
     </div>
   </div>
 
@@ -163,18 +163,18 @@
           <h3>Description
             <button
               class="right btn-tooltip"
-              popover="Add a nice description to your dataset. If your audience may contact you, write down how."
+              data-popover="Add a nice description to your dataset. If your audience may contact you, write down how."
               data-popover-trigger="mouseenter"
               data-popover-placement="left"><i class="fa fa-question"></i>
             </button>
           </h3>
           <div
             placeholder="Add a nice description to your dataset. If your audience may contact you, write down how."
-            ng-model        = "datasetUpdate.description"
+            data-ng-model        = "datasetUpdate.description"
             text-angular
-            ta-default-wrap = "p"
-            ng-blur         = "update()",
-            ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]">
+            data-ta-default-wrap = "p"
+            data-ng-blur         = "update()",
+            data-ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]">
           </div>
         </div>
       </div>
@@ -188,7 +188,7 @@
           <h3>Sources
             <button
               class="right btn btn-default btn-xs btn-tooltip"
-              popover="Add some datasources to your dataset. These can be links to webpages and files. But you can also upload your data (xls, csv, etc.) to Columby."
+              data-popover="Add some datasources to your dataset. These can be links to webpages and files. But you can also upload your data (xls, csv, etc.) to Columby."
               data-popover-trigger="mouseenter"
               data-popover-placement="left"><i class="fa fa-question"></i>
             </button>
@@ -314,7 +314,7 @@
           <div class="content">
             <h3>References<button
               class="btn btn-default right btn-xs btn-tooltip"
-              popover="Did you make a nice App with this data? Have a cool blogpost about this data? Or an infographic? Paste links to these references here."
+              data-popover="Did you make a nice App with this data? Have a cool blogpost about this data? Or an infographic? Paste links to these references here."
               data-popover-trigger="mouseenter"
               data-popover-placement="left"><i class="fa fa-question"></i>
             </button></h3>
@@ -371,10 +371,10 @@
 
           <!-- Datasource Modal -->
           <button
-            ng-show="editMode"
+            data-ng-show="editMode"
             class="btn btn-default"
             type="button"
-            ng-click="addToCollection()"
+            data-ng-click="addToCollection()"
             >Add to collection</button>
         </div>
       </div>
@@ -386,15 +386,15 @@
 				<div class="col-md-12">
 		      <button
 		        class    = "btn dbt-default create disabled"
-		        ng-hide  = "dataset.id || datasetUpdate.title">Save draft & proceed to add data
+            data-ng-hide  = "dataset.id || datasetUpdate.title">Save draft & proceed to add data
 		      </button>
-					<p ng-hide  = "dataset.id || datasetUpdate.title">Please add a title first.</p>
+					<p data-ng-hide  = "dataset.id || datasetUpdate.title">Please add a title first.</p>
 		      <button
 		        class    = "btn dbt-default create"
-		        ng-hide  = "dataset.id || !datasetUpdate.title"
-		        ng-click = "create()">Save draft & proceed to add data
+            data-ng-hide  = "dataset.id || !datasetUpdate.title"
+            data-ng-click = "create()">Save draft & proceed to add data
 		      </button>
-					<p ng-hide  = "dataset.id || !datasetUpdate.title">Don't worry, you can still change your title and description.</p>
+					<p data-ng-hide  = "dataset.id || !datasetUpdate.title">Don't worry, you can still change your title and description.</p>
 				</div>
 			</div>
 		</div>

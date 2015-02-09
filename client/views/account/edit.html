@@ -7,22 +7,22 @@
       <li>
         <button
           class    = "default-button"
-          ng-show  = "account.id"
-          ng-click = "toggleOptions()">options
+          data-ng-show  = "account.id"
+          data-ng-click = "toggleOptions()">options
         </button>
       </li>
       <li>
         <button class="btn btn-default"
           type     = "button"
-          ng-show  = "account.id"
+          data-ng-show  = "account.id"
           ui-sref="account.view({slug:account.slug})">Exit edit mode
         </button>
       </li>
       <li>
         <button
           class    = "btn btn-default publish"
-          ng-show  = "!account.id"
-          ng-click = "createAccount()">Publish
+          data-ng-show  = "!account.id"
+          data-ng-click = "createAccount()">Publish
         </button>
       </li>
     </ul>
@@ -40,18 +40,18 @@
         <h3>Background image
           <button
             class="btn btn-default right btn-xs btn-tooltip"
-            popover="Upload a background image for your account"
-            popover-trigger="mouseenter"
-            popover-placement="left"><i class="fa fa-question"></i>
+            data-popover="Upload a background image for your account"
+            data-popover-trigger="mouseenter"
+            data-popover-placement="left"><i class="fa fa-question"></i>
           </button>
         </h3>
-      
+
         <div>
           <button
             class="btn btn-xs btn-default upload-button"
             ng-file-select="onFileSelect($files,'image','header')">upload your image</button>
         </div>
-        
+
       </div>
 
     </div>
@@ -68,14 +68,12 @@
           placeholder = 'Your account name'
           data-ng-model    = 'accountUpdate.name'
           data-ng-blur     = 'update()'
-          focus       = 'true'
-         ></textarea>
+          data-focus = 'true'></textarea>
 
         <div class="avatar-container avatar"
-
-          ng-file-select="onFileSelect($files,'image','avatar')"
+          data-ng-file-select="onFileSelect($files,'image','avatar')"
           data-multiple="false">
-          <img class="img-circle avatar" src="{{account.avatar.url}}"/>
+          <img class="img-circle avatar" ng-src="{{account.avatar.url}}" />
         </div>
       </div>
     </div>
@@ -88,20 +86,19 @@
         <div class="col-md-12">
           <h3>Description</h3>
             <button
-              class="right btn-xs btn-tooltip"
-              popover="----"
-              popover-trigger="mouseenter"
-              popover-placement="left"
-              class="btn btn-default"><i class="fa fa-question"></i>
+              class="btn btn-default right btn-xs btn-tooltip"
+              data-popover="----"
+              data-popover-trigger="mouseenter"
+              data-popover-placement="left"><i class="fa fa-question"></i>
             </button>
 
 
           <div
-            ng-model        = "accountUpdate.description"
+            data-ng-model        = "accountUpdate.description"
             text-angular
-            ta-default-wrap = "p"
-            ng-blur         = "update()"
-            ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"
+            data-ta-default-wrap = "p"
+            data-ng-blur         = "update()"
+            data-ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"
         ></div>
         </div>
       </div>
@@ -137,8 +134,8 @@
             </tr>
           </table>
           <button class="btn btn-default"
-                  file-type="file"
-                  file-target="accountFile"
+                  data-file-type="file"
+                  data-file-target="accountFile"
                   ng-file-select="onFileSelect($files,'file','accountFile')"
                   data-multiple="false">
             Upload a new file</button>
@@ -189,8 +186,8 @@
                        placeholder="New collection"
                        ng-minlength="3"
                        ng-maxlength="30"/>
-                <span class="error" ng-show="newCollectionForm.title.$error.maxlength">Too long!</span>
-                <span class="error" ng-show="newCollectionForm.title.$error.minlength">Too short!</span>
+                <span class="error" data-ng-show="newCollectionForm.title.$error.maxlength">Too long!</span>
+                <span class="error" data-ng-show="newCollectionForm.title.$error.minlength">Too short!</span>
               </div>
             <button
               class="btn btn-default col-md-4"
@@ -202,4 +199,3 @@
       </div>
     </div>
   </div>
-</div>

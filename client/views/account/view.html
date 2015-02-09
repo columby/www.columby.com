@@ -17,8 +17,8 @@
       <div class="container">
         <h1 ng-bind-html="account.name || 'No name yet'"></h1>
         <div class="avatar">
-          <img class="img-circle" src="{{account.avatar.url}}"/>
-          <div class="label label-success" ng-show="account.id===$root.user.primaryAccount.id">This is you!</div>
+          <img class="img-circle" ng-src="{{account.avatar.url}}"/>
+          <div class="label label-success" data-ng-show="account.id===$root.user.primaryAccount.id">This is you!</div>
 
         </div>
       </div>
@@ -83,22 +83,22 @@
                   <li><label>Created</label><date>{{dataset.created_at | date:'d MMMM yyyy'}}</date></li>
                   <li ng-show="dataset.distributions.length>0"><label>Data sources</label>{{dataset.distributions.length}}</li>
                   <li ng-show="dataset.references.length>0"><label>References</label>{{dataset.references.length}}</li>
-                  <br ng-show="dataset.tags.length>0"/>
+
                   <li ng-show="dataset.tags.length>0"><label>Tags</label><span ng-repeat="tag in dataset.tags">{{tag}}</span></li>
                 </ul>
               </li>
             </ul>
 
             <pagination
-              ng-change="pageChanged()"
+              data-ng-change="pageChanged()"
               total-items="datasets.count"
-              ng-model="datasets.currentPage"
-              max-size="5"
+              data-ng-model="datasets.currentPage"
+              data-max-size="5"
               class="pagination-sm"
-              boundary-links="true"
-              rotate="false"
-              num-pages="datasets.numPages"
-              ng-show="dataset.numPages>0">
+              data-boundary-links="true"
+              data-rotate="false"
+              data-num-pages="datasets.numPages"
+              data-ng-show="dataset.numPages>0">
             </pagination>
 
           </div>
@@ -140,5 +140,4 @@
       </div>
     </div>
   </div>
-  </div>
-</section>
+</div>

@@ -21,6 +21,7 @@ angular.module('columbyApp', [
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
 
     $urlRouterProvider
+      .when('', '/')
       .otherwise('/');
 
     $locationProvider.html5Mode(true).hashPrefix('!');

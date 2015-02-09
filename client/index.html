@@ -28,7 +28,7 @@
       <!-- endinjector -->
     <!-- endbuild -->
   </head>
-  <body id="ng-app" data-ng-app="columbyApp">
+  <body id="ng-app" data-ng-app="columbyApp" ng-cloak>
     <div class="{{$root.bodyClasses.state}}" data-ng-class="{'embed': $root.bodyClasses.embed}" data-ng-controller="ColumbyCtrl">
     <!--[if lt IE 10]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -36,7 +36,7 @@
 
     <!-- Add your site or application content here -->
     <!-- popup messages -->
-    <toaster-container></toaster-container>
+    <div toaster-container></div>
 
     <!-- include sitenav including sitenav-overlay -->
     <div class="sitenav" data-ng-include="'components/sitenav/sitenav.html'"></div>
@@ -48,7 +48,7 @@
       <div ui-view autoscroll="true"></div>
 
       <!-- include footer -->
-      <div class="footer-wrapper" data-ng-include="'components/footer/footer.html'"></div>
+      <div class="footer-wrapper" data-ng-include="'/components/footer/footer.html'"></div>
     </div>
 
     <div uservoice></div>
