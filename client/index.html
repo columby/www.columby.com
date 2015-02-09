@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html xmlns:ng="http://angularjs.org">
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -28,9 +28,9 @@
       <!-- endinjector -->
     <!-- endbuild -->
   </head>
-  <body ng-app="columbyApp">
-    <div class="{{$root.bodyClasses.state}}" ng-class="{'embed': $root.bodyClasses.embed}" ng-controller="ColumbyCtrl">
-    <!--[if lt IE 7]>
+  <body id="ng-app" data-ng-app="columbyApp">
+    <div class="{{$root.bodyClasses.state}}" data-ng-class="{'embed': $root.bodyClasses.embed}" data-ng-controller="ColumbyCtrl">
+    <!--[if lt IE 10]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
@@ -39,16 +39,16 @@
     <toaster-container></toaster-container>
 
     <!-- include sitenav including sitenav-overlay -->
-    <div class="sitenav" ng-include="'components/sitenav/sitenav.html'"></div>
+    <div class="sitenav" data-ng-include="'components/sitenav/sitenav.html'"></div>
 
     <div class="site-main">
       <!-- include metabar -->
-      <div class="metabar-wrapper" ng-include="'components/metabar/metabar.html'"></div>
+      <div class="metabar-wrapper" data-ng-include="'components/metabar/metabar.html'"></div>
 
       <div ui-view autoscroll="true"></div>
 
       <!-- include footer -->
-      <div class="footer-wrapper" ng-include="'components/footer/footer.html'"></div>
+      <div class="footer-wrapper" data-ng-include="'components/footer/footer.html'"></div>
     </div>
 
     <div uservoice></div>

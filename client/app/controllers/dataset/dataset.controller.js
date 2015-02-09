@@ -41,7 +41,7 @@ angular.module('columbyApp')
      *
      */
     function getDataset(){
-
+      console.log('Fetching dataset', $stateParams.id);;
       DatasetSrv.get({
         id: $stateParams.id
       }, function(dataset) {
