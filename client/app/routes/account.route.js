@@ -5,7 +5,7 @@ angular.module('columbyApp')
     $stateProvider
 
       .state('account', {
-        template: '<ui-view />'
+        template: '<div ui-view></div>'
       })
 
       // .state('account.create', {

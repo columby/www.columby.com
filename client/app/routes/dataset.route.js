@@ -6,7 +6,7 @@ angular.module('columbyApp')
     $stateProvider
 
       .state('dataset', {
-        template: '<ui-view/>'
+        template: '<div ui-view></div>'
       })
 
       .state('dataset.create', {

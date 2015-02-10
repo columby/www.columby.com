@@ -5,7 +5,7 @@ angular.module('columbyApp')
     $stateProvider
 
       .state('collection', {
-        template: '<ui-view/>'
+        template: '<div ui-view></div>'
       })
 
       .state('collection.index', {
