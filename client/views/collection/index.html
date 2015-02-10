@@ -19,7 +19,7 @@
           <h3>Collections</h3>
           <ul>
             <li ng-repeat="collection in collections">
-              <p><a ui-sref="collection.view({id:collection._id})">{{collection.title}} by {{collection.account.name}}</a></p>
+              <p><a ui-sref="collection({id:collection._id})">{{collection.title}} by {{collection.account.name}}</a></p>
               <p>{{collection.datasets.length}} datasets</p>
             </li>
           </ul>

@@ -15,7 +15,7 @@
         <button class="btn btn-default"
           type     = "button"
           data-ng-show  = "account.id"
-          ui-sref="account.view({slug:account.slug})">Exit edit mode
+          ui-sref="account({slug:account.slug})">Exit edit mode
         </button>
       </li>
       <li>
@@ -170,7 +170,7 @@
           <p ng-show="account.Collections.length === 0">No collections for this account</p>
           <ul>
             <li ng-repeat="collection in account.Collections">
-                <h4><a ui-sref="collection.view({id: collection.shortid})">{{collection.title}}</a></h4>
+                <h4><a ui-sref="collection({id: collection.shortid})">{{collection.title}}</a></h4>
                 <p>{{collection.description}}</p>
             </li>
           </ul>

@@ -19,7 +19,7 @@ angular.module('columbyApp')
             description: $scope.collection.description
           };
         } else {
-          $state.go('collection.view({id: result.shortid}');
+          $state.go('collection({id: result.shortid}');
         }
       });
     }
@@ -63,7 +63,7 @@ angular.module('columbyApp')
       CollectionSrv.delete({id: $scope.collection.id}, function(res){
         if (res){
           toaster.pop('success', null, 'Collection deleted.');
-          $state.go('account.edit', {slug: $scope.collection.Account.slug});
+          $state.go('accountEdit', {slug: $scope.collection.Account.slug});
         } else {
           toaster.pop('warning', null, 'There was an error deleting the collection.');
         }

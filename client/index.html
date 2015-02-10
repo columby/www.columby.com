@@ -1,9 +1,9 @@
 <!doctype html>
 <html xmlns:ng="http://angularjs.org">
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7]><html class="no-js ie lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="no-js ie lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="no-js ie lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js ie"> <!--<![endif]-->
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,7 +22,7 @@
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
-    <link rel="stylesheet" href="app/app.css">
+    <link rel="stylesheet" href="/app/app.css">
       <!-- injector:css -->
       <link rel="stylesheet" href="components/modal/modal.css">
       <!-- endinjector -->
@@ -49,7 +49,7 @@
       <div ui-view autoscroll="true"></div>
 
       <!-- include footer -->
-      <div class="footer-wrapper" data-ng-include="'/components/footer/footer.html'"></div>
+      <div class="footer-wrapper" data-ng-include="'components/footer/footer.html'"></div>
     </div>
 
     <div uservoice></div>
@@ -66,8 +66,8 @@
 
     </script>
     <!--[if lt IE 9]>
-    <script src="bower_components/es5-shim/es5-shim.js"></script>
-    <script src="bower_components/json3/lib/json3.min.js"></script>
+    <script src="/bower_components/es5-shim/es5-shim.js"></script>
+    <script src="/bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
 
     <!-- Typekit -->
@@ -99,7 +99,7 @@
     <!-- endbuild -->
 
         <!-- build:js({.tmp,client}) app/app.js -->
-        <script src="app/app.js"></script>
+        <script src="/app/app.js"></script>
           <!-- injector:js -->
           <script src="app/controllers/account/account.controller.js"></script>
           <script src="app/controllers/account/accountSelector.controller.js"></script>

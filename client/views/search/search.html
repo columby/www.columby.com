@@ -27,7 +27,7 @@
       <div class="no-result" ng-show="search.hits.length===0">No result</div>
         <ul ng-show="search.hits.length>0">
           <li ng-repeat="result in search.hits" class="publication-item">
-            <h4><a ui-sref="dataset.view({datasetId: result.id})">{{result.title}}</a><em>{{result._source.publishStatus}}</em></h4>
+            <h4><a ui-sref="dataset({datasetId: result.id})">{{result.title}}</a><em>{{result._source.publishStatus}}</em></h4>
             <div class="user-date"><!-- {{result._source.account.name || '[Oops! No publisher found]'}} on  --><time class="post-date">{{result._source.createdAt | date:'d MMMM yyyy'}}</time></div>
           </li>
         </ul>

@@ -17,7 +17,7 @@
       <li>
         <a class="default-button"
           ng-show  = "dataset.id"
-          ui-sref="dataset.view({id:dataset.shortid})">view dataset
+          ui-sref="dataset({id:dataset.shortid})">view dataset
         </a>
       </li>
     </ul>
@@ -130,7 +130,7 @@
           <div class="meta" ng-show="dataset.id">
 						<span ng-show="dataset.status === true" class="label bg-primary">private</span>
             <p>A dataset by
-              <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a></span>,
+              <span class="account"><a ui-sref="account({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a></span>,
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
             </p>
             <div class="tags-wrapper">

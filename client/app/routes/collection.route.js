@@ -4,23 +4,19 @@ angular.module('columbyApp')
   .config(function ($stateProvider) {
     $stateProvider
 
-      .state('collection', {
-        template: '<div ui-view></div>'
-      })
-
-      .state('collection.index', {
+      .state('collections', {
         url: '/c',
         templateUrl: 'views/collection/index.html',
         controller: 'CollectionIndexCtrl'
       })
 
-      .state('collection.view', {
+      .state('collection', {
         url: '/c/:id',
         templateUrl: 'views/collection/view.html',
         controller: 'CollectionViewCtrl'
       })
 
-      .state('collection.edit', {
+      .state('collectionEdit', {
         url: '/c/:id/edit',
         templateUrl: 'views/collection/edit.html',
         controller: 'CollectionEditCtrl'

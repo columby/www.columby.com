@@ -323,7 +323,7 @@ angular.module('columbyApp')
         console.log('New dataset received: ' + res.id);
         if (res.id) {
           toaster.pop('success', null, 'Your dataset page is created. Now add some data.');
-          $state.go('dataset.edit', {id:res.shortid});
+          $state.go('datasetEdit', {id:res.shortid});
         }
       });
     };
@@ -667,7 +667,7 @@ angular.module('columbyApp')
     // Check if user is authenticated
     if (!AuthSrv.isAuthenticated()){
       toaster.pop('danger',null,'You need to be authenticated to be able to edit this post. ');
-      $state.go('dataset.view', { id: $stateParams.id });
+      $state.go('dataset', { id: $stateParams.id });
     } else if ($stateParams.id) {
       getDataset();
     } else if($rootScope.user.id){
