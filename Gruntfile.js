@@ -728,7 +728,7 @@ module.exports = function (grunt) {
         'replace:development',
         'env:all',
         'injector:less',
-        
+
         'concurrent:server',
         'injector',
         'wiredep',
