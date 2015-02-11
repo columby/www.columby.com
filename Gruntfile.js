@@ -438,6 +438,13 @@ module.exports = function (grunt) {
             'package.json',
             'server/**/*'
           ]
+        }, {
+          // Copy font-awesome fonts
+          expand: true,
+          flatten: 'true',
+          cwd: '<%= yeoman.client %>',
+          src: ['bower_components/font-awesome/fonts/*.*'],
+          dest: '<%= yeoman.dist %>/public/fonts'
         }]
       },
       styles: {
