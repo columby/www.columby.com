@@ -6,7 +6,7 @@
        ng-class="{top: scroll<165}">
     <a class="btn btn-default edit"
        ng-show="account.canEdit"
-       ui-sref="account.edit({slug:account.slug})">edit
+       ui-sref="accountEdit({slug:account.slug})">edit
     </a>
   </div>
 
@@ -17,8 +17,8 @@
       <div class="container">
         <h1 ng-bind-html="account.name || 'No name yet'"></h1>
         <div class="avatar">
-          <img class="img-circle" src="{{account.avatar.url}}"/>
-          <div class="label label-success" ng-show="account.id===$root.user.primaryAccount.id">This is you!</div>
+          <img class="img-circle" ng-src="{{account.avatar.url}}"/>
+          <div class="label label-success" data-ng-show="account.id===$root.user.primaryAccount.id">This is you!</div>
 
         </div>
       </div>
@@ -43,7 +43,7 @@
 
 					<ul>
             <li ng-repeat="collection in account.collections" class="collection">
-                <h4><a ui-sref="collection.view({id: collection.shortid})">{{collection.title}}</a></h4>
+                <h4><a ui-sref="collection({id: collection.shortid})">{{collection.title}}</a></h4>
                 <p>{{collection.description}}</p>
             </li>
     				<!-- <li>
@@ -76,29 +76,29 @@
 						<ul ng-hide="datasets.loading">
               <li ng-repeat="dataset in datasets.rows | filter:search" class="dataset">
                 <h4>
-                  <a ui-sref="dataset.view({ id: dataset.shortid })">{{dataset.title}}</a>
+                  <a ui-sref="dataset({ id: dataset.shortid })">{{dataset.title}}</a>
                   <span ng-show="dataset.private === true" class="label bg-primary">private</span>
                 </h4>
                 <ul class="properties">
                   <li><label>Created</label><date>{{dataset.created_at | date:'d MMMM yyyy'}}</date></li>
                   <li ng-show="dataset.distributions.length>0"><label>Data sources</label>{{dataset.distributions.length}}</li>
                   <li ng-show="dataset.references.length>0"><label>References</label>{{dataset.references.length}}</li>
-                  <br ng-show="dataset.tags.length>0"/>
+
                   <li ng-show="dataset.tags.length>0"><label>Tags</label><span ng-repeat="tag in dataset.tags">{{tag}}</span></li>
                 </ul>
               </li>
             </ul>
 
             <pagination
-              ng-change="pageChanged()"
+              data-ng-change="pageChanged()"
               total-items="datasets.count"
-              ng-model="datasets.currentPage"
-              max-size="5"
+              data-ng-model="datasets.currentPage"
+              data-max-size="5"
               class="pagination-sm"
-              boundary-links="true"
-              rotate="false"
-              num-pages="datasets.numPages"
-              ng-show="dataset.numPages>0">
+              data-boundary-links="true"
+              data-rotate="false"
+              data-num-pages="datasets.numPages"
+              data-ng-show="dataset.numPages>0">
             </pagination>
 
           </div>
@@ -140,5 +140,4 @@
       </div>
     </div>
   </div>
-  </div>
-</section>
+</div>

@@ -36,7 +36,8 @@ angular.module('columbyApp')
         }
 
         // check if user has edit-access
-        if (!AuthSrv.canEdit()) {
+        var canEdit = AuthSrv.canEdit('dataset', dataset);
+        if (canEdit === false) {
           toaster.pop('danger', null, 'You do not have the permission to edit this post. ');
           $state.go('dataset.view', {id: $stateParams.id});
         }
@@ -122,7 +123,7 @@ angular.module('columbyApp')
      *
      */
     function initiateNewDataset(){
-      console.log($rootScope);
+      console.log('Initiating new dataset.');
       // if user has multiple accounts, show the account-selector.
       if ($rootScope.user.accounts.length > 1) {
         //$scope.showAccountSelector = true;
@@ -137,6 +138,8 @@ angular.module('columbyApp')
         account_id: $rootScope.user.accounts[ 0].id,
         canEdit: true
       };
+
+      $scope.datasetLoading  = false;
 
       toaster.pop('notice',null,'Here\'s your new dataset!');
     }
@@ -260,6 +263,7 @@ angular.module('columbyApp')
         return toaster.pop('warning', null, 'The file you chose is not valid. ' + file.type);
       }
 
+      ngProgress.color('#2FCCFF');
       ngProgress.start();
 
       var params = {
@@ -319,7 +323,7 @@ angular.module('columbyApp')
         console.log('New dataset received: ' + res.id);
         if (res.id) {
           toaster.pop('success', null, 'Your dataset page is created. Now add some data.');
-          $state.go('dataset.edit', {id:res.shortid});
+          $state.go('datasetEdit', {id:res.shortid});
         }
       });
     };
@@ -606,6 +610,10 @@ angular.module('columbyApp')
      *
      */
     $scope.syncPrimarySource = function(){
+<<<<<<< HEAD
+=======
+      $scope.syncInProgress=true;
+>>>>>>> refs/heads/release-1.1
       // Check if the primary is valid for resyncing
       // type (fortes,csv,arcgis
       var job = {
@@ -617,6 +625,11 @@ angular.module('columbyApp')
 
       // Send request to api
       PrimaryService.sync(job, function(r){
+<<<<<<< HEAD
+=======
+        toaster.pop('info', null, 'The primary source will be synchronised. ');
+        $scope.dataset.primary.jobStatus = 'active';
+>>>>>>> refs/heads/release-1.1
         // Process response
         console.log('result', r);
       });
@@ -660,7 +673,7 @@ angular.module('columbyApp')
     // Check if user is authenticated
     if (!AuthSrv.isAuthenticated()){
       toaster.pop('danger',null,'You need to be authenticated to be able to edit this post. ');
-      $state.go('dataset.view', { id: $stateParams.id });
+      $state.go('dataset', { id: $stateParams.id });
     } else if ($stateParams.id) {
       getDataset();
     } else if($rootScope.user.id){

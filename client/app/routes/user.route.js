@@ -3,6 +3,7 @@
 angular.module('columbyApp')
   .config(function ($stateProvider) {
     $stateProvider
+
       .state('signin', {
         url: '/u/signin',
         templateUrl: 'views/user/signin.html',
@@ -15,13 +16,9 @@ angular.module('columbyApp')
         controller: 'RegisterCtrl'
       })
 
-      // Edit user settings
       .state('settings', {
-        url:'/u/settings',
+        url: '/u/settings',
         templateUrl: 'views/user/view.html',
-        authorization: {
-          authorizedRoles: ['authenticated'],
-        },
         controller: 'UserCtrl'
       });
   });

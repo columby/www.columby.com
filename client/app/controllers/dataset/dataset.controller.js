@@ -41,7 +41,7 @@ angular.module('columbyApp')
      *
      */
     function getDataset(){
-
+      console.log('Fetching dataset', $stateParams.id);;
       DatasetSrv.get({
         id: $stateParams.id
       }, function(dataset) {
@@ -58,7 +58,7 @@ angular.module('columbyApp')
 
         // transition the url from slug to id
         if ($stateParams.id !== dataset.shortid) {
-          $state.transitionTo ('dataset.view', { id: dataset.shortid}, {
+          $state.transitionTo ('dataset', { id: dataset.shortid}, {
             location: true,
             inherit: true,
             relative: $state.$current,

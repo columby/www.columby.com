@@ -5,7 +5,7 @@
       <li ng-repeat="account in $root.user.accounts">
         <a href="" ng-click="selectAccount($index)">
           <div>
-            <img src="{{account.avatar.url}}"/>
+            <img ng-src="{{account.avatar.url}}"/>
             <span class="account">{{account.name}}</span>
           </div>
         </a>

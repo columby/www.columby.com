@@ -8,7 +8,7 @@
       <li>
         <a class="default-button edit"
           ng-show  = "dataset.canEdit"
-          ui-sref="dataset.edit({id:dataset.shortid})">edit
+          ui-sref="datasetEdit({id:dataset.shortid})">edit
         </a>
       </li>
     </ul>
@@ -30,14 +30,16 @@
           <div class="meta" ng-show="dataset.id">
 						<span ng-show="dataset.private === true" class="label bg-primary">private</span>
             <p>A dataset by
-              <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a></span>,
+              <span class="account"><a ui-sref="account({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a></span>,
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
             </p>
-            <p ng-show="dataset.tags.length>0"><strong>Tags: </strong><span class="tag" ng-repeat="tag in dataset.tags">{{tag.text}}</span></p>
+            <p ng-show="dataset.tags.length>0">
+              <span class="tag" ng-repeat="tag in dataset.tags"><i class="fa fa-tag"></i>{{tag.text}}</span>
+            </p>
           </div>
 
           <div class="avatar">
-            <a ui-sref="account.view({slug:dataset.account.slug})">
+            <a ui-sref="account({slug:dataset.account.slug})">
               <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" alt="{{dataset.account.name}}"/>
             </a>
           </div>
@@ -108,7 +110,7 @@
                 <a href="{{distribution.downloadUrl}}"><i class="fa fa-download"></i></a>
               </div>
               <div class="link datasource-icon" ng-show="distribution.accessUrl">
-                <a href="{{distribution.accessUrl}}"><i class="fa fa-external-link"></i></a>
+                <a href="{{distribution.accessUrl}}" target="_blank"><i class="fa fa-external-link"></i></a>
               </div>
 
               <ul class="properties">
@@ -195,7 +197,7 @@
 
               <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
 								<div class="reference">
-									<img src="../../../images/reference-spaceholder.png" class="placeholder">
+									<img src="images/reference-spaceholder.png" class="placeholder">
 									<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
 										<div class="reference-top"></div>
 							      <h3 class="reference-title"><a href="{{reference.url}}">{{reference.title}}</a></h3>
@@ -246,7 +248,7 @@
           <div class="content">
             <h3>About {{dataset.account.name}}</h3>
             <div ng-bind-html="dataset.account.description" class="description"></div>
-  					<p class="more-about"><a ui-sref="account.view({slug: dataset.account.slug})">more about {{dataset.account.name}}</a></p>
+  					<p class="more-about"><a ui-sref="account({slug: dataset.account.slug})">more about {{dataset.account.name}}</a></p>
           </div>
         </div>
       </div>
@@ -270,7 +272,7 @@
       <div class="container">
         <div class="col-md-12 content">
 					<h3>Share this dataset</h3>
-          <div share-square="false" share-links="Facebook, Twitter, LinkedIn, Google-Plus"></div>
+          <div data-share-square="false" data-share-links="Facebook, Twitter, LinkedIn, Google-Plus"></div>
         </div>
       </div>
     </div>

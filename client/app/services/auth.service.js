@@ -124,16 +124,17 @@ angular.module('columbyApp')
       canEdit: function(type, item) {
 
         var canEdit = false;
-        //console.log('check auth');
+
+        if (!type || !item){
+          return canEdit;
+        }
 
         if (user.admin === true){
-          //console.log('admin true');
           return true;
         }
 
         //console.log('checking canEdit', type, item);
         if (this.isAuthenticated() === false) {
-          console.log('user is not authenticated');
           return false;
         }
 
@@ -148,11 +149,9 @@ angular.module('columbyApp')
             }
             break;
           case 'dataset':
-            console.log(item.account.id);
             for (i=0;i<user.accounts.length;i++){
               if (item.account.id === user.accounts[ i].id){
                 if ( (user.accounts[ i].role === 1) || (user.accounts[ i].role === 2) || (user.accounts[ i].role === 3) ) {
-                  console.log('canedit true: ', user.accounts[ i].role);
                   canEdit = true;
                 }
               }
@@ -170,7 +169,6 @@ angular.module('columbyApp')
             }
             break;
         }
-
         return canEdit;
       },
 

@@ -1,6 +1,11 @@
 {
-  "version"     : "release-1.1",
-  "apiRoot"     : "https://dev-api.columby.com/api",
+  "version"     : "1.0.3",
+  "apiRoot"     : "https://dev-api.columby.com",
   "workerRoot"  : "https://dev-worker.columby.com",
+<<<<<<< HEAD
   "embedlyKey"  : "844b2c4d25334b4db2c327f10c70cb54"
+=======
+	"embedlyKey"  : "844b2c4d25334b4db2c327f10c70cb54",
+  "awsEndpoint" : "https://s3.amazonaws.com/columby-dev/"
+>>>>>>> refs/heads/release-1.1
 }

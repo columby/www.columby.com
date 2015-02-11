@@ -10,11 +10,11 @@
       <div class="col-md-12">
         <img src="/images/logo.png" class="logo img-responsive" />
         <h2 class="page-subtitle">publish and discover data</h2>
-        <button type="button" class="big-button" ng-show="$root.user.id"  ui-sref="dataset.create">Publish new dataset</button>
+        <button type="button" class="big-button" ng-show="$root.user.id"  ui-sref="datasetCreate">Publish new dataset</button>
         <button type="button" class="big-button" ng-hide="$root.user.id"  ui-sref='signin'>Login or Signup</button>
         <p>or</p>
         <a ui-sref="about">Read about Columby</a>
-        <div class="arrow animated bounce"></div>
+        <a href="#more"><div class="arrow animated bounce"></div></a>
       </div>
     </div>
   </div>
@@ -26,7 +26,7 @@
       </div>
     </div>
   </div>
-
+  <a id="more"></a>
   <div class="showcase-presentation" ng-hide="$root.user.id">
 
 			<div class="container-fluid about-facts-columby">
@@ -95,7 +95,8 @@
           </div>
 					<ul>
             <li ng-repeat="result in search.hits" class="publication-item">
-              <h4><a ui-sref="dataset.view({id: result.shortid})">{{result.title}}</a><em>{{result._source.publishStatus}}</em></h4>
+              <h4><a ui-sref="dataset({id: result.shortid})">{{result.title}}</a><em>{{result._source.publishStatus}}</em></h4>
+              <span>{{result.contentType}}</span>
               <div class="user-date"><!-- {{result._source.account.name || '[Oops! No publisher found]'}} on  --><time class="post-date">{{result._source.created_at | date:'d MMMM yyyy'}}</time></div>
             </li>
         	</ul>
@@ -108,11 +109,11 @@
         <div class="publication-listing">
 					<ul>
             <li ng-repeat="dataset in datasets.rows" class="publication-item">
-              <h4><a ui-sref="dataset.view({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
+              <h4><a ui-sref="dataset({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
               <div class="user-date">
                 <!-- <img ng-src="dataset.account.avatar.img" class="img-rounded"/> -->
                 <img class="img-circle avatar-small" ng-src="{{dataset.account.avatar.url}}" alt="{{dataset.account.name}}"/>
-                <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
+                <a ui-sref="account({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
               </div>
             </li>
         	</ul>

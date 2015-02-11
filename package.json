@@ -1,6 +1,6 @@
 {
   "name": "columby-ui",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "server/app.js",
   "dependencies": {
     "aws-sdk": "^2.0.30",
@@ -12,7 +12,7 @@
     "crypto": "0.0.3",
     "ejs": "~0.8.4",
     "errorhandler": "~1.0.0",
-    "express": "~4.0.0",
+    "express": "4.11.1",
     "express-session": "~1.0.2",
     "gm": "^1.17.0",
     "hashids": "^1.0.1",
@@ -26,10 +26,10 @@
     "mysql": "^2.5.3",
     "node-uuid": "^1.4.1",
     "pg": "^4.0.0",
-    "request": "^2.49.0",
-    "sequelize": "^2.0.0-rc2",
-    "serve-favicon": "~2.0.1",
-    "uuid": "^2.0.1"
+    "request": "2.53.0",
+    "sequelize": "2.0.0-rc8",
+    "serve-favicon": "2.2.0",
+    "uuid": "2.0.1"
   },
   "devDependencies": {
     "connect-livereload": "~0.4.0",
@@ -54,6 +54,7 @@
     "grunt-env": "~0.4.1",
     "grunt-express-server": "~0.4.17",
     "grunt-google-cdn": "~0.4.0",
+    "grunt-html-angular-validate": "^0.4.0",
     "grunt-karma": "~0.8.2",
     "grunt-mocha-test": "~0.10.2",
     "grunt-newer": "~0.7.0",

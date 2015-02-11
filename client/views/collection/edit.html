@@ -23,7 +23,7 @@
       <li>
         <a class="default-button"
            ng-show  = "collection.id"
-           ui-sref="collection.view({id:collection.shortid})">view collection
+           ui-sref="collection({id:collection.shortid})">view collection
         </a>
       </li>
     </ul>
@@ -47,12 +47,12 @@
           <!-- Meta -->
           <div class="meta" ng-show="collection.id">
             <p>A collection by
-              <span class="account"><a ui-sref="account.view({slug:collection.Account.slug})">{{collection.Account.name || 'unknown'}}</a></span>
+              <span class="account"><a ui-sref="account({slug:collection.Account.slug})">{{collection.Account.name || 'unknown'}}</a></span>
             </p>
           </div>
 
           <div class="avatar">
-            <a ui-sref="account.view({slug:collection.Account.slug})">
+            <a ui-sref="account({slug:collection.Account.slug})">
               <img class="img-circle" src="{{collection.Account.avatar.url}}" alt="{{collection.Account.name}}"/>
             </a>
           </div>
@@ -68,18 +68,17 @@
           <h3>Description
             <button
               class="right btn-tooltip"
-              popover="Add a nice description to your collection. "
+              data-popover="Add a nice description to your collection. "
               data-popover-trigger="mouseenter"
               data-popover-placement="left"><i class="fa fa-question"></i>
             </button>
           </h3>
           <div
-            placeholder="some placeholder"
-            ng-model        = "collectionUpdate.description"
+            data-ng-model        = "collectionUpdate.description"
             text-angular
-            ta-default-wrap = "p"
-            ng-blur         = "update()",
-            ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]">
+            data-ta-default-wrap = "p"
+            data-ng-blur         = "update()"
+            data-ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]">
           </div>
         </div>
       </div>
@@ -94,18 +93,18 @@
 
           <input class="searchbox"
                  type="text"
-                 ng-m odel="search.$"
+                 data-ng-model="search.$"
                  placeholder="Search this collection"
-                 ng-show="collection.Datasets.length>10">
+                 data-ng-show="collection.Datasets.length>10">
 
 
-          <p ng-show="collection.Datasets.length === 0">No datasets for this collection. You can add datasets to this collection at a dataset page. </p>
+          <p data-ng-show="collection.Datasets.length === 0">No datasets for this collection. You can add datasets to this collection at a dataset page. </p>
 
           <div class="dataset-listing">
             <ul>
               <li ng-repeat="dataset in collection.datasets | filter:search" class="dataset">
                 <h4>
-                  <a ui-sref="dataset.view({ id: dataset._id })">{{dataset.title}}</a>
+                  <a ui-sref="dataset({ id: dataset._id })">{{dataset.title}}</a>
                   <span ng-show="dataset.private === true" class="label bg-primary">private</span>
                 </h4>
               </li>

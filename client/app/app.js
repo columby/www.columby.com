@@ -19,8 +19,13 @@ angular.module('columbyApp', [
 ])
 
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
-    $urlRouterProvider.otherwise('/');
+
+    $urlRouterProvider
+      .when('', '/')
+      .otherwise('/');
+
     $locationProvider.html5Mode(true).hashPrefix('!');
+
   })
 
   // Set the JWT if it is stored
@@ -33,6 +38,9 @@ angular.module('columbyApp', [
 
   // Run once during startup
   .run(function($log, $rootScope, $http, AuthSrv, configSrv){
+    //IE console
+    window.console = window.console || {};
+    window.console.log = window.console.log || function() {};
 
     $rootScope.bodyClasses = {};
     $rootScope.user = {};

@@ -7,27 +7,26 @@ angular.module('columbyApp')
  * Account Edit Controller
  *
  **/
-  .controller('AccountCtrl',
-  function($window,$rootScope,$scope, $stateParams,$state,toaster, AccountSrv, AuthSrv, CollectionSrv, DatasetSrv){
+  .controller('AccountCtrl', function ($window, $rootScope, $scope, $stateParams, $state, toaster, AccountSrv, AuthSrv, CollectionSrv, DatasetSrv) {
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading  = true;
     $window.document.title = 'columby.com';
     $scope.datasets = {
-      currentPage:1,
-      numberOfItems:10
+      currentPage: 1,
+      numberOfItems: 10
     };
 
     /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
 
 
     /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
-    function getCollections(){
-      if ($scope.account.Collections && $scope.account.Collections.length >0){
+    function getCollections() {
+      if ($scope.account.Collections && $scope.account.Collections.length > 0) {
         $scope.account.collections = [];
-        angular.forEach($scope.account.Collections, function(value, key) {
-          CollectionSrv.get({id:value.shortid}, function(result){
-            $scope.account.collections[ key] = result;
+        angular.forEach($scope.account.Collections, function (value, key) {
+          CollectionSrv.get({id: value.shortid}, function (result) {
+            $scope.account.collections[key] = result;
           });
         });
         delete $scope.account.Collections;
@@ -37,10 +36,10 @@ angular.module('columbyApp')
       }
     }
 
-    function getDatasets(){
+    function getDatasets() {
       $scope.datasets.loading = true;
-      var offset = ($scope.datasets.currentPage -1) *10;
-      DatasetSrv.index({accountId: $scope.account.id, offset:offset}, function(d){
+      var offset = ($scope.datasets.currentPage - 1) * 10;
+      DatasetSrv.index({accountId: $scope.account.id, offset: offset}, function (d) {
         $scope.datasets.rows = d.rows;
         $scope.datasets.count = d.count;
         $scope.datasets.loading = false;
@@ -48,26 +47,26 @@ angular.module('columbyApp')
 
     }
 
-    function getAccount(){
+    function getAccount() {
 
     // get account information of user by userSlug
-    AccountSrv.get({slug: $stateParams.slug}, function(result){
-      if (!result.id){
-        toaster.pop('warning', null, 'The requested account was not found. ');
-        $state.go('home');
-      } else {
-        $scope.account = result;
-        if ($scope.account.avatar) {
-          $scope.account.avatar.url = $rootScope.config.apiRoot + '/v2/file/' + $scope.account.avatar.id + '?style=small';
-        }
-        $scope.contentLoading = false;
-        $window.document.title = 'columby.com | ' + result.name;
+    AccountSrv.get({slug: $stateParams.slug}, function (result) {
+        if (!result.id) {
+          toaster.pop('warning', null, 'The requested account was not found. ');
+          $state.go('home');
+        } else {
+          $scope.account = result;
+          if ($scope.account.avatar) {
+            $scope.account.avatar.url = $rootScope.config.apiRoot + '/v2/file/' + $scope.account.avatar.id + '?style=small';
+          }
+          $scope.contentLoading = false;
+          $window.document.title = 'columby.com | ' + result.name;
 
-        $scope.account.canEdit = AuthSrv.canEdit('account', result);
+          $scope.account.canEdit = AuthSrv.canEdit('account', result);
 
-        if ($scope.account.headerImg) {
-          updateHeaderImage();
-        }
+          if ($scope.account.headerImg) {
+            updateHeaderImage();
+          }
 
         getCollections();
         getDatasets();
@@ -78,7 +77,7 @@ angular.module('columbyApp')
     function updateHeaderImage(){
       $scope.account.headerImg.url = $rootScope.config.apiRoot + '/v2/file/' + $scope.account.headerImg.id + '?style=large';
       $scope.headerStyle={
-        'background-image': 'url(/images/default-header.png), url(' + $scope.account.headerImg.url + ')',
+        'background-image': 'linear-gradient(transparent,transparent), url(/images/default-header-bw.svg), url(' + $scope.account.headerImg.url + ')',
         'background-blend-mode': 'multiply'
       };
     }
@@ -297,6 +296,7 @@ angular.module('columbyApp')
         return toaster.pop('warning', null, 'The file you chose is not valid. ' + file.type);
       }
 
+      ngProgress.color('#2FCCFF');
       ngProgress.start();
       var params = {
         filetype: file.type,

@@ -8,7 +8,7 @@
       <li>
         <a class="default-button edit"
            ng-show  = "collection.canEdit"
-           ui-sref="collection.edit({id:collection.shortid})">edit
+           ui-sref="collectionEdit({id:collection.shortid})">edit
         </a>
       </li>
     </ul>
@@ -24,13 +24,13 @@
           <!-- Meta -->
           <div class="meta" ng-show="collection.id">
             <p>A collection by
-              <span class="account"><a ui-sref="account.view({slug:collection.Account.slug})">{{collection.Account.name || 'unknown'}}</a></span>
+              <span class="account"><a ui-sref="account({slug:collection.Account.slug})">{{collection.Account.name || 'unknown'}}</a></span>
             </p>
           </div>
 
           <div class="avatar">
-            <a ui-sref="account.view({slug:collection.Account.slug})">
-              <img class="img-circle" src="{{collection.Account.avatar.url}}" alt="{{collection.Account.name}}"/>
+            <a ui-sref="account({slug:collection.Account.slug})">
+              <img class="img-circle" ng-src="{{collection.Account.avatar.url}}" alt="{{collection.Account.name}}"/>
             </a>
           </div>
         </div>
@@ -57,19 +57,18 @@
 
           <input class="searchbox"
                  type="text"
-                 ng-m odel="search.$"
+                 data-ng-model="search.$"
                  placeholder="Search this collection"
-                 ng-show="collection.Datasets.length>10">
+                 data-ng-show="collection.Datasets.length>10">
 
-
-          <p ng-show="collection.Datasets.length === 0">No datasets for this collection</p>
+          <p data-ng-show="collection.Datasets.length === 0">No datasets for this collection</p>
 
           <div class="dataset-listing">
             <ul>
               <li ng-repeat="dataset in collection.datasets | filter:search" class="dataset">
                 <h4>
-                  <a ui-sref="dataset.view({ id: dataset._id })">{{dataset.title}}</a>
-                  <span ng-show="dataset.private === true" class="label bg-primary">private</span>
+                  <a ui-sref="dataset({ id: dataset._id })">{{dataset.title}}</a>
+                  <span data-ng-show="dataset.private === true" class="label bg-primary">private</span>
                 </h4>
               </li>
             </ul>

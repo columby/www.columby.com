@@ -27,11 +27,11 @@ angular.module('columbyApp')
 
       embed: function(inputUrl) {
         var escapedUrl = encodeURI(inputUrl);
-        var embedlyRequest = 'http://api.embed.ly/1/oembed?key=' + key + '&url=' +  escapedUrl;
+        var embedlyRequest = 'https://api.embed.ly/1/oembed?key=' + key + '&url=' +  escapedUrl;
 
         var request = $http({
             method: 'get',
-            url: embedlyRequest,
+            url: embedlyRequest
         });
 
         return( request.then( handleSuccess, handleError ) );
@@ -40,11 +40,11 @@ angular.module('columbyApp')
 
       extract: function(inputUrl) {
         var escapedUrl = encodeURI(inputUrl);
-        var embedlyRequest = 'http://api.embed.ly/1/extract?key=' + key + '&url=' +  escapedUrl;
+        var embedlyRequest = 'https://api.embed.ly/1/extract?key=' + key + '&url=' +  escapedUrl;
 
         var request = $http({
             method: 'get',
-            url: embedlyRequest,
+            url: embedlyRequest
         });
 
         return( request.then( handleSuccess, handleError ) );
