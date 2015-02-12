@@ -3,7 +3,7 @@
 angular.module('columbyApp')
 
   // Controller for a new primary source modal
-  .controller('DatasetPrimaryCtrl', function($scope, $modalInstance, distribution, primary, DistributionSrv, PrimaryService, WorkerSrv, toaster){
+  .controller('PrimaryNewCtrl', function($scope, $modalInstance, distribution, primary, DistributionSrv, PrimaryService, WorkerSrv, toaster){
 
     $scope.loading = true;
     $scope.distribution = distribution;
@@ -72,19 +72,4 @@ angular.module('columbyApp')
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
-  })
-
-// Controller for a new primary source modal
-  .controller('DatasetPrimaryEditCtrl', function($scope, $modalInstance, primary){
-
-    $scope.primary = primary;
-
-    $scope.confirm = function(){
-      $modalInstance.close($scope.primary);
-    };
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-  })
-
-;
+  });

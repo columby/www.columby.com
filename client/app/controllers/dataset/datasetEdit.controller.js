@@ -414,6 +414,9 @@ angular.module('columbyApp')
     };
 
 
+
+    /*********** DISTRIBUTIONS ********************************/
+
     $scope.newDistribution = function() {
 
       // Make sure only 1 modal is opened at a time.
@@ -421,26 +424,30 @@ angular.module('columbyApp')
 
       var modalInstance = $modal.open({
         templateUrl: 'views/dataset/distribution/new.html',
-        controller: 'DistributionCreateCtrl',
+        controller: 'DistributionNewCtrl',
         size: 'lg',
         backdrop: 'static',
-        keyboard: false
-        //resolve: {
-        //  distribution: function () {
-        //    return distribution;
-        //  }
-        //}
+        keyboard: false,
+        resolve: {
+          dataset: function() {
+            return $scope.dataset;
+          }
+        }
       });
 
       modalOpened=true;
 
-      modalInstance.result.then(function(item) {
-        console.log(item);
-        $scope.dataset.distributions.push(item)
+      modalInstance.result.then(function (distribution) {
+        toaster.pop('info', null, 'Datasource saved.');
+        $scope.dataset.distributions.push(distribution);
         modalOpened=false;
       }, function () {
+        // Delete the created datasource
+        DistributionSrv.delete($scope.distribution, function(res){
+          console.log('deleted');
+          console.log(res);
+        });
         $log.info('Modal dismissed at: ' + new Date());
-        modalOpened=false;
       });
     };
 
@@ -525,7 +532,7 @@ angular.module('columbyApp')
 
       var modalInstance = $modal.open({
         templateUrl: 'views/dataset/primary/new.html',
-        controller: 'DatasetPrimaryCtrl',
+        controller: 'PrimaryNewCtrl',
         size: 'lg',
         backdrop: 'static',
         keyboard: false,
@@ -585,7 +592,7 @@ angular.module('columbyApp')
 
       var modalInstance = $modal.open({
         templateUrl: 'views/dataset/primary/edit.html',
-        controller: 'DatasetPrimaryEditCtrl',
+        controller: 'PrimaryEditCtrl',
         size: 'lg',
         backdrop: 'static',
         keyboard: false,

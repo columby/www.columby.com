@@ -2,17 +2,22 @@
 
 angular.module('columbyApp')
 
-  .controller('DistributionNewCtrl', function($log, $scope, $modalInstance, distribution, FileService, toaster, ngProgress, DistributionSrv){
+  .controller('DistributionNewCtrl', function($log, $scope, $modalInstance, dataset, FileService, toaster, ngProgress, DistributionSrv) {
 
-    $scope.distribution = distribution;
-    $scope.distribution.license="cc0";
+    console.log('new distribution controller');
+
+    $scope.distribution = {
+      license: 'cc0',
+      account_id: dataset.account_id,
+      dataset_id: dataset.id,
+      title: 'Datasource'
+    };
 
     $scope.upload = {
       inProgress: false,
       finished: false
     };
     $scope.wizard={
-
       steps: ['start','data','metadata','finish'],
       step:1,
       cancelShow: true,
@@ -26,9 +31,9 @@ angular.module('columbyApp')
 
 
     /**
-     * File is uploaded, finish it at the server.
      *
-     * @param params
+     *  File is uploaded, finish it at the server.
+     *
      */
     function finishUpload(params) {
       $log.log('upload: ', $scope.upload);
@@ -74,12 +79,7 @@ angular.module('columbyApp')
       $scope.wizard.step = 2;
     };
 
-    /**
-     *
-     * Handle file select
-     *
-     * @param files
-     */
+    //Handle file select
     $scope.onFileSelect = function(files) {
       var file = files[0];
       // Check if there is a file
@@ -142,26 +142,13 @@ angular.module('columbyApp')
       });
     };
 
-    $scope.save = function(){
-      $scope.updateInProgress = true;
-
-      // save metadata
-      DistributionSrv.update($scope.distribution, function(response){
-        $scope.updateInProgress = false;
-        if (response.id){
-          // all is well, next step close distribution
-          $scope.close();
-        } else {
-          toaster.pop('warning', null, 'Something went wrong. ' + response);
-        }
-      });
-    };
 
     // Initialize a source link
     $scope.initSync = function(){
       $scope.distribution.type = 'remoteService';
       $scope.wizard.step = 3;
     };
+
 
     $scope.validateLink = function(){
       // validate if we can read the source
@@ -188,6 +175,7 @@ angular.module('columbyApp')
       });
     };
 
+
     $scope.submitLink = function(){
       console.log('submitting link.');
 
@@ -202,6 +190,7 @@ angular.module('columbyApp')
       });
     };
 
+
     $scope.next = function(){
       //console.log($scope.wizard.step);
       if ($scope.wizard.step === 3){
@@ -212,76 +201,30 @@ angular.module('columbyApp')
       }
     };
 
+
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
 
     $scope.close = function(){
-      //console.log('Closing with distribution: ', $scope.distribution);
+      console.log('Closing with distribution: ', $scope.distribution);
       $modalInstance.close($scope.distribution);
     };
-  })
 
+    $scope.save = function(){
+      $scope.updateInProgress = true;
 
-  .directive('distributionPopup', function($modal,  $rootScope, EmbedlySrv, DistributionSrv, ngDialog, FileService, toaster){
-    return {
-      templateUrl: 'app/directives/distributionPopup/distributionPopup.html',
-      restrict: 'EA',
-      scope: {
-        dataset: '='
-      },
-
-      controller: function($log, $scope){
-
-        /* Initialize */
-        function initiate() {
-
-          $scope.distribution = {
-            dataset_id: $scope.dataset.id
-          };
-
-          DistributionSrv.save($scope.distribution, function(res){
-            if (res.id){
-              $scope.distribution = res;
-              $scope.distribution.account_id = $scope.dataset.account_id;
-
-              //$scope.dataset.distributions.push(res);
-              //toaster.pop('success', null, 'New source created.');
-
-              var modalInstance = $modal.open({
-                templateUrl: 'app/directives/distributionPopup/distributionPopupContent.html',
-                controller: 'DistributionNewCtrl',
-                size: 'lg',
-                backdrop: 'static',
-                keyboard: false,
-                resolve: {
-                  distribution: function() {
-                    return $scope.distribution;
-                  }
-                }
-              });
-              modalInstance.result.then(function (distribution) {
-                toaster.pop('info', null, 'Datasource saved.');
-                $scope.dataset.distributions.push(distribution);
-              }, function () {
-                // Delete the created datasource
-                DistributionSrv.delete($scope.distribution, function(res){
-                  console.log('deleted');
-                  console.log(res);
-                });
-                $log.info('Modal dismissed at: ' + new Date());
-              });
-
-            } else {
-              toaster.pop('danger', null, 'Something went wrong.');
-            }
-          });
+      // save metadata
+      DistributionSrv.save($scope.distribution, function(response) {
+        $scope.updateInProgress = false;
+        if (response.id) {
+          $scope.distribution = response;
+          $scope.close();
+        } else {
+          toaster.pop('warning', null, 'Something went wrong. ' + response);
         }
-
-        //initNew
-        $scope.initNewDistribution = function() {
-          initiate();
-        };
-      }
+      });
     };
+
   });
+
