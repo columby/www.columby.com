@@ -36,10 +36,7 @@ angular.module('columbyApp')
           // Send to queue
           var job = {
             type: $scope.primary.jobType,
-            data: {
-              title: $scope.primary.dataset.title + ' - ID:' + $scope.primary.dataset.shortid,
-              ID: $scope.primary.dataset.shortid
-            }
+            data: $scope.primary
           };
           WorkerSrv.add(job).then(function(jobResult){
             console.log('Job result: ', jobResult);

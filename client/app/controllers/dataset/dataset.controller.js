@@ -14,6 +14,7 @@ angular.module('columbyApp')
     /* --------- FUNCTIONS ------------------------------------------------------------------ */
     function processData(){
       if (!$scope.dataset.primary){
+        console.log('No primary source. Skip creating data preview.')
         return;
       }
 
@@ -25,12 +26,11 @@ angular.module('columbyApp')
       };
 
       DataService.sql(q).then(function(result){
-        console.log(result);
         if (result.status === 'success') {
           $scope.datapreview = {
-            header: Object.keys(result[0])
+            header: result.rows.fields
           };
-          $scope.datapreview.data = result;
+          $scope.datapreview.data = result.rows;
         }
       });
     }
@@ -79,6 +79,16 @@ angular.module('columbyApp')
         // $scope.summary = summary + '</p>';
 
         $scope.dataset.canEdit= AuthSrv.canEdit('dataset', dataset);
+
+        // filter out private sources
+        if (!$scope.dataset.canEdit){
+          angular.forEach($scope.dataset.distributions, function(value,key){
+            console.log(value);
+            if (value.private){
+              $scope.dataset.distributions.splice(key,1);
+            }
+          });
+        }
 
         if ($scope.dataset.headerImg && $scope.dataset.headerImg.url) {
           updateHeaderImage();

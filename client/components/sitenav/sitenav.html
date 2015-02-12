@@ -10,7 +10,7 @@
       </li>
 
       <li ng-show="$root.user.id">
-        <a ui-sref="dataset.create" ng-class="{active: $state.includes('dataset.create')}">Publish new dataset</a>
+        <a ui-sref="datasetCreate" ng-class="{active: $state.includes('datasetCreate')}">Publish new dataset</a>
       </li>
 
       <!-- <li ng-show="$root.user.id">
@@ -19,7 +19,7 @@
 
       <li ng-show="$root.user.id">
         {{$root.primary}}
-        <a ui-sref="account.view({slug: $root.user.primary.slug})" ng-class="{active: $state.includes(account.view)}">
+        <a ui-sref="account({slug: $root.user.primary.slug})" ng-class="{active: $state.includes(account.view)}">
          My profile<!-- {{$root.selectedAccount.name}} -->
         </a>
         <span class="settings">

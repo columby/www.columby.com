@@ -28,7 +28,7 @@
 
           <!-- Meta -->
           <div class="meta" ng-show="dataset.id">
-						<span ng-show="dataset.private === true" class="label bg-primary">private</span>
+						<span ng-show="dataset.private === true" class="label label-warning">private</span>
             <p>A dataset by
               <span class="account"><a ui-sref="account({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a></span>,
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
@@ -112,8 +112,9 @@
               <div class="link datasource-icon" ng-show="distribution.accessUrl">
                 <a href="{{distribution.accessUrl}}" target="_blank"><i class="fa fa-external-link"></i></a>
               </div>
-
+              <span ng-show="distribution.private" class="label label-warning">private</span>
               <ul class="properties">
+
                 <li ng-show="distribution.type"><label>Type</label>{{distribution.type}}</li>
                 <li ng-show="distribution.license"><label>License</label>{{distribution.license}}</li>
                 <li ng-show="distribution.mediaType"><label>Media type</label>{{distribution.type}}</li>
@@ -135,17 +136,17 @@
     </div>
 
     <!-- Dataset Preview -->
-    <div class="preview wrapper" ng-hide="editMode">
+    <div class="preview wrapper">
       <div class="table-responsive">
         <table class="table table-striped table-hover">
           <thead>
             <tr>
-              <td ng-repeat="header in datapreview.header">{{header}}</td>
+              <td ng-repeat="header in datapreview.header">{{header.name}}</td>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="row in datapreview.data">
-              <td ng-repeat="field in datapreview.header">{{row[field]}}</td>
+            <tr ng-repeat="row in datapreview.data.rows">
+              <td ng-repeat="field in datapreview.header">{{row[field.name]}}</td>
             </tr>
           </tbody>
         </table>

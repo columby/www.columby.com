@@ -6,6 +6,7 @@ angular.module('columbyApp')
 
     $scope.distribution = distribution;
     $scope.distribution.license="cc0";
+
     $scope.upload = {
       inProgress: false,
       finished: false
@@ -142,20 +143,13 @@ angular.module('columbyApp')
     };
 
     $scope.save = function(){
-      console.log('saving');
       $scope.updateInProgress = true;
-      $scope.distribution.status='draft';
-      var d = {
-        id: $scope.distribution.id,
-        status: 'public'
-      };
+
       // save metadata
-      DistributionSrv.update(d, function(response){
-        console.log(response);
+      DistributionSrv.update($scope.distribution, function(response){
         $scope.updateInProgress = false;
         if (response.id){
-          // all is well, next step.
-          // close distribution
+          // all is well, next step close distribution
           $scope.close();
         } else {
           toaster.pop('warning', null, 'Something went wrong. ' + response);
@@ -178,7 +172,7 @@ angular.module('columbyApp')
       };
 
       DistributionSrv.validateLink({url:$scope.distribution.accessUrl}, function(response){
-        console.log('r', response);
+        //console.log('r', response);
         $scope.distribution.validation = {
           status: 'done',
           result: response
@@ -209,7 +203,7 @@ angular.module('columbyApp')
     };
 
     $scope.next = function(){
-      console.log($scope.wizard.step);
+      //console.log($scope.wizard.step);
       if ($scope.wizard.step === 3){
         $scope.wizard.step = 4;
         $scope.wizard.nextShow=false;
@@ -223,6 +217,7 @@ angular.module('columbyApp')
     };
 
     $scope.close = function(){
+      //console.log('Closing with distribution: ', $scope.distribution);
       $modalInstance.close($scope.distribution);
     };
   })
@@ -261,14 +256,13 @@ angular.module('columbyApp')
                 keyboard: false,
                 resolve: {
                   distribution: function() {
-                    return res;
+                    return $scope.distribution;
                   }
                 }
               });
               modalInstance.result.then(function (distribution) {
                 toaster.pop('info', null, 'Datasource saved.');
                 $scope.dataset.distributions.push(distribution);
-                console.log(distribution);
               }, function () {
                 // Delete the created datasource
                 DistributionSrv.delete($scope.distribution, function(res){
