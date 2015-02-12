@@ -555,19 +555,7 @@ angular.module('columbyApp')
         $log.info('Modal dismissed at: ' + new Date());
       });
     };
-
-    ///**
-    // * Create a new primary source
-    // */
-    //$scope.createPrimary = function(){
-    //  var primary = {
-    //    syncperiod: $scope.newPrimary.syncPeriod,
-    //    dataset_id: $scope.newPrimary.dataset_id,
-    //    distribution_id: $scope.newPrimary.distribution_id
-    //  };
-    //  console.log('new Primary: ', primary);
-    //
-    //};
+    
 
     /**
      * Delete a primary source

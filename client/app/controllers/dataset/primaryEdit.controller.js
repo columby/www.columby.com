@@ -11,4 +11,4 @@ angular.module('columbyApp')
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
-  })
+  });
