@@ -14,7 +14,9 @@
     </ul>
   </div>
 
-  <div class="content">
+  <div class="page-loading" ng-show="contentLoading"><i class="fa fa-spinner fa-spin"></i></div>
+
+  <div class="content" ng-hide="contentLoading">
     <div class="header wrapper" ng-style="headerStyle">
       <div class="container">
         <div class="col-md-12">
@@ -65,7 +67,7 @@
 
           <div class="dataset-listing">
             <ul>
-              <li ng-repeat="dataset in collection.datasets | filter:search" class="dataset">
+              <li ng-repeat="dataset in collection.Datasets | filter:search" class="dataset">
                 <h4>
                   <a ui-sref="dataset({ id: dataset._id })">{{dataset.title}}</a>
                   <span data-ng-show="dataset.private === true" class="label bg-primary">private</span>

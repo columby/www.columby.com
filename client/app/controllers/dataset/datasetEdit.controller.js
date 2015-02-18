@@ -555,7 +555,7 @@ angular.module('columbyApp')
         $log.info('Modal dismissed at: ' + new Date());
       });
     };
-    
+
 
     /**
      * Delete a primary source
