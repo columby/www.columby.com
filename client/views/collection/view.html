@@ -26,13 +26,13 @@
           <!-- Meta -->
           <div class="meta" ng-show="collection.id">
             <p>A collection by
-              <span class="account"><a ui-sref="account({slug:collection.Account.slug})">{{collection.Account.name || 'unknown'}}</a></span>
+              <span class="account"><a ui-sref="account({slug:collection.account.slug})">{{collection.account.name || 'unknown'}}</a></span>
             </p>
           </div>
 
           <div class="avatar">
-            <a ui-sref="account({slug:collection.Account.slug})">
-              <img class="img-circle" ng-src="{{collection.Account.avatar.url}}" alt="{{collection.Account.name}}"/>
+            <a ui-sref="account({slug:collection.account.slug})">
+              <img class="img-circle" ng-src="{{collection.account.avatar.url}}" alt="{{collection.account.name}}"/>
             </a>
           </div>
         </div>
@@ -61,13 +61,13 @@
                  type="text"
                  data-ng-model="search.$"
                  placeholder="Search this collection"
-                 data-ng-show="collection.Datasets.length>10">
+                 data-ng-show="collection.datasets.length>10">
 
-          <p data-ng-show="collection.Datasets.length === 0">No datasets for this collection</p>
+          <p data-ng-show="collection.datasets.length === 0">No datasets for this collection</p>
 
           <div class="dataset-listing">
             <ul>
-              <li ng-repeat="dataset in collection.Datasets | filter:search" class="dataset">
+              <li ng-repeat="dataset in collection.datasets | filter:search" class="dataset">
                 <h4>
                   <a ui-sref="dataset({ id: dataset._id })">{{dataset.title}}</a>
                   <span data-ng-show="dataset.private === true" class="label bg-primary">private</span>

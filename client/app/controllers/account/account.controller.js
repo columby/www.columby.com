@@ -22,18 +22,20 @@ angular.module('columbyApp')
 
     /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
     function getCollections() {
-      if ($scope.account.Collections && $scope.account.Collections.length > 0) {
-        $scope.account.collections = [];
-        angular.forEach($scope.account.Collections, function (value, key) {
-          CollectionSrv.get({id: value.shortid}, function (result) {
-            $scope.account.collections[key] = result;
-          });
-        });
-        delete $scope.account.Collections;
-        console.log($scope.account.collections);
-      } else {
-        //console.log('no collections');
-      }
+      //if ($scope.account.collections && $scope.account.collections.length > 0) {
+      //  $scope.account.collections = [];
+      //  angular.forEach($scope.account.Collections, function (value, key) {
+      //    CollectionSrv.get({id: value.shortid}, function (result) {
+      //      $scope.account.collections[key] = result;
+      //    });
+      //  });
+      //  delete $scope.account.Collections;
+      //  console.log($scope.account.collections);
+      //} else {
+      //  //console.log('no collections');
+      //}
+      $scope.account.collections = $scope.account.Collections;
+      delete $scope.account.Collections;
     }
 
     function getDatasets() {
@@ -48,9 +50,8 @@ angular.module('columbyApp')
     }
 
     function getAccount() {
-
-    // get account information of user by userSlug
-    AccountSrv.get({slug: $stateParams.slug}, function (result) {
+      // get account information of user by userSlug
+      AccountSrv.get({slug: $stateParams.slug}, function (result) {
         if (!result.id) {
           toaster.pop('warning', null, 'The requested account was not found. ');
           $state.go('home');
@@ -68,10 +69,10 @@ angular.module('columbyApp')
             updateHeaderImage();
           }
 
-        getCollections();
-        getDatasets();
-      }
-    });
+          getCollections();
+          getDatasets();
+        }
+      });
 
     }
     function updateHeaderImage(){
