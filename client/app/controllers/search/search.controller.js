@@ -5,7 +5,7 @@ angular.module('columbyApp')
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading = true;
-    $scope.search = '';
+    $scope.search = {};
 
     $window.document.title = 'columby.com | search';
 
@@ -31,4 +31,9 @@ angular.module('columbyApp')
     };
 
     /* ---------- INIT ---------------------------------------------------------------------------- */
+    // get last search result if present
+    $scope.search.searchTerm = SearchSrv.queryTerm();
+    $scope.search.hits = SearchSrv.result();
+    //console.log('search', $scope.search.hits);
+
   });
