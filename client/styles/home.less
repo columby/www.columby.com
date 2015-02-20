@@ -3,9 +3,10 @@
 /*** ---- HOMEPAGE ---------------------------- ***/
 .page-home {
   .page-header {
+		position: relative;
 		margin: 0;
     text-align: center;
-    min-height: 560px;
+    min-height: 670px;
     color: #FFF;
     background-color: #eee;
     background-image: url('/images/homepage-header.jpg');
@@ -74,6 +75,35 @@
       background-image: url('/images/arrow.png');
       background-size: contain;
     }
+		
+
+		.search-bar{
+			position: absolute;
+			bottom: 0;
+			margin: 0 auto;
+			width: 100%;
+			background: #000;
+			background: rgba(0,0,0,0.6);
+			padding: 20px;
+			.searchbox{
+				color: #000;
+				font-family: "lato", sans-serif;
+				input{
+					margin: 10px;
+				}
+			}
+			button{
+				height: 56px;
+				width: 100px;
+				font-size: 1.2em;
+				margin: 10px;
+			}
+			.search-message{
+				color: #fff;
+				padding: 10px;
+				margin: 10px;
+			}
+		}
 
     .bounce {
       -moz-animation: bounce 2s infinite;
