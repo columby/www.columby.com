@@ -81,14 +81,14 @@
           <!-- <h2 class="datasource-title">Primary source</h2> -->
           <ul ng-show="dataset.primary.id">
             <li class="dataset-primary">
-							
+
 							<!-- START PRIMARY SOURCE -->
               <div>
 								<div class="row">
 									<div class="col-md-8">
-										
+
 										<h4 class="datasource-title">Primary source</h4>
-																
+
 										<ul class="properties">
 											<li>
 												<label>Issued</label>{{dataset.primary.created_at | date:'d MMMM yyyy'}}
@@ -104,41 +104,41 @@
 											</li>
 										</ul>
                 		<p ng-show="dataset.primary.jobStatus==='error'">There was an error processing this dataset. The data is currently unavailable.</p>
-										
+
 									</div>
-									
+
 									<div class="col-md-4">
-										
+
 		                <div class="download datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
 		                  <a href="download"><button class="lightblue filled"><i class="fa fa-download"></i>Download source</button></a>
 		                </div>
-										
+
 		                <div class="link datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
-		                  <a href="http://api.columby.com/v2/data/{{dataset.shortid}}" target="_blank"><button class="lightblue filled"><i class="fa fa-external-link"></i>Go to Source</button></a>
+		                  <a  target="_blank"><button class="lightblue filled"><i class="fa fa-external-link"></i>Go to Source</button></a>
 		                </div>
-										
+
 										<div class="link datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
-											<a href="api"><button class="lightblue filled disabled last"><i class="fa fa-link"></i>Use Columby API</button></a>
+											<a ng-href="http://api.columby.com/v2/data/sql?q={{dataQuery}}"><button class="lightblue filled disabled last"><i class="fa fa-link"></i>Use Columby API</button></a>
 										</div>
-										
+
 									</div>
 								</div>
               </div>
 							<!-- END PRIMARY SOURCE -->
-							
+
             </li>
 						<hr/>
           </ul>
 
           <ul ng-hide="!dataset.distributions || dataset.distributions.length===0">
             <li ng-repeat="distribution in dataset.distributions" class="dataset-source">
-							
+
 							<!-- START SOURCE -->
 							<div class="row">
 								<div class="col-md-8">
-									
+
 		              <h4 class="datasource-title">{{distribution.title}}</h4>
-							
+
 		              <span ng-show="distribution.private" class="label label-warning">private</span>
 		              <ul class="properties">
 
@@ -153,17 +153,17 @@
 		                <li ng-show="distribution.syncPeriod"><label>Sync</label>{{distribution.syncPeriod}}</li>
 		                <li ng-show="distribution.lastSync"><label>Last sync</label>{{distribution.lastSync}}</li>
 		              </ul>
-							
+
 								</div>
 								<div class="col-md-4">
-									
+
 		              <div class="download datasource-icon" ng-show="distribution.downloadUrl">
 		                <a href="{{distribution.downloadUrl}}"><button class="lightblue filled"><i class="fa fa-download"></i>Download source</button></a>
 		              </div>
 		              <div class="link datasource-icon" ng-show="distribution.accessUrl">
 		                <a href="{{distribution.accessUrl}}" target="_blank"><button class="lightblue filled"><i class="fa fa-external-link"></i>Go to Source</button></a>
 		              </div>
-									
+
 								</div>
 							</div>
 							<!-- END SOURCE -->
