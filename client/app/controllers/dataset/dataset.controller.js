@@ -14,7 +14,7 @@ angular.module('columbyApp')
     /* --------- FUNCTIONS ------------------------------------------------------------------ */
     function processData(){
       if (!$scope.dataset.primary){
-        console.log('No primary source. Skip creating data preview.')
+        console.log('No primary source. Skip creating data preview.');
         return;
       }
 
@@ -24,6 +24,9 @@ angular.module('columbyApp')
         fields: '*',
         limit: '10'
       };
+
+      // Query string for api call example.
+      $scope.dataQuery = '{"type":"select","table":"primary_' + $scope.dataset.primary.id + '","fields":"*","limit":"10"}';
 
       DataService.sql(q).then(function(result){
         if (result.status === 'success') {
