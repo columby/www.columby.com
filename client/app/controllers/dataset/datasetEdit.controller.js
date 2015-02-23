@@ -76,6 +76,7 @@ angular.module('columbyApp')
       });
     }
 
+
     /**
      * File is uploaded, finish it at the server.
      *
@@ -144,6 +145,7 @@ angular.module('columbyApp')
       toaster.pop('notice',null,'Here\'s your new dataset!');
     }
 
+
     /**
      * Update the header background image
      *
@@ -183,12 +185,6 @@ angular.module('columbyApp')
     }
 
 
-    /*-------------------   SCOPE FUNCTIONS   -----------------------------------------------------------------*/
-
-    $scope.showAccountSelector = function(){
-      showAccountSelector();
-    };
-
     /**
      * Change the owner of the dataset.
      *
@@ -200,6 +196,35 @@ angular.module('columbyApp')
       $scope.dataset.account = $rootScope.user.accounts[ id];
       //$scope.showAccountSelector = false;
     }
+
+
+    $scope.updateSlug = function(){
+      var slug = Slug.slugify($scope.dataset.slug);
+      var d={
+        id: $scope.dataset.id,
+        slug: slug
+      };
+      DatasetSrv.update({id: d.id}, d, function(res){
+        //console.log(res);
+        if (res.id) {
+          $scope.dataset.slug = res.slug;
+          toaster.pop('success', 'Updated', 'Dataset custom URL updated.');
+        } else if (res.err && res.err.errors.slug){
+          toaster.pop('error', 'Update error', 'There was an error setting the custom URL: ' + res.err.errors.slug.message);
+        } else {
+          toaster.pop('error', 'Update error', 'There was an error updating the custom URL.');
+        }
+      });
+    };
+
+
+    /*-------------------   SCOPE FUNCTIONS   -----------------------------------------------------------------*/
+
+    /*********** OPTIONS ********************************/
+    $scope.showAccountSelector = function(){
+      showAccountSelector();
+    };
+
 
     /**
      *
@@ -232,6 +257,7 @@ angular.module('columbyApp')
         }
       });
     };
+
 
     /**
      * Handle file select
@@ -311,6 +337,7 @@ angular.module('columbyApp')
     };
 
 
+    /*********** DATASET FUNCTIONS ********************************/
     /**
      *
      * Create a new dataset
@@ -367,26 +394,40 @@ angular.module('columbyApp')
       }
     };
 
-    $scope.updateSlug = function(){
-      var slug = Slug.slugify($scope.dataset.slug);
-      var d={
-        id: $scope.dataset.id,
-        slug: slug
-      };
-      DatasetSrv.update({id: d.id}, d, function(res){
-        //console.log(res);
-        if (res.id) {
-          $scope.dataset.slug = res.slug;
-          toaster.pop('success', 'Updated', 'Dataset custom URL updated.');
-        } else if (res.err && res.err.errors.slug){
-          toaster.pop('error', 'Update error', 'There was an error setting the custom URL: ' + res.err.errors.slug.message);
-        } else {
-          toaster.pop('error', 'Update error', 'There was an error updating the custom URL.');
+
+    $scope.delete = function() {
+
+      if (modalOpened) { return; }
+
+      $scope.showOptions = !$scope.showOptions;
+
+      var modalInstance = $modal.open({
+        templateUrl: 'views/dataset/confirmDelete.html',
+        controller: 'DatasetDeleteCtrl',
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        resolve: {
+          dataset: function () {
+            return $scope.dataset;
+          }
         }
+      });
+
+      modalOpened=true;
+
+      modalInstance.result.then(function(result) {
+        console.log(result);
+        state.go('home');
+        toaster.pop('info', null, 'Dataset deleted.');
+        modalOpened=false;
+      }, function() {
+        modalOpened=false;
       });
     };
 
 
+    /*********** REFERENCE FUNCTIONS ********************************/
     $scope.confirmDeleteReference = function(index){
       $scope.dataset.references[ index].confirmDelete = true;
     };
