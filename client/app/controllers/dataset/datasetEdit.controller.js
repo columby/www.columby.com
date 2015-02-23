@@ -395,7 +395,7 @@ angular.module('columbyApp')
      *
      * Delete an attached reference
      *
-     * @param index
+     * @param reference
      */
     $scope.deleteReference = function(reference){
       var idx = $scope.dataset.references.indexOf(reference);
@@ -410,7 +410,6 @@ angular.module('columbyApp')
           toaster.pop('success', null, 'There was a problem deleting the reference.');
         }
       });
-
     };
 
 
