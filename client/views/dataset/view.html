@@ -109,13 +109,13 @@
 
 									<div class="col-md-4">
 
-		                <div class="download datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
+		                <!-- <div class="download datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
 		                  <a href="download"><button class="lightblue filled"><i class="fa fa-download"></i>Download source</button></a>
-		                </div>
+		                </div> -->
 
-		                <div class="link datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
-		                  <a  target="_blank"><button class="lightblue filled"><i class="fa fa-external-link"></i>Go to Source</button></a>
-		                </div>
+		                <!-- <div class="link datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
+		                  <a href="{{dataset.primary.accessUrl}}" target="_blank"><button class="lightblue filled"><i class="fa fa-external-link"></i>Go to Source</button></a>
+		                </div> -->
 
 										<div class="link datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
 											<a ng-href="http://api.columby.com/v2/data/sql?q={{dataQuery}}"><button class="lightblue filled disabled last"><i class="fa fa-link"></i>Use Columby API</button></a>
