@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .controller('DistributionNewCtrl', function($log, $scope, $modalInstance, dataset, FileService, toaster, ngProgress, DistributionSrv) {
+  .controller('DistributionNewCtrl', function($log, $rootScope, $scope, $modalInstance, dataset, FileService, toaster, ngProgress, DistributionSrv, $upload) {
 
     console.log('new distribution controller');
 
@@ -35,43 +35,73 @@ angular.module('columbyApp')
      *  File is uploaded, finish it at the server.
      *
      */
-    function finishUpload(params) {
-      $log.log('upload: ', $scope.upload);
-      var params = {
-        fid: $scope.upload.file.id,
-        url: 'https://' + $scope.upload.credentials.bucket + '.s3.amazonaws.com/' + $scope.upload.credentials.file.key
-      };
-      $log.log('params', params);
-
-      FileService.finishS3(params).then(function(res){
-        $log.log('upload finished',res);
-        if (res.id){
-          var d = {
-            id: $scope.distribution.id,
-            file_id: res.id
-          };
-          if (res.filetype === 'text/csv'){
-            d.valid = true;
-            $scope.distribution.valid=true;
-          }
-          DistributionSrv.update(d, function(result){
-            $log.log('Finish upload result:', result);
-            if (result.id){
-              $scope.distribution.file_id = result.file_id;
-
-              $scope.wizard.step = 4;
-              $scope.wizard.finishShow = true;
-              $scope.wizard.finishDisabled = false;
-            }
-          });
-        }
-        $scope.upload.file = null;
-      });
-    }
+    // function finishUpload(params) {
+    //   $log.log('upload: ', $scope.upload);
+    //   var params = {
+    //     fid: $scope.upload.file.id,
+    //     url: 'https://' + $scope.upload.credentials.bucket + '.s3.amazonaws.com/' + $scope.upload.credentials.file.key
+    //   };
+    //   $log.log('params', params);
+    //
+    //   FileService.finishS3(params).then(function(res){
+    //     $log.log('upload finished',res);
+    //     if (res.id){
+    //       var d = {
+    //         id: $scope.distribution.id,
+    //         file_id: res.id
+    //       };
+    //       if (res.filetype === 'text/csv'){
+    //         d.valid = true;
+    //         $scope.distribution.valid=true;
+    //       }
+    //       DistributionSrv.update(d, function(result){
+    //         $log.log('Finish upload result:', result);
+    //         if (result.id){
+    //           $scope.distribution.file_id = result.file_id;
+    //
+    //           $scope.wizard.step = 4;
+    //           $scope.wizard.finishShow = true;
+    //           $scope.wizard.finishDisabled = false;
+    //         }
+    //       });
+    //     }
+    //     $scope.upload.file = null;
+    //   });
+    // }
 
 
 
     /** ---------- SCOPE FUNCTIONS ------------------------------------------------ **/
+
+    $scope.startUpload = function(files){
+      console.log(files);
+      console.log($rootScope.config);
+
+      if (files && files.length) {
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          $upload.upload({
+            method: 'POST',
+            url   : $rootScope.config.filesRoot + '/upload',
+            fields: {
+              filetype: file.type,
+              type: 'datafile',
+              filesize: file.size,
+              filename: file.name,
+              accountId: $scope.distribution.account_id
+            },
+            file  : file
+          }).progress(function (evt) {
+              var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+              console.log('progress: ' + progressPercentage + '% for ' + evt.config.file.name);
+          }).success(function (data, status, headers, config) {
+              console.log('file ' + config.file.name + 'uploaded. Response: ');
+              console.log('data', data);
+          });
+        }
+      }
+    };
+
 
     // Initialize a file upload
     $scope.initUpload = function(){
@@ -79,7 +109,7 @@ angular.module('columbyApp')
       $scope.wizard.step = 2;
     };
 
-    //Handle file select
+    // //Handle file select
     $scope.onFileSelect = function(files) {
       var file = files[0];
       // Check if there is a file
@@ -206,10 +236,12 @@ angular.module('columbyApp')
       $modalInstance.dismiss('cancel');
     };
 
+
     $scope.close = function(){
       console.log('Closing with distribution: ', $scope.distribution);
       $modalInstance.close($scope.distribution);
     };
+
 
     $scope.save = function(){
       $scope.updateInProgress = true;
@@ -227,4 +259,3 @@ angular.module('columbyApp')
     };
 
   });
-

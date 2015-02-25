@@ -24,10 +24,9 @@
         <label>Upload a datafile: </label>
       </div>
       <div class="col-xs-8">
-        <input class="browse-button"
-               type="file"
-               name="file"
-               ng-file-select="onFileSelect($files)">
+
+        <div class="btn btn-default" ng-file-select ng-file-change="startUpload($files)">Upload</div>
+
       </div>
     </div>
     <div class="row" ng-show="uploadInProgress">
