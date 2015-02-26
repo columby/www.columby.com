@@ -541,6 +541,7 @@ angular.module('columbyApp')
           $scope.dataset.distributions.splice(idx,1);
           toaster.pop('success', 'Done', 'Distribution deleted.');
         } else {
+          console.log(res);
           toaster.pop('danger', null, 'There was a problem deleting the distribution.');
         }
       });
