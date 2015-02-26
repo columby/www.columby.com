@@ -34,7 +34,9 @@
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
             </p>
             <p ng-show="dataset.tags.length>0">
-              <span class="tag" ng-repeat="tag in dataset.tags"><i class="fa fa-tag"></i>{{tag.text}}</span>
+              <span class="tag" ng-repeat="tag in dataset.tags">
+                <a ui-sref="tag({slug: tag.slug})"><i class="fa fa-tag"></i>{{tag.text}}</a>
+              </span>
             </p>
           </div>
 
