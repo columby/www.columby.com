@@ -22,26 +22,26 @@
                data-ng-change="doSearch()"
                focus
                ng-model-options="{debounce: 250}"/>
-      
+
     </div>
   </div>
 
   <div class="container">
     <div class="col-md-12 results">
       <h3>Search results</h3>
-			
+
 			<div class="search-message">{{search.message}}</div>
-			
+
       <div class="no-result" ng-show="search.hits.length===0">
 				No result
 			</div>
       <ul ng-show="search.hits.length>0">
         <li ng-repeat="result in search.hits" class="publication-item">
-          <h4><a ui-sref="dataset({id: result.shortid})">{{result.title}}</a><em>{{result._source.publishStatus}}</em></h4>
+          <h4><a ui-sref="{{checkLink(result)}}">{{result.title}}</a><em>{{result._source.publishStatus}}</em></h4>
           <span class="content-type">{{result.contentType}}</span>
           <div class="user-date"><time class="post-date">{{result._source.created_at | date:'d MMMM yyyy'}}</time></div>
         </li>
-      </ul>			
+      </ul>
 
     </div>
   </div>
