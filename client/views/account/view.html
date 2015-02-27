@@ -65,10 +65,10 @@
                  type="text"
                  ng-model="search.$"
                  placeholder="Search this dataset list"
-                 ng-show="datasets.count>10">
+                 ng-show="datasets.numPages>1">
 
           <h3>{{datasets.count}} Datasets</h3>
-          <p ng-show="!datasets">No datasets for this user</p>
+          <p ng-show="!datasets">No datasets for this account</p>
 
           <div class="dataset-listing">
             <div class="loader" ng-show="datasets.loading"><i class="fa fa-spinner fa-spin"></i>&nbsp;Loading</div>
@@ -90,19 +90,17 @@
             </ul>
 
             <pagination
-              data-ng-change="pageChanged()"
+              ng-change="pageChanged()"
               total-items="datasets.count"
-              data-ng-model="datasets.currentPage"
-              data-max-size="5"
+              ng-model="datasets.currentPage"
+              max-size="5"
               class="pagination-sm"
-              data-boundary-links="true"
-              data-rotate="false"
-              data-num-pages="datasets.numPages"
-              data-ng-show="dataset.numPages>0">
+              boundary-links="true"
+              rotate="false"
+              num-pages="datasets.numPages"
+              ng-show="datasets.numPages>1">
             </pagination>
-
           </div>
-
         </div>
       </div>
     </div>

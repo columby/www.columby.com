@@ -44,6 +44,7 @@ angular.module('columbyApp')
       DatasetSrv.index({accountId: $scope.account.id, offset: offset}, function (d) {
         $scope.datasets.rows = d.rows;
         $scope.datasets.count = d.count;
+        $scope.datasets.numPages = parseInt(d.count/$scope.datasets.numberOfItems + 1);
         $scope.datasets.loading = false;
       });
 

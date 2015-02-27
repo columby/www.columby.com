@@ -64,6 +64,7 @@ angular.module('columbyApp')
         // Add the dataset to the scope
         $scope.dataset = dataset;
 
+        $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.dataset.account.avatar.shortid + '/' + $scope.dataset.account.avatar.filename;
         // set draft title and description
         $scope.datasetUpdate.title = $scope.dataset.title;
         $scope.datasetUpdate.description = $scope.dataset.description;

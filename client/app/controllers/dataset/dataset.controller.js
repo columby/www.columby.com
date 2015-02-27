@@ -27,6 +27,7 @@ angular.module('columbyApp')
 
       // Query string for api call example.
       $scope.dataQuery = '{"type":"select","table":"primary_' + $scope.dataset.primary.id + '","fields":"*","limit":"10"}';
+      $scope.apiLink = $rootScope.config.apiRoot + '/v2/data/sql?q='+ $scope.dataQuery;
 
       DataService.sql(q).then(function(result){
         if (result.status === 'success') {
@@ -92,6 +93,8 @@ angular.module('columbyApp')
             }
           });
         }
+
+        $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.dataset.account.avatar.shortid + '/' + $scope.dataset.account.avatar.filename;
 
         if ($scope.dataset.headerImg && $scope.dataset.headerImg.url) {
           updateHeaderImage();
