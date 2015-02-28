@@ -1,5 +1,5 @@
 {
-  "version"    : "1.0.2",
+  "version"    : "1.0.4",
   "apiRoot"    : "https://api.columby.com",
   "workerRoot" : "https://worker.columby.com",
   "filesRoot"  : "https://files.columby.com",
