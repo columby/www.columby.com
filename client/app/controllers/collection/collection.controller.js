@@ -2,13 +2,13 @@
 
 angular.module('columbyApp')
 
-  .controller('CollectionsCtrl', function ($scope, CollectionSrv) {
+  .controller('CollectionsCtrl', function ($rootScope, $scope, CollectionSrv) {
 
     $scope.collections = CollectionSrv.index();
 
   })
 
-  .controller('CollectionCtrl', function ($scope, $stateParams, AuthSrv, CollectionSrv) {
+  .controller('CollectionCtrl', function ($rootScope, $scope, $stateParams, AuthSrv, CollectionSrv) {
 
     $scope.contentLoading = true;
 
@@ -20,7 +20,7 @@ angular.module('columbyApp')
       delete result.Account;
       result.datasets = result.Datasets;
       delete result.Datasets;
-
+      result.account.avatar.url = $rootScope.config.filesRoot + '/a/' + result.account.avatar.shortid + '/' + result.account.avatar.filename;
       // Add collection to the scope
       $scope.collection = result;
 

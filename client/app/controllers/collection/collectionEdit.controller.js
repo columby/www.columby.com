@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .controller('CollectionEditCtrl', function ($scope, $state, $stateParams, AuthSrv, CollectionSrv, toaster) {
+  .controller('CollectionEditCtrl', function ($rootScope, $scope, $state, $stateParams, AuthSrv, CollectionSrv, toaster) {
 
     // Configuration
     $scope.contentLoading = true;
@@ -13,6 +13,7 @@ angular.module('columbyApp')
       CollectionSrv.show({id:$stateParams.id }, function(result){
         if (AuthSrv.canEdit('collection', result)){
           $scope.collection = result;
+          $scope.collection.Account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.collection.Account.avatar.shortid + '/' + $scope.collection.Account.avatar.filename;
           // set draft title and description
           $scope.collectionUpdate = {
             title: $scope.collection.title,
@@ -67,7 +68,7 @@ angular.module('columbyApp')
         } else {
           toaster.pop('warning', null, 'There was an error deleting the collection.');
         }
-      })
+      });
     };
 
 
