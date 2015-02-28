@@ -14,18 +14,42 @@
         <button type="button" class="big-button" ng-hide="$root.user.id"  ui-sref='signin'>Login or Signup</button>
         <p>or</p>
         <a ui-sref="about">Read about Columby</a>
-        <a href="#more"><div class="arrow animated bounce"></div></a>
+        <!-- <a href="#more"><div class="arrow animated bounce"></div></a> -->
       </div>
     </div>
+		<div class="container search-bar">
+      <div class="searchbox">
+        <form>
+          <div class="col-md-offset-3 col-md-5">
+            <input id="search-datasets"
+                  class="input-large"
+                  type="text"
+                  ng-model="search.searchTerm"
+                  placeholder="Looking for data and publishers?"
+                  ng-change="doSearch()"
+                  ng-model-options="{debounce: 250}"/>
+          </div>
+          <div class="col-md-1">
+            <button class="big-button lightblue filled"
+                    type="submit"
+                    ui-sref='search'>Search!</button>
+          </div>
+        </form>
+      </div>
+
+			<div class="col-md-3">
+				<div class="search-message">{{search.message}}</div>
+			</div>
+		</div>
   </div>
 
-  <div class="news-flash">
+  <!-- <div class="news-flash">
     <div class="container">
       <div class="col-md-12">
         <h2 class="news-flash-title">Welcome to the new Columby! <a ui-sref="columby-update">Read more about our major update</a>.</h2>
       </div>
     </div>
-  </div>
+  </div> -->
   <a id="more"></a>
   <div class="showcase-presentation" ng-hide="$root.user.id">
 
@@ -75,7 +99,7 @@
   <div class="page-content">
     <div class="container">
 
-      <div class="searchbox col-md-offset-1 col-md-10">
+      <!-- <div class="searchbox col-md-offset-1 col-md-10">
         <label for="search-datasets" class="sr-only">Search datasets</label>
         <input id="search-datasets" class="input-large"
           type="text"
@@ -84,10 +108,10 @@
           ng-change="doSearch()"
           ng-model-options="{debounce: 250}">
         <div class="search-message">{{search.message}}</div>
-      </div>
+      </div> -->
 
       <!-- Search result -->
-      <div class="col-md-offset-1 col-md-10 results recent-publications">
+      <!-- <div class="col-md-offset-1 col-md-10 results recent-publications">
         <h3 ng-show="search.hits">Search results</h3>
         <div class="result publication-listing">
           <div class="no-result" ng-show="search.hits.length === 0">
@@ -97,14 +121,14 @@
             <li ng-repeat="result in search.hits" class="publication-item">
               <h4><a ui-sref="dataset({id: result.shortid})">{{result.title}}</a><em>{{result._source.publishStatus}}</em></h4>
               <span>{{result.contentType}}</span>
-              <div class="user-date"><!-- {{result._source.account.name || '[Oops! No publisher found]'}} on  --><time class="post-date">{{result._source.created_at | date:'d MMMM yyyy'}}</time></div>
+              <div class="user-date"><time class="post-date">{{result._source.created_at | date:'d MMMM yyyy'}}</time></div>
             </li>
         	</ul>
         </div>
-      </div>
+      </div> -->
 
 
-      <div class="col-md-offset-1 col-md-10 recent-publications" ng-hide="search.hits.length">
+      <div class="col-md-offset-1 col-md-10 recent-publications">
         <h3>Recently published</h3>
         <div class="publication-listing">
 					<ul>
@@ -112,7 +136,7 @@
               <h4><a ui-sref="dataset({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
               <div class="user-date">
                 <!-- <img ng-src="dataset.account.avatar.img" class="img-rounded"/> -->
-                <img class="img-circle avatar-small" ng-src="{{dataset.account.avatar.url}}" alt="{{dataset.account.name}}"/>
+                <img class="img-circle avatar-small" ng-src="{{$root.config.filesRoot}}/a/{{dataset.account.avatar.shortid}}/{{dataset.account.avatar.filename}}" alt="{{dataset.account.name}}"/>
                 <a ui-sref="account({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
               </div>
             </li>

@@ -33,10 +33,10 @@
     <div class="options-arrow"></div>
     <div class="editorSidebarContent">
       <div class="sidebarModule">
-        <div class="editors" ng-show="account.id">
+        <!-- <div class="editors" ng-show="account.id">
           <h3>Editors</h3>
 
-        </div>
+        </div> -->
         <h3>Background image
           <button
             class="btn btn-default right btn-xs btn-tooltip"
@@ -47,9 +47,9 @@
         </h3>
 
         <div>
-          <button
-            class="btn btn-xs btn-default upload-button"
-            ng-file-select="onFileSelect($files,'image','header')">upload your image</button>
+
+          <div class="btn btn-default  upload-button" ng-file-select ng-file-change="startUpload($files,'image','header')">upload your image</div>
+
         </div>
 
       </div>
@@ -71,8 +71,9 @@
           data-focus = 'true'></textarea>
 
         <div class="avatar-container avatar"
-          data-ng-file-select="onFileSelect($files,'image','avatar')"
-          data-multiple="false">
+             ng-file-select
+             ng-file-change="startUpload($files,'image','avatar')"
+          >
           <img class="img-circle avatar" ng-src="{{account.avatar.url}}" />
         </div>
       </div>

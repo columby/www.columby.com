@@ -64,6 +64,7 @@ angular.module('columbyApp')
         // Add the dataset to the scope
         $scope.dataset = dataset;
 
+        $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.dataset.account.avatar.shortid + '/' + $scope.dataset.account.avatar.filename;
         // set draft title and description
         $scope.datasetUpdate.title = $scope.dataset.title;
         $scope.datasetUpdate.description = $scope.dataset.description;
@@ -75,6 +76,7 @@ angular.module('columbyApp')
 
       });
     }
+
 
     /**
      * File is uploaded, finish it at the server.
@@ -144,6 +146,7 @@ angular.module('columbyApp')
       toaster.pop('notice',null,'Here\'s your new dataset!');
     }
 
+
     /**
      * Update the header background image
      *
@@ -183,12 +186,6 @@ angular.module('columbyApp')
     }
 
 
-    /*-------------------   SCOPE FUNCTIONS   -----------------------------------------------------------------*/
-
-    $scope.showAccountSelector = function(){
-      showAccountSelector();
-    };
-
     /**
      * Change the owner of the dataset.
      *
@@ -200,6 +197,35 @@ angular.module('columbyApp')
       $scope.dataset.account = $rootScope.user.accounts[ id];
       //$scope.showAccountSelector = false;
     }
+
+
+    $scope.updateSlug = function(){
+      var slug = Slug.slugify($scope.dataset.slug);
+      var d={
+        id: $scope.dataset.id,
+        slug: slug
+      };
+      DatasetSrv.update({id: d.id}, d, function(res){
+        //console.log(res);
+        if (res.id) {
+          $scope.dataset.slug = res.slug;
+          toaster.pop('success', 'Updated', 'Dataset custom URL updated.');
+        } else if (res.err && res.err.errors.slug){
+          toaster.pop('error', 'Update error', 'There was an error setting the custom URL: ' + res.err.errors.slug.message);
+        } else {
+          toaster.pop('error', 'Update error', 'There was an error updating the custom URL.');
+        }
+      });
+    };
+
+
+    /*-------------------   SCOPE FUNCTIONS   -----------------------------------------------------------------*/
+
+    /*********** OPTIONS ********************************/
+    $scope.showAccountSelector = function(){
+      showAccountSelector();
+    };
+
 
     /**
      *
@@ -232,6 +258,7 @@ angular.module('columbyApp')
         }
       });
     };
+
 
     /**
      * Handle file select
@@ -311,6 +338,7 @@ angular.module('columbyApp')
     };
 
 
+    /*********** DATASET FUNCTIONS ********************************/
     /**
      *
      * Create a new dataset
@@ -367,26 +395,40 @@ angular.module('columbyApp')
       }
     };
 
-    $scope.updateSlug = function(){
-      var slug = Slug.slugify($scope.dataset.slug);
-      var d={
-        id: $scope.dataset.id,
-        slug: slug
-      };
-      DatasetSrv.update({id: d.id}, d, function(res){
-        //console.log(res);
-        if (res.id) {
-          $scope.dataset.slug = res.slug;
-          toaster.pop('success', 'Updated', 'Dataset custom URL updated.');
-        } else if (res.err && res.err.errors.slug){
-          toaster.pop('error', 'Update error', 'There was an error setting the custom URL: ' + res.err.errors.slug.message);
-        } else {
-          toaster.pop('error', 'Update error', 'There was an error updating the custom URL.');
+
+    $scope.delete = function() {
+
+      if (modalOpened) { return; }
+
+      $scope.showOptions = !$scope.showOptions;
+
+      var modalInstance = $modal.open({
+        templateUrl: 'views/dataset/confirmDelete.html',
+        controller: 'DatasetDeleteCtrl',
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        resolve: {
+          dataset: function () {
+            return $scope.dataset;
+          }
         }
+      });
+
+      modalOpened=true;
+
+      modalInstance.result.then(function(result) {
+        console.log(result);
+        state.go('home');
+        toaster.pop('info', null, 'Dataset deleted.');
+        modalOpened=false;
+      }, function() {
+        modalOpened=false;
       });
     };
 
 
+    /*********** REFERENCE FUNCTIONS ********************************/
     $scope.confirmDeleteReference = function(index){
       $scope.dataset.references[ index].confirmDelete = true;
     };
@@ -395,7 +437,7 @@ angular.module('columbyApp')
      *
      * Delete an attached reference
      *
-     * @param index
+     * @param reference
      */
     $scope.deleteReference = function(reference){
       var idx = $scope.dataset.references.indexOf(reference);
@@ -410,9 +452,11 @@ angular.module('columbyApp')
           toaster.pop('success', null, 'There was a problem deleting the reference.');
         }
       });
-
     };
 
+
+
+    /*********** DISTRIBUTIONS ********************************/
 
     $scope.newDistribution = function() {
 
@@ -421,26 +465,30 @@ angular.module('columbyApp')
 
       var modalInstance = $modal.open({
         templateUrl: 'views/dataset/distribution/new.html',
-        controller: 'DistributionCreateCtrl',
+        controller: 'DistributionNewCtrl',
         size: 'lg',
         backdrop: 'static',
-        keyboard: false
-        //resolve: {
-        //  distribution: function () {
-        //    return distribution;
-        //  }
-        //}
+        keyboard: false,
+        resolve: {
+          dataset: function() {
+            return $scope.dataset;
+          }
+        }
       });
 
       modalOpened=true;
 
-      modalInstance.result.then(function(item) {
-        console.log(item);
-        $scope.dataset.distributions.push(item)
+      modalInstance.result.then(function (distribution) {
+        toaster.pop('info', null, 'Datasource saved.');
+        $scope.dataset.distributions.push(distribution);
         modalOpened=false;
       }, function () {
+        // Delete the created datasource
+        DistributionSrv.delete($scope.distribution, function(res){
+          console.log('deleted');
+          console.log(res);
+        });
         $log.info('Modal dismissed at: ' + new Date());
-        modalOpened=false;
       });
     };
 
@@ -494,6 +542,7 @@ angular.module('columbyApp')
           $scope.dataset.distributions.splice(idx,1);
           toaster.pop('success', 'Done', 'Distribution deleted.');
         } else {
+          console.log(res);
           toaster.pop('danger', null, 'There was a problem deleting the distribution.');
         }
       });
@@ -525,7 +574,7 @@ angular.module('columbyApp')
 
       var modalInstance = $modal.open({
         templateUrl: 'views/dataset/primary/new.html',
-        controller: 'DatasetPrimaryCtrl',
+        controller: 'PrimaryNewCtrl',
         size: 'lg',
         backdrop: 'static',
         keyboard: false,
@@ -549,18 +598,6 @@ angular.module('columbyApp')
       });
     };
 
-    ///**
-    // * Create a new primary source
-    // */
-    //$scope.createPrimary = function(){
-    //  var primary = {
-    //    syncperiod: $scope.newPrimary.syncPeriod,
-    //    dataset_id: $scope.newPrimary.dataset_id,
-    //    distribution_id: $scope.newPrimary.distribution_id
-    //  };
-    //  console.log('new Primary: ', primary);
-    //
-    //};
 
     /**
      * Delete a primary source
@@ -585,7 +622,7 @@ angular.module('columbyApp')
 
       var modalInstance = $modal.open({
         templateUrl: 'views/dataset/primary/edit.html',
-        controller: 'DatasetPrimaryEditCtrl',
+        controller: 'PrimaryEditCtrl',
         size: 'lg',
         backdrop: 'static',
         keyboard: false,

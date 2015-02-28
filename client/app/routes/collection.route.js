@@ -7,13 +7,13 @@ angular.module('columbyApp')
       .state('collections', {
         url: '/c',
         templateUrl: 'views/collection/index.html',
-        controller: 'CollectionIndexCtrl'
+        controller: 'CollectionsCtrl'
       })
 
       .state('collection', {
         url: '/c/:id',
         templateUrl: 'views/collection/view.html',
-        controller: 'CollectionViewCtrl'
+        controller: 'CollectionCtrl'
       })
 
       .state('collectionEdit', {

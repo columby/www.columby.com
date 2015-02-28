@@ -1,7 +1,8 @@
 {
-  "version"     : "1.0.3",
+  "version"     : "1.0.4",
   "apiRoot"     : "https://dev-api.columby.com",
   "workerRoot"  : "https://dev-worker.columby.com",
-  "embedlyKey"  : "844b2c4d25334b4db2c327f10c70cb54",
+  "filesRoot"   : "https://dev-files.columby.com",
+	"embedlyKey"  : "844b2c4d25334b4db2c327f10c70cb54",
   "awsEndpoint" : "https://s3.amazonaws.com/columby-dev/"
 }

@@ -30,8 +30,7 @@
   <div class="editorSidebar" ng-show="showOptions && !datasetLoading">
     <div class="options-arrow"></div>
     <div class="editorSidebarContent">
-      <div class="sidebarModule">
-	      <div class="visibility setting" ng-show="dataset.id">
+      <div class="visibility setting" ng-show="dataset.id">
           <h3>Visibility
             <button
               class="btn btn-defaultright btn-xs btn-tooltip"
@@ -50,7 +49,6 @@
               data-ng-disabled="!dataset.private">Public</button>
           	</div>
 	      </div>
-			</div>
 
       <div class="slug" ng-show="dataset.id">
         <h3>Custom URL
@@ -81,28 +79,26 @@
         </form>
       </div>
 
-      <h3>Background image
-        <button
-          class="btn btn-default right btn-xs btn-tooltip"
-          data-popover="Upload a background image for your dataset"
-          data-popover-trigger="mouseenter"
-          data-popover-placement="left"><i class="fa fa-question"></i>
-        </button>
-      </h3>
-
-      <div>
-        <button
-          class="btn btn-xs btn-default upload-button"
-          ng-file-select="onFileSelect($files,'image','header')">upload your image</button>
+      <div class="background">
+        <h3>Background image
+          <button
+            class="btn btn-default right btn-xs btn-tooltip"
+            data-popover="Upload a background image for your dataset"
+            data-popover-trigger="mouseenter"
+            data-popover-placement="left"><i class="fa fa-question"></i>
+          </button>
+        </h3>
+        <div>
+          <button
+            class="btn btn-xs btn-default upload-button"
+            ng-file-select="onFileSelect($files,'image','header')">upload your image</button>
+        </div>
       </div>
-      <!-- <div class="upload-button"
-           ng-file-select="onFileSelect($files,'image','header')"
-           popover="Change the header background image for this dataset."
-           data-popover-trigger="mouseenter"
-           data-popover-placement="left">
-        <i class="fa fa-cog"></i><span>Upload an image</span>
-      </div> -->
 
+      <div class="delete">
+        <hr>
+        <button type="button" class="btn btn-danger btn-xs" ng-click="delete()"><i class="fa fa-trash-o"></i> Delete dataset</button>
+      </div>
     </div>
   </div>
 
@@ -257,11 +253,9 @@
               </div>
 
               <div class="label label-success" ng-show="distribution.id === dataset.primary.distribution_id">Source for Primary</div>
-							<div class="label label-warning" ng-show="distribution.status === 'draft'">Draft</div>
-							<div class="label label-primary" ng-show="distribution.status === 'private'">Private</div>
+							<div class="label label-warning" ng-show="distribution.private">Private</div>
 
               <ul class="properties">
-                <li><label>Datasource status</label>{{distribution.status}}</li>
                 <li><label>Datasource type</label>{{distribution.type}}</li>
                 <li><label>License</label>{{distribution.license}}</li>
                 <li><label>Media type</label>{{distribution.type}}</li>
@@ -285,7 +279,7 @@
                 <div class="col-xs-1">
 		              <button class="valid-api btn btn-primary btn-xs"
 		                ng-click="convertPrimary(distribution)"
-		                ng-hide="!distribution.valid || distribution.primary.id || distribution.id === dataset.primary.distribution_id">Convert to API</button>
+		                ng-hide="!distribution.valid || dataset.primary.id || distribution.id === dataset.primary.distribution_id">Convert to API</button>
 								</div>
 							</div>
 
@@ -300,8 +294,10 @@
 
           <!-- Add distribution Modal -->
 					<hr/>
-          <div distribution-popup dataset="dataset"></div>
-
+          <button
+            class="lightblue filled pull-right"
+            type="button"
+            ng-click="newDistribution()">Add a new datasource</button>
         </div>
       </div>
     </div>
@@ -320,16 +316,20 @@
 
             <div class="row">
               <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
-									<div class="reference">
-										<img src="../../../images/reference-spaceholder.png" class="placeholder">
-										<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
-											<div class="reference-top"></div>
-								      <h3 class="reference-title"><a href="{{reference.url}}">{{reference.title}}</a></h3>
-								      <p class="small reference-source"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
-								    </div>
-									</div>
-									<div class="small reference-text">{{reference.description}}</div>
-
+                <div class="reference">
+                  <img src="../../../images/reference-spaceholder.png" class="placeholder">
+									<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
+										<div class="reference-top"></div>
+							      <h3 class="reference-title"><a href="{{reference.url}}">{{reference.title}}</a></h3>
+							      <p class="small reference-source"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
+							    </div>
+								</div>
+								<div class="small reference-text">{{reference.description}}</div>
+                <div class="actions">
+                  <div class="confirm-delete"
+                       confirm-delete
+                       on-confirm="deleteReference(reference)"></div>
+                </div>
 
                 <!-- <div class="thumbnail dataset-reference">
                   <div class="caption clearfix">
@@ -339,12 +339,8 @@
                     <p>{{reference.description}}</p>
                     <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
                   </div>
-                  <div class="actions" ng-show="editMode">
-                    <div class="col-xs-5 confirm-delete"
-                         confirm-delete
-                         on-confirm="deleteReference(reference)"></div>
-                  </div>
                 </div> -->
+
               </div>
             </div>
 

@@ -4,9 +4,10 @@ angular.module('columbyApp')
 
   .constant('configSrv', {
 
-    version: '@@version',
-    apiRoot: '@@apiRoot',
+    version   : '@@version',
+    apiRoot   : '@@apiRoot',
     workerRoot: '@@workerRoot',
+    filesRoot : '@@filesRoot',
     embedlyKey: '@@embedlyKey',
     aws: {
       endpoint: '@@awsEndpoint'

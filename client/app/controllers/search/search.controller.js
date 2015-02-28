@@ -5,7 +5,7 @@ angular.module('columbyApp')
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading = true;
-    $scope.search = '';
+    $scope.search = {};
 
     $window.document.title = 'columby.com | search';
 
@@ -30,5 +30,21 @@ angular.module('columbyApp')
       }
     };
 
+    $scope.checkLink = function(item){
+      if (item.contentType === 'dataset'){
+        return item.contentType + '({id: \'' + item.shortid + '\'})';
+      } else if (item.contentType === 'account'){
+        return item.contentType + '({slug: \'' + item.slug + '\'})';
+      } else {
+        return '';
+      }
+    };
+
+    
     /* ---------- INIT ---------------------------------------------------------------------------- */
+    // get last search result if present
+    $scope.search.searchTerm = SearchSrv.queryTerm();
+    $scope.search.hits = SearchSrv.result();
+    //console.log('search', $scope.search.hits);
+
   });

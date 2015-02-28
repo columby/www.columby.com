@@ -14,6 +14,7 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
+      <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
       <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
       <link rel="stylesheet" href="bower_components/angularjs-toaster/toaster.css" />
       <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog.css" />
@@ -96,6 +97,7 @@
       <script src="bower_components/angular-jwt/dist/angular-jwt.js"></script>
       <script src="bower_components/ngprogress/build/ngProgress.js"></script>
       <script src="bower_components/ng-tags-input/ng-tags-input.min.js"></script>
+      <script src="bower_components/ng-file-upload-shim/angular-file-upload-shim.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
 
@@ -103,24 +105,27 @@
         <script src="/app/app.js"></script>
           <!-- injector:js -->
           <script src="app/controllers/account/account.controller.js"></script>
+          <script src="app/controllers/account/accountEdit.controller.js"></script>
           <script src="app/controllers/account/accountSelector.controller.js"></script>
           <script src="app/controllers/admin/admin.controller.js"></script>
           <script src="app/controllers/collection/collection.controller.js"></script>
           <script src="app/controllers/collection/collectionEdit.controller.js"></script>
           <script src="app/controllers/dataset/dataset.controller.js"></script>
+          <script src="app/controllers/dataset/datasetDelete.controller.js"></script>
           <script src="app/controllers/dataset/datasetEdit.controller.js"></script>
-          <script src="app/controllers/dataset/distributionCreate.controller.js"></script>
           <script src="app/controllers/dataset/distributionEdit.controller.js"></script>
-          <script src="app/controllers/dataset/distributionPrimary.controller.js"></script>
+          <script src="app/controllers/dataset/distributionNew.controller.js"></script>
+          <script src="app/controllers/dataset/primaryEdit.controller.js"></script>
+          <script src="app/controllers/dataset/primaryNew.controller.js"></script>
           <script src="app/controllers/home/home.controller.js"></script>
           <script src="app/controllers/pages/pages.controller.js"></script>
           <script src="app/controllers/search/search.controller.js"></script>
+          <script src="app/controllers/tag/tag.controller.js"></script>
           <script src="app/controllers/user/user.controller.js"></script>
           <script src="app/directives/accountSelector/accountSelector.directive.js"></script>
           <script src="app/directives/accountSwitcher/accountSwitcher.directive.js"></script>
           <script src="app/directives/autogrow/autogrow.directive.js"></script>
           <script src="app/directives/confirmDelete/confirmDelete.directive.js"></script>
-          <script src="app/directives/distributionPopup/distributionPopup.directive.js"></script>
           <script src="app/directives/embedly/embedly.directive.js"></script>
           <script src="app/directives/focus/focus.directive.js"></script>
           <script src="app/directives/noImage/noImage.directive.js"></script>
@@ -136,6 +141,7 @@
           <script src="app/routes/home.route.js"></script>
           <script src="app/routes/pages.route.js"></script>
           <script src="app/routes/search.route.js"></script>
+          <script src="app/routes/tag.route.js"></script>
           <script src="app/routes/user.route.js"></script>
           <script src="app/services/account.service.js"></script>
           <script src="app/services/auth.service.js"></script>

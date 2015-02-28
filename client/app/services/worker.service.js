@@ -8,7 +8,7 @@ angular.module('columbyApp')
 
       add: function(job) {
         console.log(configSrv.workerRoot);
-        return $http.post(configSrv.workerRoot + '/job', job)
+        return $http.post(configSrv.workerRoot + '/api/job', job)
           .then(function (response) {
             return response.data;
           });

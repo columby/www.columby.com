@@ -1,9 +1,14 @@
 <section class="page search" ng-controller="SearchCtrl">
 
-  <div class="page-header">
+  <div class="actions-bar"
+    scroll-position="scroll"
+    ng-class="{top: scroll<290-75}">
+  </div>
+
+  <div class="header wrapper">
     <div class="container">
-      <h1>Search</h1>
-      <h2 class="page-subtitle">find datasets</h2>
+      <h1 class="title">Search</h1>
+      <h2 class="page-subtitle">find datasets, collections and accounts</h2>
     </div>
   </div>
 
@@ -17,21 +22,27 @@
                data-ng-change="doSearch()"
                focus
                ng-model-options="{debounce: 250}"/>
-      <div class="search-message">{{search.message}}</div>
+
     </div>
   </div>
 
   <div class="container">
     <div class="col-md-12 results">
-      <h3 ng-show="search.hits.length">Search results</h3>
-      <div class="no-result" ng-show="search.hits.length===0">No result</div>
-        <ul ng-show="search.hits.length>0">
-          <li ng-repeat="result in search.hits" class="publication-item">
-            <h4><a ui-sref="dataset({datasetId: result.id})">{{result.title}}</a><em>{{result._source.publishStatus}}</em></h4>
-            <div class="user-date"><!-- {{result._source.account.name || '[Oops! No publisher found]'}} on  --><time class="post-date">{{result._source.createdAt | date:'d MMMM yyyy'}}</time></div>
-          </li>
-        </ul>
-      </div>
+      <h3>Search results</h3>
+
+			<div class="search-message">{{search.message}}</div>
+
+      <div class="no-result" ng-show="search.hits.length===0">
+				No result
+			</div>
+      <ul ng-show="search.hits.length>0">
+        <li ng-repeat="result in search.hits" class="publication-item">
+          <h4><a ui-sref="{{checkLink(result)}}">{{result.title}}</a><em>{{result._source.publishStatus}}</em></h4>
+          <span class="content-type">{{result.contentType}}</span>
+          <div class="user-date"><time class="post-date">{{result._source.created_at | date:'d MMMM yyyy'}}</time></div>
+        </li>
+      </ul>
+
     </div>
   </div>
 </section>

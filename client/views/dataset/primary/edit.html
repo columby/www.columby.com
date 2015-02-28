@@ -10,50 +10,25 @@
         {{primary.status}}
       </div>
     </div>
-
     <div class="form-group">
       <div class="col-xs-4"><label>Synchronisation period</label></div>
       <div class="col-xs-8">
         <div class="btn-group">
-          <label class="btn btn-primary" ng-model="primary.syncPeriod" btn-radio="'dontsync'">Do not sync</label>
-          <label class="btn btn-primary" ng-model="primary.syncPeriod" btn-radio="'yearly'">Yearly</label>
-          <label class="btn btn-primary" ng-model="primary.syncPeriod" btn-radio="'quarterly'">Quarterly</label>
+          <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="'0'">Do not sync</label>
+          <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="'1'">Yearly</label>
+          <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="'2'">Quarterly</label>
+          <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="'3'">Monthly</label>
+          <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="'4'">Weekly</label>
         </div>
       </div>
     </div>
-
-    <!-- License -->
-    <div class="form-group">
-      <div class="col-xs-4">
-        <label>License</label>
-      </div>
-      <div class="col-xs-8">
-        <div class="btn-group">
-          <label class="btn btn-primary" ng-model="distribution.license" btn-radio="'dontKnow'">I don't know</label>
-          <label class="btn btn-primary" ng-model="distribution.license" btn-radio="'CC0'">CC0</label>
-          <label class="btn btn-primary" ng-model="distribution.license" btn-radio="'CCBYND'">CC-BY-ND</label>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-xs-4">
-        <label>Visibility</label>
-      </div>
-      <div class="col-xs-8">
-        <div class="btn-group">
-          <label class="btn btn-primary" ng-model="distribution.status" btn-radio="'draft'">Draft</label>
-          <label class="btn btn-primary" ng-model="distribution.status" btn-radio="'private'">Private</label>
-          <label class="btn btn-primary" ng-model="distribution.status" btn-radio="'public'">Public</label>
-        </div>
-      </div>
-    </div>
-
   </form>
   <!--<p>Rights: {{distribution.rights}}</p>-->
 </div>
 
 <div class="modal-footer">
-  <button class="btn btn-primary" ng-click="update()">Update</button>
-  <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+  <button class="btn orange pull-left"
+          ng-click="cancel()">Cancel</button>
+  <button class="default-button lightblue filled pull-right"
+          ng-click="update()">Save</button>
 </div>

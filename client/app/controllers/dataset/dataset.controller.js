@@ -14,6 +14,7 @@ angular.module('columbyApp')
     /* --------- FUNCTIONS ------------------------------------------------------------------ */
     function processData(){
       if (!$scope.dataset.primary){
+        console.log('No primary source. Skip creating data preview.');
         return;
       }
 
@@ -24,13 +25,16 @@ angular.module('columbyApp')
         limit: '10'
       };
 
+      // Query string for api call example.
+      $scope.dataQuery = '{"type":"select","table":"primary_' + $scope.dataset.primary.id + '","fields":"*","limit":"10"}';
+      $scope.apiLink = $rootScope.config.apiRoot + '/v2/data/sql?q='+ $scope.dataQuery;
+
       DataService.sql(q).then(function(result){
-        console.log(result);
         if (result.status === 'success') {
           $scope.datapreview = {
-            header: Object.keys(result[0])
+            header: result.rows.fields
           };
-          $scope.datapreview.data = result;
+          $scope.datapreview.data = result.rows;
         }
       });
     }
@@ -41,7 +45,7 @@ angular.module('columbyApp')
      *
      */
     function getDataset(){
-      console.log('Fetching dataset', $stateParams.id);;
+      console.log('Fetching dataset', $stateParams.id);
       DatasetSrv.get({
         id: $stateParams.id
       }, function(dataset) {
@@ -79,6 +83,18 @@ angular.module('columbyApp')
         // $scope.summary = summary + '</p>';
 
         $scope.dataset.canEdit= AuthSrv.canEdit('dataset', dataset);
+
+        // filter out private sources
+        if (!$scope.dataset.canEdit){
+          angular.forEach($scope.dataset.distributions, function(value,key){
+            console.log(value);
+            if (value.private){
+              $scope.dataset.distributions.splice(key,1);
+            }
+          });
+        }
+
+        $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.dataset.account.avatar.shortid + '/' + $scope.dataset.account.avatar.filename;
 
         if ($scope.dataset.headerImg && $scope.dataset.headerImg.url) {
           updateHeaderImage();
