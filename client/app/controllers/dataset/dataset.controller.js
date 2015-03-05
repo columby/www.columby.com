@@ -54,6 +54,7 @@ angular.module('columbyApp')
           $state.go('home');
           return;
         }
+
         // add acquired dataset to the scope
         $scope.datasetLoading = false;
         $scope.dataset = dataset;
@@ -94,6 +95,7 @@ angular.module('columbyApp')
           });
         }
 
+        // update avatar url
         $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.dataset.account.avatar.shortid + '/' + $scope.dataset.account.avatar.filename;
 
         if ($scope.dataset.headerImg && $scope.dataset.headerImg.url) {
