@@ -33,10 +33,16 @@
     <div class="options-arrow"></div>
     <div class="editorSidebarContent">
       <div class="sidebarModule">
-        <!-- <div class="editors" ng-show="account.id">
+        <div class="editors" ng-show="account.id">
           <h3>Editors</h3>
-
-        </div> -->
+          <div class="row">
+            <div class="col-md-3" ng-repeat="user in account.users">
+              <a ui-sref="account({slug: user.slug})">
+                <img class="img-responsive img-circle" ng-src="{{user.avatar.url || '/images/avatar.png'}}"/>
+              </a>
+            </div>
+          </div>
+        </div>
         <h3>Background image
           <button
             class="btn btn-default right btn-xs btn-tooltip"
@@ -112,7 +118,7 @@
           <h3>Account Files</h3>
           <p>A list of files connected to your account. For example to be used for general organisation policy files. </p>
 
-          <table class="table table-bordered">
+          <table class="table table-bordered" ng-show="account.files.length>0">
             <thead>
               <tr>
                 <th>id</th>

@@ -74,6 +74,8 @@ angular.module('columbyApp')
           updateHeaderImage();
         }
 
+        console.log(dataset);
+        
       });
     }
 
@@ -419,7 +421,7 @@ angular.module('columbyApp')
 
       modalInstance.result.then(function(result) {
         console.log(result);
-        state.go('home');
+        $state.go('home');
         toaster.pop('info', null, 'Dataset deleted.');
         modalOpened=false;
       }, function() {

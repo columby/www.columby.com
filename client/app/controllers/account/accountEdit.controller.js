@@ -25,22 +25,22 @@ angular.module('columbyApp')
       // get account information of user by userSlug
       AccountSrv.get({slug: $stateParams.slug}, function(result){
         $log.log('Fetched result: ' , result);
-        $scope.account = result;
-        if (result.avatar){
-          $scope.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.account.avatar.shortid + '/' + $scope.account.avatar.filename;
-        } else {
-          $scope.account.avatar = {};
-        }
-        $scope.contentLoading = false;
-        $window.document.title = 'columby.com | ' + result.name;
 
+        // handle result
+        $window.document.title = 'columby.com | ' + result.name;
+        $scope.account = result;
+        $scope.contentLoading = false;
+
+        // initiate updated model
         $scope.accountUpdate = {
           name        : $scope.account.name,
           description : $scope.account.description
         };
 
+        // check if current user can edit this account
         $scope.account.canEdit= AuthSrv.canEdit('account',result);
 
+        // update the header with the header image just fetched.
         if ($scope.account.headerImg) {
           $log.log('updating header image. ');
           updateHeaderImage();
