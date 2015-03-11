@@ -40,6 +40,8 @@ angular.module('columbyApp')
         // check if current user can edit this account
         $scope.account.canEdit= AuthSrv.canEdit('account',result);
 
+        $scope.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.account.avatar.shortid + '/' + $scope.account.avatar.filename;
+
         // update the header with the header image just fetched.
         if ($scope.account.headerImg) {
           $log.log('updating header image. ');
@@ -61,7 +63,7 @@ angular.module('columbyApp')
     }
 
     function updateHeaderImage(){
-      $scope.account.headerImg.url = $rootScope.config.apiRoot + '/v2/file/' + $scope.account.headerImg.id + '?style=large';
+      $scope.account.headerImg.url = $rootScope.config.filesRoot + '/a/' + $scope.account.headerImg.shortid + '/' + $scope.account.headerImg.filename;
       $scope.headerStyle = {
         'background-image': 'url(/images/default-header.png), url(' + $scope.account.headerImg.url + ')',
         'background-blend-mode': 'multiply'
@@ -184,9 +186,10 @@ angular.module('columbyApp')
           switch(target){
             case 'header':
               console.log('updating header image');
-              $scope.headerImg=data.file;
-              $scope.headerImg=data.file.id;
+              $scope.account.headerImg = data.file;
+              $scope.account.headerimg_id = data.file.id;
               updateHeaderImage();
+              updated.headerimg_id = data.file.id;
               break;
             case 'avatar':
               console.log('Updating avatar. ');
