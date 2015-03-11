@@ -91,7 +91,8 @@
         <div>
           <button
             class="btn btn-xs btn-default upload-button"
-            ng-file-select="onFileSelect($files,'image','header')">upload your image</button>
+            ng-file-select
+            ng-file-change="startUpload($files,'image','header')">upload your image</button>
         </div>
       </div>
 
