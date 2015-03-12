@@ -77,7 +77,7 @@ angular.module('columbyApp')
 
     }
     function updateHeaderImage(){
-      $scope.account.headerImg.url = $rootScope.config.apiRoot + '/v2/file/' + $scope.account.headerImg.id + '?style=large';
+      $scope.account.headerImg.url = $rootScope.config.filesRoot + '/a/' + $scope.account.headerImg.shortid + '/' + $scope.account.headerImg.filename;
       $scope.headerStyle={
         'background-image': 'linear-gradient(transparent,transparent), url(/images/default-header-bw.svg), url(' + $scope.account.headerImg.url + ')',
         'background-blend-mode': 'multiply'

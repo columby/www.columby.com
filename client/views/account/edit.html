@@ -33,10 +33,16 @@
     <div class="options-arrow"></div>
     <div class="editorSidebarContent">
       <div class="sidebarModule">
-        <!-- <div class="editors" ng-show="account.id">
+        <div class="editors" ng-show="account.id">
           <h3>Editors</h3>
-
-        </div> -->
+          <div class="row">
+            <div class="col-md-3" ng-repeat="user in account.users">
+              <a ui-sref="account({slug: user.slug})" data-popover-placement="bottom" data-popover-trigger="mouseenter" popover="{{user.name}}">
+                <img class="img-responsive img-circle" ng-src="{{$root.config.filesRoot + '/a/' + user.avatar.shortid + '/' + user.avatar.filename || '/images/avatar.png'}}"/>
+              </a>
+            </div>
+          </div>
+        </div>
         <h3>Background image
           <button
             class="btn btn-default right btn-xs btn-tooltip"
@@ -48,7 +54,9 @@
 
         <div>
 
-          <div class="btn btn-default  upload-button" ng-file-select ng-file-change="startUpload($files,'image','header')">upload your image</div>
+          <div class="btn btn-default upload-button"
+               ng-file-select 
+               ng-file-change="startUpload($files,'image','header')">upload your image</div>
 
         </div>
 
@@ -74,7 +82,7 @@
              ng-file-select
              ng-file-change="startUpload($files,'image','avatar')"
           >
-          <img class="img-circle avatar" ng-src="{{account.avatar.url}}" />
+          <img class="img-circle avatar" ng-src="{{$root.config.filesRoot + '/a/' + account.avatar.shortid + '/' + account.avatar.filename || '/images/avatar.png'}}" />
         </div>
       </div>
     </div>
@@ -112,7 +120,7 @@
           <h3>Account Files</h3>
           <p>A list of files connected to your account. For example to be used for general organisation policy files. </p>
 
-          <table class="table table-bordered">
+          <table class="table table-bordered" ng-show="account.files.length>0">
             <thead>
               <tr>
                 <th>id</th>
