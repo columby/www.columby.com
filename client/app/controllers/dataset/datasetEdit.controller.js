@@ -7,7 +7,7 @@ angular.module('columbyApp')
  *  Controller for a dataset Edit page
  *
  */
-.controller('DatasetEditCtrl', function($log,$window, $rootScope, $scope, configSrv, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, TagService, toaster, Slug, ngDialog, $http, FileService,ngProgress, $timeout,$modal) {
+.controller('DatasetEditCtrl', function($log,$window, $rootScope, $scope, configSrv, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, TagService, toaster, Slug, ngDialog, $http, FileService,ngProgress, $timeout,$modal,$upload) {
 
     /*-------------------   INITIALISATION   ------------------------------------------------------------------*/
     var modalOpened=false; // Boolean to check if only 1 modal is opened at a time.
@@ -70,9 +70,11 @@ angular.module('columbyApp')
         $scope.datasetUpdate.description = $scope.dataset.description;
 
         // Update the header image
-        if ($scope.dataset.headerImg && $scope.dataset.headerImg.url) {
+        if ($scope.dataset.headerImg.id) {
           updateHeaderImage();
         }
+
+        console.log(dataset);
 
       });
     }
@@ -153,7 +155,7 @@ angular.module('columbyApp')
      */
     function updateHeaderImage(){
       if ($scope.dataset.headerImg) {
-        $scope.dataset.headerImg.url = configSrv.apiRoot + '/v2/file/' + $scope.dataset.headerImg.id + '?style=large';
+        $scope.dataset.headerImg.url = $rootScope.config.filesRoot + '/a/' + $scope.dataset.headerImg.shortid + '/' + $scope.dataset.headerImg.filename;
         $scope.headerStyle = {
           'background-image': 'linear-gradient(transparent,transparent), url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
           'background-blend-mode': 'multiply'
@@ -236,6 +238,7 @@ angular.module('columbyApp')
       $scope.showOptions = !$scope.showOptions;
     };
 
+
     /**
      *
      * Toggle private mode for a dataset.
@@ -260,82 +263,98 @@ angular.module('columbyApp')
     };
 
 
-    /**
-     * Handle file select
-     *
-     * @param $files
-     * @param type (file, image, datafile)
-     * @param target (headerImage, accountFile, avatar)
-     */
-    $scope.onFileSelect = function($files, type, target) {
-      $log.log('type',type);
-
-      var file = $files[0];
-
+    $scope.startUpload = function(files,type,target){
+      var file = files[0];
       $scope.fileUpload = {
         type: type,
         target: target
       };
 
       // Check if there is a file
-      if (!file) {
-        return toaster.pop('warning',null,'No file selected.');
-      }
+      if (!file) { return toaster.pop('warning',null,'No file selected.'); }
+      console.log('Yes there is a file. ');
+
       // Check if there is already an upload in progress
-      if ($scope.upload){
+      if ($scope.upload && $scope.upload.file) {
         return toaster.pop('warning',null,'There is already an upload in progress. ');
       }
+      console.log('There is not already an upload in progress. ');
+
       // Check if the file has the right type
       if (!FileService.validateFile(file.type,type,target)) {
         return toaster.pop('warning', null, 'The file you chose is not valid. ' + file.type);
       }
+      console.log('File is valid. ');
+
+      $scope.upload = {
+        file: file
+      };
 
       ngProgress.color('#2FCCFF');
       ngProgress.start();
-
       var params = {
         filetype: file.type,
         filesize: file.size,
         filename: file.name,
-        accountId: $scope.dataset.account.id,
+        accountId: $scope.dataset.account_id,
         type: type,
         target: target
       };
 
-      $log.log('Uploading with params: ', params);
+      $upload.upload({
+        method: 'POST',
+        url   : $rootScope.config.filesRoot + '/upload',
+        fields: params,
+        file  : file,
+      })
 
-      // Sign the upload request
-      FileService.signS3(params).then(function(signedResponse) {
-        console.log('Response sign: ', signedResponse);
-        // signed request is valid, send the file to S3
-        if (signedResponse.file) {
-          // Initiate the upload
-          FileService.upload($scope, signedResponse, file).then(function(res){
-            // File upload is done
-            if (res.status === 201 && res.statusText==='Created') {
-              ngProgress.complete();
-              $log.log($scope.fileUpload);
-              $scope.fileUpload.file = signedResponse.file;
-              $scope.fileUpload.credentials = signedResponse.credentials;
-              console.log('Finishing uploading. ');
+      .progress(function (evt) {
+        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+        //console.log('progress: ' + progressPercentage + '% for ' + evt.config.file.name);
+        ngProgress.set(progressPercentage);
+      })
 
-              finishUpload();
-            } else {
-              return toaster.pop('warning',null,'Something went wrong finishing the upload. ');
-            }
-          }, function(error){
-            console.log('Error', error);
+      .success(function (data, status, headers, config) {
+        //console.log('File ' + config.file.name + 'uploaded.');
+        //console.log('Data', data);
+        // File upload is done
+        if (data.status === 'ok') {
+          ngProgress.complete();
+          // finish
+          $scope.upload.file = null;
+          toaster.pop('notice', null, 'File uploaded. ');
+          console.log('File uploaded: ', data);
 
-          }, function(evt) {
-            console.log('Progress: ' + evt.value);
-            ngProgress.set(evt.value);
+          var updated = {
+            id: $scope.dataset.shortid
+          };
+
+          switch(target){
+            case 'header':
+              console.log('updating header image');
+              $scope.dataset.headerImg = data.file;
+              $scope.dataset.headerimg_id = data.file.id;
+              updateHeaderImage();
+              updated.headerimg_id = data.file.id;
+              break;
+          }
+          $scope.fileUpload = null;
+          toaster.pop('notice',null,'File uploaded, updating account...');
+          console.log('updating, ', updated);
+
+          // Update Account at server
+          DatasetSrv.update({id: $scope.dataset.id}, updated, function(result){
+            $log.log('Account updated, ', result);
           });
+
         } else {
-          toaster.pop('error', null, 'Sorry, there was an error. Details: ' +  signedResponse.msg);
-          console.log(signedResponse);
+          $scope.upload.file = null;
+          return toaster.pop('warning', null, 'Something went wrong finishing the upload. ');
         }
+
       });
     };
+
 
 
     /*********** DATASET FUNCTIONS ********************************/
@@ -419,7 +438,7 @@ angular.module('columbyApp')
 
       modalInstance.result.then(function(result) {
         console.log(result);
-        state.go('home');
+        $state.go('home');
         toaster.pop('info', null, 'Dataset deleted.');
         modalOpened=false;
       }, function() {

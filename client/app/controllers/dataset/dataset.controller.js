@@ -54,6 +54,7 @@ angular.module('columbyApp')
           $state.go('home');
           return;
         }
+
         // add acquired dataset to the scope
         $scope.datasetLoading = false;
         $scope.dataset = dataset;
@@ -87,16 +88,17 @@ angular.module('columbyApp')
         // filter out private sources
         if (!$scope.dataset.canEdit){
           angular.forEach($scope.dataset.distributions, function(value,key){
-            console.log(value);
+            //console.log(value);
             if (value.private){
               $scope.dataset.distributions.splice(key,1);
             }
           });
         }
 
+        // update avatar url
         $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.dataset.account.avatar.shortid + '/' + $scope.dataset.account.avatar.filename;
 
-        if ($scope.dataset.headerImg && $scope.dataset.headerImg.url) {
+        if ($scope.dataset.headerImg.id) {
           updateHeaderImage();
         }
 
@@ -110,8 +112,11 @@ angular.module('columbyApp')
      * Update the header image of a dataset
      */
     function updateHeaderImage(){
+
+      console.log($scope.dataset);
 			if ($scope.dataset.headerImg) {
-        $scope.dataset.headerImg.url = configSrv.apiRoot + '/v2/file/' + $scope.dataset.headerImg.id + '?style=large';
+        console.log('updating header image');
+        $scope.dataset.headerImg.url = $rootScope.config.filesRoot + '/a/' + $scope.dataset.headerImg.shortid + '/' + $scope.dataset.headerImg.filename;
         $scope.headerStyle={
 	        'background-image': 'linear-gradient(transparent,transparent), url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
 	        'background-blend-mode': 'multiply'

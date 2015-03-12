@@ -91,7 +91,8 @@
         <div>
           <button
             class="btn btn-xs btn-default upload-button"
-            ng-file-select="onFileSelect($files,'image','header')">upload your image</button>
+            ng-file-select
+            ng-file-change="startUpload($files,'image','header')">upload your image</button>
         </div>
       </div>
 
@@ -201,12 +202,12 @@
               <div ng-show="dataset.primary.id">
 
                 <h4 class="datasource-title">Primary source</h4>
-                <div class="download datasource-icon"  ng-show="dataset.primary.jobStatus==='done'">
+                <!-- <div class="download datasource-icon"  ng-show="dataset.primary.jobStatus==='done'">
                   <a href="download"><i class="fa fa-download"></i></a>
                 </div>
                 <div class="link datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
                   <a href="{{distribution.accessUrl}}"><i class="fa fa-external-link"></i></a>
-                </div>
+                </div> -->
 
                 <ul class="properties">
                   <li><label>Datasource status</label>{{dataset.primary.status}}</li>
@@ -245,12 +246,12 @@
           <ul ng-show="dataset.distributions.length > 0">
             <li class="distribution" ng-repeat="distribution in dataset.distributions">
               <h4 class="datasource-title">{{distribution.title}}</h4>
-              <div class="download datasource-icon" ng-show="distribution.downloadUrl">
+              <!-- <div class="download datasource-icon" ng-show="distribution.downloadUrl">
                 <a href="{{distribution.downloadUrl}}"><i class="fa fa-download"></i></a>
               </div>
               <div class="link datasource-icon" ng-show="distribution.accessUrl">
                 <a href="{{distribution.accessUrl}}" target="_blank"><i class="fa fa-external-link"></i></a>
-              </div>
+              </div> -->
 
               <div class="label label-success" ng-show="distribution.id === dataset.primary.distribution_id">Source for Primary</div>
 							<div class="label label-warning" ng-show="distribution.private">Private</div>
