@@ -1,15 +1,22 @@
-<div class="accountSelector">
+<div class="modal-header">
+  <h3 class="modal-title">Select your publication account</h3>
+</div>
+
+<div class="modal-body delete-dataset">
   <div class="switcher">
-    <h3>Select your publication account</h3>
     <ul>
       <li ng-repeat="account in $root.user.accounts">
         <a href="" ng-click="selectAccount($index)">
           <div>
-            <img ng-src="{{account.avatar.url}}"/>
+            <img class="img-circle avatar" ng-src="{{account.avatar.url || '/images/avatar.png'}}"/>
             <span class="account">{{account.name}}</span>
           </div>
         </a>
       </li>
     </ul>
   </div>
+</div>
+
+<div class="modal-footer">
+
 </div>
