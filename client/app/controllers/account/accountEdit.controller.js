@@ -190,11 +190,12 @@ angular.module('columbyApp')
               break;
             case 'avatar':
               console.log('Updating avatar. ');
+              $scope.account.avatar_id = data.file.id;
+              $scope.account.avatar = data.file;
               $scope.account.avatar.url = $rootScope.config.filesRoot + '/a/' + data.file.shortid + '/' + data.file.filename;
               console.log('Account avatar: ' + $scope.account.avatar.url);
-
               //console.log('updating avatar');
-              updated.avatar = data.file.id;
+              updated.avatar_id = data.file.id;
               break;
             case 'accountFile':
               console.log('updating account file');

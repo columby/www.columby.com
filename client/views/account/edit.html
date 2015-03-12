@@ -33,10 +33,9 @@
     <div class="options-arrow"></div>
     <div class="editorSidebarContent">
       <div class="sidebarModule">
-        <!-- <div class="editors" ng-show="account.id">
+        <div class="editors" ng-show="!account.primary">
           <h3>Editors</h3>
-
-        </div> -->
+        </div>
         <h3>Background image
           <button
             class="btn btn-default right btn-xs btn-tooltip"
@@ -48,8 +47,9 @@
 
         <div>
 
-          <div class="btn btn-default  upload-button" ng-file-select ng-file-change="startUpload($files,'image','header')">upload your image</div>
-
+          <div class="btn btn-default upload-button"
+               ng-file-select
+               ng-file-change="startUpload($files,'image','header')">upload your image</div>
         </div>
 
       </div>
