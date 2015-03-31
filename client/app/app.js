@@ -31,7 +31,14 @@ angular.module('columbyApp', [
   // Set the JWT if it is stored
   .config(function($httpProvider, jwtInterceptorProvider) {
     jwtInterceptorProvider.tokenGetter = function() {
-      return angular.fromJson(localStorage.getItem('columby_token'));
+      // Check for a json based token
+      var token = localStorage.getItem('columby_token');
+      try {
+        token = angular.fromJson(token);
+      } catch (err) {
+        token = null;
+      }
+      return token;
     };
     $httpProvider.interceptors.push('jwtInterceptor');
   })

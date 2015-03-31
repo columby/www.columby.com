@@ -70,12 +70,9 @@ angular.module('columbyApp')
         $scope.datasetUpdate.description = $scope.dataset.description;
 
         // Update the header image
-        if ($scope.dataset.headerImg.id) {
+        if ($scope.dataset.headerImg && $scope.dataset.headerImg.id) {
           updateHeaderImage();
         }
-
-        console.log(dataset);
-
       });
     }
 
@@ -415,6 +412,11 @@ angular.module('columbyApp')
     };
 
 
+    /**
+     *
+     * Delete a Dataset
+     *
+     **/
     $scope.delete = function() {
 
       if (modalOpened) { return; }
@@ -438,8 +440,12 @@ angular.module('columbyApp')
 
       modalInstance.result.then(function(result) {
         console.log(result);
-        $state.go('home');
-        toaster.pop('info', null, 'Dataset deleted.');
+        if (result.status === 'error'){
+          toaster.pop('warning', null, 'There was a problem deleting the distribution. (' + result.msg + ')');
+        } else {
+          $state.go('home');
+          toaster.pop('info', null, 'Dataset deleted.');  
+        }
         modalOpened=false;
       }, function() {
         modalOpened=false;

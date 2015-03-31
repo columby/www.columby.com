@@ -18,28 +18,18 @@ angular.module('columbyApp')
   /* ----- FUNCTIONS -------------------------------------------------------- */
   // Check if a request is a login token request
   function verify(token) {
+
     $scope.verificationInProgress = true;
-    AuthSrv.verify(token).then(function(response){
-      console.log(response);
 
-      if (response.token){
-        console.log('JWT token received', response.token);
-        // save JWT token in local storage (browser)
-        localStorage.setItem('columby_token', JSON.stringify(response.token));
-
-        AuthSrv.setUser(response.user);
-        console.log(response.user);
-
-        // Let the app know§
-        $rootScope.user = AuthSrv.user();
-
-
+    // Handle Authentication at Authentication service
+    AuthSrv.verify(token).then(function(){
+      console.log($rootScope.user);
+      if ($rootScope.user.id) {
         toaster.pop('success', null, 'You have succesfully signed in.');
-
         // Redirect back to frontpage
         $state.go('home');
       } else {
-        toaster.pop('warning', null, 'There was an error verifying the login. Please try again. ' + response.err);
+        toaster.pop('warning', null, 'There was an error verifying the login. Please try again.');
         $state.go('signin');
       }
     });

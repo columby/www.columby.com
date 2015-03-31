@@ -98,7 +98,7 @@ angular.module('columbyApp')
         // update avatar url
         $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.dataset.account.avatar.shortid + '/' + $scope.dataset.account.avatar.filename;
 
-        if ($scope.dataset.headerImg.id) {
+        if ($scope.dataset.headerImg  && $scope.dataset.headerImg.id) {
           updateHeaderImage();
         }
 

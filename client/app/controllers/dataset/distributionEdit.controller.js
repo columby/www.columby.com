@@ -57,9 +57,9 @@ angular.module('columbyApp')
 
     };
 
-      /**
-       *
-       */
+    /**
+     *
+     */
     $scope.checkValidity = function(){
       checkValidity();
     };

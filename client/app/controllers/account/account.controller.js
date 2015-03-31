@@ -64,6 +64,7 @@ angular.module('columbyApp')
           $scope.contentLoading = false;
           $window.document.title = 'columby.com | ' + result.name;
 
+          console.log(result);
           $scope.account.canEdit = AuthSrv.canEdit('account', result);
 
           if ($scope.account.headerImg) {
