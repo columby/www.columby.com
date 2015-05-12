@@ -28,12 +28,12 @@ deploy:
         overwrite: true
 
     - script:
-        name: pull code from git
-        code: echo "$PRIVATEKEY_PATH $DEPLOY_USER $DEPLOY_IP $DEPLOY_PORT" 
+        name: echo keys
+        code: echo "$PRIVATEKEY_PATH $DEPLOY_USER $DEPLOY_IP $DEPLOY_PORT"
 
     - script:
         name: pull code from git
-        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER $DEPLOY_IP -p $DEPLOY_PORT "cd $DEPLOY_PATH && git pull"
+        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER $DEPLOY_IP -p $DEPLOY_PORT "cd $DEPLOY_PATH && git pull" -yes
 
     - script:
         name: npm install
