@@ -16,7 +16,7 @@ deploy:
   steps:
 
     - add-to-known_hosts:
-        hostname: $DEPLOY_IP
+        hostname: 188.166.31.214
 
     - mktemp:
         envvar: PRIVATEKEY_PATH
