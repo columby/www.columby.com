@@ -28,8 +28,9 @@ deploy:
         overwrite: true
 
     - script:
-        name: echo keys
-        code: echo "$PRIVATEKEY_PATH columby 188.166.31.214 23976"
+        name: show env vars
+        code: |
+          export
 
     - script:
         name: pull code from git
