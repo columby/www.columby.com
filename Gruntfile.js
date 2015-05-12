@@ -3,6 +3,7 @@
 
 module.exports = function (grunt) {
   var localConfig;
+  
   try {
     localConfig = require('./server/config/local.env');
   } catch(e) {
@@ -31,19 +32,6 @@ module.exports = function (grunt) {
 
     // Replace configuration settings
     replace: {
-      local: {
-        options: {
-          patterns: [{
-            json: grunt.file.readJSON('./client/config/environments/local.json')
-          }]
-        },
-        files: [{
-          expand: true,
-          flatten: true,
-          src: ['./client/config/config.service.js'],
-          dest: '<%= yeoman.client %>/app/services/'
-        }]
-      },
       development: {
         options: {
           patterns: [{

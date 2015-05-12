@@ -34,20 +34,19 @@ deploy:
 
     - script:
         name: pull code from git
-        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER -p 23976 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $DEPLOY_HOST "cd ~/www/www.columby.com && git pull"
+        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER -p $DEPLOY_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $DEPLOY_HOST "cd $DEPLOY_PATH && git pull"
 
     - script:
         name: npm install
-        code: ssh -i $PRIVATEKEY_PATH -l columby 188.166.31.214 -p 23976 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "cd ~/www/www.columby.com && npm install"
+        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER -p $DEPLOY_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $DEPLOY_HOST "cd $DEPLOY_PATH && npm install"
 
     - script:
         name: bower install
-        code: ssh -i $PRIVATEKEY_PATH -l columby 188.166.31.214 -p 23976 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "cd ~/www/www.columby.com && bower install"
+        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER -p $DEPLOY_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $DEPLOY_HOST "cd $DEPLOY_PATH && bower install"
 
     - script:
-        name: grunt build
-        code: ssh -i $PRIVATEKEY_PATH -l columby 188.166.31.214 -p 23976 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "cd ~/www/www.columby.com && grunt build"
+        name: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER -p $DEPLOY_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $DEPLOY_HOST "cd $DEPLOY_PATH && grunt build"
 
     - script:
         name: start application
-        code: ssh -i $PRIVATEKEY_PATH -l columby 188.166.31.214 -p 23976 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "nginx restart";
+        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER -p $DEPLOY_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $DEPLOY_HOST "nginx restart";
