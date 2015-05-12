@@ -29,20 +29,20 @@ deploy:
 
     - script:
         name: pull code from git
-        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER $DEPLOY_IP "cd $DEPLOY_PATH && git pull"
+        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER $DEPLOY_IP -p $DEPLOY_PORT "cd $DEPLOY_PATH && git pull"
 
     - script:
         name: npm install
-        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER $DEPLOY_IP "cd $DEPLOY_PATH && npm install"
+        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER $DEPLOY_IP -p $DEPLOY_PORT "cd $DEPLOY_PATH && npm install"
 
     - script:
         name: bower install
-        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER $DEPLOY_IP "cd $DEPLOY_PATH && bower install"
+        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER $DEPLOY_IP -p $DEPLOY_PORT "cd $DEPLOY_PATH && bower install"
 
     - script:
         name: grunt build
-        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER $DEPLOY_IP "cd $DEPLOY_PATH && grunt build"
+        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER $DEPLOY_IP -p $DEPLOY_PORT "cd $DEPLOY_PATH && grunt build"
 
     - script:
         name: start application
-        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER $DEPLOY_IP "nginx restart";
+        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER $DEPLOY_IP -p $DEPLOY_PORT "nginx restart";
