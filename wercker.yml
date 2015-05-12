@@ -45,7 +45,8 @@ deploy:
         code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER -p $DEPLOY_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $DEPLOY_HOST "cd $DEPLOY_PATH && bower install"
 
     - script:
-        name: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER -p $DEPLOY_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $DEPLOY_HOST "cd $DEPLOY_PATH && grunt build"
+        name: grunt build
+        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER -p $DEPLOY_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $DEPLOY_HOST "cd $DEPLOY_PATH && grunt build"
 
     - script:
         name: start application
