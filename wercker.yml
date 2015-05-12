@@ -34,7 +34,7 @@ deploy:
 
     - script:
         name: pull code from git
-        code: ssh -i $PRIVATEKEY_PATH -l DEPLOY_HOST -p 23976 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "cd ~/www/www.columby.com && git pull"
+        code: ssh -i $PRIVATEKEY_PATH -l $DEPLOY_USER -p 23976 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $DEPLOY_HOST "cd ~/www/www.columby.com && git pull"
 
     - script:
         name: npm install
