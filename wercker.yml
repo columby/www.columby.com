@@ -3,8 +3,8 @@ box: wercker/nodejs
 
 build:
   steps:
-    - npm-install
-    - npm-test
+    #- npm-install
+    #- npm-test
 
     - script:
         name: echo nodejs information
@@ -24,7 +24,7 @@ deploy:
     - create-file:
         name: write key
         filename: $PRIVATEKEY_PATH
-        content: $SSH_KEY_PRIVATE
+        content: $WERCKER_PRIVATE
         overwrite: true
 
     - script:
