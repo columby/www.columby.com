@@ -3,7 +3,7 @@
 
 module.exports = function (grunt) {
   var localConfig;
-  
+
   try {
     localConfig = require('./server/config/local.env');
   } catch(e) {
@@ -586,6 +586,27 @@ module.exports = function (grunt) {
     'rev',
     'usemin'
   ]);
+
+  grunt.registerTask('build-staging', [
+    'clean:dist',
+    'replace:development',
+    'injector:less',
+    'concurrent:dist',
+    'injector',
+    'wiredep',
+    'useminPrepare',
+    'autoprefixer',
+    'ngtemplates',
+    'concat',
+    'ngAnnotate',
+    'copy:dist',
+    'cdnify',
+    'cssmin',
+    'uglify',
+    'rev',
+    'usemin'
+  ]);
+
 
   grunt.registerTask('default', [
     'newer:jshint',
