@@ -24,7 +24,7 @@ deploy:
     - create-file:
         name: write key
         filename: $PRIVATEKEY_PATH
-        content: $WERCKER_PRIVATE
+        content: $SSH_KEY_PRIVATE
         overwrite: true
 
     - script:

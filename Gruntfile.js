@@ -567,7 +567,7 @@ module.exports = function (grunt) {
   });
 
 
-  grunt.registerTask('build', [
+  grunt.registerTask('build-production', [
     'clean:dist',
     'replace:dist',
     'injector:less',
