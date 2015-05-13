@@ -7,7 +7,7 @@ angular.module('columbyApp')
  * Account Edit Controller
  *
  **/
-  .controller('AccountCtrl', function ($window, $rootScope, $scope, $stateParams, $state, toaster, AccountSrv, AuthSrv, CollectionSrv, DatasetSrv) {
+  .controller('AccountCtrl', function ($window, $rootScope, $scope, $stateParams, $state, ngNotify, AccountSrv, AuthSrv, CollectionSrv, DatasetSrv) {
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading  = true;
@@ -54,7 +54,7 @@ angular.module('columbyApp')
       // get account information of user by userSlug
       AccountSrv.get({slug: $stateParams.slug}, function (result) {
         if (!result.id) {
-          toaster.pop('warning', null, 'The requested account was not found. ');
+          ngNotify.set('The requested account was not found. ','error');
           $state.go('home');
         } else {
           $scope.account = result;
@@ -64,6 +64,7 @@ angular.module('columbyApp')
           $scope.contentLoading = false;
           $window.document.title = 'columby.com | ' + result.name;
 
+          console.log(result);
           $scope.account.canEdit = AuthSrv.canEdit('account', result);
 
           if ($scope.account.headerImg) {
@@ -93,7 +94,7 @@ angular.module('columbyApp')
 
     /* ---------- INIT ----------------------------------------------------------------------------- */
     if (!$stateParams.slug){
-      toaster.pop('warning', null, 'The requested account was not found. ');
+      ngNotify.set('The requested account was not found. ','error');
       $state.go('home');
     } else {
       getAccount();

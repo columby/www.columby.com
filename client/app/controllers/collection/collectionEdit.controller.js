@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .controller('CollectionEditCtrl', function ($rootScope, $scope, $state, $stateParams, AuthSrv, CollectionSrv, toaster) {
+  .controller('CollectionEditCtrl', function ($rootScope, $scope, $state, $stateParams, AuthSrv, CollectionSrv, ngNotify) {
 
     // Configuration
     $scope.contentLoading = true;
@@ -50,9 +50,9 @@ angular.module('columbyApp')
             $scope.collection.description = result.description;
             $scope.collectionUpdate.title = result.title;
             $scope.collectionUpdate.description = result.description;
-            toaster.pop('success', null, 'Collection updated.');
+            ngNotify.set('Collection updated.');
           } else {
-            toaster.pop('warning', null, 'There was an error updating the collection.');
+            ngNotify.set('There was an error updating the collection.','error');
           }
         });
       }
@@ -63,10 +63,10 @@ angular.module('columbyApp')
       console.log('delete collection');
       CollectionSrv.delete({id: $scope.collection.id}, function(res){
         if (res){
-          toaster.pop('success', null, 'Collection deleted.');
+          ngNotify.set('Collection deleted.');
           $state.go('accountEdit', {slug: $scope.collection.Account.slug});
         } else {
-          toaster.pop('warning', null, 'There was an error deleting the collection.');
+          ngNotify.set('There was an error deleting the collection.','error');
         }
       });
     };

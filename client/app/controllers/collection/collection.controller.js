@@ -10,26 +10,65 @@ angular.module('columbyApp')
 
   .controller('CollectionCtrl', function ($rootScope, $scope, $stateParams, AuthSrv, CollectionSrv) {
 
-    $scope.contentLoading = true;
+    // Initiate pagination
+    $scope.pagination = {
+      count: 0,
+      numPages: 0,
+      itemsPerPage: 10,
+      currentPage: 1,
+      rowsPerPage: 10
+    };
 
-    // Get collection
-    CollectionSrv.show({id:$stateParams.id }, function(result){
+    // Get the collection
+    function getCollection(){
 
-      // restructure result
-      result.account = result.Account;
-      delete result.Account;
-      result.datasets = result.Datasets;
-      delete result.Datasets;
-      result.account.avatar.url = $rootScope.config.filesRoot + '/a/' + result.account.avatar.shortid + '/' + result.account.avatar.filename;
-      // Add collection to the scope
-      $scope.collection = result;
+      $scope.contentLoading = true;
 
-      // Check access
-      $scope.collection.canEdit= AuthSrv.canEdit('collection', result);
+      // Get collection
+      CollectionSrv.show({id:$stateParams.id }, function(result){
 
-      // Turn off loader
-      $scope.contentLoading = false;
-    });
+        // restructure result
+        result.account = result.Account;
+        delete result.Account;
+        result.account.avatar.url = $rootScope.config.filesRoot + '/a/' + result.account.avatar.shortid + '/' + result.account.avatar.filename;
+
+        // Add collection to the scope
+        $scope.collection = result;
+
+        // Check access
+        $scope.collection.canEdit= AuthSrv.canEdit('collection', result);
+
+        // Turn off loader
+        $scope.contentLoading = false;
+
+        // Get Datasets
+        getDatasets({id:$scope.collection.id});
+      });
+    }
+
+    // Get datasets for the collection
+    function getDatasets() {
+      $scope.datasetsLoading = true;
+      var offset = ($scope.pagination.currentPage - 1) * $scope.pagination.rowsPerPage;
+
+      CollectionSrv.getDatasets({
+        id: $scope.collection.id,
+        offset: offset
+      }, function(result){
+        $scope.collection.datasets = result.rows;
+        $scope.pagination.count = result.count;
+        $scope.pagination.numPages = Math.ceil(parseInt($scope.pagination.count, 10) / parseInt($scope.pagination.rowsPerPage, 10));
+        $scope.datasetsLoading = false;
+      });
+    }
+
+    // Handle pagination change
+    $scope.pageChanged = function() {
+      getDatasets();
+    };
+
+    // Initiate the page
+    getCollection();
 
   })
 

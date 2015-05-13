@@ -306,53 +306,54 @@
     <!-- Dataset references -->
     <div class="references wrapper" ng-show="dataset.id">
       <div class="container">
-        <div class="col-md-12">
-          <div class="content">
+        <div class="row">
+          <div class="heading col-md-12">
             <h3>References<button
               class="btn btn-default right btn-xs btn-tooltip"
               data-popover="Did you make a nice App with this data? Have a cool blogpost about this data? Or an infographic? Paste links to these references here."
               data-popover-trigger="mouseenter"
               data-popover-placement="left"><i class="fa fa-question"></i>
             </button></h3>
+          </div>
+        </div>
 
-            <div class="row">
-              <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
-                <div class="reference">
-                  <img src="../../../images/reference-spaceholder.png" class="placeholder">
-									<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
-										<div class="reference-top"></div>
-							      <h3 class="reference-title"><a href="{{reference.url}}">{{reference.title}}</a></h3>
-							      <p class="small reference-source"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
-							    </div>
-								</div>
-								<div class="small reference-text">{{reference.description}}</div>
-                <div class="actions">
-                  <div class="confirm-delete"
-                       confirm-delete
-                       on-confirm="deleteReference(reference)"></div>
-                </div>
-
-                <!-- <div class="thumbnail dataset-reference">
-                  <div class="caption clearfix">
-
-                    <h4><a href="{{reference.url}}">{{reference.title}}</a></h4>
-                    <div class="ref-img pull-right" style="background-image:url('{{reference.image}}');background-size:cover;background-position:50% 50%;"></div>
-                    <p>{{reference.description}}</p>
-                    <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
-                  </div>
-                </div> -->
-
+        <div class="row">
+          <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
+            <div class="reference">
+              <img src="../../../images/reference-spaceholder.png" class="placeholder">
+							<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
+								<div class="reference-top"></div>
+					      <h3 class="reference-title"><a href="{{reference.url}}">{{reference.title}}</a></h3>
+					      <p class="small reference-source"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
+					    </div>
+              <div class="small reference-text">{{reference.description}}</div>
+              <div class="actions">
+                <div class="confirm-delete"
+                     confirm-delete
+                     on-confirm="deleteReference(reference)"></div>
               </div>
-            </div>
+						</div>
+					</div>
+        </div>
 
+        <div class="row">
+          <div class="col-md-12">
             <div class="highlight" ng-show="!dataset.references || dataset.references.length===0">
 							<!-- <i class="fa fa-exclamation-circle"></i> -->
 							<h2>No references added yet</h2>
 							<p>Did you get creative with your data? Add some references of output like a Data visualisation, app or website.</p>
 						</div>
+          </div>
+        </div>
 
             <!-- Datasource Modal -->
-            <div reference-popup dataset="dataset"></div>
+          <div class="row add-reference">
+            <div class="col-md-12">
+              <button
+                class="lightblue filled pull-right"
+                type="button"
+                ng-click="newReference()">Add a new reference</button>
+            </div>
           </div>
         </div>
       </div>

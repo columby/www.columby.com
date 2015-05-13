@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .controller('DistributionNewCtrl', function($log, $rootScope, $scope, $modalInstance, dataset, FileService, toaster, ngProgress, DistributionSrv, $upload) {
+  .controller('DistributionNewCtrl', function($log, $rootScope, $scope, $modalInstance, dataset, FileService, ngNotify, ngProgress, DistributionSrv, $upload) {
 
 
     $scope.distribution = {
@@ -39,15 +39,15 @@ angular.module('columbyApp')
       var file = files[0];
       // Check if there is a file
       if (!file) {
-        return toaster.pop('warning',null,'No file selected.');
+        return ngNotify.set('No file selected.', 'error');
       }
       // Check if there is already an upload in progress
       if ($scope.upload.file){
-        return toaster.pop('warning',null,'There is already an upload in progress. ');
+        return ngNotify.set('There is already an upload in progress. ', 'error');
       }
       // Check if the file has the right type
       if (!FileService.validateFile(file.type, 'datafile')) {
-        return toaster.pop('warning', null, 'The file you chose is not valid. ' + file.type);
+        return ngNotify.set('The file you chose is not valid. ' + file.type, 'error');
       }
 
       $scope.upload.file = file;
@@ -82,7 +82,7 @@ angular.module('columbyApp')
           ngProgress.complete();
           // finish
           $scope.upload.file = null;
-          toaster.pop('notice', null, 'File uploaded. ');
+          ngNotify.set('File uploaded. ');
 
           // Update distribution with the uploaded file.
           $scope.distribution.file_id = data.file.id;
@@ -99,7 +99,7 @@ angular.module('columbyApp')
 
         } else {
           $scope.upload.file = null;
-          return toaster.pop('warning', null, 'Something went wrong finishing the upload. ');
+          return ngNotify.set('Something went wrong finishing the upload. ','danger');
         }
       });
     };
@@ -152,7 +152,7 @@ angular.module('columbyApp')
       DistributionSrv.update($scope.distribution, function(response){
         console.log('submitlink respononse, ', response);
         if (response.id){
-          //toaster.pop('success',null,'Distribution updated.');
+          //ngNotify.set('success',null,'Distribution updated.');
           // Go to metadata screen
           $scope.wizard.step = 4;
         }
@@ -192,7 +192,7 @@ angular.module('columbyApp')
           $scope.distribution = response;
           $scope.close();
         } else {
-          toaster.pop('warning', null, 'Something went wrong. ' + response);
+          ngNotify.set('Something went wrong. ' + response, 'error');
         }
       });
     };

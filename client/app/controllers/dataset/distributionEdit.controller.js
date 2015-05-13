@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
   .controller('DistributionEditCtrl',
-  function ($scope, $modalInstance, distribution, DistributionSrv, toaster) {
+  function ($scope, $modalInstance, distribution, DistributionSrv, ngNotify) {
 
     var originalDistribution = distribution;
     $scope.distribution = distribution;
@@ -10,10 +10,10 @@ angular.module('columbyApp')
     function updateDistribution(){
       DistributionSrv.update($scope.distribution, function(response){
         if (response.id){
-          toaster.pop('success',null,'Datasource updated successfully');
+          ngNotify.set('Datasource updated successfully');
           $modalInstance.close(response);
         } else {
-          toaster.pop('danger',null,'Error updating the dataset.');
+          ngNotify.set('Error updating the dataset.','error');
         }
       });
     }
@@ -38,7 +38,7 @@ angular.module('columbyApp')
           $scope.distribution.mediaType = 'link';
           // TODO: Wat format for a link?
           $scope.distribution.format = 'link';
-          toaster.pop('info',null,'Validation result: ' + response.valid);
+          ngNotify.set('Validation result: ' + response.valid);
 
           return response;
         });
@@ -57,9 +57,9 @@ angular.module('columbyApp')
 
     };
 
-      /**
-       *
-       */
+    /**
+     *
+     */
     $scope.checkValidity = function(){
       checkValidity();
     };

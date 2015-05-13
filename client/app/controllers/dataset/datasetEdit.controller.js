@@ -7,7 +7,7 @@ angular.module('columbyApp')
  *  Controller for a dataset Edit page
  *
  */
-.controller('DatasetEditCtrl', function($log,$window, $rootScope, $scope, configSrv, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, AuthSrv, TagService, toaster, Slug, ngDialog, $http, FileService,ngProgress, $timeout,$modal,$upload) {
+.controller('DatasetEditCtrl', function($log,$window, $rootScope, $scope, configSrv, $location, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, UserSrv, TagService, Slug, ngDialog, $http, FileService,ngProgress, $timeout,$modal,$upload, ngNotify) {
 
     /*-------------------   INITIALISATION   ------------------------------------------------------------------*/
     var modalOpened=false; // Boolean to check if only 1 modal is opened at a time.
@@ -30,15 +30,15 @@ angular.module('columbyApp')
         id: $stateParams.id
       }, function(dataset) {
         if (!dataset.id){
-          toaster.pop('danger',null,'Sorry, the requested dataset was not found. ');
+          ngNotify.set('Sorry, the requested dataset was not found.', 'error');
           $state.go('home');
           return;
         }
 
         // check if user has edit-access
-        var canEdit = AuthSrv.canEdit('dataset', dataset);
+        var canEdit = UserSrv.canEdit('dataset', dataset);
         if (canEdit === false) {
-          toaster.pop('danger', null, 'You do not have the permission to edit this post. ');
+          ngNotify.set('You do not have the permission to edit this post.', 'error');
           $state.go('dataset.view', {id: $stateParams.id});
         }
 
@@ -70,12 +70,9 @@ angular.module('columbyApp')
         $scope.datasetUpdate.description = $scope.dataset.description;
 
         // Update the header image
-        if ($scope.dataset.headerImg.id) {
+        if ($scope.dataset.headerImg && $scope.dataset.headerImg.id) {
           updateHeaderImage();
         }
-
-        console.log(dataset);
-
       });
     }
 
@@ -108,7 +105,7 @@ angular.module('columbyApp')
               break;
           }
           $scope.fileUpload = null;
-          toaster.pop('notice',null,'File uploaded, updating dataset...');
+          ngNotify.set('File uploaded, updating dataset...');
 
           // Update Account at server
           DatasetSrv.update(updated, function(result){
@@ -145,7 +142,7 @@ angular.module('columbyApp')
 
       $scope.datasetLoading  = false;
 
-      toaster.pop('notice',null,'Here\'s your new dataset!');
+      ngNotify.set('Here\'s your new dataset!');
     }
 
 
@@ -165,13 +162,12 @@ angular.module('columbyApp')
 
 
     function showAccountSelector(){
-      console.log('show selector');
       var modalInstance = $modal.open({
         templateUrl: 'views/account/partials/selector.html',
         controller: 'AccountSelectorCtrl',
         size: 'lg',
         backdrop: 'static',
-        keyboard: false,
+        keyboard: true,
         resolve: {
           user: function () {
             return $rootScope.user.accounts;
@@ -189,9 +185,9 @@ angular.module('columbyApp')
 
 
     /**
+     *
      * Change the owner of the dataset.
      *
-     * @param id
      */
     function updateDatasetOwner(id){
       console.log(id);
@@ -211,11 +207,11 @@ angular.module('columbyApp')
         //console.log(res);
         if (res.id) {
           $scope.dataset.slug = res.slug;
-          toaster.pop('success', 'Updated', 'Dataset custom URL updated.');
+          ngNotify.set('Dataset custom URL updated.');
         } else if (res.err && res.err.errors.slug){
-          toaster.pop('error', 'Update error', 'There was an error setting the custom URL: ' + res.err.errors.slug.message);
+          ngNotify.set('There was an error setting the custom URL: ' + res.err.errors.slug.message);
         } else {
-          toaster.pop('error', 'Update error', 'There was an error updating the custom URL.');
+          ngNotify.set('There was an error updating the custom URL.');
         }
       });
     };
@@ -255,9 +251,9 @@ angular.module('columbyApp')
       DatasetSrv.update({id: dataset.id}, dataset, function(res){
         if (res.id){
           $scope.dataset.private = newStatus;
-          toaster.pop('success', null, 'Dataset visibility status updated to  ' + newStatus);
+          ngNotify.set('Dataset visibility status updated to  ' + newStatus);
         } else {
-          toaster.pop('error', null, 'There was an error updating the setting.');
+          ngNotify.set('There was an error updating the setting.');
         }
       });
     };
@@ -271,18 +267,18 @@ angular.module('columbyApp')
       };
 
       // Check if there is a file
-      if (!file) { return toaster.pop('warning',null,'No file selected.'); }
+      if (!file) { return ngNotify.set('warning',null,'No file selected.'); }
       console.log('Yes there is a file. ');
 
       // Check if there is already an upload in progress
       if ($scope.upload && $scope.upload.file) {
-        return toaster.pop('warning',null,'There is already an upload in progress. ');
+        return ngNotify.set('There is already an upload in progress. ','error');
       }
       console.log('There is not already an upload in progress. ');
 
       // Check if the file has the right type
       if (!FileService.validateFile(file.type,type,target)) {
-        return toaster.pop('warning', null, 'The file you chose is not valid. ' + file.type);
+        return ngNotify.set('The file you chose is not valid. ' + file.type, 'error');
       }
       console.log('File is valid. ');
 
@@ -322,7 +318,7 @@ angular.module('columbyApp')
           ngProgress.complete();
           // finish
           $scope.upload.file = null;
-          toaster.pop('notice', null, 'File uploaded. ');
+          ngNotify.set('File uploaded. ');
           console.log('File uploaded: ', data);
 
           var updated = {
@@ -339,7 +335,7 @@ angular.module('columbyApp')
               break;
           }
           $scope.fileUpload = null;
-          toaster.pop('notice',null,'File uploaded, updating account...');
+          ngNotify.set('File uploaded, updating account...');
           console.log('updating, ', updated);
 
           // Update Account at server
@@ -349,7 +345,7 @@ angular.module('columbyApp')
 
         } else {
           $scope.upload.file = null;
-          return toaster.pop('warning', null, 'Something went wrong finishing the upload. ');
+          return ngNotify.set('Something went wrong finishing the upload. ', 'error');
         }
 
       });
@@ -369,7 +365,7 @@ angular.module('columbyApp')
       DatasetSrv.save($scope.dataset, function(res){
         console.log('New dataset received: ' + res.id);
         if (res.id) {
-          toaster.pop('success', null, 'Your dataset page is created. Now add some data.');
+          ngNotify.set('Your dataset page is created. Now add some data.');
           $state.go('datasetEdit', {id:res.shortid});
         }
       });
@@ -405,9 +401,9 @@ angular.module('columbyApp')
             if (result.id){
               $scope.datasetUpdate.title = result.title;
               $scope.datasetUpdate.description = result.description;
-              toaster.pop('success', null, 'Dataset updated.');
+              ngNotify.set('Dataset updated.');
             } else {
-              toaster.pop('warning', null, 'There was an error updating the dataset.');
+              ngNotify.set('There was an error updating the dataset.', 'error');
             }
           });
         }
@@ -415,6 +411,11 @@ angular.module('columbyApp')
     };
 
 
+    /**
+     *
+     * Delete a Dataset
+     *
+     **/
     $scope.delete = function() {
 
       if (modalOpened) { return; }
@@ -438,8 +439,12 @@ angular.module('columbyApp')
 
       modalInstance.result.then(function(result) {
         console.log(result);
-        $state.go('home');
-        toaster.pop('info', null, 'Dataset deleted.');
+        if (result.status === 'error'){
+          ngNotify.set('There was a problem deleting the distribution. (' + result.msg + ')', 'error');
+        } else {
+          $state.go('home');
+          ngNotify.set('Dataset deleted.');
+        }
         modalOpened=false;
       }, function() {
         modalOpened=false;
@@ -448,27 +453,67 @@ angular.module('columbyApp')
 
 
     /*********** REFERENCE FUNCTIONS ********************************/
+    $scope.newReference = function() {
+
+      // Make sure only 1 modal is opened at a time.
+      if (modalOpened) { return; }
+
+      var modalInstance = $modal.open({
+        templateUrl: 'views/dataset/reference/new.html',
+        controller: 'ReferenceNewCtrl',
+        size: 'lg',
+        backdrop: 'static',
+        keyboard: false,
+        resolve: {
+          dataset: function() {
+            return $scope.dataset;
+          }
+        }
+      });
+
+      modalOpened=true;
+
+      modalInstance.result.then(function(reference) {
+        ngNotify.set('Reference saved.');
+        $scope.dataset.references.push(reference);
+        modalOpened=false;
+      }, function () {
+        // Delete the created datasource
+        DatasetReferenceSrv.delete({id:$scope.dataset.id, reference: $scope.reference}, function(res){
+          console.log('deleted');
+          console.log(res);
+        });
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+    };
+
     $scope.confirmDeleteReference = function(index){
-      $scope.dataset.references[ index].confirmDelete = true;
+      $scope.dataset.distributions[ index].confirmDelete = true;
+      // turn the confirmation off automatically
+      $timeout(function(){
+        $scope.dataset.distributions[ index].confirmDelete = false;
+      }, 5000);
     };
 
     /**
      *
      * Delete an attached reference
      *
-     * @param reference
      */
     $scope.deleteReference = function(reference){
+      console.log($scope.dataset);
+      console.log(reference);
       var idx = $scope.dataset.references.indexOf(reference);
       var id = $scope.dataset.id;
       var referenceId = reference.id;
+      console.log('referenceId ', referenceId);
 
       DatasetReferenceSrv.delete({id:id, rid:referenceId}, function(res){
         if (res.status === 'success') {
           $scope.dataset.references.splice(idx, 1);
-          toaster.pop('success', null, 'Reference deleted.');
+          ngNotify.set('Reference deleted.');
         } else {
-          toaster.pop('success', null, 'There was a problem deleting the reference.');
+          ngNotify.set('There was a problem deleting the reference.');
         }
       });
     };
@@ -476,7 +521,6 @@ angular.module('columbyApp')
 
 
     /*********** DISTRIBUTIONS ********************************/
-
     $scope.newDistribution = function() {
 
       // Make sure only 1 modal is opened at a time.
@@ -498,7 +542,7 @@ angular.module('columbyApp')
       modalOpened=true;
 
       modalInstance.result.then(function (distribution) {
-        toaster.pop('info', null, 'Datasource saved.');
+        ngNotify.set('Datasource saved.');
         $scope.dataset.distributions.push(distribution);
         modalOpened=false;
       }, function () {
@@ -538,7 +582,6 @@ angular.module('columbyApp')
     /**
      * Confirm the deletion of a distribution
      *
-     * @param index
      */
     $scope.confirmDeleteDistribution = function(index){
       $scope.dataset.distributions[ index].confirmDelete = true;
@@ -552,17 +595,16 @@ angular.module('columbyApp')
      *
      * Delete a distriubtion from the server
      *
-     * @param index
      */
     $scope.deleteDistribution = function(distribution){
       var idx = $scope.dataset.distributions.indexOf(distribution);
       DistributionSrv.delete({id: $scope.dataset.distributions[ idx].id}, function(res){
         if (res.status === 'success') {
           $scope.dataset.distributions.splice(idx,1);
-          toaster.pop('success', 'Done', 'Distribution deleted.');
+          ngNotify.set('Distribution deleted.');
         } else {
           console.log(res);
-          toaster.pop('danger', null, 'There was a problem deleting the distribution.');
+          ngNotify.set('There was a problem deleting the distribution.', 'error');
         }
       });
     };
@@ -570,12 +612,10 @@ angular.module('columbyApp')
 
 
     /************* PRIMARY SOURCE ***************/
-
-    /**
+    /***
      *
      * Handle the request to convert a distribution to a primary source.
      *
-     * @param dist
      */
     $scope.convertPrimary = function(dist){
       var idx = $scope.dataset.distributions.indexOf(dist);
@@ -619,7 +659,9 @@ angular.module('columbyApp')
 
 
     /**
+     *
      * Delete a primary source
+     *
      */
     $scope.deletePrimarySource = function(){
       if ($scope.dataset.primary.id){
@@ -627,9 +669,9 @@ angular.module('columbyApp')
           console.log(result);
           if (result.status === 'success'){
             $scope.dataset.primary = null;
-            toaster.pop('success',null,'The primary source was deleted successfully');
+            ngNotify.set('The primary source was deleted successfully');
           } else {
-            toaster.pop('warning',null,'There was an error deleting the primary source.');
+            ngNotify.set('There was an error deleting the primary source.','error');
           }
         });
       }
@@ -678,7 +720,7 @@ angular.module('columbyApp')
 
       // Send request to api
       PrimaryService.sync(job, function(r){
-        toaster.pop('info', null, 'The primary source will be synchronised. ');
+        ngNotify.set('The primary source will be synchronised. ');
         $scope.dataset.primary.jobStatus = 'active';
         // Process response
         console.log('result', r);
@@ -708,6 +750,7 @@ angular.module('columbyApp')
       });
     };
 
+
     $scope.removeTag = function(tag){
       console.log('removing tag, ', tag);
       DatasetSrv.removeTag({id:$scope.dataset.id, tid:tag.id},function(result){
@@ -716,13 +759,10 @@ angular.module('columbyApp')
     };
 
 
-    /* --------- ROOTSCOPE EVENTS ------------------------------------------------------------ */
-
-
     /* --------- INIT ------------------------------------------------------------------------ */
     // Check if user is authenticated
-    if (!AuthSrv.isAuthenticated()){
-      toaster.pop('danger',null,'You need to be authenticated to be able to edit this post. ');
+    if (!UserSrv.isAuthenticated()){
+      ngNotify.set('You need to be authenticated to be able to edit this post. ', 'error');
       $state.go('dataset', { id: $stateParams.id });
     } else if ($stateParams.id) {
       getDataset();

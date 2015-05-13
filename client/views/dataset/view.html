@@ -233,55 +233,32 @@
     <!-- Dataset references -->
     <div class="references wrapper" ng-show="dataset.id">
       <div class="container">
-        <div class="col-md-12">
-
-          <div class="content" ng-show="dataset.references.length>0">
-            <h3>References</h3>
-
-            <div class="row">
-
-              <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
-								<div class="reference">
-									<img src="images/reference-spaceholder.png" class="placeholder">
-									<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
-										<div class="reference-top"></div>
-							      <h3 class="reference-title"><a href="{{reference.url}}">{{reference.title}}</a></h3>
-							      <p class="small reference-source"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
-							    </div>
-								</div>
-								<div class="small reference-text">{{reference.description}}</div>
-								<!-- <div class="thumbnail dataset-reference">
-                  <div class="caption clearfix">
-
-                    <h4><a href="{{reference.url}}">{{reference.title}}</a></h4>
-                    <div class="ref-img pull-right" style="background-image:url('{{reference.image}}');background-size:cover;background-position:50% 50%;"></div>
-                    <p>{{reference.description}}</p>
-                    <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
-                  </div>
-                </div> -->
-              </div>
+        <div class="row">
+          <div class="heading col-md-12">
+            <div class="content" ng-show="dataset.references.length>0">
+              <h3>References</h3>
             </div>
-
-            <!-- <ul>
-              <li ng-repeat="reference in dataset.references">
-                <div class="col-md-12">
-                  <h4><a href="{{reference.url}}">{{reference.title}}</a></h4>
-                </div>
-                <div class="col-sm-12">
-                  <img src="{{reference.image}}" class="preview"/>
-                  <p>{{reference.description}}</p>
-                  <p class="meta"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
-                </div>
-                <div class="actions" ng-show="editMode">
-                  <a href="" ng-click="deleteReference($index)"><i class="fa fa-trash"></i></a>
-                </div>
-              </li>
-            </ul> -->
-	          <div class="highlight" ng-show="!dataset.references || dataset.references.length===0">
-							<!-- <i class="fa fa-exclamation-circle"></i> -->
-							<h2>No references added yet</h2>
-						</div>
           </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
+						<div class="reference">
+							<img src="images/reference-spaceholder.png" class="placeholder">
+							<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
+								<div class="reference-top"></div>
+							  <h3 class="reference-title"><a href="{{reference.url}}">{{reference.title}}</a></h3>
+							  <p class="small reference-source"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
+							</div>
+						</div>
+						<div class="small reference-text">{{reference.description}}</div>
+          </div>
+        </div>
+
+        <div class="row">
+	        <div class="highlight col-md-12" ng-show="!dataset.references || dataset.references.length===0">
+						<h2>No references added yet</h2>
+					</div>
         </div>
       </div>
     </div>

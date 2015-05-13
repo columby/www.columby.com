@@ -4,12 +4,10 @@ angular.module('columbyApp')
   .controller('DatasetDeleteCtrl',
   function ($scope, $modalInstance, dataset, DatasetSrv) {
 
-    $scope.confirm = function(){
-      console.log('Delete controller. ');
-      console.log(dataset.id);
+    // Handle confirm delete button click
+    $scope.confirm = function() {
       DatasetSrv.delete({id: dataset.id}, function(result){
-        console.log(result);
-        $modalInstance.close(true);
+        $modalInstance.close(result);
       });
     };
 

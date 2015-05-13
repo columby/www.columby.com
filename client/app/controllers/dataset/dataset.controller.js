@@ -2,13 +2,13 @@
 
 angular.module('columbyApp')
 
-  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, DatasetReferenceSrv, AuthSrv, toaster, ngDialog, configSrv, DataService) {
+  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, DatasetReferenceSrv, ngDialog, configSrv, DataService, UserSrv) {
 
     /* --------- INITIALISATION ------------------------------------------------------------ */
     $scope.hostname = $location.protocol() + '://' + $location.host();
     $scope.embedUrl = $location.absUrl();
-    $window.document.title = 'columby.com';
-    $scope.datasetLoading = true;
+    $rootScope.title = 'columby.com';
+    delete $scope.datasetLoading;
 
 
     /* --------- FUNCTIONS ------------------------------------------------------------------ */
@@ -50,7 +50,7 @@ angular.module('columbyApp')
         id: $stateParams.id
       }, function(dataset) {
         if (!dataset.id){
-          toaster.pop('danger',null,'Sorry, the requested dataset was not found. ');
+          ngNotify.set('Sorry, the requested dataset was not found. ', 'error');
           $state.go('home');
           return;
         }
@@ -83,7 +83,7 @@ angular.module('columbyApp')
         // }
         // $scope.summary = summary + '</p>';
 
-        $scope.dataset.canEdit= AuthSrv.canEdit('dataset', dataset);
+        $scope.dataset.canEdit= UserSrv.canEdit('dataset', dataset);
 
         // filter out private sources
         if (!$scope.dataset.canEdit){
@@ -98,7 +98,7 @@ angular.module('columbyApp')
         // update avatar url
         $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.dataset.account.avatar.shortid + '/' + $scope.dataset.account.avatar.filename;
 
-        if ($scope.dataset.headerImg.id) {
+        if ($scope.dataset.headerImg  && $scope.dataset.headerImg.id) {
           updateHeaderImage();
         }
 
@@ -142,7 +142,7 @@ angular.module('columbyApp')
     if ($stateParams.id) {
       getDataset();
     } else {
-      toaster.pop('danger',null,'Sorry, the requested dataset was not found. ');
+      ngNotify.set('Sorry, the requested dataset was not found. ', 'error');
       $state.go('home');
     }
   })
