@@ -7,16 +7,11 @@ build:
     #- npm-test
 
     - script:
-        name: install bower
-        code: npm install bower
-
-    - script:
-        name: bower install
-        code: bower install
-
-    - script:
-        name: grunt build
-        code: grunt build-$DEPLOY_ENVIRONMENT
+        name: install
+        code: |
+          npm install bower
+          bower install
+          grunt build-$DEPLOY_ENVIRONMENT
 
     - script:
         name: echo nodejs information
