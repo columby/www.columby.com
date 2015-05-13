@@ -1,5 +1,49 @@
 'use strict';
 
+/***
+ *
+ * Load the app manually, first fetch user data asynchronically .
+ *
+ ***/
+angular.element(document).ready(
+
+  function() {
+
+    var initInjector = angular.injector(['ng']);
+    var $http = initInjector.get('$http');
+    var token = localStorage.getItem('columby_token');
+
+    if (token) {
+      $http({
+        method: 'POST',
+        url: 'https://dev-api.columby.com/v2/user/me',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      }).then(function(response) {
+        // If response has no user object, delete the local token.
+        if (!response.data.id) {
+          localStorage.removeItem('columby_token');
+        } else {
+          window.user = response.data;
+        }
+        // start the app
+        angular.bootstrap(document, ['columbyApp']);
+      });
+    } else {
+      // No token present, start the app.
+      angular.bootstrap(document, ['columbyApp']);
+    }
+  }
+);
+
+
+
+/***
+ *
+ * Main module of the application.
+ *
+ ***/
 angular.module('columbyApp', [
   'ngCookies',
   'ngResource',
@@ -8,80 +52,73 @@ angular.module('columbyApp', [
   'ui.router',
   'ui.bootstrap',
   'angular-jwt',
-  'toaster',
+  'satellizer',
   'slugifier',
   'ngDialog',
   'angularFileUpload',
   'textAngular',
   'td.easySocialShare',
   'ngProgress',
-  'ngTagsInput'
+  'ngTagsInput',
+  'ngNotify',
 ])
 
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
 
-    $urlRouterProvider
-      .when('', '/')
-      .otherwise('/');
 
-    $locationProvider.html5Mode(true).hashPrefix('!');
+/***
+ *
+ * Use the HTML5 History API
+ * For any unmatched url, redirect to /
+ *
+ ***/
+.config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+  $urlRouterProvider.otherwise('/');
+  $locationProvider.html5Mode(true).hashPrefix('!');
+})
 
-  })
 
-  // Set the JWT if it is stored
-  .config(function($httpProvider, jwtInterceptorProvider) {
-    jwtInterceptorProvider.tokenGetter = function() {
-      // Check for a json based token
-      var token = localStorage.getItem('columby_token');
-      try {
-        token = angular.fromJson(token);
-      } catch (err) {
-        token = null;
+
+/***
+ *
+ * Authentication configuration.
+ *   Satellizer settings
+ *
+ ***/
+.config(function($authProvider) {
+
+  // Setup token name
+  $authProvider.tokenName = 'token';
+  $authProvider.tokenPrefix = 'columby';
+})
+
+
+
+/***
+ *
+ * Check permission for each state change
+ *
+ ***/
+.run(function($rootScope, AccountSrv, $state, ngNotify) {
+
+  ngNotify.config({
+    theme: 'pure',
+    position: 'top',
+    duration: 5000,
+    type: 'info',
+    sticky: false
+  });
+
+  // Check each state change start
+  $rootScope.$on('$stateChangeStart', function (event, next) {
+    // Check for required authorized role
+    if (next.data && next.data.authorizedRoles) {
+      var authorizedRoles = next.data.authorizedRoles;
+      // Return ro home if user does not have required role.
+      if (!AccountSrv.isAuthorized(authorizedRoles)){
+        event.preventDefault();
+        $state.go('home');
+        ngNotify.set('Geen toegang.', 'error');
       }
-      return token;
-    };
-    $httpProvider.interceptors.push('jwtInterceptor');
-  })
-
-  // Run once during startup
-  .run(function($log, $rootScope, $http, AuthSrv, configSrv){
-    //IE console
-    window.console = window.console || {};
-    window.console.log = window.console.log || function() {};
-
-    $rootScope.bodyClasses = {};
-    $rootScope.user = {};
-    $rootScope.config = configSrv;
-
-    // On initial run, check the user (with the JWT required from config).
-    if (localStorage.getItem('columby_token')) {
-      // Fetch user information from server with JWT
-      AuthSrv.me().then(function (response) {
-        // remove local JWT when there was an error (expires or malformed).
-        //console.log(response);
-        if (response.status === 'error') {
-          localStorage.removeItem('columby_token');
-        }
-        // Attached the user object to the rootscope.
-        if (response.id) {
-          // set primary account
-          $rootScope.user = response;
-        }
-      });
     }
-  })
-
-  .controller('ColumbyCtrl', function($window, $rootScope, $location){
-    $rootScope.$on('$stateChangeSuccess',  function(event, toState){
-
-      // send to analytics
-      //$window.ga('send', 'pageview', { page: $location.path() });
-      // Add state to body class
-      var stateName = toState.name;
-      stateName = stateName.replace('.','-');
-      $rootScope.bodyClasses.state = stateName;
-      $rootScope.bodyClasses.embed = $location.search().embed;
-
-    });
-  })
-;
+  });
+});

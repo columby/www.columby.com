@@ -8,7 +8,7 @@ angular.module('columbyApp')
  *
  **/
   .controller('AccountEditCtrl',
-  function ($log, $window, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, CollectionSrv, toaster, $upload, FileService, ngProgress) {
+  function ($log, $window, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, CollectionSrv, ngNotify, $upload, FileService, ngProgress) {
 
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
@@ -107,9 +107,9 @@ angular.module('columbyApp')
               $scope.accountUpdate.description = result.description;
               $scope.account.name = result.name;
               $scope.account.description = result.description;
-              toaster.pop('success', null, 'Account updated.');
+              ngNotify.set('Account updated.');
             } else {
-              toaster.pop('warning', null, 'There was an error updating the account name.');
+              ngNotify.set('There was an error updating the account name.','error');
             }
           });
         }
@@ -125,18 +125,18 @@ angular.module('columbyApp')
       };
 
       // Check if there is a file
-      if (!file) { return toaster.pop('warning',null,'No file selected.'); }
+      if (!file) { return ngNotify.set('No file selected.','error'); }
       console.log('Yes there is a file. ');
 
       // Check if there is already an upload in progress
       if ($scope.upload && $scope.upload.file) {
-        return toaster.pop('warning',null,'There is already an upload in progress. ');
+        return ngNotify.set('There is already an upload in progress.','error');
       }
       console.log('There is not already an upload in progress. ');
 
       // Check if the file has the right type
       if (!FileService.validateFile(file.type,type,target)) {
-        return toaster.pop('warning', null, 'The file you chose is not valid. ' + file.type);
+        return ngNotify.set('The file you chose is not valid. ' + file.type, 'error');
       }
       console.log('File is valid. ');
 
@@ -176,7 +176,7 @@ angular.module('columbyApp')
           ngProgress.complete();
           // finish
           $scope.upload.file = null;
-          toaster.pop('notice', null, 'File uploaded. ');
+          ngNotify.set('File uploaded.');
           console.log('File uploaded: ', data);
 
           var updated = {
@@ -209,7 +209,7 @@ angular.module('columbyApp')
               break;
           }
           $scope.fileUpload = null;
-          toaster.pop('notice',null,'File uploaded, updating account...');
+          ngNotify.set('File uploaded, updating account...');
           console.log('updating, ', updated);
 
           // Update Account at server
@@ -219,7 +219,7 @@ angular.module('columbyApp')
 
         } else {
           $scope.upload.file = null;
-          return toaster.pop('warning', null, 'Something went wrong finishing the upload. ');
+          return ngNotify.set('Something went wrong finishing the upload. ','error');
         }
 
       });
@@ -246,7 +246,7 @@ angular.module('columbyApp')
           $scope.account.Collections.push(result);
           $scope.newCollection = null;
         } else {
-          toaster.pop('warning', null, 'There was an error creating the collection. ');
+          ngNotify.set('There was an error creating the collection. ','error');
         }
       });
     };
