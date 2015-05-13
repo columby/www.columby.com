@@ -519,6 +519,7 @@ angular.module('columbyApp')
     };
 
 
+
     /*********** DISTRIBUTIONS ********************************/
     $scope.newDistribution = function() {
 
@@ -660,7 +661,7 @@ angular.module('columbyApp')
     /**
      *
      * Delete a primary source
-     * 
+     *
      */
     $scope.deletePrimarySource = function(){
       if ($scope.dataset.primary.id){

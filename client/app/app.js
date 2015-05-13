@@ -17,10 +17,8 @@ angular.element(document).ready(
       $http({
         method: 'POST',
         url: 'https://dev-api.columby.com/v2/user/me',
-        headers: {
-          'Authorization': 'Bearer ' + token
-        }
-      }).then(function(response) {
+        headers: { 'Authorization': 'Bearer ' + token }
+      }).success(function(data, status, headers, config) {
         // If response has no user object, delete the local token.
         if (!response.data.id) {
           localStorage.removeItem('columby_token');
@@ -28,6 +26,11 @@ angular.element(document).ready(
           window.user = response.data;
         }
         // start the app
+        angular.bootstrap(document, ['columbyApp']);
+      }).error(function(data, status, headers, config){
+        console.log(data);
+        // there was an error fetching the user. load the app anyway and remove the token for security reasons
+        localStorage.removeItem('columby_token');
         angular.bootstrap(document, ['columbyApp']);
       });
     } else {
