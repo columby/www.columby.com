@@ -3,7 +3,7 @@
 angular.module('columbyApp')
 
   // Controller for a new primary source modal
-  .controller('PrimaryNewCtrl', function($scope, $modalInstance, distribution, primary, DistributionSrv, PrimaryService, WorkerSrv, toaster){
+  .controller('PrimaryNewCtrl', function($scope, $modalInstance, distribution, primary, DistributionSrv, PrimaryService, WorkerSrv, ngNotify){
 
     $scope.loading = true;
     $scope.distribution = distribution;
@@ -54,14 +54,14 @@ angular.module('columbyApp')
           }, function(err){
             console.log('err', err);
             console.log(primary);
-            toaster.pop('error', null,'There was an error sending the primary for processing...');
+            ngNotify.set('There was an error sending the primary for processing...','error');
             PrimaryService.delete({id: primary.id}, function(result){
               console.log('result', result);
             });
           });
 
         } else {
-          toaster.pop('warning',null,'There was an error creating the primary source.');
+          ngNotify.set('warning',null,'There was an error creating the primary source.');
         }
       });
       // Send to Worker Queue
