@@ -7,11 +7,11 @@ angular.module('columbyApp')
  * Account Edit Controller
  *
  **/
-  .controller('AccountCtrl', function ($window, $rootScope, $scope, $stateParams, $state, ngNotify, AccountSrv, AuthSrv, CollectionSrv, DatasetSrv) {
+  .controller('AccountCtrl', function ($window, $rootScope, $scope, $stateParams, $state, ngNotify, AccountSrv, CollectionSrv, DatasetSrv, UserSrv) {
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading  = true;
-    $window.document.title = 'columby.com';
+    $rootScope.title = 'columby.com';
     $scope.datasets = {
       currentPage: 1,
       numberOfItems: 10
@@ -65,7 +65,7 @@ angular.module('columbyApp')
           $window.document.title = 'columby.com | ' + result.name;
 
           console.log(result);
-          $scope.account.canEdit = AuthSrv.canEdit('account', result);
+          $scope.account.canEdit = UserSrv.canEdit('account', result);
 
           if ($scope.account.headerImg) {
             updateHeaderImage();
