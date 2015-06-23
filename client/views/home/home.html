@@ -9,11 +9,11 @@
     <div class="container">
       <div class="col-md-12">
         <img src="/images/logo.png" class="logo img-responsive" />
-        <h2 class="page-subtitle">publish and discover data</h2>
-        <button type="button" class="big-button" ng-show="$root.user.id"  ui-sref="datasetCreate">Publish new dataset</button>
-        <button type="button" class="big-button" ng-hide="$root.user.id"  ui-sref='signin'>Login or Signup</button>
+        <h2 class="page-subtitle" translate>publish and discover data</h2>
+        <button type="button" class="big-button" ng-show="$root.user.id"  ui-sref="datasetCreate" translate>Publish new dataset</button>
+        <button type="button" class="big-button" ng-hide="$root.user.id"  ui-sref='signin' translate>Login or Signup</button>
         <p>or</p>
-        <a ui-sref="about">Read about Columby</a>
+        <a ui-sref="about" translate>Read about Columby</a>
         <!-- <a href="#more"><div class="arrow animated bounce"></div></a> -->
       </div>
     </div>
@@ -32,7 +32,7 @@
           <div class="col-md-1">
             <button class="big-button lightblue filled"
                     type="submit"
-                    ui-sref='search'>Search!</button>
+                    ui-sref='search' translate>Search!</button>
           </div>
         </form>
       </div>
@@ -129,7 +129,7 @@
 
 
       <div class="col-md-offset-1 col-md-10 recent-publications">
-        <h3>Recently published</h3>
+        <h3 translate>Recently published</h3>
         <div class="publication-listing">
 					<ul>
             <li ng-repeat="dataset in datasets.rows" class="publication-item">

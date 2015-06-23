@@ -1,0 +1,29 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: \n"
+
+#: client/views/home/home.html:14
+msgid "Login or Signup"
+msgstr ""
+
+#: client/views/home/home.html:12
+msgid "publish and discover data"
+msgstr ""
+
+#: client/views/home/home.html:13
+msgid "Publish new dataset"
+msgstr ""
+
+#: client/views/home/home.html:16
+msgid "Read about Columby"
+msgstr ""
+
+#: client/views/home/home.html:132
+msgid "Recently published"
+msgstr ""
+
+#: client/views/home/home.html:33
+msgid "Search!"
+msgstr ""

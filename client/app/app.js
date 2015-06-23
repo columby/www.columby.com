@@ -18,7 +18,7 @@ angular.element(document).ready(
         method: 'POST',
         url: 'https://dev-api.columby.com/v2/user/me',
         headers: { 'Authorization': 'Bearer ' + token }
-      }).success(function(data, status, headers, config) {
+      }).success(function(response, status, headers, config) {
         // If response has no user object, delete the local token.
         if (!response.data.id) {
           localStorage.removeItem('columby_token');
@@ -27,7 +27,7 @@ angular.element(document).ready(
         }
         // start the app
         angular.bootstrap(document, ['columbyApp']);
-      }).error(function(data, status, headers, config){
+      }).error(function(response, status, headers, config){
         console.log(data);
         // there was an error fetching the user. load the app anyway and remove the token for security reasons
         localStorage.removeItem('columby_token');
@@ -64,6 +64,7 @@ angular.module('columbyApp', [
   'ngProgress',
   'ngTagsInput',
   'ngNotify',
+  'gettext'
 ])
 
 
@@ -101,7 +102,9 @@ angular.module('columbyApp', [
  * Check permission for each state change
  *
  ***/
-.run(function($rootScope, AccountSrv, $state, ngNotify) {
+.run(function($rootScope, AccountSrv, $state, ngNotify, gettextCatalog) {
+
+  gettextCatalog.setCurrentLanguage('nl_NL');
 
   ngNotify.config({
     theme: 'pure',

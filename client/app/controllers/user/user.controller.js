@@ -106,7 +106,7 @@ angular.module('columbyApp')
  * Register controller for a new user.
  *
  ***/
-.controller('RegisterCtrl', function ($window, $scope, $rootScope, $location, $http, $state, AuthSrv, ngNotify, Slug) {
+.controller('RegisterCtrl', function ($window, $scope, $rootScope, $location, $http, $state, UserSrv, ngNotify, Slug) {
 
   // if user is already logged in
   if($rootScope.user.id){
@@ -120,7 +120,7 @@ angular.module('columbyApp')
 
     $scope.registrationInProgress = true;
 
-    AuthSrv.register($scope.newuser).then(function(response){
+    UserSrv.register($scope.newuser).then(function(response){
       delete $scope.registrationInProgress;
 
       if (response.errors && response.errors.email && (response.errors.email.message==='E-mail address is already in-use') ) {

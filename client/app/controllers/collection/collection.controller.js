@@ -8,7 +8,7 @@ angular.module('columbyApp')
 
   })
 
-  .controller('CollectionCtrl', function ($rootScope, $scope, $stateParams, AuthSrv, CollectionSrv) {
+  .controller('CollectionCtrl', function ($rootScope, $scope, $stateParams, CollectionSrv, UserSrv) {
 
     // Initiate pagination
     $scope.pagination = {
@@ -36,7 +36,7 @@ angular.module('columbyApp')
         $scope.collection = result;
 
         // Check access
-        $scope.collection.canEdit= AuthSrv.canEdit('collection', result);
+        $scope.collection.canEdit= UserSrv.canEdit('collection', result);
 
         // Turn off loader
         $scope.contentLoading = false;

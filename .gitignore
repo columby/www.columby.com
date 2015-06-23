@@ -4,6 +4,7 @@ public
 .tmp
 .idea
 client/bower_components
+*.bts
 server/config/local.env.js
 
 

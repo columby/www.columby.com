@@ -20,7 +20,9 @@ module.exports = function (grunt) {
     injector: 'grunt-asset-injector',
     buildcontrol: 'grunt-build-control',
     replace: 'grunt-replace',
-    htmlangular: 'grunt-html-angular-validate'
+    htmlangular: 'grunt-html-angular-validate',
+    nggettext_extract: 'grunt-angular-gettext',
+    nggettext_compile: 'grunt-angular-gettext'
   });
 
   // Time how long tasks take. Can help when optimizing build times
@@ -29,6 +31,24 @@ module.exports = function (grunt) {
 
   // Define the configuration for all the tasks
   grunt.initConfig({
+
+
+    nggettext_extract: {
+      pot: {
+        files: {
+          '<%= yeoman.client %>/translations/po/template.pot': ['<%= yeoman.client %>/views/**/*.html']
+        }
+      },
+    },
+
+    nggettext_compile: {
+      all: {
+        files: {
+          '<%= yeoman.client %>/app/translations/translations.js': ['<%= yeoman.client %>/translations/po/*.po']
+        }
+      },
+    },
+
 
     // Replace configuration settings
     replace: {
@@ -571,6 +591,7 @@ module.exports = function (grunt) {
     'clean:dist',
     'replace:dist',
     'injector:less',
+    'nggettext_compile',
     'concurrent:dist',
     'injector',
     'wiredep',
@@ -645,7 +666,8 @@ module.exports = function (grunt) {
         'replace:development',
         'env:all',
         'injector:less',
-
+        'nggettext_extract',
+        'nggettext_compile',
         'concurrent:server',
         'injector',
         'wiredep',

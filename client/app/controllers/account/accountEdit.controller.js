@@ -8,7 +8,7 @@ angular.module('columbyApp')
  *
  **/
   .controller('AccountEditCtrl',
-  function ($log, $window, $scope, $rootScope, $location, $state, $stateParams, $http, AuthSrv, AccountSrv, CollectionSrv, ngNotify, $upload, FileService, ngProgress) {
+  function ($log, $window, $scope, $rootScope, $location, $state, $stateParams, $http, UserSrv, AccountSrv, CollectionSrv, ngNotify, $upload, FileService, ngProgress) {
 
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
@@ -38,7 +38,7 @@ angular.module('columbyApp')
         };
 
         // check if current user can edit this account
-        $scope.account.canEdit= AuthSrv.canEdit('account',result);
+        $scope.account.canEdit= USerSrv.canEdit('account',result);
 
         $scope.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.account.avatar.shortid + '/' + $scope.account.avatar.filename;
 
