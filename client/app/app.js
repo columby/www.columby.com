@@ -20,10 +20,10 @@ angular.element(document).ready(
         headers: { 'Authorization': 'Bearer ' + token }
       }).success(function(data, status, headers, config) {
         // If response has no user object, delete the local token.
-        if (!response.data.id) {
+        if (!data.id) {
           localStorage.removeItem('columby_token');
         } else {
-          window.user = response.data;
+          window.user = data;
         }
         // start the app
         angular.bootstrap(document, ['columbyApp']);
