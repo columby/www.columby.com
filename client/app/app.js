@@ -18,16 +18,16 @@ angular.element(document).ready(
         method: 'POST',
         url: 'https://dev-api.columby.com/v2/user/me',
         headers: { 'Authorization': 'Bearer ' + token }
-      }).success(function(response, status, headers, config) {
+      }).success(function(data, status, headers, config) {
         // If response has no user object, delete the local token.
-        if (!response.data.id) {
+        if (!data.id) {
           localStorage.removeItem('columby_token');
         } else {
-          window.user = response.data;
+          window.user = data;
         }
         // start the app
         angular.bootstrap(document, ['columbyApp']);
-      }).error(function(response, status, headers, config){
+      }).error(function(data, status, headers, config){
         console.log(data);
         // there was an error fetching the user. load the app anyway and remove the token for security reasons
         localStorage.removeItem('columby_token');
