@@ -16,6 +16,10 @@ msgstr ""
 msgid "Login or Signup"
 msgstr "Login of Registreer"
 
+#: client/views/home/home.html:28
+msgid "Looking for data and publishers?"
+msgstr "Op zoek naar gegevens en publiceerders?"
+
 #: client/views/home/home.html:12
 msgid "publish and discover data"
 msgstr "publiceer en ontdek gegevens"
