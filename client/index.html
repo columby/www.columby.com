@@ -41,13 +41,14 @@
     <!-- Init loader -->
     <div ng-if="initialLoad" style="text-align:center; margin-top:50px"><p>Loading Columby</p></div><!-- / Init loader -->
 
-    <!-- include sitenav including sitenav-overlay -->
-    <div class="sitenav" data-ng-include="'components/sitenav/sitenav.html'"></div>
-
     <div class="site-main">
-      <!-- include metabar -->
+      <!-- Include navbar -->
+      <div navbar></div>
+
+      <!-- Include metabar -->
       <div class="metabar-wrapper" data-ng-include="'components/metabar/metabar.html'"></div>
 
+      <!-- Main UI -->
       <div ui-view autoscroll="true"></div>
 
       <!-- include footer -->
@@ -142,6 +143,7 @@
           <script src="app/directives/confirmDelete/confirmDelete.directive.js"></script>
           <script src="app/directives/embedly/embedly.directive.js"></script>
           <script src="app/directives/focus/focus.directive.js"></script>
+          <script src="app/directives/navbar/navbar.directive.js"></script>
           <script src="app/directives/noImage/noImage.directive.js"></script>
           <script src="app/directives/scrollPosition/scrollPosition.directive.js"></script>
           <script src="app/directives/updateTitle/updateTitle.directive.js"></script>
@@ -157,6 +159,7 @@
           <script src="app/routes/tag.route.js"></script>
           <script src="app/routes/user.route.js"></script>
           <script src="app/services/account.service.js"></script>
+          <script src="app/services/auth.service.js"></script>
           <script src="app/services/collection.service.js"></script>
           <script src="app/services/config.service.js"></script>
           <script src="app/services/data.service.js"></script>
