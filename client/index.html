@@ -29,7 +29,6 @@
     <!-- build:css({.tmp,client}) app/app.css -->
     <link rel="stylesheet" href="/app/app.css">
       <!-- injector:css -->
-      <link rel="stylesheet" href="components/modal/modal.css">
       <!-- endinjector -->
     <!-- endbuild -->
   </head>
@@ -39,20 +38,21 @@
     <![endif]-->
 
     <!-- Init loader -->
-    <div ng-if="initialLoad" style="text-align:center; margin-top:50px"><p>Loading Columby</p></div><!-- / Init loader -->
+    <div ng-if="initialLoad" style="text-align:center; margin-top:50px"><p>Loading Columby</p></div>
+    <!-- / Init loader -->
 
     <div class="site-main">
       <!-- Include navbar -->
       <div navbar></div>
 
       <!-- Include metabar -->
-      <div class="metabar-wrapper" data-ng-include="'components/metabar/metabar.html'"></div>
+      <div metabar></div>
 
       <!-- Main UI -->
       <div ui-view autoscroll="true"></div>
 
       <!-- include footer -->
-      <div class="footer-wrapper" data-ng-include="'components/footer/footer.html'"></div>
+      <div footer></div>
     </div>
 
     <div uservoice></div>
@@ -143,6 +143,8 @@
           <script src="app/directives/confirmDelete/confirmDelete.directive.js"></script>
           <script src="app/directives/embedly/embedly.directive.js"></script>
           <script src="app/directives/focus/focus.directive.js"></script>
+          <script src="app/directives/footer/footer.directive.js"></script>
+          <script src="app/directives/metabar/metabar.directive.js"></script>
           <script src="app/directives/navbar/navbar.directive.js"></script>
           <script src="app/directives/noImage/noImage.directive.js"></script>
           <script src="app/directives/scrollPosition/scrollPosition.directive.js"></script>
@@ -173,10 +175,6 @@
           <script src="app/services/user.service.js"></script>
           <script src="app/services/worker.service.js"></script>
           <script src="app/translations/translations.js"></script>
-          <script src="components/metabar/metabar.controller.js"></script>
-          <script src="components/modal/modal.service.js"></script>
-          <script src="components/navbar/navbar.controller.js"></script>
-          <script src="components/sitenav/sitenav.controller.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->
   </div>
