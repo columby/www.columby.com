@@ -7,13 +7,21 @@ angular.module('columbyApp')
       .state('account', {
         url: '/a/:slug',
         templateUrl: 'views/account/view.html',
-        controller: 'AccountCtrl'
+        controller: 'AccountCtrl',
+        data: {
+          bodyClasses: 'page account view',
+          permission: 'view account'
+        }
       })
 
       .state('accountEdit', {
         url: '/a/:slug/edit',
         templateUrl: 'views/account/edit.html',
-        controller: 'AccountEditCtrl'
+        controller: 'AccountEditCtrl',
+        data: {
+          bodyClasses: 'page account edit',
+          permission: 'edit account'
+        }
       });
 
   });

@@ -6,6 +6,10 @@ angular.module('columbyApp')
       .state('admin', {
         url: '/admin',
         templateUrl: 'app/routes/admin/admin.html',
-        controller: 'AdminCtrl'
+        controller: 'AdminCtrl',
+        data: {
+          bodyClasses: 'admin',
+          permission: 'administer site'
+        }
       });
   });

@@ -10,10 +10,11 @@
 
 angular.module('columbyApp')
 
-  .directive('metabar', function() {
+  .directive('metabar', function(AuthSrv) {
 
     return {
       restrict: 'EA',
-      templateUrl: 'app/directives/metabar/metabar.html'
+      templateUrl: 'app/directives/metabar/metabar.html',
+      controller: function($scope){}
     };
   });

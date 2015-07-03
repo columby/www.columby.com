@@ -17,36 +17,51 @@
         <!-- login form -->
         <div class="login-form col-md-12">
           <h2>Login to continue</h2>
-          <form class="form-horizontal novalidate" role="form" name="loginForm" ng-submit="login()" >
-
-            <div class="form-group">
-              <div class="col-sm-6">
-                <input class="form-control"
-                  required
-                  id="email"
-                  type="email"
-                  name="email"
-                  placeholder="Your email address"
-                  ng-model="email"/>
-              </div>
-              <div class="col-sm-6">
-                <button
-                  type="submit"
-                  class="black"
-                  ng-disabled="loginForm.$invalid || loginInProgress">Login</button>
-                <span ng-show="loginInProgress"><i class="fa fa-spinner fa-spin"></i></span>
-              </div>
-              <div class="col-sm-8">
-                <div ng-show="loginForm.$invalid && !loginForm.$pristine" class="alert alert-warning" role="alert">
-                  <span ng-show="loginForm.email.$invalid && !loginForm.email.$pristine">Enter a valid email.</span>
-                </div>
-                <div ng-show="loginError" class="alert alert-danger" role="alert">
-                  {{loginError}}
-                </div>
-              </div>
+          <div class="oauth-login">
+            <div class="google-login">
+              <a class="btn btn-default btn-google" ng-click="login('google')">g Login with your Google account</a>
             </div>
+          </div>
 
-          </form>
+          <div class="separator">
+            <hr>
+            <p>Or login with your email using a login-link:</p>
+            <hr>
+          </div>
+
+          <div class="email-login">
+            <form class="form-horizontal novalidate" role="form" name="loginForm" ng-submit="login('email')" >
+
+              <div class="form-group">
+                <div class="col-sm-6">
+                  <input class="form-control"
+                    required
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="Your email address"
+                    ng-model="email"/>
+                </div>
+                <div class="col-sm-6">
+                  <button
+                    type="submit"
+                    class="black"
+                    ng-disabled="loginForm.$invalid || loginInProgress">Login</button>
+                  <span ng-show="loginInProgress"><i class="fa fa-spinner fa-spin"></i></span>
+                </div>
+                <div class="col-sm-8">
+                  <div ng-show="loginForm.$invalid && !loginForm.$pristine" class="alert alert-warning" role="alert">
+                    <span ng-show="loginForm.email.$invalid && !loginForm.email.$pristine">Enter a valid email.</span>
+                  </div>
+                  <div ng-show="loginError" class="alert alert-danger" role="alert">
+                    {{loginError}}
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+
           <div class="register-link"><a ui-sref='register'>Need to sign up?</a></div>
         </div>
 

@@ -2,7 +2,7 @@
 
 /***
  *
- * Load the app manually, first fetch user data asynchronically .
+ * Load the app manually, first fetch user data synchronically .
  *
  ***/
 angular.element(document).ready(
@@ -21,6 +21,7 @@ angular.element(document).ready(
       }).success(function(data, status, headers, config) {
         // If response has no user object, delete the local token.
         if (!data.id) {
+          console.log('Removing local token. Response: ', data);
           localStorage.removeItem('columby_token');
         } else {
           window.user = data;
@@ -76,8 +77,8 @@ angular.module('columbyApp', [
  *
  ***/
 .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
-  $urlRouterProvider.otherwise('/');
   $locationProvider.html5Mode(true).hashPrefix('!');
+  $urlRouterProvider.otherwise('/');
 })
 
 
@@ -96,16 +97,12 @@ angular.module('columbyApp', [
 })
 
 
-
-/***
- *
- * Check permission for each state change
- *
- ***/
-.run(function($rootScope, AccountSrv, $state, ngNotify, gettextCatalog) {
-
+.run(function(gettextCatalog) {
   gettextCatalog.setCurrentLanguage('nl_NL');
+})
 
+
+.run(function(ngNotify) {
   ngNotify.config({
     theme: 'pure',
     position: 'top',
@@ -113,17 +110,27 @@ angular.module('columbyApp', [
     type: 'info',
     sticky: false
   });
+})
 
-  // Check each state change start
-  $rootScope.$on('$stateChangeStart', function (event, next) {
-    // Check for required authorized role
-    if (next.data && next.data.authorizedRoles) {
-      var authorizedRoles = next.data.authorizedRoles;
-      // Return ro home if user does not have required role.
-      if (!AccountSrv.isAuthorized(authorizedRoles)){
+/***
+ *
+ * Check permission for each state change
+ *
+ ***/
+.run(function($rootScope, AuthSrv, $state, ngNotify, $location) {
+
+  var path = $location.path();
+
+  $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+    //Check if the user has the required role
+    if (toState.data && toState.data.permission) {
+      if (!AuthSrv.hasPermission(toState.data.permission)){
+        console.log('No access permission!');
         event.preventDefault();
         $state.go('home');
-        ngNotify.set('Geen toegang.', 'error');
+        ngNotify.set('Sorry, you have no access to the requested page.', 'error');
+      } else {
+        console.log('Access granted.');
       }
     }
   });

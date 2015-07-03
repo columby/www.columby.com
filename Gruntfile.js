@@ -93,13 +93,13 @@ module.exports = function (grunt) {
       },
       dev: {
         options: {
-          script: 'server/app.js',
+          script: 'server/server.js',
           debug: true
         }
       },
       prod: {
         options: {
-          script: 'dist/server/app.js'
+          script: 'dist/server/server.js'
         }
       }
     },
@@ -119,18 +119,18 @@ module.exports = function (grunt) {
       },
       injectCss: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.css'
+          '<%= yeoman.client %>/assets/**/*.css'
         ],
         tasks: ['injector:css']
       },
       injectLess: {
         files: [
-          '<%= yeoman.client %>/{styles,components}/**/*.less'],
+          '<%= yeoman.client %>/assets/**/*.less'],
         tasks: ['injector:less']
       },
       less: {
         files: [
-          '<%= yeoman.client %>/{styles,components}/**/*.less'],
+          '<%= yeoman.client %>/assets/**/*.less'],
         tasks: ['less', 'autoprefixer']
       },
       gruntfile: {
@@ -138,12 +138,12 @@ module.exports = function (grunt) {
       },
       livereload: {
         files: [
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.css',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.html',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
+          '{.tmp,<%= yeoman.client %>}/assets/**/*.css',
+          '{.tmp,<%= yeoman.client %>}/app/**/*.html',
+          '{.tmp,<%= yeoman.client %>}/app/**/*.js',
           '!{.tmp,<%= yeoman.client %>}{app,components}/**/*.spec.js',
           '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.mock.js',
-          '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
+          '<%= yeoman.client %>/assets/img/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         options: {
           livereload: 1139
@@ -250,7 +250,7 @@ module.exports = function (grunt) {
     // Use nodemon to run server in debug mode with an initial breakpoint
     nodemon: {
       debug: {
-        script: 'server/app.js',
+        script: 'server/server.js',
         options: {
           nodeArgs: ['--debug-brk'],
           env: {
@@ -288,7 +288,7 @@ module.exports = function (grunt) {
           src: [
             '<%= yeoman.dist %>/public/{,*/}*.js',
             '<%= yeoman.dist %>/public/{,*/}*.css',
-            '<%= yeoman.dist %>/public/assets/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+            '<%= yeoman.dist %>/public/assets/img/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
             '<%= yeoman.dist %>/public/assets/fonts/*'
           ]
         }
@@ -313,12 +313,12 @@ module.exports = function (grunt) {
       options: {
         assetsDirs: [
           '<%= yeoman.dist %>/public',
-          '<%= yeoman.dist %>/public/assets/images'
+          '<%= yeoman.dist %>/public/assets/img'
         ],
         // This is so we update image references in our ng-templates
         patterns: {
           js: [
-            [/(assets\/images\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm, 'Update the JS to reference our revved images']
+            [/(assets\/img\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm, 'Update the JS to reference our revved images']
           ]
         }
       }
@@ -329,9 +329,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.client %>/images/',
+          cwd: '<%= yeoman.client %>/imgs/',
           src: '**/*.{png,jpg,jpeg,gif}',
-          dest: '<%= yeoman.dist %>/public/images'
+          dest: '<%= yeoman.dist %>/public/imgs'
         }]
       }
     },
@@ -340,9 +340,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.client %>/images/',
+          cwd: '<%= yeoman.client %>/imgs/',
           src: '**/*.svg',
-          dest: '<%= yeoman.dist %>/public/images'
+          dest: '<%= yeoman.dist %>/public/imgs'
         }]
       }
     },
@@ -407,14 +407,14 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             'bower_components/**/*',
-            'assets/images/{,*/}*.{webp}',
+            'assets/img/{,*/}*.{webp}',
             'assets/fonts/**/*',
             'index.html'
           ]
         }, {
           expand: true,
           cwd: '.tmp/images',
-          dest: '<%= yeoman.dist %>/public/assets/images',
+          dest: '<%= yeoman.dist %>/public/assets/imgs',
           src: ['generated/*']
         }, {
           expand: true,
@@ -501,7 +501,7 @@ module.exports = function (grunt) {
       },
       server: {
         files: {
-          '.tmp/app/app.css': '<%= yeoman.client %>/styles/app.less'
+          '.tmp/app/app.css': '<%= yeoman.client %>/assets/styles/app.less'
         }
       }
     },
@@ -533,7 +533,7 @@ module.exports = function (grunt) {
       less: {
         options: {
           transform: function (filePath) {
-            filePath = filePath.replace('/client/app/', '');
+            filePath = filePath.replace('/client/assets/styles/', '');
             filePath = filePath.replace('/client/components/', '');
             return '@import \'' + filePath + '\';';
           },
@@ -541,9 +541,9 @@ module.exports = function (grunt) {
           endtag: '// endinjector'
         },
         files: {
-          '<%= yeoman.client %>/styles/app.less': [
-            '<%= yeoman.client %>/{app,components,styles}/**/*.less',
-            '!<%= yeoman.client %>/styles/app.less',
+          '<%= yeoman.client %>/assets/styles/app.less': [
+            '<%= yeoman.client %>/assets/styles/**/*.less',
+            '!<%= yeoman.client %>/assets/styles/app.less',
           ]
         }
       },
@@ -552,7 +552,7 @@ module.exports = function (grunt) {
       css: {
         options: {
           transform: function (filePath) {
-            filePath = filePath.replace('/client/', '');
+            filePath = filePath.replace('/client/assets/', '');
             filePath = filePath.replace('/.tmp/', '');
             return '<link rel="stylesheet" href="' + filePath + '">';
           },
@@ -561,7 +561,7 @@ module.exports = function (grunt) {
         },
         files: {
           '<%= yeoman.client %>/index.html': [
-            '<%= yeoman.client %>/{app,components,styles}/**/*.css'
+            '<%= yeoman.client %>/assets/styles/**/*.css'
           ]
         }
       }

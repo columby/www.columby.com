@@ -9,6 +9,9 @@ angular.module('columbyApp')
     .state('search', {
       url: '/search',
       templateUrl: 'views/search/search.html',
-      controller: 'SearchCtrl'
+      controller: 'SearchCtrl',
+      data: {
+        bodyClasses: 'page search'
+      }
     });
 });

@@ -20,11 +20,11 @@ angular.module('columbyApp')
 
   // Change body class after state change
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+    console.log('State change success', fromState,toState);
     if (toState.data && toState.data.bodyClasses) {
       $rootScope.bodyClasses = toState.data.bodyClasses;
       return;
     }
-    $rootScope.bodyClasses = 'default';
   });
 
 })

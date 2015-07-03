@@ -1,0 +1,63 @@
+/**
+ * App-wide Styles
+ */
+
+@screen-sm: 768px;
+@screen-sm-min: @screen-sm;
+@screen-sm-max: (@screen-md-min - 1);
+@screen-md: 992px;
+@screen-md-min: @screen-md;
+@screen-md-max: (@screen-lg-min - 1);
+@screen-lg: 1200px;
+@screen-lg-min: @screen-lg;
+
+
+@media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+  .container {
+    width: 750px;
+  }
+}
+@media (min-width: @screen-lg-min) {
+  .container {
+    width: 750px;
+  }
+}
+
+
+
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+// injector
+@import 'account.less';
+@import 'collection.less';
+@import 'columby.less';
+@import 'components/distributionPopup.less';
+@import 'components/editor-sidebar.less';
+@import 'components/footer.less';
+@import 'components/header.less';
+@import 'components/metabar.less';
+@import 'components/navbar.less';
+@import 'components/notices.less';
+@import 'components/referencePopup.less';
+@import 'dataset.less';
+@import 'elements.less';
+@import 'home.less';
+@import 'modules/colors.less';
+@import 'modules/typography.less';
+@import 'pages/pages.less';
+@import 'patterns/buttons.less';
+@import 'patterns/titles.less';
+@import 'search.less';
+@import 'signin.less';
+@import 'user/settings.less';
+// endinjector

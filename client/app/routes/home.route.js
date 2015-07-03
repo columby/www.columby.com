@@ -8,6 +8,9 @@ angular.module('columbyApp')
       .state('home', {
         url: '/',
         templateUrl: 'views/home/home.html',
-        controller: 'HomeCtrl'
+        controller: 'HomeCtrl',
+        data: {
+          bodyClasses: 'home'
+        }
       });
   });
