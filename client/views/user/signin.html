@@ -19,7 +19,7 @@
           <h2>Login to continue</h2>
           <div class="oauth-login">
             <div class="google-login">
-              <a class="btn btn-default btn-google" ng-click="login('google')">g Login with your Google account</a>
+              <a class="btn btn-default btn-google" ng-click="authenticate('google')">g | Login with your Google account</a>
             </div>
           </div>
 
@@ -30,7 +30,7 @@
           </div>
 
           <div class="email-login">
-            <form class="form-horizontal novalidate" role="form" name="loginForm" ng-submit="login('email')" >
+            <form class="form-horizontal novalidate" role="form" name="loginForm" ng-submit="authenticate('email')" >
 
               <div class="form-group">
                 <div class="col-sm-6">
@@ -58,10 +58,8 @@
                   </div>
                 </div>
               </div>
-
             </form>
           </div>
-
           <div class="register-link"><a ui-sref='register'>Need to sign up?</a></div>
         </div>
 
@@ -73,11 +71,11 @@
         </div>
 
       </div>
-    <!-- end login & register forms -->
+    <!-- /login form -->
 
   </div>
 
-  <!-- Verification madal -->
+  <!-- Verification modal -->
   <div class="verify-in-progress" ng-show="verifyInProgress">
     <h1>Signing in</h1>
     <p>Your verification token is checked for validity.</p>

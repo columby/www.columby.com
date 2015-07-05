@@ -6,20 +6,16 @@ angular.module('columbyApp')
 
     return {
       get: function(slug) {
-        return $http.get(configSrv.apiRoot + '/v2/account/' + slug).then(function(result){
-          console.log(result);
-          var user = result.data;
-          $rootScope.user = user;
-          if (!user){
-            logout();
-          }
-
-          return user;
+        return $http.get(configSrv.apiRoot + '/v2/account/' + slug).then(function(response){
+          return response.data;
         });
       },
 
       update: function(account) {
-        return $http.put(configSrv.apiRoot + '/v2/account/:slug', account);
+        return $http.put(configSrv.apiRoot + '/v2/account/slug', account).then(function(response){
+          console.log(response);
+          return response.data;
+        });
       }
     };
 

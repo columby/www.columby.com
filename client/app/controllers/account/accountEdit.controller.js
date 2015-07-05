@@ -8,58 +8,46 @@ angular.module('columbyApp')
  *
  **/
   .controller('AccountEditCtrl',
-  function ($log, $window, $scope, $rootScope, $location, $state, $stateParams, $http, UserSrv, AccountSrv, CollectionSrv, ngNotify, $upload, FileService, ngProgress) {
+  function ($rootScope, $scope, $stateParams, AccountSrv, CollectionSrv, ngNotify, $upload, FileService, ngProgress) {
 
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading  = true;
-    $scope.showOptions = false;
-    $window.document.title = 'columby.com';
-
-    /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
+    $rootScope.title = 'columby.com';
+    $scope.activePanel = 'profile';
 
 
     /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
     function getAccount(){
       //console.log($stateParams);
       // get account information of user by userSlug
-      AccountSrv.get({slug: $stateParams.slug}, function(result){
-        $log.log('Fetched result: ' , result);
-
-        // handle result
-        $window.document.title = 'columby.com | ' + result.name;
-        $scope.account = result;
+      AccountSrv.get($stateParams.slug).then(function(result){
+        console.log('Fetched result: ' , result);
         $scope.contentLoading = false;
 
-        // initiate updated model
-        $scope.accountUpdate = {
-          name        : $scope.account.name,
-          description : $scope.account.description
+        // redirect primary accout to user edit page
+        if (result.account.primary){
+          console.log('forward from account to user edit page.');
+          $state.go('userEdit',{slug: $stateParams.slug});
+        }
+
+        // handle result
+        $rootScope.title = 'columby.com | ' + result.account.displayName;
+        $scope.account = result.account;
+        // set reference model to check for changes
+        $scope.originalAccount = angular.copy($scope.account);
+
+        if ($scope.account.avatar) {
+          $scope.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.account.avatar.shortid + '/' + $scope.account.avatar.filename;
         };
-
-        // check if current user can edit this account
-        $scope.account.canEdit= USerSrv.canEdit('account',result);
-
-        $scope.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.account.avatar.shortid + '/' + $scope.account.avatar.filename;
 
         // update the header with the header image just fetched.
         if ($scope.account.headerImg) {
-          $log.log('updating header image. ');
+          console.log('updating header image. ');
           updateHeaderImage();
         }
 
       });
-    }
-
-    function initiateNewAccount(){
-      $scope.account = {
-        name        : 'New account',
-        description : '<p>Account description</p>',
-        owner       : $rootScope.user.id,
-        canEdit     : true
-      };
-      $scope.contentLoading = false;
-      console.log('account initiated', $scope.account);
     }
 
     function updateHeaderImage(){
@@ -71,48 +59,26 @@ angular.module('columbyApp')
     }
 
 
-    /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
+    // Change the active panel when a user clicks on a menu-link
+    $scope.changePanel = function(panel) {
+      $scope.activePanel = panel;
+    }
 
-    /**
-     * Update an existing account
-     *
-     */
+
+    //Update an existing account
     $scope.update = function(){
-      if (!$scope.account.id) {
-        console.log('Name changed, but not yet saved');
-      } else {
-        var changed = false;
-        var account = {
-          id: $scope.account.id,
-          slug: $scope.account.slug
-        };
-        if ($scope.accountUpdate.name !== $scope.account.name) {
-          console.log('The account name was changed. ');
-          changed = true;
-          account.name = $scope.accountUpdate.name;
-          console.log(account.name);
-          console.log($scope.accountUpdate.name);
-        }
-        if ($scope.accountUpdate.description !== $scope.account.description) {
-          console.log('The account description was changed. ');
-          changed = true;
-          account.description = $scope.accountUpdate.description;
-        }
-        if (changed) {
-          console.log('Updating account', account);
-          AccountSrv.update(account, function(result){
-            console.log(result);
-            if (result.id){
-              $scope.accountUpdate.name = result.name;
-              $scope.accountUpdate.description = result.description;
-              $scope.account.name = result.name;
-              $scope.account.description = result.description;
-              ngNotify.set('Account updated.');
-            } else {
-              ngNotify.set('There was an error updating the account name.','error');
-            }
-          });
-        }
+      // check for update
+      if (angular.equals($scope.account, $scope.originalAccount) === false){
+        // send to server
+        AccountSrv.update($scope.account).then(function(result){
+          if (result.id){
+            $scope.account = result;
+            $scope.originalAccount = angular.copy($scope.account);
+            ngNotify.set('Account updated.','notice');
+          } else {
+            ngNotify.set('There was an error updating the account name.','error');
+          }
+        });
       }
     };
 
@@ -226,17 +192,7 @@ angular.module('columbyApp')
     };
 
 
-
-
-    // Toggle account options menu
-    $scope.toggleOptions = function() {
-      console.log('toggleOptions');
-      $scope.showOptions = !$scope.showOptions;
-    };
-
-    /**
-     * Create a new collection for this account
-     */
+    // Create a new collection for this account
     $scope.newCollection = function(){
       CollectionSrv.save({
         accountId: $scope.account.id,
@@ -253,9 +209,10 @@ angular.module('columbyApp')
 
 
     /* ---------- INIT ----------------------------------------------------------------------------- */
-    if ($stateParams.slug) {
-      getAccount();
-    } else {
-      initiateNewAccount();
-    }
+    getAccount();
+
+  })
+
+  .controller('AccountEditOptionsCtrl', function($modalInstance, AccountSrv) {
+
   });

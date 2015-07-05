@@ -6,17 +6,23 @@
     <div class="header wrapper">
       <div class="container">
         <div>
-          <h1 class="title">Settings</h1>
-          <h2 class="page-subtitle">View your details and accounts</h2>
+          <h1 class="title">User settings <br><a ui-sref="account({slug: user.primary.slug})">{{user.primary.displayName}}</a></h1>
+          <h2 class="page-subtitle">Edit your account details and organisations</h2>
         </div>
       </div>
     </div>
 
     <div class="container">
+      <div class="col-md-12" ng-show="errorMsg">
+        <div class="alert alert-danger" role="alert">
+          <span class="fa fa-warning" aria-hidden="true"></span>
+          {{errorMsg}}
+        </div>
+      </div>
       <div class="col-md-3 menus">
         <div class="panel panel-default panel-usermenu">
           <div class="panel-heading">
-            Personal settings
+            Settings
           </div>
 
           <table class="table">
@@ -26,9 +32,9 @@
             <tr><td><a href="#" ng-click="changePanel('organisations')" ng-class="{ active: activePanel==='organisations'}">Organisations</a></td></tr>
             <tr><td><a href="#" ng-click="changePanel('support')" ng-class="{ active: activePanel==='support'}">Support</a></td></tr>
           </table>
-
         </div>
-        <div class="panel panel-default">
+
+        <div class="panel panel-default panel-organisationsmenu" ng-show="user.organisations.length>0">
           <div class="panel-heading">
             Organisations
           </div>
@@ -55,19 +61,19 @@
                   <label for="displayname">Profile picture</label>
                   <div class="row">
                     <div class="col-md-3">
-                      <img class="img-circle avatar" ng-src="{{user.primary.avatar.url || 'images/avatar.png'}}"/>
+                      <img class="img-circle avatar" ng-src="{{user.primary.avatar.url || 'assets/img/avatar.png'}}"/>
                     </div>
                     <div class="col-md-9">
                       <div class="form-group">
 
-                        <button class="btn btn-default">Upload new picture</button>
+                        <!-- <button class="btn btn-default">Upload new picture</button> -->
                       </div>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label for="displayname">Display name</label>
-                    <input type="text" class="form-control" id="displayname" ng-model="user.primary.name"></input>
+                    <input type="text" class="form-control" id="displayname" ng-model="user.primary.displayName"></input>
                   </div>
 
                   <div class="form-group">
@@ -76,13 +82,13 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="url">URL</label>
-                    <input type="text" class="form-control" id="url" ng-model="user.primary.url"></input>
+                    <label for="contact">Contact</label>
+                    <textarea class="form-control" id="contact" rows="3" ng-model="user.primary.contact"></textarea>
                   </div>
 
                   <div class="form-group">
-                    <label for="displayname">Company</label>
-                    <input type="text" class="form-control" id="company" ng-model="user.primary.company"></input>
+                    <label for="url">URL</label>
+                    <input type="text" class="form-control" id="url" ng-model="user.primary.url"></input>
                   </div>
 
                   <div class="form-group">
@@ -90,23 +96,34 @@
                     <input type="text" class="form-control" id="location" ng-model="user.primary.location"></input>
                   </div>
 
+                  <button class="btn btn-default btn-blue" ng-disabled="profileForm.$pristine || profileForm.$invalid || updatingAccount" ng-click="updateAccount()"><span class="btn-text" ng-hide="updatingAccount">Update profile</span><i class="fa fa-spinner fa-spin" ng-show="updatingAccount"></i></span></button>
                 </form>
-                <button class="btn btn-default btn-blue" type="submit">Update profile</button>
               </div>
             </div>
           </div>
 
           <div class="account-panels" ng-switch-when="account">
-            <div class="panel panel-default">
+            <div class="panel panel-default panel-email">
               <div class="panel-heading">
-                Change username
+                Registered email-address
               </div>
               <div class="panel-body">
-                <form class="novalidate" role="form" name="profileForm">
+                <p>{{user.email}}
+              </div>
+            </div>
+
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                Account url
+              </div>
+              <div class="panel-body">
+                <form class="novalidate" role="form" name="accountForm">
                   <div class="form-group">
-                    <input type="text" class="form-control" id="displayname"></input>
+                    <input type="text" class="form-control" id="slug" ng-model="user.primary.slug" ng-change="slugify()" ng-required="true"></input>
                   </div>
-                  <button class="btn btn-default">Change</button>
+
+                  <button class="btn btn-default" ng-disabled="accountForm.$pristine || accountForm.$invalid || updatingSlug" ng-click="updateSlug()"><span class="btn-text" ng-hide="updatingSlug">Change url</span><span class="loader"><i class="fa fa-spinner fa-spin" ng-show="updatingSlug"></i></span></button>
+                </form>
               </div>
             </div>
 
@@ -116,7 +133,7 @@
               </div>
               <div class="panel-body">
                 <p>Be careful, do not just delete your account!</p>
-                <button class="btn btn-danger">Delete account</button>
+                <button class="btn btn-danger" ng-click="destroy()">Delete account</button>
               </div>
             </div>
           </div>
@@ -143,6 +160,7 @@
                 Organisations
               </div>
               <div class="panel-body">
+                <div class="empty" ng-show="user.organisations.length<1"><p>No organisations added yet!</p></div>
                 <ul>
                   <li ng-repeat="organisation in user.organisations">{{organisation.name}}</li>
                 </ul>

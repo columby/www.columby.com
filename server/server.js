@@ -8,7 +8,7 @@ var express = require('express'),
     bodyParser = require('body-parser');
 
 var app = express();
-    app.set('port', process.env.PORT || 3000);
+    app.set('port', 9000);
     app.use(morgan('dev'));
     app.use(express.static(path.join(__dirname, '../client')));
     app.use(bodyParser.urlencoded({ extended: false }));

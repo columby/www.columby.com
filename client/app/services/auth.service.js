@@ -2,17 +2,15 @@
 
 angular.module('columbyApp')
 
-  .service('AuthSrv', function($rootScope, $http, $auth, configSrv) {
+  .service('AuthSrv', function($rootScope, $http, $auth, configSrv, UserSrv) {
 
     var permissionsList = [
       // user permissions
-      'signin existing user',
-      'register new user',
-      'edit user settings',
+      'signin user',
+      'register user',
+      'view user',
+      'edit user',
       'delete user',
-      // account permissions
-      'view account',
-      'edit account',
       // organisation permissions
       'create organisation',
       'view organisation',
@@ -34,15 +32,44 @@ angular.module('columbyApp')
     }
 
     return {
-      login: function() { },
+
+      /**
+       *
+       * Authenticate a user login (email or oauth).
+       *
+       **/
+      authenticate: function(provider) {
+
+        // handle email login
+        if (provider.service === 'email') {
+          return $http.post(configSrv.apiRoot + '/v2/user/login', provider.email).then(function (response) {
+            return response.data;
+          });
+        } else {
+          // handle ouath login
+          return $auth.authenticate(provider.service, {register:provider.register}).then(function(result){
+            var user = {};
+            if (result.data.user){
+              console.log('setting user ', result.data.user);
+              UserSrv.setUser(result.data.user);
+            }
+            return result.data;
+          }).catch(function(data, status, headers, config) {
+            return data.data;
+          });
+        }
+      },
+
 
       isAuthenticated: function(){
         return $auth.isAuthenticated();
       },
 
+
       logout: function(){
         return logout();
       },
+
 
       hasRole: function(roles){
         // Make no access the default, to be sure.
@@ -72,32 +99,27 @@ angular.module('columbyApp')
         return authorized;
       },
 
-      hasPermission: function(permission){
-        console.log('Checking permission: ' + permission);
+
+      hasPermission: function(permission, params){
+        console.log('Checking permission: ' + permission + ' with params: ', params);
         // admin is always true
-        if ($rootScope.user.isAdmin === true) {
+        console.log($rootScope.user);
+        if ($rootScope.user.admin === true) {
           console.log('user is admin');
           return true;
         }
 
         switch (permission){
           // User permissions
-          case 'signin existing user':
-            if (!$auth.isAuthenticated()) {
-              return true;
-            } else {
-              return false;
-            }
+          case 'signin user':
+            return !$auth.isAuthenticated();
             break;
-          case 'register new user':
-            if (!$auth.isAuthenticated()) {
-              return true;
-            } else {
-              return false;
-            }
+          case 'register user':
+            return !$auth.isAuthenticated();
             break;
-          case 'edit user settings':
-            if ($auth.isAuthenticated()) {
+          case 'edit user':
+            if (!$auth.isAuthenticated()) { return false; }
+            if ($rootScope.user.primary.slug === params.slug) {
               return true;
             } else {
               return false;
@@ -106,8 +128,6 @@ angular.module('columbyApp')
           case 'delete user':
             return false;
             break;
-
-          // Account permissions
 
           // isAuthorized: function(authorizedRoles) {
           //   // Make no access the default, to be sure.
@@ -142,24 +162,23 @@ angular.module('columbyApp')
           //
           //   return authorized;
           // }
+
+
+          // Account permissions
           case 'view account':
             return true;
             break;
+          case 'create account':
+            return false;
+            break;
           case 'edit account':
+            if (!$auth.isAuthenticated()) { return false; }
+            if ($rootScope.user.primary.slug === params.slug) {
+              return true;
+            }
             return false;
             break;
-
-          // Organisation permissions
-          case 'create organisation':
-            return false;
-            break;
-          case 'edit organisation':
-            return false;
-            break;
-          case 'view organisation':
-            return true;
-            break;
-          case 'delete organisation':
+          case 'delete account':
             return false;
             break;
 

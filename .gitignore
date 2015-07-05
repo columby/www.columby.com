@@ -6,9 +6,5 @@ public
 client/bower_components
 *.bts
 server/config/local.env.js
-
-
 /client/config/environments/local.json
-/client/app/services/config.service.js
-
 /html-angular-validate-report.json

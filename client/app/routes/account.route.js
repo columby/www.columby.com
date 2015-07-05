@@ -23,5 +23,4 @@ angular.module('columbyApp')
           permission: 'edit account'
         }
       });
-
   });

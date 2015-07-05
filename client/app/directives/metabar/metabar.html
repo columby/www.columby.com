@@ -9,17 +9,17 @@
     <div class="usernav" ng-show="$root.user.id">
       <div class="col-xs-1 pull-right dropdown" dropdown on-toggle="toggleUsermenu(open)">
         <a href class="dropdown-toggle avatar" dropdown-toggle>
-          <img class="img-circle avatar" ng-src="{{ $root.user.primary.avatar || '/images/avatar.png'}}"/><span class="caret"></span>
+          <img class="img-circle avatar" ng-src="{{ $root.user.primary.avatar || '/assets/img/avatar.png'}}"/><span class="caret"></span>
         </a>
         <div class="dropdown-menu usermenu">
           <div class="usermenu-header">
             Signed in as: <br>
-            {{ $root.user.primary.name }}
+            {{ $root.user.primary.displayName }}
           </div>
           <hr>
           <ul>
             <li><a ui-sref="account({slug: $root.user.primary.slug})">Your profile</a></li>
-            <li><a ui-sref="settings">Settings</a></li>
+            <li><a ui-sref="userEdit({slug: $root.user.primary.slug})">Settings</a></li>
             <li><a href="http://docs.columby.com">Help</a></li>
             <li><a href ng-click="logout()">Sign out</a></li>
           </ul>

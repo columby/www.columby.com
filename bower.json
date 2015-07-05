@@ -25,7 +25,7 @@
     "ngprogress": "~1.0.7",
     "ng-tags-input": "~2.1.1",
     "ng-file-upload-shim": "~3.0.7",
-    "satellizer": "~0.10.1",
+    "satellizer": "~0.11.2",
     "ng-notify": "~0.5.3",
     "angular-gettext": "~2.1.0"
   },

@@ -2,7 +2,8 @@
 
 /***
  *
- * Load the app manually, first fetch user data synchronically .
+ * Load the app manually, first fetch user data synchronically.
+ * Config is loaded directly in index.html by loading a local config.js file
  *
  ***/
 angular.element(document).ready(
@@ -16,7 +17,7 @@ angular.element(document).ready(
     if (token) {
       $http({
         method: 'POST',
-        url: 'https://dev-api.columby.com/v2/user/me',
+        url: window.config.apiRoot + '/v2/user/me',
         headers: { 'Authorization': 'Bearer ' + token }
       }).success(function(data, status, headers, config) {
         // If response has no user object, delete the local token.
@@ -94,6 +95,18 @@ angular.module('columbyApp', [
   // Setup token name
   $authProvider.tokenName = 'token';
   $authProvider.tokenPrefix = 'columby';
+  $authProvider.withCredentials = false;
+  console.log(window.config.apiRoot);
+  // Setup Google authentication provider
+  $authProvider.google({
+    url               : window.config.apiRoot+'/v2/auth/google',
+    clientId          : '313936519511-lklf0npbiafkj3iregop6cle0n8hrpd9.apps.googleusercontent.com',
+    scope             : ['profile', 'email'],
+    redirectUri       : window.location.origin || window.location.protocol + '//' + window.location.host,
+    requiredUrlParams : ['scope'],
+    optionalUrlParams : ['display']
+  });
+
 })
 
 
@@ -124,13 +137,10 @@ angular.module('columbyApp', [
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
     //Check if the user has the required role
     if (toState.data && toState.data.permission) {
-      if (!AuthSrv.hasPermission(toState.data.permission)){
-        console.log('No access permission!');
+      if (!AuthSrv.hasPermission(toState.data.permission, toParams)){
         event.preventDefault();
         $state.go('home');
         ngNotify.set('Sorry, you have no access to the requested page.', 'error');
-      } else {
-        console.log('Access granted.');
       }
     }
   });

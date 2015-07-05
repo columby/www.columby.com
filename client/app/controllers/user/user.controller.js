@@ -10,57 +10,70 @@ angular.module('columbyApp')
  ***/
 .controller('SigninCtrl', function ($rootScope, $scope, $state, UserSrv, AuthSrv, ngNotify) {
 
+  // Set page title
   $rootScope.title = 'Sign in | columby.com';
 
-  // Check login status
-  console.log(AuthSrv.isAuthenticated());
+  // Check if user is not already logged in
   if (AuthSrv.isAuthenticated()) {
-    console.log('already authenticated');
     $state.go('settings');
     ngNotify.set('You are already logged in.');
-  } else {
-    console.log('Not logged in');
   }
 
 
-  /***
-   *
-   * Handle passwordless login, results in email to user
-   *
-   ***/
+  // Handle login authentication
   $scope.authenticate = function(provider){
 
     $scope.loginInProgress = true;
-    var email = $scope.email;
 
-    AuthSrv.authenticate(provider, email).then(function(response){
+    // Set the type of provider and necessary details.
+    var provider = {
+      service: provider,
+      email: $scope.email,
+      register: 'false'
+    }
+
+    // Authenticate with the authentication service.
+    AuthSrv.authenticate(provider).then(function(response){
+
       delete $scope.loginInProgress;
 
-      // handle email login
-      if (provider==='email'){
-        if (response.status === 'success') {
-          $scope.signinSuccess = true;
-        } else if (response.status === 'not_found') {
-          ngNotify.set('The email address ' + $scope.email + ' does not exist. Would you like to register for a new account?', 'warning');
-          $scope.newuser={};
-          $scope.newuser.email = $scope.email;
+      console.log(response);
 
-          var newmail = $scope.email.replace(/@.*$/,'').substring(0,20);
-          for (var c=0; newmail.length < 3; c++) {
-            newmail = newmail + c;
+      if (response.status === 'warning'){
+        ngNotify.set(response.msg, 'warning');
+      } else if (response.user && response.user.id) {
+        // Handle email login
+        if (provider==='email'){
+          if (response.status === 'success') {
+            $scope.signinSuccess = true;
+          } else if (response.status === 'not_found') {
+            ngNotify.set('The email address ' + $scope.email + ' does not exist. Would you like to register for a new account?', 'warning');
+            $scope.newuser={};
+            $scope.newuser.email = $scope.email;
+
+            var newmail = $scope.email.replace(/@.*$/,'').substring(0,20);
+            for (var c=0; newmail.length < 3; c++) {
+              newmail = newmail + c;
+            }
+            $scope.newuser.name = newmail;
+          } else {
+            ngNotify.set('Sorry, something went wrong... ' + JSON.stringify(response.err), 'error');
           }
-          $scope.newuser.name = newmail;
         } else {
-          ngNotify.set('Sorry, something went wrong... ' + JSON.stringify(response.err), 'error');
+          // Handle oauth login
+          if (response.user && response.user.id) {
+            ngNotify.set('Welcome, you are now signed in at Columby!', 'notice');
+            $state.go('home');
+          }
         }
       } else {
-        // handle oauth login
-
+        ngNotify.set('Sorry, something went wrong', 'danger');
       }
     })
   };
 
 })
+
 
 /***
  *
@@ -83,13 +96,14 @@ angular.module('columbyApp')
 })
 
 
-
 /***
  *
  * Register controller for a new user.
  *
  ***/
-.controller('RegisterCtrl', function ($window, $scope, $rootScope, $location, $http, $state, UserSrv, ngNotify, Slug) {
+.controller('RegisterCtrl', function ($window, $scope, $rootScope, $location, $http, $state, AccountSrv, UserSrv, ngNotify, Slug, AuthSrv) {
+
+  $window.document.title = 'Register | columby.com';
 
   // if user is already logged in
   if($rootScope.user.id){
@@ -97,20 +111,25 @@ angular.module('columbyApp')
     $state.go('settings');
   }
 
-  $window.document.title = 'Register | columby.com';
-
-  $scope.register = function(){
+  $scope.register = function(provider){
 
     $scope.registrationInProgress = true;
 
-    UserSrv.register($scope.newuser).then(function(response){
+    // Set the type of provider and necessary details.
+    var provider = {
+      service: provider,
+      email: $scope.email,
+      register: 'true'
+    }
+
+    AuthSrv.authenticate(provider).then(function(response){
       delete $scope.registrationInProgress;
 
-      if (response.errors && response.errors.email && (response.errors.email.message==='E-mail address is already in-use') ) {
-        ngNotify.set('This email address is already registered, please sign in!', 'error');
-      } else {
-        $scope.registrationSuccess = true;
+      if (response.user.id) {
+        ngNotify.set('Welcome, you are now signed in at Columby!', 'notice');
+        $state.go('settings');
       }
+
     });
   };
 
@@ -126,50 +145,85 @@ angular.module('columbyApp')
 })
 
 
+.controller('UserViewCtrl', function($window, $rootScope, $scope, $stateParams, AuthSrv, UserSrv, AccountSrv, ngNotify) {
+  console.log('User view controller');
 
+  $scope.contentLoading  = true;
+  $rootScope.title = 'columby.com';
+  $scope.datasets = {
+    currentPage: 1,
+    numberOfItems: 10
+  };
+
+  function fetchAccount(){
+    $scope.contentLoading = false;
+    AccountSrv.get($stateParams.slug).then(function(user){
+      $scope.user = user.account;
+
+      // Update window title
+      $rootScope.title = 'columby.com | ' + $scope.user.displayName;
+
+      // Check permission
+      $scope.user.canEdit = AuthSrv.hasPermission('edit user', {slug:$scope.user.slug});
+
+      // Set header background image
+      if ($scope.user.headerImg) {
+        //updateHeaderImage();
+      }
+
+    });
+  }
+
+  fetchAccount();
+})
 /***
  *
- * Controller for currently logged in user.
+ * Edit a user account
  *
  ***/
-.controller('UserCtrl', function ($scope, $rootScope, $location, $state, UserSrv, ngNotify) {
-
+.controller('UserEditCtrl', function ($scope, $rootScope, $location, $state, $stateParams, UserSrv, AccountSrv, ngNotify, Slug, $modal) {
+  console.log('User edit controller');
   // Set the default active panel
   $scope.activePanel = 'profile';
 
   // Get the currently loggedin user from the server.
   function fetchAccount(){
-    UserSrv.me().then(function(result){
+    UserSrv.get($stateParams.slug).then(function(result){
       console.log(result);
-      result.organisations = [];
-      for (var i=0; i<result.accounts.length; i++) {
-        console.log(result.accounts[ i]);
-        if (result.accounts[ i].primary === true) {
-          //result.account = result.accounts[ i];
-        } else {
-          result.organisations.push(result.accounts[ i]);
-        }
-      }
-      delete result.accounts;
+      // add to scope
       $scope.user = result;
-      console.log($scope.user);
+
+      //
+      if (!$scope.user.primary.id){
+        $scope.errorMsg = 'There seems to be a problem with your account. Please contact support.';
+      }
+
+      // save a copy for reference
+      $scope.originalUser = angular.copy($scope.user);
     });
   }
 
-  function saveAccount(){
-
+  $scope.updateAccount = function() {
+    $scope.updatingAccount = true;
+    AccountSrv.update($scope.user.primary).then(function(result){
+      delete $scope.updatingAccount;
+      if (result.id){
+        $scope.originalUser = $scope.user;
+        ngNotify.set('Account updated. ', 'info');
+      } else {
+        ngNotify.set('There was a problem: ' + result.msg[ 0].message, 'error');
+        $scope.user.primary = $scope.originalUser.primary;
+      }
+    })
   }
 
   // Change the active panel when a user clicks on a menu-link
   $scope.changePanel = function(panel) {
-    // Check for model change and alert to save changes
-
-    // Change the active panel
     $scope.activePanel = panel;
   }
 
   // Logout the current user
-  $scope.logout = function(){
+  $scope.logout = function() {
     UserSrv.logout();
     ngNotify.set('You are now signed out.');
     $state.go('home');
@@ -177,14 +231,43 @@ angular.module('columbyApp')
 
 
   // Delete an account
-  $scope.deleteAccount = function(index){
-    console.log(index);
-    console.log($scope.user.accounts[ index].slug);
-    // AccountSrv.delete($scope.user.accounts[index ].slug, function(res){
-    //   console.log(res);
-    // });
+  $scope.destroy = function(){
+    var modalInstance = $modal.open({
+      size: 'lg',
+      templateUrl: 'views/user/deleteModal.html'
+    }).result.then(function(){
+      $scope.deletingUser = true;
+      UserSrv.destroy($scope.user.id).then(function(result){
+        if (result.status === 'success'){
+          $state.go('home');
+          ngNotify.set('You have succesfully deleted your account, thank you and see you next time. ', 'notice');
+        }
+      });
+    },function(){
+      ngNotify.set('There was an error', 'error');
+    });
   };
 
+  // Update a slug input
+  $scope.slugify = function() {
+    $scope.user.primary.slug = Slug.slugify($scope.user.primary.slug);
+  }
+
+  // Update a slug at the server.
+  $scope.updateSlug = function() {
+    $scope.updatingSlug = true;
+
+    AccountSrv.update($scope.user.primary).then(function(result){
+      delete $scope.updatingSlug;
+      if (result.id){
+        $scope.originalUser.primary.slug = $scope.user.primary.slug;
+        ngNotify.set('Account url updated. ', 'info');
+      } else {
+        ngNotify.set('There was a problem: ' + result.msg[ 0].message, 'error');
+        $scope.user.primary.slug = $scope.originalUser.primary.slug;
+      }
+    });
+  }
 
   // Initialize
   fetchAccount();

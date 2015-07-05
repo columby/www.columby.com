@@ -4,15 +4,29 @@ angular.module('columbyApp')
 
   .service('UserSrv', function($rootScope, $http, $auth, configSrv) {
 
+    var user;
+
+    function setUser(u){
+      user = u;
+      $rootScope.user = u;
+      console.log('New user: ', user);
+    };
+
     return {
 
-      /**
-       *
-       * Login a user using an email-address,
-       *
-       **/
-      login: function(credentials) {
-        return $http.post(configSrv.apiRoot + '/v2/user/login', credentials).then(function (response) {
+
+      setUser: function(u){
+        setUser(u);
+      },
+      user: function(){
+        return user;
+      },
+
+
+      get: function(slug){
+        console.log(slug);
+        return $http.get(configSrv.apiRoot + '/v2/user/' + slug).then(function (response) {
+          console.log(response);
           return response.data;
         });
       },
@@ -69,11 +83,14 @@ angular.module('columbyApp')
       },
 
 
-      getUser: function(id){
-        var promise = $http.get(configSrv.apiRoot + '/v2/user/' + id).then(function (response) {
-          return response.data;
-        });
-        return promise;
+      destroy: function(id) {
+        console.log('deleting user ' + id);
+        return $http.delete(configSrv.apiRoot + '/v2/user/' + id).then(function(result){
+          if (result.data.status === 'success') {
+            setUser({});
+          }
+          return result.data;
+        })
       }
     };
   }

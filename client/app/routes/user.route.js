@@ -10,11 +10,11 @@ angular.module('columbyApp')
         controller: 'SigninCtrl',
         data: {
           bodyClasses: 'page user signin',
-          permission: 'signin existing user'
+          permission: 'signin user'
         }
       })
 
-      .state('verigy', {
+      .state('verify', {
         url: '/u/verify',
         templateUrl: 'views/user/verify.html',
         controller: 'SigninCtrl',
@@ -30,17 +30,18 @@ angular.module('columbyApp')
         controller: 'RegisterCtrl',
         data: {
           bodyClasses: 'page user register',
-          permission: 'register new user'
+          permission: 'register user'
         }
       })
 
-      .state('settings', {
-        url: '/u/settings',
-        templateUrl: 'views/user/settings.html',
-        controller: 'UserCtrl',
+      .state('userEdit', {
+        url: '/u/:slug/edit',
+        templateUrl: 'views/user/edit.html',
+        controller: 'UserEditCtrl',
         data: {
-          bodyClasses: 'page user settings',
-          permission: 'edit user settings'
+          bodyClasses: 'page user edit',
+          permission: 'edit user'
         }
-      });
+      })
+
   });

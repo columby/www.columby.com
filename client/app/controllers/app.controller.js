@@ -2,25 +2,25 @@
 
 angular.module('columbyApp')
 
-.controller('AppCtrl', function($window, $rootScope, $location, configSrv){
+.controller('AppCtrl', function($window, $rootScope, $location, UserSrv, configSrv){
 
-  //IE console
+  //IE console fix
   window.console = window.console || {};
   window.console.log = window.console.log || function() {};
 
   // Set page title
   $rootScope.title = "Columby";
 
-  // Set user if available
-  $rootScope.user = window.user || {};
+  // Set user if available, transfer it from window to config service
+  UserSrv.setUser(window.user || {});
   delete window.user;
 
-  // Set configuration
+  console.log('User in userService: ', UserSrv.user());
+  // Set configuration in rootScope
   $rootScope.config = configSrv;
 
   // Change body class after state change
   $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
-    console.log('State change success', fromState,toState);
     if (toState.data && toState.data.bodyClasses) {
       $rootScope.bodyClasses = toState.data.bodyClasses;
       return;

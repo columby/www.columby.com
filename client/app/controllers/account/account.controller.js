@@ -7,7 +7,7 @@ angular.module('columbyApp')
  * Account Edit Controller
  *
  **/
-  .controller('AccountCtrl', function ($window, $rootScope, $scope, $stateParams, $state, ngNotify, AccountSrv, CollectionSrv, DatasetSrv, UserSrv) {
+  .controller('AccountCtrl', function ($window, $rootScope, $scope, $stateParams, $state, ngNotify, AuthSrv, AccountSrv, CollectionSrv, DatasetSrv, UserSrv) {
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading  = true;
@@ -17,10 +17,48 @@ angular.module('columbyApp')
       numberOfItems: 10
     };
 
-    /* ---------- ROOTSCOPE EVENTS ------------------------------------------------------------------ */
-
-
     /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
+
+    function getAccount() {
+      console.log('Fetching account. ');
+      // get account information of user by userSlug
+      AccountSrv.get($stateParams.slug).then(function (result) {
+        $scope.contentLoading = false;
+        if (result.account.id) {
+
+          $scope.account = result.account;
+
+          // Set avatar url
+          if ($scope.account.avatar) {
+            $scope.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.account.avatar.shortid + '/' + $scope.account.avatar.filename;
+          }
+
+          // Update window title
+          $window.document.title = 'columby.com | ' + $scope.account.displayName;
+
+          // Check permission
+          if ($scope.account.primary){
+            $scope.account.canEdit = AuthSrv.hasPermission('edit user', {slug:$scope.account.slug});
+          } else {
+            $scope.account.canEdit = AuthSrv.hasPermission('edit account', {slug:$scope.account.slug});
+          }
+          console.log($scope.account.canEdit);
+
+
+          // Set header background image
+          if ($scope.account.headerImg) {
+            updateHeaderImage();
+          }
+
+          getCollections();
+          getDatasets();
+        } else {
+          ngNotify.set('The requested account was not found. ','error');
+          $state.go('home');
+        }
+      });
+    }
+
     function getCollections() {
       //if ($scope.account.collections && $scope.account.collections.length > 0) {
       //  $scope.account.collections = [];
@@ -50,33 +88,8 @@ angular.module('columbyApp')
 
     }
 
-    function getAccount() {
-      // get account information of user by userSlug
-      AccountSrv.get({slug: $stateParams.slug}, function (result) {
-        if (!result.id) {
-          ngNotify.set('The requested account was not found. ','error');
-          $state.go('home');
-        } else {
-          $scope.account = result;
-          if ($scope.account.avatar) {
-            $scope.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.account.avatar.shortid + '/' + $scope.account.avatar.filename;
-          }
-          $scope.contentLoading = false;
-          $window.document.title = 'columby.com | ' + result.name;
 
-          console.log(result);
-          $scope.account.canEdit = UserSrv.canEdit('account', result);
 
-          if ($scope.account.headerImg) {
-            updateHeaderImage();
-          }
-
-          getCollections();
-          getDatasets();
-        }
-      });
-
-    }
     function updateHeaderImage(){
       $scope.account.headerImg.url = $rootScope.config.filesRoot + '/a/' + $scope.account.headerImg.shortid + '/' + $scope.account.headerImg.filename;
       $scope.headerStyle={

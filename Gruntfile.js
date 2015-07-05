@@ -22,7 +22,8 @@ module.exports = function (grunt) {
     replace: 'grunt-replace',
     htmlangular: 'grunt-html-angular-validate',
     nggettext_extract: 'grunt-angular-gettext',
-    nggettext_compile: 'grunt-angular-gettext'
+    nggettext_compile: 'grunt-angular-gettext',
+    bump: 'grunt-bump'
   });
 
   // Time how long tasks take. Can help when optimizing build times
@@ -31,6 +32,25 @@ module.exports = function (grunt) {
 
   // Define the configuration for all the tasks
   grunt.initConfig({
+
+    bump: {
+      options: {
+        files: ['package.json'],
+        updateConfigs: [],
+        commit: false,
+        commitMessage: 'Release v%VERSION%',
+        commitFiles: ['package.json'],
+        createTag: true,
+        tagName: 'v%VERSION%',
+        tagMessage: 'Version %VERSION%',
+        push: false,
+        pushTo: 'upstream',
+        gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
+        globalReplace: false,
+        prereleaseName: false,
+        regExp: false
+      }
+    },
 
 
     nggettext_extract: {
@@ -52,30 +72,45 @@ module.exports = function (grunt) {
 
     // Replace configuration settings
     replace: {
+      local: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./client/config/local.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./client/config/config.js'],
+          dest: '<%= yeoman.client %>/app/'
+        }]
+      },
+
       development: {
         options: {
           patterns: [{
-            json: grunt.file.readJSON('./client/config/environments/development.json')
+            json: grunt.file.readJSON('./client/config/development.json')
           }]
         },
         files: [{
           expand: true,
           flatten: true,
-          src: ['./client/config/config.service.js'],
-          dest: '<%= yeoman.client %>/app/services/'
+          src: ['./client/config/config.js'],
+          dest: '<%= yeoman.client %>/app/'
         }]
       },
+
       dist: {
         options: {
           patterns: [{
-            json: grunt.file.readJSON('./client/config/environments/production.json')
+            json: grunt.file.readJSON('./client/config/production.json')
           }]
         },
         files: [{
           expand: true,
           flatten: true,
-          src: ['./client/config/config.service.js'],
-          dest: '<%= yeoman.client %>/app/services/'
+          src: ['./client/config/config.js'],
+          dest: '<%= yeoman.client %>/app/'
         }]
       }
     },
@@ -89,19 +124,13 @@ module.exports = function (grunt) {
     },
     express: {
       options: {
-        port: process.env.PORT || 9000
+        port: 9000
       },
       dev: {
         options: {
-          script: 'server/server.js',
-          debug: true
+          script: 'server/server.js'
         }
       },
-      prod: {
-        options: {
-          script: 'dist/server/server.js'
-        }
-      }
     },
     open: {
       server: {
@@ -234,41 +263,6 @@ module.exports = function (grunt) {
           src: '{,*/}*.css',
           dest: '.tmp/'
         }]
-      }
-    },
-
-    // Debugging with node inspector
-    'node-inspector': {
-      custom: {
-        options: {
-          'web-host': 'localhost',
-          'debug-port': 5856
-        }
-      }
-    },
-
-    // Use nodemon to run server in debug mode with an initial breakpoint
-    nodemon: {
-      debug: {
-        script: 'server/server.js',
-        options: {
-          nodeArgs: ['--debug-brk'],
-          env: {
-            PORT: process.env.PORT || 9000
-          },
-          callback: function (nodemon) {
-            nodemon.on('log', function (event) {
-              console.log(event.colour);
-            });
-
-            // opens browser on initial server start
-            nodemon.on('config:update', function () {
-              setTimeout(function () {
-                require('open')('http://localhost:8080/debug?port=5859');
-              }, 500);
-            });
-          }
-        }
       }
     },
 
@@ -467,20 +461,6 @@ module.exports = function (grunt) {
       server: [
         'less',
       ],
-      debug: {
-        tasks: [
-          'nodemon',
-          'node-inspector'
-        ],
-        options: {
-          logConcurrentOutput: true
-        }
-      },
-      dist: [
-        'less',
-        'imagemin',
-        'svgmin'
-      ]
     },
 
     env: {
@@ -587,7 +567,16 @@ module.exports = function (grunt) {
   });
 
 
-  grunt.registerTask('build-production', [
+  grunt.registerTask('default', [
+    'serve:dev'
+  ]);
+
+  grunt.registerTask('bump', [
+    'bump'
+  ]);
+
+  // Build a production version
+  grunt.registerTask('build', [
     'clean:dist',
     'replace:dist',
     'injector:less',
@@ -608,59 +597,29 @@ module.exports = function (grunt) {
     'usemin'
   ]);
 
-  grunt.registerTask('build-staging', [
-    'clean:dist',
-    'replace:development',
-    'injector:less',
-    'concurrent:dist',
-    'injector',
-    'wiredep',
-    'useminPrepare',
-    'autoprefixer',
-    'ngtemplates',
-    'concat',
-    'ngAnnotate',
-    'copy:dist',
-    'cdnify',
-    'cssmin',
-    'uglify',
-    'rev',
-    'usemin'
-  ]);
-
-
-  grunt.registerTask('default', [
-    'newer:jshint',
-    'build'
-  ]);
 
   grunt.registerTask('serve', function (target) {
-    if (target === 'dist') {
-      return grunt.task.run([
-        'build',
-        'env:all',
-        'env:prod',
-        'express:prod',
-        'wait',
-        'open',
-        'express-keepalive'
-      ]);
-    }
 
-    if (target === 'debug') {
-      return grunt.task.run([
+    if (target === 'local') {
+      grunt.task.run([
         'clean:server',
+        'replace:local',
         'env:all',
         'injector:less',
+        'nggettext_extract',
+        'nggettext_compile',
         'concurrent:server',
         'injector',
         'wiredep',
         'autoprefixer',
-        'concurrent:debug'
+        'express:dev',
+        'wait',
+        'open',
+        'watch'
       ]);
     }
 
-    if (target === 'development') {
+    if (target === 'dev') {
       grunt.task.run([
         'clean:server',
         'replace:development',
@@ -678,19 +637,5 @@ module.exports = function (grunt) {
         'watch'
       ]);
     }
-
-    grunt.task.run([
-      'clean:server',
-      'env:all',
-      'injector:less',
-      'concurrent:server',
-      'injector',
-      'wiredep',
-      'autoprefixer',
-      'express:dev',
-      'wait',
-      'open',
-      'watch'
-    ]);
   });
 };

@@ -8,7 +8,7 @@
   <div class="page-header">
     <div class="container">
       <div class="col-md-12">
-        <img src="/images/logo.png" class="logo img-responsive" />
+        <img src="/assets/img/logo.png" class="logo img-responsive" />
         <h2 class="page-subtitle" translate>publish and discover data</h2>
         <button type="button" class="big-button" ng-show="$root.user.id"  ui-sref="datasetCreate" translate>Publish new dataset</button>
         <button type="button" class="big-button" ng-hide="$root.user.id"  ui-sref='signin' translate>Login or Signup</button>
@@ -79,13 +79,13 @@
           <p>You carefully gather your data. We help you to present it in it's best way. Attach beautiful pictures, describe your dataset and add some references.</p>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-          <img src="/images/showcase-presentation.png" class="img-responsive pull-right"/>
+          <img src="/assets/img/showcase-presentation.png" class="img-responsive pull-right"/>
         </div>
       </div>
 
         <div class="container-fluid slide">
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-          <img src="/images/showcase-presentation-embed.png" class="img-responsive pull-left"/>
+          <img src="/assets/img/showcase-presentation-embed.png" class="img-responsive pull-left"/>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
           <h3>Embed your data with ease.</h3>
@@ -137,7 +137,7 @@
               <div class="user-date">
                 <!-- <img ng-src="dataset.account.avatar.img" class="img-rounded"/> -->
                 <img class="img-circle avatar-small" ng-src="{{$root.config.filesRoot}}/a/{{dataset.account.avatar.shortid}}/{{dataset.account.avatar.filename}}" alt="{{dataset.account.name}}"/>
-                <a ui-sref="account({slug:dataset.account.slug})">{{dataset.account.name || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
+                <a ui-sref="account({slug:dataset.account.slug})">{{dataset.account.displayName || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
               </div>
             </li>
         	</ul>

@@ -1,0 +1,26 @@
+
+  <div class="modal-header row">
+      <div class="col-md-10">
+        <h4 class="modal-title"><i class="fa fa-danger"></i> Delete account?</h4>
+      </div>
+      <div class="col-md-2 right">
+        <a class="close" href ng-click="$dismiss()"><span class="fa fa-close"></span></a>
+      </div>
+  </div>
+
+  <div class="modal-body row">
+    <div class="col-md-12">
+      <p>Are you really sure??? it will be deleted permanently!</p>
+      <p>Type you email-address to make it permanent</p>
+      <form class="novalidate" role="form" name="deleteForm">
+        <div class="form-group">
+          <input type="text" class="form-control" ng-model="deleteCode" ng-required="true"></input>
+        </div>
+
+    </div>
+  </div>
+
+  <div class="modal-footer center clearfix">
+    <button ng-click="$dismiss()" type="button" class="btn btn-default pull-left">Cancel</button>
+    <button type="button" class="btn btn-danger pull-right" ng-disabled="deleteCode!==user.email" ng-click="$close()">I understand, DELETE</button>
+  </div>

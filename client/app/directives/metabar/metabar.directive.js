@@ -10,11 +10,19 @@
 
 angular.module('columbyApp')
 
-  .directive('metabar', function(AuthSrv) {
+  .directive('metabar', function($state, ngNotify, AuthSrv) {
 
     return {
       restrict: 'EA',
       templateUrl: 'app/directives/metabar/metabar.html',
-      controller: function($scope){}
+      controller: function($scope, AuthSrv){
+
+        $scope.logout = function(){
+          AuthSrv.logout();
+          $state.go('home');
+          ngNotify.set('You are now signed out', 'notice');
+        }
+
+      }
     };
   });
