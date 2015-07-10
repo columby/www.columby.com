@@ -1,9 +1,4 @@
-<section class="page search" ng-controller="SearchCtrl">
-
-  <div class="actions-bar"
-    scroll-position="scroll"
-    ng-class="{top: scroll<290-75}">
-  </div>
+<section class="page search">
 
   <div class="header wrapper">
     <div class="container">
@@ -19,7 +14,7 @@
                type="text"
                ng-model="search.searchTerm"
                placeholder="Search"
-               data-ng-change="doSearch()"
+               ng-change="doSearch()"
                focus
                ng-model-options="{debounce: 250}"/>
 
@@ -32,17 +27,41 @@
 
 			<div class="search-message">{{search.message}}</div>
 
-      <div class="no-result" ng-show="search.hits.length===0">
-				No result
-			</div>
-      <ul ng-show="search.hits.length>0">
-        <li ng-repeat="result in search.hits" class="publication-item">
-          <h4><a ui-sref="{{checkLink(result)}}">{{result.title}}</a><em>{{result._source.publishStatus}}</em></h4>
-          <span class="content-type">{{result.contentType}}</span>
-          <div class="user-date"><time class="post-date">{{result._source.created_at | date:'d MMMM yyyy'}}</time></div>
-        </li>
-      </ul>
+      <div class="search-result-accounts">
+        <h3>Accounts</h3>
+        <div class="no-result" ng-show="search.hits.accounts.rows.length<1">
+  				<p>No result</p>
+  			</div>
+        <ul>
+          <li ng-repeat="account in search.hits.accounts.rows" class="publication-item">
+            <h4><a ui-sref="account({slug: account.slug})">{{account.title}}</a></h4>
+          </li>
+        </ul>
+      </div>
 
+      <div class="search-result-datasets">
+        <h3>Datasets</h3>
+        <div class="no-result" ng-show="search.hits.datasets.rows.length<1">
+  				<p>No dataset result</p>
+  			</div>
+        <ul>
+          <li ng-repeat="dataset in search.hits.datasets.rows">
+            <h4><a ui-sref="dataset({id: '{{dataset.shortid}}' })">{{dataset.title}}</a></h4>
+          </li>
+        </ul>
+      </div>
+
+      <div class="search-result-tags">
+        <h3>Tags</h3>
+        <div class="no-result" ng-show="search.hits.tags.rows.length<1">
+  				<p>No result</p>
+  			</div>
+        <ul>
+          <li ng-repeat="tag in search.hits.tags.rows">
+            <h4><a ui-sref="tag({slug: tag.slug})">{{tag.title}}</a></h4>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>

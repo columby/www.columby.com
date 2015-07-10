@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('columbyApp')
-  .controller('HomeCtrl', function ($window,$scope, SearchSrv, DatasetSrv) {
+  .controller('HomeCtrl', function ($window,$scope,$state,SearchSrv,DatasetSrv) {
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading = true;
@@ -18,9 +18,6 @@ angular.module('columbyApp')
 
 
     /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
-
-     // TODO: Marcel, zoeken op dataset titel en beschrijving van een dataset, titel van een account, tags.
-     // Resultaat gegroepeerdspot
     $scope.doSearch = function(){
 
       if ($scope.search.searchTerm.length>2){
@@ -28,9 +25,7 @@ angular.module('columbyApp')
         SearchSrv.query({
           text: $scope.search.searchTerm
         }).then(function (response) {
-          console.log(response);
-          $scope.search.hits = response;
-          $scope.search.message = null;
+          $state.go('search');
         }, function(err){
           $scope.search.message = 'Error: ' + err.data.message;
         });
