@@ -130,6 +130,10 @@
                 People
               </div>
               <div class="panel-body">
+                <h3>The public data team</h3>
+                <p>This is the public data team. <a href="">Add team member</a></p>
+
+                <h3>Organisation editors</h3>
                 <ul>
                   <li ng-repeat="user in account.people">
                     <img ng-src="{{user.avatar.url || 'assets/img/avatar.png'}}"/> {{user.role}} - {{user.displayName}} - <a href="#">change role</a> - <a href="#">delete</a>
@@ -146,12 +150,29 @@
                 Registries
               </div>
               <div class="panel-body">
-                <div class="empty" ng-show="!user.registries || user.registries.length<1"><p>No registries added yet!</p></div>
-                <ul>
-                  <li>BZK</li>
-                  <li>IATI</li>
-                  <li>NGR</li>
-                </ul>
+                <p>With Columby it is possible to automatically update data registers. Add the key here and all changes to a dataset will be updated automatically at the register.<br>Is your desired register not in the list. Let us know and we will work on a synchronisation. </p>
+                <hr>
+                <h3>Activated registries</h3>
+                <h4>data.overheid.nl</h4>
+                <label>api-key: </label><input></input><a class="btn btn-defalt">validate key</a><br>
+                <label>key status: </label>active<br>
+                <label>auto-add: </label>yes no<br>
+                <label>auto-sync: </label>yes no<br>
+                <table>
+                  <th>
+                    <td>Total</td><td>Excluded</td><td>In sync</td><td>Unsynced</td>
+                  </th>
+
+                  <tr>
+                    <td>210</td><td>120</td><td>80</td><td>10</td>
+                  </tr>
+                </table>
+                <hr>
+                <h4>Inactive registries</h4>
+                <label>IATI</label><a class="btn btn-default">Make active</a><br>
+                <label>NGR</label><a class="btn btn-default">Make active</a>
+                <hr>
+                <p>Your registry not listed? Contact us to discuss the possibilities! </p>
               </div>
             </div>
           </div>

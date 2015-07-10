@@ -8,7 +8,7 @@ angular.module('columbyApp')
  * Signin controller for an existing user.
  *
  ***/
-.controller('SigninCtrl', function ($rootScope, $scope, $state, UserSrv, AuthSrv, ngNotify) {
+.controller('SigninCtrl', function ($rootScope, $scope, $state, UserSrv, AuthSrv, ngNotify, $modal) {
 
   // Set page title
   $rootScope.title = 'Sign in | columby.com';
@@ -23,7 +23,12 @@ angular.module('columbyApp')
   // Handle login authentication
   $scope.authenticate = function(provider){
 
-    $scope.loginInProgress = true;
+    // Open up a loading modal
+    var modal = $modal.open({
+      size: 'lg',
+      templateUrl: 'views/user/partials/modal-inprogress.html',
+      controller: function(){ }
+    });
 
     // Set the type of provider and necessary details.
     var provider = {
@@ -35,7 +40,7 @@ angular.module('columbyApp')
     // Authenticate with the authentication service.
     AuthSrv.authenticate(provider).then(function(response){
 
-      delete $scope.loginInProgress;
+      modal.dismiss();
 
       console.log(response);
 
@@ -67,7 +72,7 @@ angular.module('columbyApp')
           }
         }
       } else {
-        ngNotify.set('Sorry, something went wrong', 'danger');
+        //ngNotify.set('Sorry, something went wrong', 'danger');
       }
     })
   };
