@@ -24,10 +24,10 @@ msgstr ""
 msgid "Read about Columby"
 msgstr ""
 
-#: client/views/home/home.html:132
+#: client/views/home/home.html:128
 msgid "Recently published"
 msgstr ""
 
-#: client/views/home/home.html:33
+#: client/views/home/home.html:31
 msgid "Search!"
 msgstr ""

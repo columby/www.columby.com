@@ -2,13 +2,13 @@ window.user = {};
 
 window.config = {
 
-  version   : 'release-1.1',
+  version   : '1.0.6',
 
-  apiRoot   : 'http://localhost:8000',
+  apiRoot   : 'https://dev-api.columby.com',
 
-  workerRoot: 'http://localhost:7000',
+  workerRoot: 'https://dev-worker.columby.com',
 
-  filesRoot : 'http://localhost:8500',
+  filesRoot : 'https://dev-files.columby.com',
 
   embedlyKey: '844b2c4d25334b4db2c327f10c70cb54',
 

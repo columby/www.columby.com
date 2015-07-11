@@ -72,20 +72,6 @@ module.exports = function (grunt) {
 
     // Replace configuration settings
     replace: {
-      local: {
-        options: {
-          patterns: [{
-            json: grunt.file.readJSON('./client/config/local.json')
-          }]
-        },
-        files: [{
-          expand: true,
-          flatten: true,
-          src: ['./client/config/config.js'],
-          dest: '<%= yeoman.client %>/app/'
-        }]
-      },
-
       development: {
         options: {
           patterns: [{
@@ -100,7 +86,7 @@ module.exports = function (grunt) {
         }]
       },
 
-      dist: {
+      production: {
         options: {
           patterns: [{
             json: grunt.file.readJSON('./client/config/production.json')
@@ -129,6 +115,11 @@ module.exports = function (grunt) {
       dev: {
         options: {
           script: 'server/server.js'
+        }
+      },
+      production: {
+        options: {
+          script: 'dist/server/server.js'
         }
       },
     },
@@ -254,7 +245,7 @@ module.exports = function (grunt) {
     // Add vendor prefixed styles
     autoprefixer: {
       options: {
-        browsers: ['last 2 versions', 'ie >= 9']
+        browsers: ['last 1 version', 'ie >= 9']
       },
       dist: {
         files: [{
@@ -280,10 +271,10 @@ module.exports = function (grunt) {
       dist: {
         files: {
           src: [
-            '<%= yeoman.dist %>/public/{,*/}*.js',
-            '<%= yeoman.dist %>/public/{,*/}*.css',
-            '<%= yeoman.dist %>/public/assets/img/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%= yeoman.dist %>/public/assets/fonts/*'
+            '<%= yeoman.dist %>/client/{,*/}*.js',
+            '<%= yeoman.dist %>/client/{,*/}*.css',
+            '<%= yeoman.dist %>/client/assets/img/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+            '<%= yeoman.dist %>/client/assets/fonts/*'
           ]
         }
       }
@@ -295,19 +286,19 @@ module.exports = function (grunt) {
     useminPrepare: {
       html: ['<%= yeoman.client %>/index.html'],
       options: {
-        dest: '<%= yeoman.dist %>/public'
+        dest: '<%= yeoman.dist %>/client'
       }
     },
 
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
-      html: ['<%= yeoman.dist %>/public/{,*/}*.html'],
-      css: ['<%= yeoman.dist %>/public/{,*/}*.css'],
-      js: ['<%= yeoman.dist %>/public/{,*/}*.js'],
+      html: ['<%= yeoman.dist %>/client/{,*/}*.html'],
+      css: ['<%= yeoman.dist %>/client/{,*/}*.css'],
+      js: ['<%= yeoman.dist %>/client/{,*/}*.js'],
       options: {
         assetsDirs: [
-          '<%= yeoman.dist %>/public',
-          '<%= yeoman.dist %>/public/assets/img'
+          '<%= yeoman.dist %>/client',
+          '<%= yeoman.dist %>/client/assets/img'
         ],
         // This is so we update image references in our ng-templates
         patterns: {
@@ -323,9 +314,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.client %>/imgs/',
-          src: '**/*.{png,jpg,jpeg,gif}',
-          dest: '<%= yeoman.dist %>/public/imgs'
+          cwd: '<%= yeoman.client %>/assets/img',
+          src: '{,*/}*.{png,jpg,jpeg,gif}',
+          dest: '<%= yeoman.dist %>/client/assets/img'
         }]
       }
     },
@@ -334,9 +325,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.client %>/imgs/',
-          src: '**/*.svg',
-          dest: '<%= yeoman.dist %>/public/imgs'
+          cwd: '<%= yeoman.client %>/assets/img',
+          src: '{,.*}*.svg',
+          dest: '<%= yeoman.dist %>/client/assets/img'
         }]
       }
     },
@@ -385,7 +376,7 @@ module.exports = function (grunt) {
     // Replace Google CDN references
     cdnify: {
       dist: {
-        html: ['<%= yeoman.dist %>/public/*.html']
+        html: ['<%= yeoman.dist %>/client/*.html']
       }
     },
 
@@ -396,7 +387,7 @@ module.exports = function (grunt) {
           expand: true,
           dot: true,
           cwd: '<%= yeoman.client %>',
-          dest: '<%= yeoman.dist %>/public',
+          dest: '<%= yeoman.dist %>/client',
           src: [
             '*.{ico,png,txt}',
             '.htaccess',
@@ -408,7 +399,7 @@ module.exports = function (grunt) {
         }, {
           expand: true,
           cwd: '.tmp/images',
-          dest: '<%= yeoman.dist %>/public/assets/imgs',
+          dest: '<%= yeoman.dist %>/client/assets/imgs',
           src: ['generated/*']
         }, {
           expand: true,
@@ -423,14 +414,14 @@ module.exports = function (grunt) {
           flatten: 'true',
           cwd: '<%= yeoman.client %>',
           src: ['bower_components/font-awesome/fonts/*.*'],
-          dest: '<%= yeoman.dist %>/public/fonts'
+          dest: '<%= yeoman.dist %>/client/fonts'
         }]
       },
       styles: {
         expand: true,
         cwd: '<%= yeoman.client %>',
         dest: '.tmp/',
-        src: ['{app,components}/**/*.css']
+        src: ['{app,assets}/**/*.css']
       }
     },
 
@@ -461,6 +452,11 @@ module.exports = function (grunt) {
       server: [
         'less',
       ],
+      dist: [
+        'less',
+        'imagemin',
+        'svgmin'
+      ]
     },
 
     env: {
@@ -476,7 +472,7 @@ module.exports = function (grunt) {
         paths: [
           '<%= yeoman.client %>/bower_components',
           '<%= yeoman.client %>/app',
-          '<%= yeoman.client %>/components'
+          '<%= yeoman.client %>/assets',
         ]
       },
       server: {
@@ -514,7 +510,6 @@ module.exports = function (grunt) {
         options: {
           transform: function (filePath) {
             filePath = filePath.replace('/client/assets/styles/', '');
-            filePath = filePath.replace('/client/components/', '');
             return '@import \'' + filePath + '\';';
           },
           starttag: '// injector',
@@ -532,7 +527,7 @@ module.exports = function (grunt) {
       css: {
         options: {
           transform: function (filePath) {
-            filePath = filePath.replace('/client/assets/', '');
+            filePath = filePath.replace('/client/assets/styles/', '');
             filePath = filePath.replace('/.tmp/', '');
             return '<link rel="stylesheet" href="' + filePath + '">';
           },
@@ -568,7 +563,7 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('default', [
-    'serve:dev'
+    'serve:development'
   ]);
 
   grunt.registerTask('bump', [
@@ -577,33 +572,68 @@ module.exports = function (grunt) {
 
   // Build a production version
   grunt.registerTask('build', [
+    // Delete all files dist directory
     'clean:dist',
-    'replace:dist',
+    // Replace configuration settings for production environment
+    'replace:production',
+    // Inject all .less files into app.less
     'injector:less',
+    // Compile translation files
     'nggettext_compile',
+    // convert less, images, svg
     'concurrent:dist',
+    // Inject scripts, css into index.html, less into app.less
     'injector',
+    // inject bower components js and css into index.html
     'wiredep',
+    // configuration for combination of css, js files
     'useminPrepare',
+    //
     'autoprefixer',
+    // Create angular view templates
     'ngtemplates',
+    // create combination files
     'concat',
+
     'ngAnnotate',
+    // Copy files to dist folder
     'copy:dist',
+
     'cdnify',
+    // add app css files (vendor and app)
     'cssmin',
+    // minify css and js
     'uglify',
+    // Rename files
     'rev',
+    // Update refrences
     'usemin'
   ]);
 
 
   grunt.registerTask('serve', function (target) {
 
-    if (target === 'local') {
+    if (target === 'production') {
+      // user production api
       grunt.task.run([
         'clean:server',
-        'replace:local',
+        'replace:production',
+        'env:all',
+        'injector:less',
+        'concurrent:server',
+        'injector',
+        'wiredep',
+        'autoprefixer',
+        'express:production',
+        'wait',
+        'open',
+        'watch'
+      ]);
+    } else if (target==='development'){
+      // Use development api
+      grunt.task.run([
+        'clean:server',
+        'replace:development',
         'env:all',
         'injector:less',
         'nggettext_extract',
@@ -617,12 +647,11 @@ module.exports = function (grunt) {
         'open',
         'watch'
       ]);
-    }
-
-    if (target === 'dev') {
+    }else if (target==='local'){
+      // Use local api
       grunt.task.run([
         'clean:server',
-        'replace:development',
+        'replace:local',
         'env:all',
         'injector:less',
         'nggettext_extract',
