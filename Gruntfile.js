@@ -1,29 +1,35 @@
-// Generated on 2014-11-07 using generator-angular-fullstack 2.0.13
+/***
+ *
+ * Build:
+ *   build:development   --> Minified version with config for staging site (dev.columby.com)
+ *   build:production    --> Minified version with config for production site (www.columby.com)
+ *
+ * Serve:
+ *   serve:local         --> Uses local development files + local api
+ *   serve:development   --> Uses local development files + development api
+ *   serve:staging       --> Uses local built for staging files + development api
+ *   serve:production    --> Uses local Build for staging files + production api
+ *
+ ***/
+
 'use strict';
 
 module.exports = function (grunt) {
-  var localConfig;
-
-  try {
-    localConfig = require('./server/config/local.env');
-  } catch(e) {
-    localConfig = {};
-  }
 
   // Load grunt tasks automatically, when needed
   require('jit-grunt')(grunt, {
-    express: 'grunt-express-server',
-    useminPrepare: 'grunt-usemin',
-    ngtemplates: 'grunt-angular-templates',
-    cdnify: 'grunt-google-cdn',
-    protractor: 'grunt-protractor-runner',
-    injector: 'grunt-asset-injector',
-    buildcontrol: 'grunt-build-control',
-    replace: 'grunt-replace',
-    htmlangular: 'grunt-html-angular-validate',
+    express       : 'grunt-express-server',
+    useminPrepare : 'grunt-usemin',
+    ngtemplates   : 'grunt-angular-templates',
+    cdnify        : 'grunt-google-cdn',
+    protractor    : 'grunt-protractor-runner',
+    injector      : 'grunt-asset-injector',
+    buildcontrol  : 'grunt-build-control',
+    replace       : 'grunt-replace',
+    htmlangular   : 'grunt-html-angular-validate',
     nggettext_extract: 'grunt-angular-gettext',
     nggettext_compile: 'grunt-angular-gettext',
-    bump: 'grunt-bump'
+    bump          : 'grunt-bump'
   });
 
   // Time how long tasks take. Can help when optimizing build times
@@ -72,7 +78,21 @@ module.exports = function (grunt) {
 
     // Replace configuration settings
     replace: {
-      development: {
+      local: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./client/config/local.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./client/config/config.js'],
+          dest: '<%= yeoman.client %>/app/'
+        }]
+      },
+
+      staging: {
         options: {
           patterns: [{
             json: grunt.file.readJSON('./client/config/development.json')
@@ -112,12 +132,13 @@ module.exports = function (grunt) {
       options: {
         port: 9000
       },
-      dev: {
+      development: {
         options: {
-          script: 'server/server.js'
+          script: 'server/server.js',
+          debug: true
         }
       },
-      production: {
+      dist: {
         options: {
           script: 'dist/server/server.js'
         }
@@ -131,9 +152,9 @@ module.exports = function (grunt) {
     watch: {
       injectJS: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.js',
-          '!<%= yeoman.client %>/{app,components}/**/*.spec.js',
-          '!<%= yeoman.client %>/{app,components}/**/*.mock.js',
+          '<%= yeoman.client %>/app/**/*.js',
+          '!<%= yeoman.client %>/app/**/*.spec.js',
+          '!<%= yeoman.client %>/app/**/*.mock.js',
           '!<%= yeoman.client %>/app/app.js'],
         tasks: ['injector:scripts']
       },
@@ -245,7 +266,7 @@ module.exports = function (grunt) {
     // Add vendor prefixed styles
     autoprefixer: {
       options: {
-        browsers: ['last 1 version', 'ie >= 9']
+        browsers: ['last 2 versions', 'ie >= 9']
       },
       dist: {
         files: [{
@@ -271,10 +292,10 @@ module.exports = function (grunt) {
       dist: {
         files: {
           src: [
-            '<%= yeoman.dist %>/client/{,*/}*.js',
-            '<%= yeoman.dist %>/client/{,*/}*.css',
-            '<%= yeoman.dist %>/client/assets/img/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%= yeoman.dist %>/client/assets/fonts/*'
+            '<%= yeoman.dist %>/public/{,*/}*.js',
+            '<%= yeoman.dist %>/public/{,*/}*.css',
+            '<%= yeoman.dist %>/public/assets/img/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+            '<%= yeoman.dist %>/public/assets/fonts/*'
           ]
         }
       }
@@ -286,19 +307,19 @@ module.exports = function (grunt) {
     useminPrepare: {
       html: ['<%= yeoman.client %>/index.html'],
       options: {
-        dest: '<%= yeoman.dist %>/client'
+        dest: '<%= yeoman.dist %>/public'
       }
     },
 
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
-      html: ['<%= yeoman.dist %>/client/{,*/}*.html'],
-      css: ['<%= yeoman.dist %>/client/{,*/}*.css'],
-      js: ['<%= yeoman.dist %>/client/{,*/}*.js'],
+      html: ['<%= yeoman.dist %>/public/{,*/}*.html'],
+      css: ['<%= yeoman.dist %>/public/{,*/}*.css'],
+      js: ['<%= yeoman.dist %>/public/{,*/}*.js'],
       options: {
         assetsDirs: [
-          '<%= yeoman.dist %>/client',
-          '<%= yeoman.dist %>/client/assets/img'
+          '<%= yeoman.dist %>/public',
+          '<%= yeoman.dist %>/public/assets/img'
         ],
         // This is so we update image references in our ng-templates
         patterns: {
@@ -314,9 +335,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.client %>/assets/img',
-          src: '{,*/}*.{png,jpg,jpeg,gif}',
-          dest: '<%= yeoman.dist %>/client/assets/img'
+          cwd: '<%= yeoman.client %>/assets/img/',
+          src: '**/*.{png,jpg,jpeg,gif}',
+          dest: '<%= yeoman.dist %>/public/assets/img'
         }]
       }
     },
@@ -325,9 +346,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.client %>/assets/img',
-          src: '{,.*}*.svg',
-          dest: '<%= yeoman.dist %>/client/assets/img'
+          cwd: '<%= yeoman.client %>/assets/img/',
+          src: '**/*.svg',
+          dest: '<%= yeoman.dist %>/public/assets/img'
         }]
       }
     },
@@ -376,7 +397,7 @@ module.exports = function (grunt) {
     // Replace Google CDN references
     cdnify: {
       dist: {
-        html: ['<%= yeoman.dist %>/client/*.html']
+        html: ['<%= yeoman.dist %>/public/*.html']
       }
     },
 
@@ -387,7 +408,7 @@ module.exports = function (grunt) {
           expand: true,
           dot: true,
           cwd: '<%= yeoman.client %>',
-          dest: '<%= yeoman.dist %>/client',
+          dest: '<%= yeoman.dist %>/public',
           src: [
             '*.{ico,png,txt}',
             '.htaccess',
@@ -398,8 +419,8 @@ module.exports = function (grunt) {
           ]
         }, {
           expand: true,
-          cwd: '.tmp/images',
-          dest: '<%= yeoman.dist %>/client/assets/imgs',
+          cwd: '.tmp/img',
+          dest: '<%= yeoman.dist %>/public/assets/img',
           src: ['generated/*']
         }, {
           expand: true,
@@ -414,14 +435,14 @@ module.exports = function (grunt) {
           flatten: 'true',
           cwd: '<%= yeoman.client %>',
           src: ['bower_components/font-awesome/fonts/*.*'],
-          dest: '<%= yeoman.dist %>/client/fonts'
+          dest: '<%= yeoman.dist %>/public/fonts'
         }]
       },
       styles: {
         expand: true,
         cwd: '<%= yeoman.client %>',
         dest: '.tmp/',
-        src: ['{app,assets}/**/*.css']
+        src: ['{app,components}/**/*.css']
       }
     },
 
@@ -460,10 +481,15 @@ module.exports = function (grunt) {
     },
 
     env: {
-      prod: {
+      production: {
         NODE_ENV: 'production'
       },
-      all: localConfig
+      staging: {
+        NODE_ENV: 'staging'
+      },
+      development: {
+        NODE_ENV: 'development'
+      },
     },
 
     // Compiles Less to CSS
@@ -472,7 +498,7 @@ module.exports = function (grunt) {
         paths: [
           '<%= yeoman.client %>/bower_components',
           '<%= yeoman.client %>/app',
-          '<%= yeoman.client %>/assets',
+          '<%= yeoman.client %>/components'
         ]
       },
       server: {
@@ -510,6 +536,7 @@ module.exports = function (grunt) {
         options: {
           transform: function (filePath) {
             filePath = filePath.replace('/client/assets/styles/', '');
+            filePath = filePath.replace('/client/components/', '');
             return '@import \'' + filePath + '\';';
           },
           starttag: '// injector',
@@ -527,7 +554,7 @@ module.exports = function (grunt) {
       css: {
         options: {
           transform: function (filePath) {
-            filePath = filePath.replace('/client/assets/styles/', '');
+            filePath = filePath.replace('/client/assets/', '');
             filePath = filePath.replace('/.tmp/', '');
             return '<link rel="stylesheet" href="' + filePath + '">';
           },
@@ -562,16 +589,40 @@ module.exports = function (grunt) {
   });
 
 
-  grunt.registerTask('default', [
-    'serve:development'
+  // grunt.registerTask('default', [
+  //   'serve:development'
+  // ]);
+  grunt.registerTask('build', [
+    'build:production'
   ]);
 
   grunt.registerTask('bump', [
     'bump'
   ]);
 
+  grunt.registerTask('build:development', [
+    'clean:dist',
+    'replace:staging',
+    'injector:less',
+    'nggettext_compile',
+    'concurrent:dist',
+    'injector',
+    'wiredep',
+    'useminPrepare',
+    'autoprefixer',
+    'ngtemplates',
+    'concat',
+    'ngAnnotate',
+    'copy:dist',
+    'cdnify',
+    'cssmin',
+    'uglify',
+    'rev',
+    'usemin'
+  ]);
+
   // Build a production version
-  grunt.registerTask('build', [
+  grunt.registerTask('build:production', [
     // Delete all files dist directory
     'clean:dist',
     // Replace configuration settings for production environment
@@ -610,61 +661,55 @@ module.exports = function (grunt) {
     'usemin'
   ]);
 
+  // Serve development files with local API
+  grunt.registerTask('serve:local', [
+    'clean:server',
+    'env:development',
+    'replace:local',
+    'injector:less',
+    'concurrent:server',
+    'injector',
+    'wiredep',
+    'autoprefixer',
+    'express:development',
+    'wait',
+    'open',
+    'watch'
+  ]);
 
-  grunt.registerTask('serve', function (target) {
+  // Serve development files with staging API
+  grunt.registerTask('serve:development', [
+    'clean:server',
+    'env:development',
+    'replace:staging',
+    'injector:less',
+    'concurrent:server',
+    'injector',
+    'wiredep',
+    'autoprefixer',
+    'express:development',
+    'wait',
+    'open',
+    'watch'
+  ]);
 
-    if (target === 'production') {
-      // user production api
-      grunt.task.run([
-        'clean:server',
-        'replace:production',
-        'env:all',
-        'injector:less',
-        'concurrent:server',
-        'injector',
-        'wiredep',
-        'autoprefixer',
-        'express:production',
-        'wait',
-        'open',
-        'watch'
-      ]);
-    } else if (target==='development'){
-      // Use development api
-      grunt.task.run([
-        'clean:server',
-        'replace:development',
-        'env:all',
-        'injector:less',
-        'nggettext_extract',
-        'nggettext_compile',
-        'concurrent:server',
-        'injector',
-        'wiredep',
-        'autoprefixer',
-        'express:dev',
-        'wait',
-        'open',
-        'watch'
-      ]);
-    }else if (target==='local'){
-      // Use local api
-      grunt.task.run([
-        'clean:server',
-        'replace:local',
-        'env:all',
-        'injector:less',
-        'nggettext_extract',
-        'nggettext_compile',
-        'concurrent:server',
-        'injector',
-        'wiredep',
-        'autoprefixer',
-        'express:dev',
-        'wait',
-        'open',
-        'watch'
-      ]);
-    }
-  });
+  // Serve minified production version with staging API
+  grunt.registerTask('serve:staging', [
+    'build:development',
+    'env:staging',
+    'express:dist',
+    'wait',
+    'open',
+    'express-keepalive'
+  ]);
+
+  // Serve minified production version with production API
+  grunt.registerTask('serve:production', [
+    'build:production',
+    'env:production',
+    'express:dist',
+    'wait',
+    'open',
+    'express-keepalive'
+  ]);
 };

@@ -8,17 +8,26 @@ var express = require('express'),
     bodyParser = require('body-parser');
 
 var app = express();
-    app.set('port', 9000);
-    app.use(morgan('dev'));
-    app.use(express.static(path.join(__dirname, '../client')));
-    app.use(bodyParser.urlencoded({ extended: false }));
-    app.use(bodyParser.json());
-    app.use(methodOverride());
-    app.use(express.static(path.join(__dirname, '../.tmp')));
+app.set('port', 9000);
 
-    app.all('/*', function(req,res,next) {
-      res.sendFile(path.resolve(path.join(__dirname, '../client/index.html')));
-    });
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(methodOverride());
+
+if ( (process.env.NODE_ENV === 'staging') || (process.env.NODE_ENV==='production') ) {
+  app.use(express.static(path.join(__dirname, '../public')));
+  app.all('/*', function(req,res,next) {
+    res.sendFile(path.resolve(path.join(__dirname, '../public/index.html')));
+  });
+} else {
+  app.use(express.static(path.join(__dirname, '../.tmp')));
+  app.use(express.static(path.join(__dirname, '../client')));
+  app.use(morgan('dev'));
+  app.all('/*', function(req,res,next) {
+    res.sendFile(path.resolve(path.join(__dirname, '../client/index.html')));
+  });
+}
+
 
 http.createServer(app).listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));
