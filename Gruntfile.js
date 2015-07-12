@@ -600,6 +600,9 @@ module.exports = function (grunt) {
     'bump'
   ]);
 
+  grunt.registerTask('build:staging', [
+    'build:development'
+  ]);
   grunt.registerTask('build:development', [
     'clean:dist',
     'replace:staging',
