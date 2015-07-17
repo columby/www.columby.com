@@ -1,6 +1,7 @@
-<navbar class="navbar-default navbar-fixed-top">
+<navbar class="sticky-header" ng-class="{hide: hideHeader}">
   <div class="container-fluid">
     <div id="navbar" class="navbar-collapse collapse">
+
       <a classs="menu" href="#" ng-click="toggleSidebar($event)">Menu</a>
       <a ui-sref="home" class="logo" ng-hide="$root.showSitenav">
       	<img src="/assets/img/logo-transparant-white.png">

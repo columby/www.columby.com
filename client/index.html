@@ -40,10 +40,11 @@
     <!-- Init loader -->
     <div ng-if="initialLoad" style="text-align:center; margin-top:50px"><p>Loading Columby</p></div>
     <!-- / Init loader -->
-
+    <!-- <auto-hide-sticky-header class="sticky-header" show-at-bottom="false"></auto-hide-sticky-header> -->
+    <div header class="header"></div>
     <div sidebar class="sidebar"></div>
 
-    <div header class="header"></div>
+    <!-- <div header class="header"></div> -->
 
     <!-- Main UI -->
     <div ui-view autoscroll="true" class="page-content"></div>
@@ -142,7 +143,6 @@
           <script src="app/directives/focus/focus.directive.js"></script>
           <script src="app/directives/footer/footer.directive.js"></script>
           <script src="app/directives/header/header.directive.js"></script>
-          <script src="app/directives/metabar/metabar.directive.js"></script>
           <script src="app/directives/noImage/noImage.directive.js"></script>
           <script src="app/directives/scrollPosition/scrollPosition.directive.js"></script>
           <script src="app/directives/sidebar/sidebar.directive.js"></script>
