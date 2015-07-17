@@ -39,30 +39,21 @@ angular.module('columbyApp')
 
     // Authenticate with the authentication service.
     AuthSrv.authenticate(provider).then(function(response){
-
+      console.log(response);
       modal.dismiss();
 
-      console.log(response);
-
       if (response.status === 'warning'){
-        ngNotify.set(response.msg, 'warning');
-      } else if (response.user && response.user.id) {
+        ngNotify.set(response.msg, 'error');
+      } else if (response.status === 'wrong_provider'){
+        ngNotify.set(response.msg, 'error');
+      } else if (response.status==="success") {
         // Handle email login
-        if (provider==='email'){
+        if (provider.service === 'email'){
           if (response.status === 'success') {
-            $scope.signinSuccess = true;
-          } else if (response.status === 'not_found') {
-            ngNotify.set('The email address ' + $scope.email + ' does not exist. Would you like to register for a new account?', 'warning');
-            $scope.newuser={};
-            $scope.newuser.email = $scope.email;
-
-            var newmail = $scope.email.replace(/@.*$/,'').substring(0,20);
-            for (var c=0; newmail.length < 3; c++) {
-              newmail = newmail + c;
-            }
-            $scope.newuser.name = newmail;
-          } else {
-            ngNotify.set('Sorry, something went wrong... ' + JSON.stringify(response.err), 'error');
+            var successModal = $modal.open({
+              size: 'lg',
+              templateUrl: 'views/user/partials/modal-email-success.html',
+            });
           }
         } else {
           // Handle oauth login
@@ -71,8 +62,19 @@ angular.module('columbyApp')
             $state.go('home');
           }
         }
+      } else if (response.status === 'not_found') {
+
+        ngNotify.set('The email address ' + $scope.email + ' does not exist. Would you like to register for a new account?', 'warning');
+        $scope.newuser={};
+        $scope.newuser.email = $scope.email;
+
+        var newmail = $scope.email.replace(/@.*$/,'').substring(0,20);
+        for (var c=0; newmail.length < 3; c++) {
+          newmail = newmail + c;
+        }
+        $scope.newuser.name = newmail;
       } else {
-        //ngNotify.set('Sorry, something went wrong', 'danger');
+        ngNotify.set('Sorry, something went wrong... ' + JSON.stringify(response.err), 'error');
       }
     })
   };
@@ -106,7 +108,7 @@ angular.module('columbyApp')
  * Register controller for a new user.
  *
  ***/
-.controller('RegisterCtrl', function ($window, $scope, $rootScope, $location, $http, $state, AccountSrv, UserSrv, ngNotify, Slug, AuthSrv) {
+.controller('RegisterCtrl', function ($window, $scope, $rootScope, $location, $http, $state, AccountSrv, UserSrv, ngNotify, Slug, AuthSrv,$modal) {
 
   $window.document.title = 'Register | columby.com';
 
@@ -118,19 +120,30 @@ angular.module('columbyApp')
 
   $scope.register = function(provider){
 
-    $scope.registrationInProgress = true;
+    // Open up a loading modal
+    var modal = $modal.open({
+      size: 'lg',
+      templateUrl: 'views/user/partials/modal-inprogress.html',
+      controller: function(){ }
+    });
 
     // Set the type of provider and necessary details.
     var provider = {
       service: provider,
-      email: $scope.email,
+      email: $scope.newuser.email,
+      displayName: $scope.newuser.name,
       register: 'true'
     }
 
-    AuthSrv.authenticate(provider).then(function(response){
-      delete $scope.registrationInProgress;
+    console.log('p', provider);
 
-      if (response.user.id) {
+    AuthSrv.authenticate(provider).then(function(response){
+
+      console.log(response);
+      if (response.status === 'warning'){
+        ngNotify.set(response.msg, 'error');
+        modal.dismiss();
+      } else if (response.user.id) {
         ngNotify.set('Welcome, you are now signed in at Columby!', 'notice');
         $state.go('settings');
       }

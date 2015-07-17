@@ -75,12 +75,6 @@
 
   </div>
 
-  <div class="fullscreen" ng-show="loginInProgress">
-    <div class="content">
-      <h1>Signin in progress</h1>
-    </div>
-  </div>
-
   <!-- Verification modal -->
   <div class="fullscreen" ng-show="verifyInProgress">
     <div class="content">
@@ -89,13 +83,6 @@
       <div class="alert alert-danger animated fadeIn" ng-show="verificationError">{{verificationError}}</div>
       <a ui-sref="home">home</a>
     </div>
-  </div>
-
-  <!-- Token request success madal -->
-  <div class="fullscreen" ng-show="signinSuccess">
-    <h1>Check your inbox</h1>
-    <p>The authentication was successful. You should receive a login link in your inbox soon.</p>
-    <a ui-sref="home">home</a>
   </div>
 
   <!-- Registration request success -->

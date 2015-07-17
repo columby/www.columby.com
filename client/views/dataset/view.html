@@ -1,19 +1,5 @@
 <div class="dataset view">
 
-  <div class="actions-bar"
-    scroll-position="scroll"
-    ng-class="{top: scroll<315}">
-
-    <ul>
-      <li>
-        <a class="default-button edit"
-          ng-show  = "dataset.canEdit"
-          ui-sref="dataset.edit({id:dataset.shortid})">edit
-        </a>
-      </li>
-    </ul>
-  </div>
-
   <div class="page-loading" ng-show="datasetLoading"><i class="fa fa-spinner fa-spin"></i> Loading dataset...</div>
 
   <!-- Main dataset Content -->

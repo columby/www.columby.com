@@ -42,9 +42,16 @@ angular.module('columbyApp')
 
         // handle email login
         if (provider.service === 'email') {
-          return $http.post(configSrv.apiRoot + '/v2/user/login', provider.email).then(function (response) {
-            return response.data;
-          });
+          if (provider.register === 'false' ) {
+            return $http.post(configSrv.apiRoot + '/v2/user/login', {email: provider.email}).then(function (response) {
+              return response.data;
+            });
+          }
+          if (provider.register === 'true' ) {
+            return $http.post(configSrv.apiRoot + '/v2/user/register', provider).then(function (response) {
+              return response.data;
+            });
+          }
         } else {
           // handle ouath login
           return $auth.authenticate(provider.service, {register:provider.register}).then(function(result){

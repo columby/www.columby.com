@@ -40,8 +40,8 @@
                   type="text" class="form-control" id="name" name="name" placeholder="Name" data-ng-minlength="3" data-ng-maxlength="20" data-ng-model="newuser.name" data-ng-change="slugifyName()" required>
               </div>
               <div class="col-sm-4">
-                <button type="submit" class="black"
-                  data-ng-disabled="registrationInProgress || registerForm.name.$invalid || registerForm.email.$invalid || registerForm.$invalid">Register</button>
+                <button type="submit" class="btn btn-default btn-black"
+                  data-ng-disabled="registerForm.$pristing || registerForm.name.$invalid || registerForm.email.$invalid || registerForm.$invalid">Register</button>
                 <span ng-show="registrationInProgress"><i class="fa fa-spinner fa-spin"></i></span>
               </div>
             </div>

@@ -8,7 +8,7 @@ angular.module('columbyApp')
       restrict: 'EA',
       templateUrl: 'app/directives/header/header.html',
 
-      controller: function($window, $timeout, $rootScope,$scope,$state,AuthSrv) {
+      controller: function($window, $timeout, $rootScope,$scope,$state,AuthSrv, ngNotify) {
         var scrollOriginal = $window.pageYOffset;
 
         $scope.hideHeader = false;
