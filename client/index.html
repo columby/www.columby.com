@@ -41,19 +41,15 @@
     <div ng-if="initialLoad" style="text-align:center; margin-top:50px"><p>Loading Columby</p></div>
     <!-- / Init loader -->
 
-    <div class="site-main">
-      <!-- Include navbar -->
-      <div navbar></div>
+    <div sidebar class="sidebar"></div>
 
-      <!-- Include metabar -->
-      <div metabar></div>
+    <div header class="header"></div>
 
-      <!-- Main UI -->
-      <div ui-view autoscroll="true"></div>
+    <!-- Main UI -->
+    <div ui-view autoscroll="true" class="page-content"></div>
 
-      <!-- include footer -->
-      <div footer></div>
-    </div>
+    <!-- include footer -->
+    <div footer></div>
 
     <div uservoice></div>
 
@@ -145,10 +141,11 @@
           <script src="app/directives/embedly/embedly.directive.js"></script>
           <script src="app/directives/focus/focus.directive.js"></script>
           <script src="app/directives/footer/footer.directive.js"></script>
+          <script src="app/directives/header/header.directive.js"></script>
           <script src="app/directives/metabar/metabar.directive.js"></script>
-          <script src="app/directives/navbar/navbar.directive.js"></script>
           <script src="app/directives/noImage/noImage.directive.js"></script>
           <script src="app/directives/scrollPosition/scrollPosition.directive.js"></script>
+          <script src="app/directives/sidebar/sidebar.directive.js"></script>
           <script src="app/directives/uservoice/uservoice.directive.js"></script>
           <script src="app/filters/bytes.filter.js"></script>
           <script src="app/routes/account.route.js"></script>

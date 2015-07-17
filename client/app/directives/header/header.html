@@ -1,0 +1,29 @@
+<navbar class="navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div id="navbar" class="navbar-collapse collapse">
+      <a classs="menu" href="#" ng-click="toggleSidebar($event)">Menu</a>
+      <a ui-sref="home" class="logo" ng-hide="$root.showSitenav">
+      	<img src="/assets/img/logo-transparant-white.png">
+      </a>
+      <ul class="nav navbar-nav navbar-right">
+        <li ng-hide="$root.user.id"><a ui-sref="register">Sign up</a></li>
+        <li ng-hide="$root.user.id"><a ui-sref="signin">Sign in</a></li>
+        <li dropdown on-toggle="toggleUsermenu(open)" ng-show="$root.user.id">
+          <a href class="dropdown-toggle avatar" dropdown-toggle>
+            <img class="img-circle avatar" ng-src="{{ $root.user.primary.avatar || '/assets/img/avatar.png'}}"/><span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu usermenu">
+            <div class="usermenu-header">
+              Signed in as: <br>
+              {{ $root.user.primary.displayName }}
+            </div>
+            <li><a ui-sref="account({slug: $root.user.primary.slug})">Your profile</a></li>
+            <li><a ui-sref="userEdit({slug: $root.user.primary.slug})">Settings</a></li>
+            <li><a href="http://docs.columby.com">Help</a></li>
+            <li><a href ng-click="logout()">Sign out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</navbar>

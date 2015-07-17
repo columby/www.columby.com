@@ -1,8 +1,4 @@
-<div class="navbar dropdown" dropdown on-toggle="toggled(open)">
-  <a href class="btn btn-default dropdown-toggle" dropdown-toggle>Menu</a>
-  <a ui-sref="home" class="logo" ng-hide="$root.showSitenav">
-  	<img src="/assets/img/logo-transparant-white.png">
-  </a>
+<div class="navbar dropdown" dropdown is-open="status.isopen">
   <ul class="dropdown-menu sitenav-wrapper">
     <button type="button" class="close" ng-click="toggleSiteNav()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
     <li>

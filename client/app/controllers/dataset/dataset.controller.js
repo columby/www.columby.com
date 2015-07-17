@@ -63,7 +63,7 @@ angular.module('columbyApp')
 
         // transition the url from slug to id
         if ($stateParams.id !== dataset.shortid) {
-          $state.transitionTo ('dataset', { id: dataset.shortid}, {
+          $state.transitionTo ('dataset.view', { id: dataset.shortid}, {
             location: true,
             inherit: true,
             relative: $state.$current,

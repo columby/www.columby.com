@@ -10,7 +10,7 @@
       <div class="col-md-12">
         <img src="/assets/img/logo.png" class="logo img-responsive" />
         <h2 class="page-subtitle" translate>publish and discover data</h2>
-        <button type="button" class="big-button" ng-show="$root.user.id"  ui-sref="datasetCreate" translate>Publish new dataset</button>
+        <button type="button" class="big-button" ng-show="$root.user.id"  ui-sref="dataset.create" translate>Publish new dataset</button>
         <button type="button" class="big-button" ng-hide="$root.user.id"  ui-sref='signin' translate>Login or Signup</button>
         <p>or</p>
         <a ui-sref="about" translate>Read about Columby</a>
@@ -129,7 +129,7 @@
         <div class="publication-listing">
 					<ul>
             <li ng-repeat="dataset in datasets.rows" class="publication-item">
-              <h4><a ui-sref="dataset({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
+              <h4><a ui-sref="dataset.view({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
               <div class="user-date">
                 <!-- <img ng-src="dataset.account.avatar.img" class="img-rounded"/> -->
                 <img class="img-circle avatar-small" ng-src="{{$root.config.filesRoot}}/a/{{dataset.account.avatar.shortid}}/{{dataset.account.avatar.filename}}" alt="{{dataset.account.name}}"/>

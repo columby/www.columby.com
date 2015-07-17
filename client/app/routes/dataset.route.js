@@ -4,9 +4,14 @@ angular.module('columbyApp')
   .config(function ($stateProvider) {
 
     $stateProvider
-
-      .state('datasetCreate', {
-        url: '/d/new',
+      .state('dataset', {
+        abstract: true,
+        url: '/d',
+        template: '<ui-view/>'
+      })
+      
+      .state('dataset.create', {
+        url: '/new',
         templateUrl: 'views/dataset/edit.html',
         controller: 'DatasetEditCtrl',
         data: {
@@ -15,8 +20,8 @@ angular.module('columbyApp')
         }
       })
 
-      .state('dataset', {
-        url: '/d/:id',
+      .state('dataset.view', {
+        url: '/:id',
         templateUrl: 'views/dataset/view.html',
         controller: 'DatasetViewCtrl',
         data: {
@@ -25,14 +30,13 @@ angular.module('columbyApp')
         }
       })
 
-      .state('datasetEdit', {
-        url: '/d/:id/edit',
+      .state('dataset.edit', {
+        url: '/:id/edit',
         templateUrl: 'views/dataset/edit.html',
         controller: 'DatasetEditCtrl',
         data: {
           bodyClasses: 'dataset edit',
           permission: 'edit dataset'
         }
-      })
-    ;
+      });
   });

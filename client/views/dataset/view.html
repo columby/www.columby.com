@@ -8,7 +8,7 @@
       <li>
         <a class="default-button edit"
           ng-show  = "dataset.canEdit"
-          ui-sref="datasetEdit({id:dataset.shortid})">edit
+          ui-sref="dataset.edit({id:dataset.shortid})">edit
         </a>
       </li>
     </ul>
@@ -30,7 +30,7 @@
           <div class="meta" ng-show="dataset.id">
 						<span ng-show="dataset.private === true" class="label label-warning">private</span>
             <p>A dataset by
-              <span class="account"><a ui-sref="account({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a></span>,
+              <span class="account"><a ui-sref="account({slug:dataset.account.slug})">{{dataset.account.displayName || 'noname'}}</a></span>,
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
             </p>
             <p ng-show="dataset.tags.length>0">
@@ -42,7 +42,7 @@
 
           <div class="avatar">
             <a ui-sref="account({slug:dataset.account.slug})">
-              <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" alt="{{dataset.account.name}}"/>
+              <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" alt="{{dataset.account.displayName}}"/>
             </a>
           </div>
         </div>
@@ -291,9 +291,9 @@
       <div class="container">
         <div class="col-md-12">
           <div class="content">
-            <h3>About {{dataset.account.name}}</h3>
+            <h3>About {{dataset.account.displayName}}</h3>
             <div ng-bind-html="dataset.account.description" class="description"></div>
-  					<p class="more-about"><a ui-sref="account({slug: dataset.account.slug})">more about {{dataset.account.name}}</a></p>
+  					<p class="more-about"><a ui-sref="account({slug: dataset.account.slug})">more about {{dataset.account.displayName}}</a></p>
           </div>
         </div>
       </div>
