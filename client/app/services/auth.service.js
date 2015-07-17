@@ -8,6 +8,7 @@ angular.module('columbyApp')
       // user permissions
       'signin user',
       'register user',
+      'verify user login',
       'view user',
       'edit user',
       'delete user',
@@ -67,7 +68,6 @@ angular.module('columbyApp')
         }
       },
 
-
       isAuthenticated: function(){
         return $auth.isAuthenticated();
       },
@@ -122,6 +122,9 @@ angular.module('columbyApp')
             return !$auth.isAuthenticated();
             break;
           case 'register user':
+            return !$auth.isAuthenticated();
+            break;
+          case 'verify user login':
             return !$auth.isAuthenticated();
             break;
           case 'edit user':

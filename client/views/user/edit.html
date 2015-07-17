@@ -78,7 +78,7 @@
 
                   <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea class="form-control" id="description" rows="5" ng-model="user.primary.description"></textarea>
+                    <div text-angular ta-toolbar="[['p','h3'],['bold','italics','underline'],['insertLink']]" ng-model="user.primary.description"></div>
                   </div>
 
                   <div class="form-group">
@@ -127,7 +127,7 @@
               </div>
             </div>
 
-            <div class="panel panel-danger">
+            <!-- <div class="panel panel-danger">
               <div class="panel-heading">
                 Delete account
               </div>
@@ -135,7 +135,7 @@
                 <p>Be careful, do not just delete your account!</p>
                 <button class="btn btn-danger" ng-click="destroy()">Delete account</button>
               </div>
-            </div>
+            </div> -->
           </div>
 
           <div class="billing-panels" ng-switch-when="billing">
@@ -160,7 +160,7 @@
                 Organisations
               </div>
               <div class="panel-body">
-                <div class="empty" ng-show="user.organisations.length<1"><p>No organisations added yet!</p></div>
+                <div class="empty" ng-show="user.organisations.length<1"><p>No organisations added yet.</p></div>
                 <ul>
                   <li ng-repeat="organisation in user.organisations">{{organisation.name}}</li>
                 </ul>

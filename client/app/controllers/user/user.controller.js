@@ -55,13 +55,10 @@ angular.module('columbyApp')
               templateUrl: 'views/user/partials/modal-email-success.html',
             });
           }
-        } else {
-          // Handle oauth login
-          if (response.user && response.user.id) {
-            ngNotify.set('Welcome, you are now signed in at Columby!', 'notice');
-            $state.go('home');
-          }
         }
+      } else if (response.user && response.user.id) {
+        ngNotify.set('Welcome, you are now signed in at Columby!', 'notice');
+        $state.go('home');
       } else if (response.status === 'not_found') {
 
         ngNotify.set('The email address ' + $scope.email + ' does not exist. Would you like to register for a new account?', 'warning');
@@ -73,6 +70,7 @@ angular.module('columbyApp')
           newmail = newmail + c;
         }
         $scope.newuser.name = newmail;
+
       } else {
         ngNotify.set('Sorry, something went wrong... ' + JSON.stringify(response.err), 'error');
       }
@@ -87,17 +85,18 @@ angular.module('columbyApp')
  * Check if user sent a verification token with page request.
  *
  ***/
-.controller('UserVerifyCtrl', function($location){
+.controller('UserVerifyCtrl', function($rootScope, $scope,$location, $state, UserSrv, ngNotify){
 
   var token = $location.search().token;
 
-  AuthSrv.verify(token).then(function(){
-    if ($rootScope.user.id) {
-      ngNotify.set('You have succesfully signed in.');
-      $state.go('home');
-    } else {
+  UserSrv.verify(token).then(function(result){
+    if (result.status==="error") {
+      $scope.message = result.err;
       ngNotify.set('There was an error verifying the login. Please try again.', 'error');
       delete $scope.verificationInProgress;
+    } else if ( (result.user) && (result.user.id) ) {
+      ngNotify.set('You have succesfully signed in.');
+      $state.go('home');
     }
   });
 })
@@ -194,6 +193,8 @@ angular.module('columbyApp')
 
   fetchAccount();
 })
+
+
 /***
  *
  * Edit a user account

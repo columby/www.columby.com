@@ -17,7 +17,7 @@ angular.module('columbyApp')
       .state('verify', {
         url: '/u/verify',
         templateUrl: 'views/user/verify.html',
-        controller: 'SigninCtrl',
+        controller: 'UserVerifyCtrl',
         data: {
           bodyClasses: 'page user verify',
           permission: 'verify user login'

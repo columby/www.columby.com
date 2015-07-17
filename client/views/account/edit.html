@@ -47,7 +47,7 @@
                   <label for="displayname">Profile picture</label>
                   <div class="row">
                     <div class="col-md-3">
-                      <img class="img-circle avatar" ng-src="{{user.primary.avatar.url || 'assets/img/avatar.png'}}"/>
+                      <img class="img-circle avatar" ng-src="{{account.avatar.url || 'assets/img/avatar.png'}}"/>
                     </div>
                     <div class="col-md-9">
                       <div class="form-group">
@@ -62,9 +62,13 @@
                     <input type="text" class="form-control" id="displayname" ng-model="account.displayName"></input>
                   </div>
 
+                  aef
+                  <div text-angular ta-toolbar="[['h1','h2','h3'],['bold','italics']]" ng-model="account.description"></div>
+
                   <div class="form-group">
                     <label for="description">Description</label>
                     <textarea class="form-control" id="description" rows="5" ng-model="account.description"></textarea>
+
                   </div>
 
                   <div class="form-group">
@@ -135,6 +139,7 @@
 
                 <h3>Organisation editors</h3>
                 <ul>
+                  <li>{{account}}</li>
                   <li ng-repeat="user in account.people">
                     <img ng-src="{{user.avatar.url || 'assets/img/avatar.png'}}"/> {{user.role}} - {{user.displayName}} - <a href="#">change role</a> - <a href="#">delete</a>
                   </li>

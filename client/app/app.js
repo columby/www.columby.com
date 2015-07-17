@@ -96,7 +96,6 @@ angular.module('columbyApp', [
   $authProvider.tokenName = 'token';
   $authProvider.tokenPrefix = 'columby';
   $authProvider.withCredentials = false;
-  console.log(window.config.apiRoot);
   // Setup Google authentication provider
   $authProvider.google({
     url               : window.config.apiRoot+'/v2/auth/google',
