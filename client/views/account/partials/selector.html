@@ -5,11 +5,19 @@
 <div class="modal-body delete-dataset">
   <div class="switcher">
     <ul>
-      <li ng-repeat="account in $root.user.accounts">
+      <li class="primary-account">
+        <a href="" ng-click="selectAccount('primary')">
+          <div>
+            <img class="img-circle avatar" ng-src="{{account.avatar.url || '/images/avatar.png'}}"/>
+            <span class="account">{{$root.user.primary.displayName}}</span>
+          </div>
+        </a>
+      </li>
+      <li ng-repeat="account in organisations">
         <a href="" ng-click="selectAccount($index)">
           <div>
             <img class="img-circle avatar" ng-src="{{account.avatar.url || '/images/avatar.png'}}"/>
-            <span class="account">{{account.name}}</span>
+            <span class="account">{{account.displayName}}</span>
           </div>
         </a>
       </li>

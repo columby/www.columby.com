@@ -1,133 +1,30 @@
-<div class="dataset edit">
+<div class="page-loading" ng-hide="dataset.id"><i class="fa fa-spinner fa-spin"></i> Loading dataset</div>
 
-  <div class="actions-bar"
-    scroll-position="scroll"
-    ng-class="{top: scroll<315}">
-
-    <ul>
-      <li>
-        <button
-          class    = "default-button"
-          ng-show  = "dataset.id"
-
-          ng-click = "toggleOptions()">options
-        </button>
-      </li>
-
-      <li>
-        <a class="default-button"
-          ng-show  = "dataset.id"
-          ui-sref="dataset({id:dataset.shortid})">view dataset
-        </a>
-      </li>
-    </ul>
-  </div>
-
-
-  <div class="page-loading" ng-show="datasetLoading"><i class="fa fa-spinner fa-spin"></i> Loading dataset...</div>
-
-  <!-- Editor Sidebar -->
-  <div class="editorSidebar" ng-show="showOptions && !datasetLoading">
-    <div class="options-arrow"></div>
-    <div class="editorSidebarContent">
-      <div class="visibility setting" ng-show="dataset.id">
-          <h3>Visibility
-            <button
-              class="btn btn-defaultright btn-xs btn-tooltip"
-              data-popover="Change visibility settings for your dataset."
-              data-popover-trigger="mouseenter"
-              data-popover-placement="left"><i class="fa fa-question"></i></button>
-          </h3>
-	        <div class="btn-group btn-toggle">
-          	<button class="btn btn-lg btn-default btn-private"
-              ng-click="toggleDatasetPrivacy()"
-              ng-model="dataset.private"
-              data-ng-disabled="dataset.private">Private</button>
-          	<button class="btn btn-lg btn-success"
-              ng-click="toggleDatasetPrivacy()"
-              ng-model="dataset.private"
-              data-ng-disabled="!dataset.private">Public</button>
-          	</div>
-	      </div>
-
-      <div class="slug" ng-show="dataset.id">
-        <h3>Custom URL
-          <button
-            class="btn btn-default right btn-xs btn-tooltip"
-            data-popover="Create a custom URL for this dataset that is more memorable than a random string of characters. Many people create a URL that matches the dataset title."
-            data-popover-trigger="mouseenter"
-            data-popover-placement="left"><i class="fa fa-question"></i>
-          </button>
-        </h3>
-				<span>{{hostname}}/d/{{dataset.slug | slugify}}</span>
-
-
-        <form class="form-horizontal novalidate" role="form" name="slugForm">
-          <div class="form-group">
-            <input class="form-control input-slug"
-              name="slug"
-              ng-model="dataset.slug"
-              ng-minlength="3"
-              ng-maxlength="30"/>
-            <span class="error" ng-show="slugForm.slug.$error.maxlength">Too long!</span>
-            <span class="error" ng-show="slugForm.slug.$error.minlength">Too short!</span>
-            <button
-              class="btn btn-xs btn-default"
-              ng-click="updateSlug()"
-              ng-show="slugForm.$valid">update url</button>
-          </div>
-        </form>
-      </div>
-
-      <div class="background">
-        <h3>Background image
-          <button
-            class="btn btn-default right btn-xs btn-tooltip"
-            data-popover="Upload a background image for your dataset"
-            data-popover-trigger="mouseenter"
-            data-popover-placement="left"><i class="fa fa-question"></i>
-          </button>
-        </h3>
-        <div>
-          <button
-            class="btn btn-xs btn-default upload-button"
-            ng-file-select
-            ng-file-change="startUpload($files,'image','header')">upload your image</button>
-        </div>
-      </div>
-
-      <div class="delete">
-        <hr>
-        <button type="button" class="btn btn-danger btn-xs" ng-click="delete()"><i class="fa fa-trash-o"></i> Delete dataset</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Main dataset Content -->
-  <div class="content" ng-hide="datasetLoading">
-
-    <!-- Dataset header -->
-    <div class="header wrapper" ng-style="headerStyle">
-
+<div ng-show="dataset.id">
+  <div class="page-header wrapper" ng-style="headerStyle">
       <div class="container">
   			<div class="col-md-12">
 
+          <!-- Dataset title -->
           <textarea
-            class       = "title edit"
+            class = "title edit"
             auto-grow
-            name        = "title"
+            name = "title"
             placeholder = "Your title"
-            data-ng-model    = "datasetUpdate.title"
-            ng-blur     = "update()"
-            focus       = "true"
+            data-ng-model = "dataset.title"
+            ng-blur = "update()"
+            focus = "true"
             >
           </textarea>
 
+          <!-- options -->
+          <div class="options"><a href="#" ng-click="showOptions()"><i class="fa fa-cog"></i> Options</a></div>
+
           <!-- Meta -->
-          <div class="meta" ng-show="dataset.id">
+          <div class="meta">
 						<span ng-show="dataset.status === true" class="label bg-primary">private</span>
             <p>A dataset by
-              <span class="account"><a ui-sref="account({slug:dataset.account.slug})">{{dataset.account.name || 'noname'}}</a></span>,
+              <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.displayName || 'unknown'}}</a></span>,
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
             </p>
             <div class="tags-wrapper">
@@ -139,12 +36,12 @@
               </tags-input>
             </div>
           </div>
-			    <div class="change-account meta" ng-hide="dataset.id">
+			    <!-- <div class="change-account meta" ng-hide="dataset.id">
 			      <p>Publish on: {{dataset.account.name}} <a ng-click="showAccountSelector()" ng-show="$root.user.accounts.length>1">Change</a></p>
-			    </div>
+			    </div> -->
 
           <div class="avatar img-rounded">
-            <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" alt="{{dataset.owner}}"/>
+            <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" />
           </div>
         </div>
       </div>
@@ -167,7 +64,7 @@
           </h3>
           <div
             placeholder="Add a nice description to your dataset. If your audience may contact you, write down how."
-            data-ng-model        = "datasetUpdate.description"
+            data-ng-model        = "dataset.description"
             text-angular
             data-ta-default-wrap = "p"
             data-ng-blur         = "update()",
@@ -359,39 +256,21 @@
       </div>
     </div>
 
-    <!-- Dataset Collections -->
-    <div class="collections wrapper" ng-hide="dataset || dataset.id">
-      <div class="container">
-        <div class="col-md-12 content">
-          <h3>Collections</h3>
-          List of collections
-
-          <!-- Datasource Modal -->
-          <button
-            data-ng-show="editMode"
-            class="btn btn-default"
-            type="button"
-            data-ng-click="addToCollection()"
-            >Add to collection</button>
-        </div>
-      </div>
-    </div>
-
-		<!-- Create new dataset -->
+    <!-- Create new dataset -->
 		<div class="step1 wrapper" ng-hide="dataset.id">
 			<div class="container">
 				<div class="col-md-12">
 		      <button
 		        class    = "btn dbt-default create disabled"
-            data-ng-hide  = "dataset.id || datasetUpdate.title">Save draft & proceed to add data
+            data-ng-hide  = "dataset.id || dataset.title">Save draft & proceed to add data
 		      </button>
-					<p data-ng-hide  = "dataset.id || datasetUpdate.title">Please add a title first.</p>
+					<p data-ng-hide  = "dataset.id || dataset.title">Please add a title first.</p>
 		      <button
 		        class    = "btn dbt-default create"
-            data-ng-hide  = "dataset.id || !datasetUpdate.title"
+            data-ng-hide  = "dataset.id || !dataset.title"
             data-ng-click = "create()">Save draft & proceed to add data
 		      </button>
-					<p data-ng-hide  = "dataset.id || !datasetUpdate.title">Don't worry, you can still change your title and description.</p>
+					<p data-ng-hide  = "dataset.id || !dataset.title">Don't worry, you can still change your title and description.</p>
 				</div>
 			</div>
 		</div>

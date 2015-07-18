@@ -2,21 +2,11 @@
 
 angular.module('columbyApp')
   .controller('AccountSelectorCtrl',
-  function ($rootScope, $scope, $modalInstance, user) {
+  function ($rootScope, $scope, $modalInstance, organisations) {
 
-    console.log(user);
-    $scope.user = $rootScope.user;
-    console.log($scope.user);
-
-    for (var i=0; i<$rootScope.user.accounts.length;i++){
-      // set avatar url
-      var account = $rootScope.user.accounts[ i];
-      console.log(account);
-      $scope.user.accounts[ i].avatar.url = $rootScope.config.filesRoot + '/a/' + account.avatar.shortid + '/' + account.avatar.filename;
-    }
+    $scope.organisations = organisations;
 
     $scope.selectAccount = function(item){
-      console.log(item);
       $modalInstance.close(item);
     };
 

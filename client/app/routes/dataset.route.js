@@ -9,11 +9,11 @@ angular.module('columbyApp')
         url: '/d',
         template: '<ui-view/>'
       })
-      
+
       .state('dataset.create', {
-        url: '/new',
-        templateUrl: 'views/dataset/edit.html',
-        controller: 'DatasetEditCtrl',
+        url: '/create',
+        templateUrl: 'views/dataset/create.html',
+        controller: 'DatasetCreateCtrl',
         data: {
           bodyClasses: 'dataset create',
           permission: 'create dataset'

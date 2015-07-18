@@ -41,7 +41,7 @@
           <table class="table">
             <tr ng-repeat="account in user.organisations">
               <td>
-                <a ui-sref="accountEdit({slug:account.slug})">{{account.name}}</a>
+                <a ui-sref="account.edit({slug:account.slug})"><img class="avatar" ng-src="account.avatar.url"/> {{account.displayName}}</a>
               </td>
             </tr>
           </table>
@@ -162,7 +162,7 @@
               <div class="panel-body">
                 <div class="empty" ng-show="user.organisations.length<1"><p>No organisations added yet.</p></div>
                 <ul>
-                  <li ng-repeat="organisation in user.organisations">{{organisation.name}}</li>
+                  <li ng-repeat="organisation in user.organisations"><a ui-sref="account.edit({slug: organisation.slug})">{{organisation.displayName}}</a></li>
                 </ul>
               </div>
             </div>

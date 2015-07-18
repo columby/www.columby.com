@@ -8,7 +8,7 @@ angular.module('columbyApp')
  *
  **/
   .controller('AccountEditCtrl',
-  function ($rootScope, $scope, $stateParams, AccountSrv, CollectionSrv, ngNotify, $upload, FileService, ngProgress) {
+  function ($rootScope, $scope, $stateParams, AccountSrv, ngNotify, $upload, FileService, RegistrySrv, ngProgress) {
 
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
@@ -46,6 +46,24 @@ angular.module('columbyApp')
           console.log('updating header image. ');
           updateHeaderImage();
         }
+
+        // Get a list of registries
+        $scope.registries = RegistrySrv.query(function(result){
+          // reshuffle registries
+          var inactiveRegistries = [];
+          for (var i=0; i<result.length; i++) {
+            var active=false;
+            for (var k=0; k<$scope.account.registries.length; k++){
+              if (result[ i].id === $scope.account.registries[ k]) {
+                active=true;
+              }
+            }
+            if (active) {
+              inactiveRegistries.push(result[ i]);
+            }
+          }
+          $scope.registries.inactive = inactiveRegistries;
+        });
 
       });
     }
@@ -188,22 +206,6 @@ angular.module('columbyApp')
           return ngNotify.set('Something went wrong finishing the upload. ','error');
         }
 
-      });
-    };
-
-
-    // Create a new collection for this account
-    $scope.newCollection = function(){
-      CollectionSrv.save({
-        accountId: $scope.account.id,
-        title: $scope.newCollection.title
-      }, function(result){
-        if (result.id){
-          $scope.account.Collections.push(result);
-          $scope.newCollection = null;
-        } else {
-          ngNotify.set('There was an error creating the collection. ','error');
-        }
       });
     };
 

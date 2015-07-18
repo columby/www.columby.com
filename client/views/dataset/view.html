@@ -24,6 +24,7 @@
                 <a ui-sref="tag({slug: tag.slug})"><i class="fa fa-tag"></i>{{tag.text}}</a>
               </span>
             </p>
+            <a ng-show="dataset.canEdit" ui-sref="dataset.edit({id:dataset.shortid })"><i class="fa fa-edit"></i> edit</a>
           </div>
 
           <div class="avatar">
@@ -219,11 +220,11 @@
     <!-- Dataset references -->
     <div class="references wrapper" ng-show="dataset.id">
       <div class="container">
-        <div class="row">
-          <div class="heading col-md-12">
-            <div class="content" ng-show="dataset.references.length>0">
-              <h3>References</h3>
-            </div>
+        <div class="heading col-md-12">
+          <div class="content" ng-show="dataset.references.length>0">
+            <h3>References</h3>
+            <h2 class="highlight" ng-show="!dataset.references || dataset.references.length===0">No references added yet</h2>
+  					</div>
           </div>
         </div>
 
@@ -239,12 +240,6 @@
 						</div>
 						<div class="small reference-text">{{reference.description}}</div>
           </div>
-        </div>
-
-        <div class="row">
-	        <div class="highlight col-md-12" ng-show="!dataset.references || dataset.references.length===0">
-						<h2>No references added yet</h2>
-					</div>
         </div>
       </div>
     </div>
@@ -279,21 +274,10 @@
           <div class="content">
             <h3>About {{dataset.account.displayName}}</h3>
             <div ng-bind-html="dataset.account.description" class="description"></div>
-  					<p class="more-about"><a ui-sref="account({slug: dataset.account.slug})">more about {{dataset.account.displayName}}</a></p>
+  					<p class="more-about"><a ui-sref="account.view({slug: dataset.account.slug})">More about {{dataset.account.displayName}}</a></p>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Dataset Collections -->
-    <div class="collections wrapper" ng-hide="dataset || dataset.id">
-      <div class="container">
-        <div class="col-md-12 content">
-          <h3>Collections</h3>
-          List of collections
-        </div>
-      </div>
-    </div>
   </div>
-
 </div>

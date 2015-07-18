@@ -4,8 +4,14 @@ angular.module('columbyApp')
   .config(function ($stateProvider) {
     $stateProvider
 
-      .state('signin', {
-        url: '/u/signin',
+      .state('user', {
+        abstract: true,
+        url: '/u',
+        template: '<ui-view/>'
+      })
+
+      .state('user.signin', {
+        url: '/signin',
         templateUrl: 'views/user/signin.html',
         controller: 'SigninCtrl',
         data: {
@@ -14,8 +20,8 @@ angular.module('columbyApp')
         }
       })
 
-      .state('verify', {
-        url: '/u/verify',
+      .state('user.verify', {
+        url: '/verify',
         templateUrl: 'views/user/verify.html',
         controller: 'UserVerifyCtrl',
         data: {
@@ -24,8 +30,8 @@ angular.module('columbyApp')
         }
       })
 
-      .state('register', {
-        url: '/u/register',
+      .state('user.register', {
+        url: '/register',
         templateUrl: 'views/user/register.html',
         controller: 'RegisterCtrl',
         data: {
@@ -34,8 +40,8 @@ angular.module('columbyApp')
         }
       })
 
-      .state('userEdit', {
-        url: '/u/:slug/edit',
+      .state('user.edit', {
+        url: '/:slug/edit',
         templateUrl: 'views/user/edit.html',
         controller: 'UserEditCtrl',
         data: {

@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, DatasetReferenceSrv, ngDialog, configSrv, DataService, UserSrv) {
+  .controller('DatasetViewCtrl', function($window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, DatasetReferenceSrv, ngDialog, configSrv, DataService, UserSrv, AuthSrv) {
 
     /* --------- INITIALISATION ------------------------------------------------------------ */
     $scope.hostname = $location.protocol() + '://' + $location.host();
@@ -83,7 +83,9 @@ angular.module('columbyApp')
         // }
         // $scope.summary = summary + '</p>';
 
-        $scope.dataset.canEdit= UserSrv.canEdit('dataset', dataset);
+        $scope.dataset.canEdit= AuthSrv.hasPermission('edit dataset', dataset);
+        console.log($scope.dataset.canEdit);
+
 
         // filter out private sources
         if (!$scope.dataset.canEdit){

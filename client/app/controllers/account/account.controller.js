@@ -52,6 +52,8 @@ angular.module('columbyApp')
 
           getCollections();
           getDatasets();
+
+          
         } else {
           ngNotify.set('The requested account was not found. ','error');
           $state.go('home');

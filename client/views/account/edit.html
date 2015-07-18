@@ -6,7 +6,7 @@
       <div class="container">
         <div>
           <h1 class="title">Organisation settings</h1>
-          <h2><a ui-sref="account({slug: account.slug})">{{account.displayName}}</a></h2>
+          <h2><a ui-sref="account.view({slug: account.slug})">{{account.displayName}}</a></h2>
           <h2 class="page-subtitle">Edit your organisation details</h2>
         </div>
       </div>
@@ -62,13 +62,10 @@
                     <input type="text" class="form-control" id="displayname" ng-model="account.displayName"></input>
                   </div>
 
-                  aef
-                  <div text-angular ta-toolbar="[['h1','h2','h3'],['bold','italics']]" ng-model="account.description"></div>
 
                   <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea class="form-control" id="description" rows="5" ng-model="account.description"></textarea>
-
+                    <div text-angular ta-toolbar="[['h1','h2','h3'],['bold','italics']]" ng-model="account.description"></div>
                   </div>
 
                   <div class="form-group">
@@ -138,12 +135,15 @@
                 <p>This is the public data team. <a href="">Add team member</a></p>
 
                 <h3>Organisation editors</h3>
-                <ul>
+                <table class="table">
                   <li>{{account}}</li>
-                  <li ng-repeat="user in account.people">
-                    <img ng-src="{{user.avatar.url || 'assets/img/avatar.png'}}"/> {{user.role}} - {{user.displayName}} - <a href="#">change role</a> - <a href="#">delete</a>
-                  </li>
-                </ul>
+                  <tr ng-repeat="user in account.people">
+                    <td><img ng-src="{{user.avatar.url || 'assets/img/avatar.png'}}"/> </td>
+                    <td>{{user.role}}</td>
+                    <td><a ui-sref="account.view({slug: user.slug})">{{user.displayName}}</a></td>
+                    <td><a href="#"><i class="fa fa-edit"></i></a><a href="#"><i class="fa fa-trash"></i></a></td>
+                  </td>
+                </table>
                 <a href="#">Add user</a>
               </div>
             </div>
@@ -155,32 +155,40 @@
                 Registries
               </div>
               <div class="panel-body">
-                <p>With Columby it is possible to automatically update data registers. Add the key here and all changes to a dataset will be updated automatically at the register.<br>Is your desired register not in the list. Let us know and we will work on a synchronisation. </p>
-                <hr>
-                <h3>Activated registries</h3>
-                <h4>data.overheid.nl</h4>
-                <label>api-key: </label><input></input><a class="btn btn-defalt">validate key</a><br>
-                <label>key status: </label>active<br>
-                <label>auto-add: </label>yes no<br>
-                <label>auto-sync: </label>yes no<br>
-                <table>
-                  <th>
-                    <td>Total</td><td>Excluded</td><td>In sync</td><td>Unsynced</td>
-                  </th>
 
-                  <tr>
-                    <td>210</td><td>120</td><td>80</td><td>10</td>
-                  </tr>
-                </table>
-                <hr>
-                <h4>Inactive registries</h4>
-                <label>IATI</label><a class="btn btn-default">Make active</a><br>
-                <label>NGR</label><a class="btn btn-default">Make active</a>
-                <hr>
+                <div class="registry-active">
+                  <h3>Active registries</h3>
+                  <div class="registry" ng-repeat="registry in account.registries">
+                    <form class="form">
+                      <h4>{{registry.title}}</h4>
+                      <div class="form-group">
+                        <label for="apikey">API key (Status: {{registry.settings.status || 'unknown'}})</label>
+                        <input type="text" class="form-control" id="apikey" ng-model="registry.settings.apikey"></input>
+                        <a class="btn btn-default" ng-click="validateRegistryKey()">validate</a>
+                        {{registry.settings.statusMessage}}
+                      </div>
+                      <div class="form-group">
+                        <label class="checkbox">
+                          <input type="checkbox" ng-model="registry.autosync">Autosync
+                        </label>
+                      </div>
+                    </form>
+                    <hr>
+                  </div>
+                </div>
+
+                <div class="registry-inactive">
+                  <h3>Inactive registries</h3>
+                  <div class="registry" ng-repeat="registry in registries.inactive">
+                    {{registry}}
+                  </div>
+                </div>
+
                 <p>Your registry not listed? Contact us to discuss the possibilities! </p>
               </div>
             </div>
           </div>
+
 
           <div class="support-panels" ng-switch-when="support">
             <div class="panel panel-default">

@@ -5,7 +5,13 @@ angular.module('columbyApp')
     $stateProvider
 
       .state('account', {
-        url: '/a/:slug',
+        abstract: true,
+        url: '/a',
+        template: '<ui-view/>'
+      })
+
+      .state('account.view', {
+        url: '/:slug',
         templateUrl: 'views/account/view.html',
         controller: 'AccountCtrl',
         data: {
@@ -14,8 +20,8 @@ angular.module('columbyApp')
         }
       })
 
-      .state('accountEdit', {
-        url: '/a/:slug/edit',
+      .state('account.edit', {
+        url: '/:slug/edit',
         templateUrl: 'views/account/edit.html',
         controller: 'AccountEditCtrl',
         data: {
