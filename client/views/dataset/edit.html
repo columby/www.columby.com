@@ -217,14 +217,15 @@
         <div class="row">
           <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
             <div class="reference">
-              <img src="../../../images/reference-spaceholder.png" class="placeholder">
+              <img src="assets/img/reference/placeholder.png" class="placeholder">
 							<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
 								<div class="reference-top"></div>
-					      <h3 class="reference-title"><a href="{{reference.url}}">{{reference.title}}</a></h3>
+					      <h3 class="reference-title"><a href="{{reference.url}}" target="_blank">{{reference.title}}</a></h3>
 					      <p class="small reference-source"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
 					    </div>
               <div class="small reference-text">{{reference.description}}</div>
               <div class="actions">
+                <div class="edit"><a class="btn btn-warning btn-xs" ng-click="editReference(reference)">Edit</a></div>
                 <div class="confirm-delete"
                      confirm-delete
                      on-confirm="deleteReference(reference)"></div>
@@ -246,10 +247,9 @@
             <!-- Datasource Modal -->
           <div class="row add-reference">
             <div class="col-md-12">
-              <button
-                class="lightblue filled pull-right"
+              <button class="btn btn-default btn-lightblue pull-right"
                 type="button"
-                ng-click="newReference()">Add a new reference</button>
+                ng-click="createReference()">Add a new reference</button>
             </div>
           </div>
         </div>

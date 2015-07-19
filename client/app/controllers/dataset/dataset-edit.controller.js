@@ -89,14 +89,14 @@ angular.module('columbyApp')
 
 
   /*********** REFERENCE FUNCTIONS ********************************/
-  $scope.newReference = function() {
+  $scope.createReference = function() {
 
     // Make sure only 1 modal is opened at a time.
     if (modalOpened) { return; }
 
     var modalInstance = $modal.open({
-      templateUrl: 'views/dataset/reference/new.html',
-      controller: 'ReferenceNewCtrl',
+      templateUrl: 'views/dataset/reference/create.html',
+      controller: 'ReferenceCreateCtrl',
       size: 'lg',
       backdrop: 'static',
       keyboard: false,
@@ -110,16 +110,42 @@ angular.module('columbyApp')
     modalOpened=true;
 
     modalInstance.result.then(function(reference) {
-      ngNotify.set('Reference saved.');
+      ngNotify.set('Reference saved.', reference);
       $scope.dataset.references.push(reference);
       modalOpened=false;
     }, function () {
-      // Delete the created datasource
-      DatasetReferenceSrv.delete({id:$scope.dataset.id, reference: $scope.reference}, function(res){
-        console.log('deleted');
-        console.log(res);
-      });
-      $log.info('Modal dismissed at: ' + new Date());
+      modalOpened=false;
+    });
+  };
+
+  $scope.editReference = function(reference) {
+    console.log('edit reference', reference);
+    // Make sure only 1 modal is opened at a time.
+    if (modalOpened) { return; }
+
+    var modalInstance = $modal.open({
+      templateUrl: 'views/dataset/reference/create.html',
+      controller: 'ReferenceEditCtrl',
+      size: 'lg',
+      backdrop: 'static',
+      keyboard: false,
+      resolve: {
+        dataset: function() {
+          return $scope.dataset;
+        },
+        reference: function(){
+          return reference;
+        }
+      }
+    });
+
+    modalOpened=true;
+
+    modalInstance.result.then(function(reference) {
+      ngNotify.set('Reference edited.', reference);
+      modalOpened=false;
+    }, function () {
+      modalOpened=false;
     });
   };
 

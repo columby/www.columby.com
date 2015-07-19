@@ -11,11 +11,9 @@
       </div>
 
       <div class="registries">
-        <ul>
-          <li ng-repeat="registry in account.registries" style="float:left">
-            <img class="registry-icon" style="height: 40px;" ng-src="{{registry.icon || 'assets/img/avatar.png'}}"/> {{registry.title}} | {{registry.settings.status}}
-          </li>
-        </ul>
+        <div class="col-md-1" ng-repeat="registry in account.registries">
+          <img class="img-responsive img-circle registry-icon" ng-src="{{registry.icon || 'assets/img/avatar.png'}}" popover="{{registry.title}}" popover-trigger="mouseenter" popover-placement="bottom"/>
+        </div>
       </div>
 
       <div class="avatar">

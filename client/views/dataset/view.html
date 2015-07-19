@@ -1,10 +1,6 @@
-<div class="dataset view">
+<div class="page-loading" ng-hide="dataset.id"><i class="fa fa-spinner fa-spin"></i> Loading dataset</div>
 
-  <div class="page-loading" ng-show="datasetLoading"><i class="fa fa-spinner fa-spin"></i> Loading dataset...</div>
-
-  <!-- Main dataset Content -->
-  <div class="content" ng-hide="datasetLoading">
-
+  <div class="content" ng-show="dataset.id">
     <div class="header wrapper" ng-style="headerStyle">
       <div class="container">
   			<div class="col-md-12">
@@ -13,7 +9,7 @@
           <h1 class="title" ng-bind-html="dataset.title || 'No title yet'"></h1>
 
           <!-- Meta -->
-          <div class="meta" ng-show="dataset.id">
+          <div class="meta">
 						<span ng-show="dataset.private === true" class="label label-warning">private</span>
             <p>A dataset by
               <span class="account"><a ui-sref="account({slug:dataset.account.slug})">{{dataset.account.displayName || 'noname'}}</a></span>,
@@ -60,7 +56,7 @@
     </div> -->
 
     <!-- Dataset Sources -->
-    <div class="distributions wrapper" ng-show="dataset.id">
+    <div class="distributions wrapper">
       <div class="container">
         <div class="col-md-12">
 
@@ -185,7 +181,7 @@
     </div>
 
     <!-- Dataset Use -->
-    <div class="use wrapper" ng-hide="editMode">
+    <div class="use wrapper">
       <div class="container">
         <div class="col-md-12">
 
@@ -218,7 +214,7 @@
     </div> -->
 
     <!-- Dataset references -->
-    <div class="references wrapper" ng-show="dataset.id">
+    <div class="references wrapper">
       <div class="container">
         <div class="heading col-md-12">
           <div class="content" ng-show="dataset.references.length>0">
@@ -234,7 +230,7 @@
 							<img src="images/reference-spaceholder.png" class="placeholder">
 							<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
 								<div class="reference-top"></div>
-							  <h3 class="reference-title"><a href="{{reference.url}}">{{reference.title}}</a></h3>
+							  <h3 class="reference-title"><a href="{{reference.url}}" target="_blank">{{reference.title}}</a></h3>
 							  <p class="small reference-source"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
 							</div>
 						</div>
@@ -242,7 +238,6 @@
           </div>
         </div>
       </div>
-    </div>
 
     <!-- Embed Dataset -->
     <div class="embed wrapper">
