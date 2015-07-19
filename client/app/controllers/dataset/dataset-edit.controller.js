@@ -391,7 +391,8 @@ console.log(reference);
 
 
   $scope.addTag = function(tag){
-    console.log('adding tag', tag);
+    console.log($scope.dataset.id);
+    console.log(tag);
     DatasetSrv.addTag({
       id: $scope.dataset.id,
       tag: tag
@@ -403,6 +404,8 @@ console.log(reference);
 
   $scope.removeTag = function(tag){
     console.log('removing tag, ', tag);
+    var id = $scope.dataset.tags.indexOf(tag);
+    console.log(tag);
     DatasetSrv.removeTag({id:$scope.dataset.id, tid:tag.id},function(result){
       console.log('dataset remove result: ', result);
     });

@@ -8,6 +8,9 @@ angular.module('columbyApp')
       .state('tag', {
         url: '/t/:slug',
         templateUrl: 'views/tag/view.html',
-        controller: 'TagCtrl'
+        controller: 'TagCtrl',
+        data: {
+          bodyClasses: 'tag view'
+        }
       });
   });

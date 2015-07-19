@@ -1,27 +1,20 @@
-<div class="tag view">
-  <div class="content">
-    <div class="header wrapper">
-      <div class="container">
-        <div class="col-md-12">
-
-          <h1 class="title">Tag: {{tag.text}}</h1>
-
-        </div>
-      </div>
+<div class="page-header wrapper">
+  <div class="container">
+    <div class="col-md-12">
+      <h1 class="title">Tag: {{tag.text}}</h1>
     </div>
+  </div>
+</div>
 
-    <div class="content-list wrapper">
-      <div class="container">
-        <div class="col-md-12">
-          <h3>Datasets</h3>
-          <ul>
-            <li ng-repeat="dataset in tag.datasets">
-              <p><a ui-sref="dataset({id:dataset.shortid})">{{dataset.title}}</a></p>
-            </li>
-          </ul>
-          <p ng-show="collections.length<1">There are no collections published yet</p>
-        </div>
-      </div>
+<div class="page-content wrapper">
+  <div class="container">
+    <div class="col-md-12">
+      <h3>Datasets</h3>
+      <ul>
+        <li ng-repeat="dataset in tag.datasets">
+          <p><a ui-sref="dataset.view({id:dataset.shortid})">{{dataset.title}}</a></p>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
