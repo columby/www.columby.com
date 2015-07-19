@@ -23,10 +23,15 @@ angular.module('columbyApp')
       .state('dataset.view', {
         url: '/:id',
         templateUrl: 'views/dataset/view.html',
+        resolve: {
+          // First try to fetch dataset.
+          dataset: function(DatasetSrv, $stateParams) {
+            return DatasetSrv.get({id: $stateParams.id}).$promise;
+          }
+        },
         controller: 'DatasetViewCtrl',
         data: {
-          bodyClasses: 'dataset view',
-          permission: 'view dataset'
+          bodyClasses: 'dataset view'
         }
       })
 
@@ -34,9 +39,16 @@ angular.module('columbyApp')
         url: '/:id/edit',
         templateUrl: 'views/dataset/edit.html',
         controller: 'DatasetEditCtrl',
+        resolve: {
+          // First try to fetch dataset.
+          dataset: function(DatasetSrv, $stateParams) {
+            return DatasetSrv.get({id: $stateParams.id}).$promise;
+          }
+        },
         data: {
           bodyClasses: 'dataset edit',
-          permission: 'edit dataset'
+          // Make sure the user can edit the dataset.
+          //permission: 'edit dataset'
         }
       });
   });

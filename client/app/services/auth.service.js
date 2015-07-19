@@ -32,6 +32,7 @@ angular.module('columbyApp')
       });
     }
 
+
     return {
 
       /**
@@ -67,6 +68,7 @@ angular.module('columbyApp')
           });
         }
       },
+
 
       isAuthenticated: function(){
         return $auth.isAuthenticated();
@@ -109,8 +111,8 @@ angular.module('columbyApp')
 
       hasPermission: function(permission, params){
         console.log('Checking permission: ' + permission + ' with params: ', params);
+
         // admin is always true
-        console.log($rootScope.user);
         if ($rootScope.user.admin === true) {
           console.log('user is admin');
           return true;
@@ -139,56 +141,41 @@ angular.module('columbyApp')
             return false;
             break;
 
-          // isAuthorized: function(authorizedRoles) {
-          //   // Make no access the default, to be sure.
-          //   var authorized = false;
-          //   var userRoles;
-          //
-          //   // make sure input is array
-          //   if (!angular.isArray(authorizedRoles)) {
-          //     authorizedRoles = [authorizedRoles];
-          //   }
-          //
-          //   console.log($rootScope.user);
-          //   // Check for anonymous user
-          //   if (!$rootScope.user || !$rootScope.user.id) {
-          //     console.log('No user');
-          //     userRoles = ['visitor'];
-          //   } else {
-          //     userRoles = ['authenticated'];
-          //     for (var i=0; i<authorizedRoles.length; i++){
-          //       for (var j=0; j<$rootScope.user.roles.length; j++) {
-          //         if ($rootScope.user.roles[ j] === authorizedRoles[ i]) {
-          //           authorized=true;
-          //         }
-          //       }
-          //     }
-          //   }
-          //
-          //   console.log(userRoles);
-          //   console.log('authorized' + authorized);
-          //
-          //
-          //
-          //   return authorized;
-          // }
-
 
           // Account permissions
+          case 'create organisation':
+            return false;
+            break;
+          case 'view organisation':
           case 'view account':
             return true;
             break;
-          case 'create account':
-            return false;
-            break;
+          case 'edit organisation':
           case 'edit account':
             if (!$auth.isAuthenticated()) { return false; }
             if ($rootScope.user.primary.slug === params.slug) {
+              console.log('User primary account');
               return true;
+            }
+            // check if user has a valid role for the organisation
+            for (var i=0; i<$rootScope.user.organisations.length; i++){
+              // Check if user is connected to the organisation
+              if ($rootScope.user.organisations[ i].slug === params.slug) {
+                // Check for the proper role
+                switch ($rootScope.user.organisations[ i].UserAccounts.role ) {
+                  case 1:
+                  case 2:
+                  case 3:
+                    console.log('yes!');
+                    return true;
+                    break
+                }
+              }
             }
             return false;
             break;
-          case 'delete account':
+
+          case 'delete organisation':
             return false;
             break;
 
@@ -197,9 +184,28 @@ angular.module('columbyApp')
             return false;
             break;
           case 'edit dataset':
+            // check if dataset's publication account is in current user's primary and organisations list
+            if ($rootScope.user.primary.id === params.account_id) {
+              return  true
+            }
+            // check if user has a valid role for the organisation
+            for (var i=0; i<$rootScope.user.organisations.length; i++){
+              // Check if user is connected to the organisation
+              if ($rootScope.user.organisations[ i].id === params.account_id) {
+                var role;
+                // Check for the proper role
+                switch ($rootScope.user.organisations[ i].UserAccounts.role ) {
+                  case 1: case 2: case 3:
+                    role = $rootScope.user.organisations[ i].UserAccounts.role;
+                    return true;
+                    break;
+                }
+              }
+            }
             return false;
             break;
           case 'view dataset':
+          console.log('true');
             return true;
             break;
           case 'delete dataset':
@@ -267,16 +273,5 @@ angular.module('columbyApp')
         }
       }
     };
-
-    // return $resource(configSrv.apiRoot + '/v2/account/:slug', {
-    //     slug: '@slug'
-    //   }, {
-    //     update: { method: 'PUT', responseType: 'json' },
-    //     addFile: {
-    //       method: 'POST',
-    //       url: 'api/v2/account/addFile'
-    //     }
-    //   }
-    // );
   }
 );

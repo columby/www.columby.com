@@ -7,50 +7,49 @@ angular.module('columbyApp')
  *  Controller for a dataset Edit page
  *
  */
-.controller('DatasetEditCtrl', function($rootScope, $scope, configSrv, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, DatasetReferenceSrv, TagService, Slug, ngDialog, FileService,ngProgress, $timeout,$modal,$upload, ngNotify, AuthSrv) {
+.controller('DatasetEditCtrl', function(dataset, $rootScope, $scope, configSrv, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, ReferenceSrv, TagService, Slug, ngDialog, FileService,ngProgress, $timeout,$modal,$upload, ngNotify, AuthSrv) {
 
-  // Boolean to check if only 1 modal is opened at a time.
+  // Check existence
+  if (!dataset.id){
+    ngNotify.set('Sorry, the requested dataset was not found.', 'error');
+    $state.go('home');
+    return;
+  }
+
+  // Check access
+  var permission = AuthSrv.hasPermission('edit dataset', dataset);
+  if (!permission) {
+    ngNotify.set('Sorry, no access.', 'error');
+    $state.go('dataset.view',{id: $stateParams.id});
+    return;
+  }
+
+
+  // Initialisation
+  $scope.dataset = dataset;
   var modalOpened = false;
+  $rootScope.title = 'columby.com | ' + dataset.title;
+  // Make sure there is a reference array
+  $scope.dataset.references = $scope.dataset.references || [];
+  // Copy the values to detect changes later
+  $scope.datasetOriginal = angular.copy($scope.dataset);
+  // Update the header image
+  if ($scope.dataset.headerImg && $scope.dataset.headerImg.id) {
+    updateHeaderImage();
+  }
 
-  $rootScope.title = 'columby.com';
 
   // Get the dataset from the server
   function getDataset() {
-
-    DatasetSrv.get({id: $stateParams.id}, function(dataset) {
-      if (!dataset.id){
-        ngNotify.set('Sorry, the requested dataset was not found.', 'error');
-        $state.go('home');
-        return;
-      }
-
-      // transition the url from slug to id
-      if ($stateParams.id !== dataset.shortid) {
-        $state.transitionTo ('dataset.view', { id: dataset.shortid}, {
-          location: true,
-          inherit: true,
-          relative: $state.$current,
-          notify: false
-        });
-      }
-
-      // Update document title
-      $rootScope.title = 'columby.com | ' + dataset.title;
-
-      // Make sure there is a reference array
-      dataset.references = dataset.references || [];
-
-      // Add the dataset to the scope
-      $scope.dataset = dataset;
-
-      // Copy the values to detect changes later
-      $scope.datasetOriginal = angular.copy($scope.dataset);
-
-      // Update the header image
-      if ($scope.dataset.headerImg && $scope.dataset.headerImg.id) {
-        updateHeaderImage();
-      }
-    });
+    // transition the url from slug to id
+    if ($stateParams.id !== dataset.shortid) {
+      $state.transitionTo ('dataset.view', { id: dataset.shortid}, {
+        location: true,
+        inherit: true,
+        relative: $state.$current,
+        notify: false
+      });
+    }
   }
 
 
@@ -163,14 +162,10 @@ angular.module('columbyApp')
    *
    */
   $scope.deleteReference = function(reference){
-    console.log($scope.dataset);
-    console.log(reference);
     var idx = $scope.dataset.references.indexOf(reference);
-    var id = $scope.dataset.id;
-    var referenceId = reference.id;
-    console.log('referenceId ', referenceId);
-
-    DatasetReferenceSrv.delete({id:id, rid:referenceId}, function(res){
+console.log(reference);
+    ReferenceSrv.delete({id:reference.id}, function(res){
+      console.log(res);
       if (res.status === 'success') {
         $scope.dataset.references.splice(idx, 1);
         ngNotify.set('Reference deleted.');
@@ -412,8 +407,5 @@ angular.module('columbyApp')
       console.log('dataset remove result: ', result);
     });
   };
-
-
-  getDataset();
 
 });

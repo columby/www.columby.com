@@ -25,8 +25,8 @@ angular.module('columbyApp')
         templateUrl: 'views/account/edit.html',
         controller: 'AccountEditCtrl',
         data: {
-          bodyClasses: 'page account edit',
-          permission: 'edit account'
+          bodyClasses: 'account organisation edit',
+          permission: 'edit organisation'
         }
       });
   });

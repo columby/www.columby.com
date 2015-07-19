@@ -21,6 +21,14 @@ Using ui-router.
 Router takes care of routes, access permissions for states and body classes for a state.
 
 ## Permissions
+ui-router resolve
+has permission
+statechange check has permission
+
+Use resolve on statemanager. First get data from api. Use the controller to handle the result of the resolve. Only then all data is available from the front end.
+Use a permissions list when data is available.
+http://www.jvandemo.com/how-to-resolve-angularjs-resources-with-ui-router/
+
 
 ## Body classes
 Using 'data' parameter of state and bodyClasses element of $rootScope.

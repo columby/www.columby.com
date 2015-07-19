@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-.controller('ReferenceEditCtrl', function($scope, $modalInstance, dataset, reference, DatasetReferenceSrv, EmbedlySrv, ngNotify) {
+.controller('ReferenceEditCtrl', function($scope, $modalInstance, dataset, reference, ReferenceSrv, EmbedlySrv, ngNotify) {
 
   // Add received dataset from parent to this scope.
   $scope.dataset = dataset;
@@ -18,11 +18,7 @@ angular.module('columbyApp')
     $scope.updateInProgress = true;
 
     // save reference
-    DatasetReferenceSrv.update({
-      id: $scope.dataset.id,
-      rid: $scope.reference.id,
-      reference: $scope.reference
-    }, function(res){
+    ReferenceSrv.update($scope.reference.id, $scope.reference, function(res){
       console.log('Reference result', res);
       if (res.id) {
         $modalInstance.close(res);

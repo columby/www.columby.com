@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-.controller('ReferenceCreateCtrl', function($log, $scope, $modalInstance, dataset, DatasetReferenceSrv, EmbedlySrv, ngNotify) {
+.controller('ReferenceCreateCtrl', function($log, $scope, $modalInstance, dataset, ReferenceSrv, EmbedlySrv, ngNotify) {
 
   // Add received dataset from parent to this scope.
   $scope.dataset = dataset;
@@ -20,6 +20,7 @@ angular.module('columbyApp')
 
   // Placeholder for reference object
   $scope.reference = {
+    dataset_id: dataset.id,
     url   : null,
     valid  : false,
     error  : null,
@@ -43,6 +44,7 @@ angular.module('columbyApp')
     EmbedlySrv.extract($scope.reference.url).then(function(result){
 
       $scope.reference = {
+        dataset_id: $scope.dataset.id,
         url: link,
         description: result.description,
         title: result.title,
@@ -59,7 +61,7 @@ angular.module('columbyApp')
       }
       // next step
       $scope.step='details';
-    }, function(err){
+    }).catch(function(err){
       $scope.reference = {
         error: err,
         valid: false,
@@ -85,10 +87,7 @@ angular.module('columbyApp')
     $scope.saveInProgress = true;
 
     // save reference
-    DatasetReferenceSrv.save({
-      id: $scope.dataset.id,
-      reference: $scope.reference
-    }, function(res){
+    ReferenceSrv.save($scope.reference, function(res){
       console.log('Reference result', res);
       if (res.id) {
         $modalInstance.close(res);
