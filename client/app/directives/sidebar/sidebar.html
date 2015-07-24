@@ -1,35 +1,45 @@
 <div class="navbar dropdown" dropdown is-open="status.isopen">
-  <ul class="dropdown-menu sitenav-wrapper">
+  <ul class="sitenav-wrapper">
 
-    <button type="button" class="close" ng-click="toggleSiteNav()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    <!-- <button type="button" class="close" ng-click="toggleSiteNav()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button> -->
 
     <li>
-      <a ui-sref="home"><i class="fa fa-home"></i> Home</a>
+      <a ui-sref="home">Home</a>
+      <a ui-sref="home"><i class="fa fa-home pull-right"></i></a>
     </li>
+    
     <li>
-      <a ui-sref="search" class="search"><i class="fa fa-search"></i> Search</a>
+      <a ui-sref="search">Search</a>
+      <a ui-sref="search"><i class="fa fa-search pull-right"></i></a>
     </li>
+    
     <li ng-show="$root.user.id">
       <a ui-sref="dataset.create" ng-class="{active: $state.includes('dataset.create')}">Publish new dataset</a>
     </li>
 
     <li ng-show="$root.user.id">
       <a ui-sref="account.view({slug: $root.user.primary.slug})" ng-class="{active: $state.includes(account.view)}">My profile</a>
-    </li>
-    <li>
-      <a ui-sref='user.edit({slug: $root.user.primary.slug})'><i class="fa fa-cog"></i></a>
+      <a ui-sref='user.edit({slug: $root.user.primary.slug})'><i class="fa fa-cog pull-right"></i></a>
     </li>
 
     <li ng-hide="$root.user.id">
       <a ui-sref='signin'>Login or Signup</a>
     </li>
 
-    <ul>
-      <li><a ui-sref="about">About Columby</a></li>
-      <li><a ui-sref="roadmap">Roadmap</a></li>
-      <!-- <li><a href="//docs.columby.com" target="_blank">Docs</a></li> -->
-      <li><a href="//columby.uservoice.com" target="_blank">Support</a></li>
-    </ul>
+    <li>
+      <a ui-sref="about">About Columby</a>
+    </li>
+    <li>
+      <a ui-sref="roadmap">Roadmap</a>
+    </li>
+    <!-- 
+    <li>
+      <a href="//docs.columby.com" target="_blank">Docs</a>
+    </li> 
+    -->
+    <li>
+      <a href="//columby.uservoice.com" target="_blank">Support</a>
+    </li>
 
     <a ui-sref="home"><div class="logo"><img src="/assets/img/logo-transparant-white.png"></div></a>
 
