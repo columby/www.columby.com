@@ -181,9 +181,11 @@ angular.module('columbyApp')
 
           // Dataset permissions
           case 'create dataset':
-            return false;
+            return $auth.isAuthenticated();
             break;
           case 'edit dataset':
+            // should be authenticated.
+            if (!$auth.isAuthenticated()) { return false; }
             // check if dataset's publication account is in current user's primary and organisations list
             if ($rootScope.user.primary.id === params.account_id) {
               return  true
