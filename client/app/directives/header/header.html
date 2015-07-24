@@ -10,7 +10,7 @@
         <li ng-hide="$root.user.id"><a ui-sref="user.signin">Sign in</a></li>
         <li dropdown on-toggle="toggleUsermenu(open)" ng-show="$root.user.id">
           <a href class="dropdown-toggle avatar" dropdown-toggle>
-            <img class="img-circle avatar" ng-src="{{ $root.user.primary.avatar || '/assets/img/avatar.png'}}" src="https://files.columby.com/a/x2oXlMWNKe/daniel-zw.jpg"/><span class="caret"></span>
+            <img class="img-circle avatar" ng-src="{{ $root.user.primary.avatar || '/assets/img/avatar.png'}}"/><span class="caret"></span>
           </a>
           <ul class="dropdown-menu usermenu">
             <li>
