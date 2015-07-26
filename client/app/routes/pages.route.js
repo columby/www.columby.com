@@ -4,7 +4,16 @@ angular.module('columbyApp')
   .config(function ($stateProvider) {
     $stateProvider
 
-      .state('terms', {
+    .state('status', {
+      url: '/status',
+      templateUrl: 'views/pages/status.html',
+      controller : 'StatusCtrl',
+      data: {
+        bodyClasses: 'page status'
+      }
+    })
+
+    .state('terms', {
         url: '/terms',
         templateUrl: 'views/pages/terms.html',
         controller : 'PagesCtrl',
