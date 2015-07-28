@@ -7,7 +7,7 @@ angular.module('columbyApp')
  * Account Edit Controller
  *
  **/
-  .controller('AccountEditCtrl', function(account, $rootScope, $scope, $stateParams, AccountSrv, ngNotify, $upload, FileService, RegistrySrv, ngProgress) {
+  .controller('AccountEditCtrl', function(account, $rootScope, $scope, $stateParams, AccountSrv, ngNotify, Upload, FileSrv, RegistrySrv, ngProgress) {
 
     $scope.activePanel = 'registries';
 

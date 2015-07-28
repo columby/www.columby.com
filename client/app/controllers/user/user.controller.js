@@ -264,7 +264,10 @@ angular.module('columbyApp')
 
 
   $scope.openFileBrowser = function() {
-    $rootScope.$broadcast('openFileManager');
+    $rootScope.$broadcast('openFileManager', {
+      type:'image',
+      account_id: $scope.user.primary.id
+    });
   }
 
 
