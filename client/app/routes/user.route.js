@@ -43,6 +43,12 @@ angular.module('columbyApp')
       .state('user.edit', {
         url: '/:slug/edit',
         templateUrl: 'views/user/edit.html',
+        resolve: {
+          // First try to fetch dataset.
+          user: function(UserSrv, $stateParams) {
+            return UserSrv.get($stateParams.slug);
+          }
+        },
         controller: 'UserEditCtrl',
         data: {
           bodyClasses: 'page user edit',

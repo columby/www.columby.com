@@ -12,32 +12,22 @@
 
 angular.module('columbyApp')
 
-  .service('FileService', function ($log, $http, $q, configSrv) {
-
-    ///**
-    //*
-    //* Read the xml response from S3
-    //*
-    //* @param s3Response
-    //* @returns {{location: string, bucket: *, key: *, etag: *}}
-    //*/
-    //function handleS3Response(s3Response){
-    //  var data = window.xml2json.parser(s3Response);
-    //  return {
-    //    location: decodeURIComponent(data.postresponse.location),
-    //    bucket: data.postresponse.bucket,
-    //    key: data.postresponse.key,
-    //    etag: data.postresponse.etag
-    //  };
-    //}
-
+  .service('FileSrv', function ($log, $http, $q, configSrv) {
 
     return {
 
+      query: function(params){
+        return $http({
+          url: configSrv.apiRoot + '/v2/file',
+          params: params,
+          method: 'GET'
+        }).then(function(result){
+          return result.data;
+        });
+      },
+
       /******
        * Get a signed request for uploading to S3 from the server.
-       *
-       * @params: Object: { filetype, size, filename, accountId }
        *
        **/
       signS3: function (params) {
@@ -53,12 +43,6 @@ angular.module('columbyApp')
 
       /******
        * Upload a file to s3 with a signed request
-       *
-       * @param scope
-       * @param s3Response
-       * @param file
-       *
-       * @returns {*}
        *
        */
       upload: function (scope, s3Response, file) {
@@ -152,9 +136,6 @@ angular.module('columbyApp')
       /******
        * Finish the S3 request.
        * Send a message to the server that the upload is finished.
-       *
-       * @param params
-       * @returns {*}
        */
       finishS3: function(params) {
         return $http({
@@ -191,5 +172,7 @@ angular.module('columbyApp')
 
         return false;
       }
+
+
     };
   });

@@ -7,67 +7,46 @@ angular.module('columbyApp')
  * Account Edit Controller
  *
  **/
-  .controller('AccountEditCtrl',
-  function ($rootScope, $scope, $stateParams, AccountSrv, ngNotify, $upload, FileService, RegistrySrv, ngProgress) {
+  .controller('AccountEditCtrl', function(account, $rootScope, $scope, $stateParams, AccountSrv, ngNotify, $upload, FileService, RegistrySrv, ngProgress) {
 
+    $scope.activePanel = 'registries';
 
-    /* ---------- SETUP ----------------------------------------------------------------------------- */
-    $scope.contentLoading  = true;
-    $rootScope.title = 'columby.com';
-    $scope.activePanel = 'profile';
-
-
-    /* ---------- FUNCTIONS ------------------------------------------------------------------------- */
-    function getAccount(){
-      //console.log($stateParams);
-      // get account information of user by userSlug
-      AccountSrv.get($stateParams.slug).then(function(result){
-        console.log('Fetched result: ' , result);
-        $scope.contentLoading = false;
-
-        // redirect primary accout to user edit page
-        if (result.account.primary){
-          console.log('forward from account to user edit page.');
-          $state.go('userEdit',{slug: $stateParams.slug});
-        }
-
-        // handle result
-        $rootScope.title = 'columby.com | ' + result.account.displayName;
-        $scope.account = result.account;
-        // set reference model to check for changes
-        $scope.originalAccount = angular.copy($scope.account);
-
-        if ($scope.account.avatar) {
-          $scope.account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.account.avatar.shortid + '/' + $scope.account.avatar.filename;
-        };
-
-        // update the header with the header image just fetched.
-        if ($scope.account.headerImg) {
-          console.log('updating header image. ');
-          updateHeaderImage();
-        }
-
-        // Get a list of registries
-        $scope.registries = RegistrySrv.query(function(result){
-          // reshuffle registries
-          var inactiveRegistries = [];
-          for (var i=0; i<result.length; i++) {
-            var active=false;
-            for (var k=0; k<$scope.account.registries.length; k++){
-              if (result[ i].id === $scope.account.registries[ k]) {
-                active=true;
-              }
-            }
-            if (active) {
-              inactiveRegistries.push(result[ i]);
-            }
-          }
-          $scope.registries.inactive = inactiveRegistries;
-        });
-
-      });
+    //
+    if (!account.id){
+      ngNotify.set('The requested account was not found. ','error');
+      $state.go('home');
     }
 
+    // redirect primary accout to user edit page
+    if (account.primary){
+      console.log('forward from account to user edit page.');
+      $state.go('user.edit',{slug: $stateParams.slug});
+    }
+
+    //
+    $scope.account = account;
+
+    //
+    $rootScope.title = 'columby.com | ' + $scope.account.displayName;
+
+    // set reference model to check for changes
+    $scope.originalAccount = angular.copy($scope.account);
+
+    // update the header with the header image just fetched.
+    if ($scope.account.headerImg) {
+      updateHeaderImage();
+    }
+
+    // Get a list of registries
+    $scope.registries = {
+      active: [],
+      inactive: []
+    };
+
+    //
+    $scope.registries.active = $scope.account.registries;
+
+    //
     function updateHeaderImage(){
       $scope.account.headerImg.url = $rootScope.config.filesRoot + '/a/' + $scope.account.headerImg.shortid + '/' + $scope.account.headerImg.filename;
       $scope.headerStyle = {
@@ -100,120 +79,50 @@ angular.module('columbyApp')
       }
     };
 
+    $scope.openFileBrowser = function(options){
+      console.log('show file browser');
+      $rootScope.$broadcast('showFileBrowser');
+    }
+    // REGISTRY FUNCTIONS
+    // Validate key for a registry
+    $scope.validateRegistry = function(registry){
+      console.log('validating registry', registry);
+      var apikey= registry.account_registries.apikey
 
-    $scope.startUpload = function(files,type,target){
-      var file = files[0];
-      $scope.fileUpload = {
-        type: type,
-        target: target
-      };
-
-      // Check if there is a file
-      if (!file) { return ngNotify.set('No file selected.','error'); }
-      console.log('Yes there is a file. ');
-
-      // Check if there is already an upload in progress
-      if ($scope.upload && $scope.upload.file) {
-        return ngNotify.set('There is already an upload in progress.','error');
-      }
-      console.log('There is not already an upload in progress. ');
-
-      // Check if the file has the right type
-      if (!FileService.validateFile(file.type,type,target)) {
-        return ngNotify.set('The file you chose is not valid. ' + file.type, 'error');
-      }
-      console.log('File is valid. ');
-
-      $scope.upload = {
-        file: file
-      };
-
-      ngProgress.color('#2FCCFF');
-      ngProgress.start();
-      var params = {
-        filetype: file.type,
-        filesize: file.size,
-        filename: file.name,
-        accountId: $scope.account.id,
-        type: type,
-        target: target
-      };
-
-      $upload.upload({
-        method: 'POST',
-        url   : $rootScope.config.filesRoot + '/upload',
-        fields: params,
-        file  : file,
-      })
-
-      .progress(function (evt) {
-        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-        //console.log('progress: ' + progressPercentage + '% for ' + evt.config.file.name);
-        ngProgress.set(progressPercentage);
-      })
-
-      .success(function (data, status, headers, config) {
-        //console.log('File ' + config.file.name + 'uploaded.');
-        //console.log('Data', data);
-        // File upload is done
-        if (data.status === 'ok') {
-          ngProgress.complete();
-          // finish
-          $scope.upload.file = null;
-          ngNotify.set('File uploaded.');
-          console.log('File uploaded: ', data);
-
-          var updated = {
-            id: $scope.account.id
-          };
-
-          switch(target){
-            case 'header':
-              console.log('updating header image');
-              $scope.account.headerImg = data.file;
-              $scope.account.headerimg_id = data.file.id;
-              updateHeaderImage();
-              updated.headerimg_id = data.file.id;
-              break;
-            case 'avatar':
-              console.log('Updating avatar. ');
-              $scope.account.avatar_id = data.file.id;
-              $scope.account.avatar = data.file;
-              $scope.account.avatar.url = $rootScope.config.filesRoot + '/a/' + data.file.shortid + '/' + data.file.filename;
-              console.log('Account avatar: ' + $scope.account.avatar.url);
-              //console.log('updating avatar');
-              updated.avatar_id = data.file.id;
-              break;
-            case 'accountFile':
-              console.log('updating account file');
-              AccountSrv.addFile(data.file, function(result){
-                $log.log('result: ', result);
-                $scope.account.files.push(result);
-              });
-              break;
-          }
-          $scope.fileUpload = null;
-          ngNotify.set('File uploaded, updating account...');
-          console.log('updating, ', updated);
-
-          // Update Account at server
-          AccountSrv.update({slug: $scope.account.slug}, updated, function(result){
-            $log.log('Account updated, ', result);
-          });
-
+      RegistrySrv.validate(registry.id, {apikey:apikey}, function(result){
+        if (result.statusCode===403){
+          ngNotify.set('Key is not valid', 'error');
         } else {
-          $scope.upload.file = null;
-          return ngNotify.set('Something went wrong finishing the upload. ','error');
+          console.log(result);
+          var r = registry.account_registries;
+          r.valid = true;
+          r.active = true;
+          r.statusMessage = 'Validated at ' + new Date();
+          //console.log(r);
+          ngNotify.set('Key is valid!', 'success');
+          AccountSrv.updateRegistry(r);
         }
+      })
+    }
 
+
+    //
+    $scope.updateRegistry = function($index, registry){
+      console.log($index);
+      console.log('updating registry');
+      AccountSrv.updateRegistry(registry.account_registries).then(function(result){
+        console.log(result);
+        if (result.id){
+          ngNotify.set('Registry settings updated. ', 'success');
+          $scope.registries.active[ $index].account_registries = result;
+        } else {
+          ngNotify.set('Something went wrong ' + result, 'error');
+        }
       });
-    };
-
-
-    /* ---------- INIT ----------------------------------------------------------------------------- */
-    getAccount();
+    }
 
   })
+
 
   .controller('AccountEditOptionsCtrl', function($modalInstance, AccountSrv) {
 

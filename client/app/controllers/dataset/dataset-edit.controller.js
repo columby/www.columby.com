@@ -7,7 +7,7 @@ angular.module('columbyApp')
  *  Controller for a dataset Edit page
  *
  */
-.controller('DatasetEditCtrl', function(dataset, $rootScope, $scope, configSrv, $state, $stateParams, DatasetSrv, DistributionSrv, PrimaryService, ReferenceSrv, TagService, Slug, ngDialog, FileService,ngProgress, $timeout,$modal,$upload, ngNotify, AuthSrv) {
+.controller('DatasetEditCtrl', function(dataset, $rootScope, $scope, configSrv, $state, $stateParams, AccountSrv, DatasetSrv, DistributionSrv, PrimaryService, ReferenceSrv, TagService, Slug, ngDialog, FileService,ngProgress, $timeout,$modal,$upload, ngNotify, AuthSrv) {
 
   // Check existence
   if (!dataset.id){
@@ -39,27 +39,22 @@ angular.module('columbyApp')
   }
 
 
-  // Get the dataset from the server
-  function getDataset() {
-    // transition the url from slug to id
-    if ($stateParams.id !== dataset.shortid) {
-      $state.transitionTo ('dataset.view', { id: dataset.shortid}, {
-        location: true,
-        inherit: true,
-        relative: $state.$current,
-        notify: false
-      });
-    }
-  }
-
-
-
   // Show or hide the options menu
   $scope.showOptions = function(){
+    console.log(AccountSrv.get({slug:dataset.account.slug}).$promise);
     var modalInstance = $modal.open({
       size: 'lg',
       templateUrl: 'views/dataset/modals/dataset-edit-options.html',
-      constroller: 'datasetOptionsCtrl'
+      controller: 'DatasetOptionsCtrl',
+      backdrop: 'static',
+      resolve: {
+        dataset: function() {
+          return $scope.dataset;
+        },
+        account: function(){
+          return AccountSrv.get({slug: dataset.account.slug}).$promise;
+        }
+      }
     })
   };
 
@@ -163,7 +158,7 @@ angular.module('columbyApp')
    */
   $scope.deleteReference = function(reference){
     var idx = $scope.dataset.references.indexOf(reference);
-console.log(reference);
+    console.log(reference);
     ReferenceSrv.delete({id:reference.id}, function(res){
       console.log(res);
       if (res.status === 'success') {
@@ -359,6 +354,7 @@ console.log(reference);
     });
   };
 
+
   /**
    *
    * Sync a primary source
@@ -410,5 +406,7 @@ console.log(reference);
       console.log('dataset remove result: ', result);
     });
   };
+
+  $scope.showOptions();
 
 });

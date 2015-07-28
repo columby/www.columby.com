@@ -50,7 +50,6 @@ angular.element(document).ready(
  *
  ***/
 angular.module('columbyApp', [
-  'ngCookies',
   'ngResource',
   'ngSanitize',
   'ngAnimate',
@@ -59,8 +58,7 @@ angular.module('columbyApp', [
   'angular-jwt',
   'satellizer',
   'slugifier',
-  'ngDialog',
-  'angularFileUpload',
+  'ngFileUpload',
   'textAngular',
   'td.easySocialShare',
   'ngProgress',

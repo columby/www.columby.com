@@ -7,7 +7,8 @@ angular.module('columbyApp')
   return $resource(configSrv.apiRoot + '/v2/dataset/:id', {
     id: '@id',
     offset: '@offset',
-    tid: '@tid'
+    tid: '@tid',
+    rid: '@rid'
   }, {
 
     query: { method: 'GET', isArray: false, responseType: 'json' },
@@ -24,6 +25,11 @@ angular.module('columbyApp')
     removeTag: {
       method: 'DELETE',
       url: configSrv.apiRoot + '/v2/dataset/:id/tag/:tid'
+    },
+
+    updateRegistry: {
+      method: 'PUT',
+      url: configSrv.apiRoot + '/v2/dataset/:id/registry/:rid'
     }
   });
 });

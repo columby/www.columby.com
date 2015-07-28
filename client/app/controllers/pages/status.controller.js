@@ -3,6 +3,30 @@
 angular.module('columbyApp')
   .controller('StatusCtrl', function ($rootScope, $scope, $http) {
 
+    $scope.ckan = {
+      action: 'dashboard_activity_list_html'
+    };
+
+    $scope.ckanQuery = function(){
+
+      var params = {
+        action: $scope.ckan.action
+      };
+
+      $http({
+        method: 'GET',
+        url: $rootScope.config.apiRoot + '/v2/registry/ckan',
+        params: params
+      }).then(function(result){
+        console.log(result);
+        $scope.ckan.result = JSON.parse(result.data.body).result;
+        $scope.ckan.error = result.data.error;
+      }).catch(function(err){
+        console.log(err);
+      });
+    }
+
+
     $rootScope.title = 'columby.com | Status';
 
     $scope.statusList = [

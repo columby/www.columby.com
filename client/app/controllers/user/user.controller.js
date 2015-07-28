@@ -200,27 +200,22 @@ angular.module('columbyApp')
  * Edit a user account
  *
  ***/
-.controller('UserEditCtrl', function ($scope, $rootScope, $location, $state, $stateParams, UserSrv, AccountSrv, ngNotify, Slug, $modal) {
-  console.log('User edit controller');
+.controller('UserEditCtrl', function (user, $scope, $rootScope, $location, $state, $stateParams, UserSrv, AccountSrv, ngNotify, Slug, $modal) {
+
+  console.log('User edit controller',user);
+
   // Set the default active panel
   $scope.activePanel = 'profile';
 
-  // Get the currently loggedin user from the server.
-  function fetchAccount(){
-    UserSrv.get($stateParams.slug).then(function(result){
-      console.log(result);
-      // add to scope
-      $scope.user = result;
-
-      //
-      if (!$scope.user.primary.id){
-        $scope.errorMsg = 'There seems to be a problem with your account. Please contact support.';
-      }
-
-      // save a copy for reference
-      $scope.originalUser = angular.copy($scope.user);
-    });
+  $scope.user = user;
+  //
+  if (!$scope.user.primary.id){
+    $scope.errorMsg = 'There seems to be a problem with your account. Please contact support.';
   }
+
+  // save a copy for reference
+  $scope.originalUser = angular.copy($scope.user);
+
 
   $scope.updateAccount = function() {
     $scope.updatingAccount = true;
@@ -267,6 +262,12 @@ angular.module('columbyApp')
     });
   };
 
+
+  $scope.openFileBrowser = function() {
+    $rootScope.$broadcast('openFileManager');
+  }
+
+
   // Update a slug input
   $scope.slugify = function() {
     $scope.user.primary.slug = Slug.slugify($scope.user.primary.slug);
@@ -288,6 +289,4 @@ angular.module('columbyApp')
     });
   }
 
-  // Initialize
-  fetchAccount();
 });

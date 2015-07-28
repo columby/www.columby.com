@@ -1,0 +1,54 @@
+<div class="modal-header">
+  <div class="col-md-10">
+    <h4 class="modal-title"><span class="fa fa-image"></span> File manager</h4>
+  </div>
+  <div class="col-md-2 right">
+    <a class="close" href data-ng-click="$dismiss()"><span class="fa fa-close"></span></a>
+  </div>
+</div>
+
+<div class="modal-body">
+
+  <div class="fm-tools row">
+    <div class="search col-md-6">
+      <div class="col-md-8">
+        <input disabled type="text" class="form-control" placeholder="search" ></input>
+      </div>
+      <div class="col-md-4">
+        <button disabled class="btn btn-default"><i class="fa fa-search"></i></button>
+      </div>
+    </div>
+    <div class="upload col-md-6">
+      <a class="btn btn-default" disabled>Import from url</a>
+      <div class="btn btn-default btn-upload" ngf-select ngf-change="onFileSelect($files)">Upload</div>
+      <progressbar ng-show="progress>0" class="progress-striped active" value="progress"></progressbar>
+
+    </div>
+  </div>
+
+  <div class="file-browser row">
+    <div class="col-md-12">
+      <div class="empty" ng-show="media.length<1">No Media Yet!</div>
+      <table class="table table-hover table-striped">
+        <tr ng-repeat="asset in media">
+          <td><a ng-href="/files/large/{{asset.filename}}" target="_blank"><img ng-src="/files/small/{{asset.filename}}" style="width:120px;"/></a></td>
+          <td>{{asset.filename}} - {{asset.title}}<br> <small>Added {{asset.created_at | date:'short'}}</small></td>
+          <td>
+            <a ng-click="select(asset)" class="btn btn-default" ng-show="options.select">Select</a>
+            <!-- <a ng-click="edit(asset)" class="btn btn-default"><i class="fa fa-cog"></i></a> -->
+            <a ng-click="delete($index, asset)" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+          </td>
+        </tr>
+      </table>
+
+      <div class="pager">
+
+      </div>
+  </div>
+</div>
+
+<div class="modal-footer center clearfix">
+  <!-- <button data-ng-click="$dismiss()" type="button" class="btn btn-default pull-left">Cancel</button>
+  <button type="submit" data-ng-disabled="image == null || image == '' || image == 'img/posts/default.svg'" class="btn btn-primary pull-right">Insert Image</button>
+  <button type="button" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-picture mR5" ng-click="showUploader()"></span>Upload Image</button> -->
+</div>

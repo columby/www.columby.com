@@ -1,10 +1,10 @@
 <div class="footer-wrapper">
   <div class="local" ng-show="$root.config.apiRoot==='http://localhost:8000'">Local Development API</div>
-  <div class="development" ng-show="$root.config.apiRoot==='http://dev-api.columby.com'">Development API</div>
+  <div class="development" ng-show="$root.config.apiRoot==='https://dev-api.columby.com'">Development API</div>
 
   <div class="container">
     <div class="footer-info pull-left">
-      <a ui-sref="home">Columby</a>. Publish and discover data <span><em>[v.{{$root.config.version}}]</em></span>
+      <a ui-sref="home">Columby</a>. Publish and discover data <span><em><a ui-sref="status">status</a></em></span>
     </div>
     <div class="footer-info footer-links pull-right">
       <a ui-sref="about">About</a>

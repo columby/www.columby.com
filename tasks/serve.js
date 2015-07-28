@@ -20,6 +20,15 @@ var openOpts = {
 module.exports = {
 
   nodemon: function () {
+
+    try {
+      env({
+        file: "server/config/env.js"
+      });
+    } catch(err) {
+      console.log('No env.js found');
+    }
+    
     return nodemon({
         script: 'server/server.js',
         ext: 'js',

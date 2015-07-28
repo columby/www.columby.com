@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .service('UserSrv', function($rootScope, $http, $auth, configSrv) {
+  .service('UserSrv', function($resource, $rootScope, $http, $auth, configSrv) {
 
     var user;
 
@@ -13,7 +13,6 @@ angular.module('columbyApp')
     };
 
     return {
-
 
       setUser: function(u){
         setUser(u);

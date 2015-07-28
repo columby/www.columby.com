@@ -155,36 +155,51 @@
                 Registries
               </div>
               <div class="panel-body">
-
-                <div class="registry-active">
-                  <h3>Active registries</h3>
-                  <div class="registry" ng-repeat="registry in account.registries">
+                <div class="registry-active col-md-12">
+                  <h3>Connected registries</h3>
+                  <div class="registry" ng-repeat="registry in registries.active">
                     <form class="form">
-                      <h4>{{registry.title}}</h4>
-                      <div class="form-group">
-                        <label for="apikey">API key (Status: {{registry.settings.status || 'unknown'}})</label>
-                        <input type="text" class="form-control" id="apikey" ng-model="registry.settings.apikey"></input>
-                        <a class="btn btn-default" ng-click="validateRegistryKey()">validate</a>
-                        {{registry.settings.statusMessage}}
+                      <div class="col-md-2">
+                        <img class="img-responsive avatar" ng-src="{{registry.icon}}"/>
                       </div>
-                      <div class="form-group">
-                        <label class="checkbox">
-                          <input type="checkbox" ng-model="registry.autosync">Autosync
-                        </label>
+                      <div class="col-md-10">
+                        <h4>{{registry.title}}</h4>
+                      </div>
+                      <div class="col-md-12">
+                        <p>Validated: {{registry.account_registries.valid || false}}</p>
+                        <input type="checkbox" ng-model="registry.account_registries.active" ng-click="updateRegistry($index,registry)" ng-show="registry.account_registries.valid">Active
+                        <input type="checkbox" ng-model="registry.account_registries.autoadd" ng-click="updateRegistry($index,registry)" ng-show="registry.account_registries.valid" ng-disabled="!registry.account_registries.active">Auto add
+                        <div class="form-group">
+                          <label for="apikey">API key</label>
+                          <input type="text" class="form-control" id="apikey" ng-model="registry.account_registries.apikey"></input>
+                          <a class="btn btn-default" ng-click="validateRegistry(registry)">validate</a>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <p ng-hide="registry.account_registries.valid">This registry is added to this account, but it is not validated yet. Add the required key and validate it. </p>
+                      </div>
+                      <div class="col-md-12" ng-show={{registry.account_registries.status}}>
+                        <div class="form-group">
+                          <label class="checkbox">
+                            <input type="checkbox" ng-model="registry.account_registries.autosync">Autosync
+                          </label>
+                        </div>
                       </div>
                     </form>
-                    <hr>
                   </div>
+
                 </div>
 
-                <div class="registry-inactive">
+                <!-- <div class="row registry-inactive">
                   <h3>Inactive registries</h3>
-                  <div class="registry" ng-repeat="registry in registries.inactive">
-                    {{registry}}
+                  <div class="registry" ng-repeat="a in registries.inactive track by a.id">
+                    <pre>{{registry}}</pre>
                   </div>
-                </div>
+                </div> -->
 
-                <p>Your registry not listed? Contact us to discuss the possibilities! </p>
+                <div class="col-md-12">
+                  <p>Your registry not listed? Contact us to discuss the possibilities! </p>
+                </div>
               </div>
             </div>
           </div>

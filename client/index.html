@@ -11,25 +11,17 @@
     <title ng-bind="$root.title || 'Columby.com'"></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(client) app/vendor.css -->
-      <!-- bower:css -->
-      <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-      <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-      <link rel="stylesheet" href="bower_components/angularjs-toaster/toaster.css" />
-      <link rel="stylesheet" href="bower_components/bootstrap-css-only/css/bootstrap.css" />
-      <link rel="stylesheet" href="bower_components/textAngular/src/textAngular.css" />
-      <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog.css" />
-      <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog-theme-default.css" />
-      <link rel="stylesheet" href="bower_components/ngprogress/ngProgress.css" />
-      <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.min.css" />
-      <link rel="stylesheet" href="bower_components/ng-notify/src/styles/ng-notify.css" />
-      <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css({.tmp,client}) app/app.css -->
+
+    <!-- build:css app.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bower_components/bootstrap-css-only/css/bootstrap.css">
+    <link rel="stylesheet" href="bower_components/ngprogress/ngProgress.css">
+    <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.min.css">
+    <link rel="stylesheet" href="bower_components/ng-notify/src/styles/ng-notify.css">
+    <link rel="stylesheet" href="bower_components/textAngular/src/textAngular.css">
+    <!-- endinject -->
     <link rel="stylesheet" href="/app/app.css">
-      <!-- injector:css -->
-      <!-- endinjector -->
     <!-- endbuild -->
   </head>
   <body ng-controller="AppCtrl" class="{{$root.bodyClasses}}">
@@ -53,6 +45,7 @@
     <div footer></div>
 
     <div uservoice></div>
+    <div file-manager></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
@@ -75,111 +68,209 @@
     <script type="text/javascript" src="//use.typekit.net/xhy8pkj.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
-    <!-- build:js({client,node_modules}) app/vendor.js -->
-      <!-- bower:js -->
-      <script src="bower_components/jquery/dist/jquery.js"></script>
-      <script src="bower_components/angular/angular.js"></script>
-      <script src="bower_components/angular-resource/angular-resource.js"></script>
-      <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-      <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-      <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-      <script src="bower_components/lodash/dist/lodash.compat.js"></script>
-      <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-      <script src="bower_components/angular-animate/angular-animate.js"></script>
-      <script src="bower_components/angularjs-toaster/toaster.js"></script>
-      <script src="bower_components/rangy/rangy-core.js"></script>
-      <script src="bower_components/rangy/rangy-classapplier.js"></script>
-      <script src="bower_components/rangy/rangy-highlighter.js"></script>
-      <script src="bower_components/rangy/rangy-selectionsaverestore.js"></script>
-      <script src="bower_components/rangy/rangy-serializer.js"></script>
-      <script src="bower_components/rangy/rangy-textrange.js"></script>
-      <script src="bower_components/textAngular/src/textAngular.js"></script>
-      <script src="bower_components/textAngular/src/textAngular-sanitize.js"></script>
-      <script src="bower_components/textAngular/src/textAngularSetup.js"></script>
-      <script src="bower_components/ngDialog/js/ngDialog.js"></script>
-      <script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
-      <script src="bower_components/xml2json/xml2json.js"></script>
-      <script src="bower_components/angular-easy-social-share/easy-social-share.js"></script>
-      <script src="bower_components/angular-slugify/angular-slugify.js"></script>
-      <script src="bower_components/angular-jwt/dist/angular-jwt.js"></script>
-      <script src="bower_components/ngprogress/build/ngProgress.js"></script>
-      <script src="bower_components/ng-tags-input/ng-tags-input.min.js"></script>
-      <script src="bower_components/ng-file-upload-shim/angular-file-upload-shim.js"></script>
-      <script src="bower_components/satellizer/satellizer.js"></script>
-      <script src="bower_components/ng-notify/src/scripts/ng-notify.js"></script>
-      <script src="bower_components/angular-gettext/dist/angular-gettext.js"></script>
-      <!-- endbower -->
-    <!-- endbuild -->
+    <!-- build:js app.js -->
+    <!-- bower:js -->
 
-        <!-- build:js({.tmp,client}) app/app.js -->
-        <script src="/app/app.js"></script>
-          <!-- injector:js -->
-          <script src="app/config.js"></script>
-          <script src="app/controllers/account/account.controller.js"></script>
-          <script src="app/controllers/account/accountEdit.controller.js"></script>
-          <script src="app/controllers/account/accountSelector.controller.js"></script>
-          <script src="app/controllers/admin/admin.controller.js"></script>
-          <script src="app/controllers/app.controller.js"></script>
-          <script src="app/controllers/collection/collection.controller.js"></script>
-          <script src="app/controllers/collection/collectionEdit.controller.js"></script>
-          <script src="app/controllers/dataset/dataset-create.controller.js"></script>
-          <script src="app/controllers/dataset/dataset-delete.controller.js"></script>
-          <script src="app/controllers/dataset/dataset-edit.controller.js"></script>
-          <script src="app/controllers/dataset/dataset-options.controller.js"></script>
-          <script src="app/controllers/dataset/dataset.controller.js"></script>
-          <script src="app/controllers/distribution/distribution-create.controller.js"></script>
-          <script src="app/controllers/distribution/distribution-edit.controller.js"></script>
-          <script src="app/controllers/distribution/primary-edit.controller.js"></script>
-          <script src="app/controllers/distribution/primary-new.controller.js"></script>
-          <script src="app/controllers/home/home.controller.js"></script>
-          <script src="app/controllers/pages/pages.controller.js"></script>
-          <script src="app/controllers/pages/status.controller.js"></script>
-          <script src="app/controllers/reference/reference-create.controller.js"></script>
-          <script src="app/controllers/reference/reference-delete.controller.js"></script>
-          <script src="app/controllers/reference/reference-edit.controller.js"></script>
-          <script src="app/controllers/search/search.controller.js"></script>
-          <script src="app/controllers/tag/tag.controller.js"></script>
-          <script src="app/controllers/user/user.controller.js"></script>
-          <script src="app/directives/accountSelector/accountSelector.directive.js"></script>
-          <script src="app/directives/accountSwitcher/accountSwitcher.directive.js"></script>
-          <script src="app/directives/autogrow/autogrow.directive.js"></script>
-          <script src="app/directives/confirmDelete/confirmDelete.directive.js"></script>
-          <script src="app/directives/embedly/embedly.directive.js"></script>
-          <script src="app/directives/focus/focus.directive.js"></script>
-          <script src="app/directives/footer/footer.directive.js"></script>
-          <script src="app/directives/header/header.directive.js"></script>
-          <script src="app/directives/noImage/noImage.directive.js"></script>
-          <script src="app/directives/sidebar/sidebar.directive.js"></script>
-          <script src="app/directives/uservoice/uservoice.directive.js"></script>
-          <script src="app/filters/bytes.filter.js"></script>
-          <script src="app/routes/account.route.js"></script>
-          <script src="app/routes/admin.route.js"></script>
-          <script src="app/routes/collection.route.js"></script>
-          <script src="app/routes/dataset.route.js"></script>
-          <script src="app/routes/home.route.js"></script>
-          <script src="app/routes/pages.route.js"></script>
-          <script src="app/routes/search.route.js"></script>
-          <script src="app/routes/tag.route.js"></script>
-          <script src="app/routes/user.route.js"></script>
-          <script src="app/services/account.service.js"></script>
-          <script src="app/services/auth.service.js"></script>
-          <script src="app/services/collection.service.js"></script>
-          <script src="app/services/config.service.js"></script>
-          <script src="app/services/data.service.js"></script>
-          <script src="app/services/dataset.service.js"></script>
-          <script src="app/services/distribution.service.js"></script>
-          <script src="app/services/embedly.service.js"></script>
-          <script src="app/services/file.service.js"></script>
-          <script src="app/services/primary.service.js"></script>
-          <script src="app/services/reference.service.js"></script>
-          <script src="app/services/registry.service.js"></script>
-          <script src="app/services/search.service.js"></script>
-          <script src="app/services/tag.service.js"></script>
-          <script src="app/services/user.service.js"></script>
-          <script src="app/services/worker.service.js"></script>
-          <script src="app/translations/translations.js"></script>
-          <!-- endinjector -->
-        <!-- endbuild -->
+    <script src="bower_components/angular/angular.js"></script>
+
+    <script src="bower_components/json3/lib/json3.js"></script>
+
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+
+    <script src="bower_components/rangy/rangy-core.js"></script>
+
+    <script src="bower_components/rangy/rangy-classapplier.js"></script>
+
+    <script src="bower_components/rangy/rangy-highlighter.js"></script>
+
+    <script src="bower_components/rangy/rangy-selectionsaverestore.js"></script>
+
+    <script src="bower_components/rangy/rangy-serializer.js"></script>
+
+    <script src="bower_components/rangy/rangy-textrange.js"></script>
+
+    <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+
+    <script src="bower_components/xml2json/xml2json.js"></script>
+
+    <script src="bower_components/angular-easy-social-share/easy-social-share.js"></script>
+
+    <script src="bower_components/angular-slugify/angular-slugify.js"></script>
+
+    <script src="bower_components/angular-jwt/dist/angular-jwt.js"></script>
+
+    <script src="bower_components/ngprogress/build/ngProgress.js"></script>
+
+    <script src="bower_components/ng-tags-input/ng-tags-input.min.js"></script>
+
+    <script src="bower_components/ng-file-upload-shim/ng-file-upload-shim.js"></script>
+
+    <script src="bower_components/satellizer/satellizer.js"></script>
+
+    <script src="bower_components/ng-notify/src/scripts/ng-notify.js"></script>
+
+    <script src="bower_components/angular-gettext/dist/angular-gettext.js"></script>
+
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+
+    <script src="bower_components/textAngular/src/textAngular.js"></script>
+
+    <script src="bower_components/textAngular/src/textAngular-sanitize.js"></script>
+
+    <script src="bower_components/textAngular/src/textAngularSetup.js"></script>
+
+    <!-- endinject -->
+
+    <!-- inject:js -->
+
+    <script src="app/config.js"></script>
+
+    <script src="app/app.js"></script>
+
+    <script src="app/services/worker.service.js"></script>
+
+    <script src="app/services/user.service.js"></script>
+
+    <script src="app/services/tag.service.js"></script>
+
+    <script src="app/services/search.service.js"></script>
+
+    <script src="app/services/registry.service.js"></script>
+
+    <script src="app/services/reference.service.js"></script>
+
+    <script src="app/services/primary.service.js"></script>
+
+    <script src="app/services/file.service.js"></script>
+
+    <script src="app/services/embedly.service.js"></script>
+
+    <script src="app/services/distribution.service.js"></script>
+
+    <script src="app/services/dataset.service.js"></script>
+
+    <script src="app/services/data.service.js"></script>
+
+    <script src="app/services/config.service.js"></script>
+
+    <script src="app/services/collection.service.js"></script>
+
+    <script src="app/services/auth.service.js"></script>
+
+    <script src="app/services/account.service.js"></script>
+
+    <script src="app/routes/user.route.js"></script>
+
+    <script src="app/routes/tag.route.js"></script>
+
+    <script src="app/routes/search.route.js"></script>
+
+    <script src="app/routes/pages.route.js"></script>
+
+    <script src="app/routes/home.route.js"></script>
+
+    <script src="app/routes/dataset.route.js"></script>
+
+    <script src="app/routes/collection.route.js"></script>
+
+    <script src="app/routes/admin.route.js"></script>
+
+    <script src="app/routes/account.route.js"></script>
+
+    <script src="app/filters/bytes.filter.js"></script>
+
+    <script src="app/directives/uservoice/uservoice.directive.js"></script>
+
+    <script src="app/directives/sidebar/sidebar.directive.js"></script>
+
+    <script src="app/directives/noImage/noImage.directive.js"></script>
+
+    <script src="app/directives/header/header.directive.js"></script>
+
+    <script src="app/directives/footer/footer.directive.js"></script>
+
+    <script src="app/directives/focus/focus.directive.js"></script>
+
+    <script src="app/directives/fileManager/fileManager.directive.js"></script>
+
+    <script src="app/directives/embedly/embedly.directive.js"></script>
+
+    <script src="app/directives/confirmDelete/confirmDelete.directive.js"></script>
+
+    <script src="app/directives/autogrow/autogrow.directive.js"></script>
+
+    <script src="app/directives/accountSwitcher/accountSwitcher.directive.js"></script>
+
+    <script src="app/directives/accountSelector/accountSelector.directive.js"></script>
+
+    <script src="app/directives/fileManager/controllers/fileManagerModal.controller.js"></script>
+
+    <script src="app/directives/fileManager/controllers/fileManager.controller.js"></script>
+
+    <script src="app/controllers/user/user.controller.js"></script>
+
+    <script src="app/controllers/tag/tag.controller.js"></script>
+
+    <script src="app/controllers/search/search.controller.js"></script>
+
+    <script src="app/controllers/reference/reference-edit.controller.js"></script>
+
+    <script src="app/controllers/reference/reference-delete.controller.js"></script>
+
+    <script src="app/controllers/reference/reference-create.controller.js"></script>
+
+    <script src="app/controllers/pages/status.controller.js"></script>
+
+    <script src="app/controllers/pages/pages.controller.js"></script>
+
+    <script src="app/controllers/home/home.controller.js"></script>
+
+    <script src="app/controllers/distribution/primary-new.controller.js"></script>
+
+    <script src="app/controllers/distribution/primary-edit.controller.js"></script>
+
+    <script src="app/controllers/distribution/distribution-edit.controller.js"></script>
+
+    <script src="app/controllers/distribution/distribution-create.controller.js"></script>
+
+    <script src="app/controllers/dataset/dataset.controller.js"></script>
+
+    <script src="app/controllers/dataset/dataset-options.controller.js"></script>
+
+    <script src="app/controllers/dataset/dataset-edit.controller.js"></script>
+
+    <script src="app/controllers/dataset/dataset-delete.controller.js"></script>
+
+    <script src="app/controllers/dataset/dataset-create.controller.js"></script>
+
+    <script src="app/controllers/collection/collectionEdit.controller.js"></script>
+
+    <script src="app/controllers/collection/collection.controller.js"></script>
+
+    <script src="app/controllers/admin/admin.controller.js"></script>
+
+    <script src="app/controllers/account/accountSelector.controller.js"></script>
+
+    <script src="app/controllers/account/accountEdit.controller.js"></script>
+
+    <script src="app/controllers/account/account.controller.js"></script>
+
+    <script src="app/controllers/app.controller.js"></script>
+
+    <!-- endinject -->
+    <!-- endbuild -->
   </div>
 </body>
 </html>

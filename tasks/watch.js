@@ -19,7 +19,9 @@ var toExclude  = require('./config/bowerFilesToExclude');
 
 module.exports = function () {
 
-  livereload.listen();
+  livereload.listen({
+    port: 35730
+  });
 
   gulp.watch('bower.json', function () {
     gulp.src('client/index.html')

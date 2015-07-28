@@ -7,9 +7,34 @@ angular.module('columbyApp')
  *  Controller for a dataset Edit options page
  *
  */
-.controller('DatasetOptionsCtrl', function() {
+.controller('DatasetOptionsCtrl', function(dataset, account, $modalInstance, $rootScope, $scope, DatasetSrv) {
 
-  console.log('dataset options');
+
+  // add account datasets that have not been added tot the account to the dataset
+  var datasetRegistryIds = [];
+  for (var i=0; i<dataset.registries.length;i++){
+    datasetRegistryIds.push(dataset.registries[ i].id);
+  }
+
+  for (var i=0; i<account.registries.length; i++){
+    console.log('Account registry id: ' + account.registries[ i].id);
+    if (datasetRegistryIds.indexOf(account.registries[ i].id) === -1) {
+      console.log(account.registries[ i]);
+      var dr = account.registries[ i];
+      dr.dataset_registries = {
+        status: false,
+        registry_id: dr.id,
+        dataset_id: dataset.id
+      }
+      dataset.registries.push(dr);
+    } else {
+      dataset.registries[ datasetRegistryIds.indexOf(account.registries[ i].id)].account_registries = account.registries[ i].account_registries;
+    }
+  }
+
+  $scope.dataset = dataset;
+  $scope.account = account;
+
 
   /**
    * Update the header background image
@@ -24,7 +49,7 @@ angular.module('columbyApp')
     }
   }
 
-  
+
   /**
    * File is uploaded, finish it at the server.
    */
@@ -96,8 +121,10 @@ angular.module('columbyApp')
 
     $scope.showOptions = !$scope.showOptions;
 
+    modalOpened=true;
+
     var modalInstance = $modal.open({
-      templateUrl: 'views/dataset/confirmDelete.html',
+      templateUrl: 'views/dataset/confirm-delete.html',
       controller: 'DatasetDeleteCtrl',
       size: 'lg',
       backdrop: 'static',
@@ -107,14 +134,10 @@ angular.module('columbyApp')
           return $scope.dataset;
         }
       }
-    });
-
-    modalOpened=true;
-
-    modalInstance.result.then(function(result) {
+    }).result.then(function(result) {
       console.log(result);
       if (result.status === 'error'){
-        ngNotify.set('There was a problem deleting the distribution. (' + result.msg + ')', 'error');
+        ngNotify.set('There was a problem deleting the dataset. (' + result.msg + ')', 'error');
       } else {
         $state.go('home');
         ngNotify.set('Dataset deleted.');
@@ -240,4 +263,11 @@ angular.module('columbyApp')
     });
   };
 
+
+  $scope.toggleDatasetRegistry = function($index, registry){
+    var status = !registry.dataset_registries.status;
+    DatasetSrv.updateRegistry({id: dataset.id, rid: registry.id},{ status:status }, function(result){
+      $scope.dataset.registries[ $index].dataset_registries = result;
+    });
+  }
 });

@@ -103,7 +103,7 @@ angular.module('columbyApp')
 
   /* --------- SCOPE FUNCTIONS ------------------------------------------------------------ */
   $scope.showEmbedModal = function(){
-    ngDialog.open({
+    var modal = $modal.open({
       template: 'views/dataset/embedModal.html',
       className: 'ngDialog-theme-default fullscreenDialog embedModal',
       scope: $scope

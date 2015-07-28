@@ -17,21 +17,21 @@
         popover="Change visibility settings for your dataset."
         popover-trigger="mouseenter"
         popover-placement="left"><i class="fa fa-question"></i></a>
-      </span>
+      </span></h3>
 
       <div class="btn-group btn-toggle">
             <button class="btn btn-lg btn-default btn-private"
               ng-click="toggleDatasetPrivacy()"
               ng-model="dataset.private"
-              data-ng-disabled="dataset.private">Private</button>
+              ng-disabled="dataset.private">Private</button>
             <button class="btn btn-lg btn-success"
               ng-click="toggleDatasetPrivacy()"
               ng-model="dataset.private"
-              data-ng-disabled="!dataset.private">Public</button>
+              ng-disabled="!dataset.private">Public</button>
             </div>
         </div>
 
-      <div class="slug">
+      <!-- <div class="slug">
         <h3>Custom URL <span class="pull-right">
           <button
             class="btn btn-default btn-xs btn-tooltip"
@@ -58,6 +58,29 @@
               ng-show="slugForm.$valid">update url</button>
           </div>
         </form>
+      </div> -->
+
+      <div class="registries">
+        <h3>Connected registries</h3>
+        <p ng-hide="account.registries.length>0">There are no validated registries connected to this publication account</p>
+        <p ng-hide="dataset.registries.length>0">There are no registries connected to this dataset</p>
+        <a ui-href="account.edit({slug: dataset.account.slug})">Manage settings at  the organisation settings page</a>
+
+        <table class="table table-hover">
+          <thead>
+            <td></td>
+            <td>Registry title</td>
+            <td>Registry status</td>
+            <td>Active</td>
+          </thead>
+          <tr ng-repeat="registry in dataset.registries">
+            <td><img ng-src="{{registry.icon}}" style="width:40px;"/></td>
+            <td>{{registry.title}}</td>
+            <td>{{registry.account_registries.active}}</td>
+            <td>{{registry.dataset_registries.status || false}}</td>
+            <td><a href ng-click="toggleDatasetRegistry($index, registry)">toggle</a></td>
+          </tr>
+        </table>
       </div>
 
       <div class="background">
