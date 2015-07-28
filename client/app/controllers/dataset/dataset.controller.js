@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-.controller('DatasetViewCtrl', function(dataset, $window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, ngDialog, configSrv, DataService, UserSrv, AuthSrv, ngNotify) {
+.controller('DatasetViewCtrl', function(dataset, $window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, configSrv, DataService, UserSrv, AuthSrv, ngNotify) {
 
   if (!dataset.id) {
     console.log('nooo');

@@ -7,7 +7,7 @@ angular.module('columbyApp')
  *  Controller for a dataset Edit page
  *
  */
-.controller('DatasetEditCtrl', function(dataset, $rootScope, $scope, configSrv, $state, $stateParams, AccountSrv, DatasetSrv, DistributionSrv, PrimaryService, ReferenceSrv, TagService, Slug, ngDialog, FileService,ngProgress, $timeout,$modal,$upload, ngNotify, AuthSrv) {
+.controller('DatasetEditCtrl', function(dataset, $rootScope, $scope, configSrv, $state, $stateParams, AccountSrv, DatasetSrv, DistributionSrv, PrimaryService, ReferenceSrv, TagService, Slug, FileSrv,ngProgress, $timeout,$modal,Upload, ngNotify, AuthSrv) {
 
   // Check existence
   if (!dataset.id){
@@ -381,9 +381,9 @@ angular.module('columbyApp')
   };
 
 
-  $scope.closeDialog = function(){
-    ngDialog.closeAll();
-  };
+  // $scope.closeDialog = function(){
+  //   ngDialog.closeAll();
+  // };
 
 
   $scope.addTag = function(tag){
