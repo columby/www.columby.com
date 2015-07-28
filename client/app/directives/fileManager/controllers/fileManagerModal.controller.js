@@ -15,7 +15,7 @@ angular.module('columbyApp')
   FileSrv.query({
     account_id: $rootScope.user.id
   }).then(function(result){
-    $scope.file = result;
+    $scope.files = result;
   });
 
   $scope.cancel = function() {

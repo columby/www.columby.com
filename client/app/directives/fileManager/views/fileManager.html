@@ -28,13 +28,13 @@
 
   <div class="file-browser row">
     <div class="col-md-12">
-      <div class="empty" ng-show="media.length<1">No Media Yet!</div>
+      <div class="empty" ng-show="files.length<1">No Media Yet!</div>
       <table class="table table-hover table-striped">
-        <tr ng-repeat="asset in media">
-          <td><a ng-href="/files/large/{{asset.filename}}" target="_blank"><img ng-src="/files/small/{{asset.filename}}" style="width:120px;"/></a></td>
-          <td>{{asset.filename}} - {{asset.title}}<br> <small>Added {{asset.created_at | date:'short'}}</small></td>
+        <tr ng-repeat="file in files">
+          <td><a ng-href="/files/large/{{file.filename}}" target="_blank"><img ng-src="/files/small/{{file.filename}}" style="width:120px;"/></a></td>
+          <td>{{file.filename}} - {{file.title}}<br> <small>Added {{file.created_at | date:'short'}}</small></td>
           <td>
-            <a ng-click="select(asset)" class="btn btn-default" ng-show="options.select">Select</a>
+            <a ng-click="select(file)" class="btn btn-default" ng-show="options.select">Select</a>
             <!-- <a ng-click="edit(asset)" class="btn btn-default"><i class="fa fa-cog"></i></a> -->
             <a ng-click="delete($index, asset)" class="btn btn-danger"><i class="fa fa-trash"></i></a>
           </td>

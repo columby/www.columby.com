@@ -17,11 +17,13 @@ angular.module('columbyApp')
     return {
 
       query: function(params){
+        console.log(params);
         return $http({
           url: configSrv.apiRoot + '/v2/file',
           params: params,
           method: 'GET'
         }).then(function(result){
+          console.log(result.data);
           return result.data;
         });
       },
