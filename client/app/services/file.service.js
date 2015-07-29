@@ -51,7 +51,14 @@ angular.module('columbyApp')
         });
       },
 
-
+      destroy: function(id) {
+        return $http({
+          url: configSrv.apiRoot + '/v2/file/' + id,
+          method: 'DELETE',
+        }).then(function(result){
+          return result.data;
+        });
+      },
 
 
       // Check if the file is an image

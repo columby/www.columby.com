@@ -9,7 +9,7 @@ angular.module('columbyApp')
     function setUser(u){
       user = u;
       $rootScope.user = u;
-      console.log('New user: ', user);
+      //console.log('New user: ', user);
     };
 
     return {
@@ -23,9 +23,9 @@ angular.module('columbyApp')
 
 
       get: function(slug){
-        console.log(slug);
+        //console.log(slug);
         return $http.get(configSrv.apiRoot + '/v2/user/' + slug).then(function (response) {
-          console.log(response);
+          //console.log(response);
           return response.data;
         });
       },
