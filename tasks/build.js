@@ -26,7 +26,7 @@ var toDelete = [];
 
 module.exports = function (done) {
   runSequence(
-    ['clean:dist', 'sass'],
+    ['clean:dist', 'less'],
     ['usemin', 'copy:dist', 'icons'],
     ['replace', 'scripts', 'cssmin'],
     'rev',

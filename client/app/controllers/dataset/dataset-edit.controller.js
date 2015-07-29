@@ -406,7 +406,4 @@ angular.module('columbyApp')
       console.log('dataset remove result: ', result);
     });
   };
-
-  $scope.showOptions();
-
 });
