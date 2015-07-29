@@ -132,7 +132,7 @@
               <h4><a ui-sref="dataset.view({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
               <div class="user-date">
                 <!-- <img ng-src="dataset.account.avatar.img" class="img-rounded"/> -->
-                <img class="img-circle avatar-small" ng-src="{{$root.config.filesRoot}}/a/{{dataset.account.avatar.shortid}}/{{dataset.account.avatar.filename}}" alt="{{dataset.account.name}}"/>
+                <img class="img-circle avatar-small" ng-src="{{dataset.account.avatar.url || 'assets/img/avatar.png'}}" alt="{{dataset.account.name}}"/>
                 <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.displayName || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
               </div>
             </li>

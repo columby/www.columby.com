@@ -7,13 +7,14 @@ angular.module('columbyApp')
  * Account View Controller
  *
  **/
-.controller('AccountCtrl', function (account, $window, $rootScope, $scope, $stateParams, $state, ngNotify, AuthSrv, AccountSrv, DatasetSrv, UserSrv) {
+.controller('AccountCtrl', function (account, $rootScope, $scope, $stateParams, $state, ngNotify, AuthSrv, AccountSrv, DatasetSrv, UserSrv) {
 
   if (!account.id){
     ngNotify.set('The requested account was not found. ','error');
     $state.go('home');
   }
   $scope.account = account;
+  $scope.account.avatar.url = $rootScope.config.filesRoot + '/image/thumbnail/' + $scope.account.avatar.filename;
 
   $rootScope.title = 'columby.com | ' + $scope.account.displayName;
 

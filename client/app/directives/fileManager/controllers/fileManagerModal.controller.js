@@ -5,7 +5,7 @@ angular.module('columbyApp')
 .controller('FileManagerModalCtrl', function(options, $rootScope, $scope, $modal, $modalInstance, FileSrv, Upload, ngNotify){
   //console.log('options', options);
   $scope.file = [];
-  $scope.options=options;
+  $scope.options = options;
   $scope.pagination = {
     totalItems: 0,
     currentPage: 1,
@@ -34,19 +34,24 @@ angular.module('columbyApp')
     getFiles();
   };
 
+
   $scope.cancel = function() {
     $modalInstance.dismiss('cancel');
   }
 
+
   $scope.showUploader = function(){
     $scope.uploaderOpen = true;
   }
+
+
   $scope.closeUploader = function() {
     $scope.uploaderOpen = false;
   }
 
+
   // Handle file upload select
-  $scope.onFileSelect = function(files){
+  $scope.onUpload = function(files){
     if (files && files.length) {
       for (var i = 0; i < files.length; i++) {
         var file = files[i];
@@ -95,10 +100,12 @@ angular.module('columbyApp')
     }
   }
 
+
   // Handle the selection of a file
   $scope.select = function(asset){
     $modalInstance.close(asset);
   }
+
 
   // Delete a file from db and file-storage
   $scope.delete = function(index, file){

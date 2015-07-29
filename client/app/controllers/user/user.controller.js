@@ -217,19 +217,24 @@ angular.module('columbyApp')
   $scope.originalUser = angular.copy($scope.user);
 
 
-  $scope.updateAccount = function() {
-    $scope.updatingAccount = true;
-    AccountSrv.update($scope.user.primary).then(function(result){
-      delete $scope.updatingAccount;
-      if (result.id){
-        $scope.originalUser = $scope.user;
-        ngNotify.set('Account updated. ', 'info');
-      } else {
-        ngNotify.set('There was a problem: ' + result.msg[ 0].message, 'error');
-        $scope.user.primary = $scope.originalUser.primary;
-      }
-    })
-  }
+  $scope.updateAccount = function(){
+    console.log('updating account');
+    console.log($scope.user.primary);
+    // check for update
+    if (angular.equals($scope.user.primary, $scope.originalUser.account) === false){
+      // send to server
+      AccountSrv.update({id: $scope.user.primary.id}, $scope.user.primary, function(result){
+        console.log(result);
+        if (result.statusCode===200){
+          //$scope.account = result;
+          $scope.originalUser = angular.copy($scope.user);
+          ngNotify.set('Account updated.','notice');
+        } else {
+          ngNotify.set('There was an error updating the account name.','error');
+        }
+      });
+    }
+  };
 
   // Change the active panel when a user clicks on a menu-link
   $scope.changePanel = function(panel) {
@@ -266,9 +271,20 @@ angular.module('columbyApp')
   $scope.openFileBrowser = function() {
     $rootScope.$broadcast('openFileManager', {
       type:'image',
-      account_id: $scope.user.primary.id
+      account_id: $scope.user.primary.id,
+      select: true,
+      action: 'updateAvatar'
     });
   }
+  $scope.$on('fileManagerSelected', function(event,data){
+    console.log(event);
+    console.log(data);
+    if (data.action === 'updateAvatar') {
+      $scope.user.primary.avatar_id = data.file.id;
+      $scope.user.primary.avatar = data.file;
+      $scope.updateAccount();
+    }
+  });
 
 
   // Update a slug input

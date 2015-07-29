@@ -12,6 +12,7 @@ angular.module('columbyApp')
 
   /* --------- INITIALISATION ------------------------------------------------------------ */
   $scope.dataset = angular.copy(dataset);
+  $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/image/thumbnail/' + $scope.dataset.account.avatar.filename;
 
   $scope.hostname = $location.protocol() + '://' + $location.host();
   $scope.embedUrl = $location.absUrl();

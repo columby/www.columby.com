@@ -81,7 +81,7 @@ angular.module('columbyApp')
 
     $scope.openFileBrowser = function(options){
       console.log('show file browser');
-      $rootScope.$broadcast('showFileBrowser');
+      $rootScope.$broadcast('showFileBrowser', {select: true});
     }
     // REGISTRY FUNCTIONS
     // Validate key for a registry

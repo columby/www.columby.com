@@ -25,9 +25,9 @@ angular.module('columbyApp')
             return options;
           }
         }
-      }).result.then(function(asset){
+      }).result.then(function(file){
         console.log('Sending browser selected. ');
-        $rootScope.$broadcast('fileManagerSelected', asset);
+        $rootScope.$broadcast('fileManagerSelected', {file:file, action: options.action});
       }, function(){
         $rootScope.$broadcast('fileManagerClose');
       });
