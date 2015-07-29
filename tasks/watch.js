@@ -11,7 +11,7 @@ var livereload = require('gulp-livereload');
 var watch      = require('gulp-watch');
 var inject     = require('gulp-inject');
 var plumber    = require('gulp-plumber');
-var sass       = require('gulp-sass');
+var less       = require('gulp-less');
 var bowerFiles = require('main-bower-files');
 
 var toInject   = require('./config/filesToInject');
@@ -34,13 +34,13 @@ module.exports = function () {
   });
 
   watch([
-    'client/assets/styles/**/*.scss',
-    'client/views/**/*.scss',
-    'client/app/directives/**/*.scss'
+    'client/assets/styles/**/*.less',
+    'client/views/**/*.less',
+    'client/app/directives/**/*.less'
   ], function () {
-    gulp.src('client/assets/styles/app.scss')
+    gulp.src('client/assets/styles/app.less')
       .pipe(plumber())
-      .pipe(sass())
+      .pipe(less())
       .pipe(gulp.dest('client/assets/styles/css'))
       .pipe(livereload());
   });
