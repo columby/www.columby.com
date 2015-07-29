@@ -77,13 +77,13 @@ gulp.task('scripts', function () {
   var views = gulp.src('client/views/**/*.html')
     .pipe(angularTemplatecache({
       root: 'views',
-      module: 'hmApp'
+      module: 'columbyApp'
     }));
 
   var tpls = gulp.src('client/app/directives/**/*.html')
     .pipe(angularTemplatecache({
       root: 'directives',
-      module: 'hmApp'
+      module: 'columbyApp'
     }));
 
   var app = gulp.src('dist/client/app.js');
