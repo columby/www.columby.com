@@ -25,6 +25,7 @@ angular.module('columbyApp')
 
     //
     $scope.account = account;
+    $scope.account.avatar.url = $rootScope.config.filesRoot + '/image/thumbnail/' + $scope.account.avatar.filename;
 
     //
     $rootScope.title = 'columby.com | ' + $scope.account.displayName;
@@ -67,10 +68,10 @@ angular.module('columbyApp')
       // check for update
       if (angular.equals($scope.account, $scope.originalAccount) === false){
         // send to server
-        AccountSrv.update($scope.account).then(function(result){
-          if (result.id){
-            $scope.account = result;
+        AccountSrv.update({id: $scope.account.id},$scope.account, function(result){
+          if (result.status==='success'){
             $scope.originalAccount = angular.copy($scope.account);
+            $scope.account.avatar.url = $rootScope.config.filesRoot + '/image/thumbnail/' + $scope.account.avatar.filename;
             ngNotify.set('Account updated.','notice');
           } else {
             ngNotify.set('There was an error updating the account name.','error');
@@ -79,10 +80,23 @@ angular.module('columbyApp')
       }
     };
 
-    $scope.openFileBrowser = function(options){
-      console.log('show file browser');
-      $rootScope.$broadcast('showFileBrowser', {select: true});
+    $scope.openFileBrowser = function() {
+      $rootScope.$broadcast('openFileManager', {
+        type:'image',
+        account_id: $scope.account.id,
+        select: true,
+        action: 'updateAccountAvatar'
+      });
     }
+    $scope.$on('fileManagerSelected', function(event,data){
+      if (data.action === 'updateAccountAvatar') {
+        $scope.account.avatar_id = data.file.id;
+        $scope.account.avatar = data.file;
+        $scope.update();
+      }
+    });
+
+
     // REGISTRY FUNCTIONS
     // Validate key for a registry
     $scope.validateRegistry = function(registry){
