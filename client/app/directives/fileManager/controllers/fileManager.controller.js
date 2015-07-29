@@ -2,8 +2,12 @@
 
 angular.module('columbyApp')
 
+/**
+ *
+ * The file manager is activated by a $broadcast event 'openFileManager'
+ *
+ **/
 .controller('FileManagerCtrl', function($rootScope, $scope, $modal){
-  console.log('filemanager');
 
   function open(options){
     if (!$rootScope.user || !$rootScope.user.id){
@@ -29,12 +33,6 @@ angular.module('columbyApp')
       });
     }
   }
-
-  // $scope.open = function(options){
-  //   console.log('open file manager');
-  //   //$rootScope.$broadcast('openFileManager', options);
-  //   open(options);
-  // }
 
   // Handle show file browser event
   $scope.$on('openFileManager', function(event, options){

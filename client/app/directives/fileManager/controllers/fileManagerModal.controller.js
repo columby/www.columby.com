@@ -5,14 +5,34 @@ angular.module('columbyApp')
 .controller('FileManagerModalCtrl', function(options, $rootScope, $scope, $modal, $modalInstance, FileSrv, Upload, ngNotify){
   console.log('options', options);
   $scope.file = [];
+  $scope.options=options;
+  $scope.pagination = {
+    totalItems: 0,
+    currentPage: 1,
+    itemsPerPage: 20,
+    maxSize: 5
+  };
 
   $scope.upload = { valid:false };
   $scope.progress=0;
   // Fetch first file assets
 
-  FileSrv.query(options).then(function(result){
-    $scope.files = result;
-  });
+  getFiles();
+
+  function getFiles(){
+    $scope.options.limit = $scope.pagination.itemsPerPage;
+    $scope.options.offset = ($scope.pagination.currentPage -1) * $scope.pagination.itemsPerPage;
+
+    FileSrv.query($scope.options).then(function(result){
+      $scope.files = result;
+      $scope.pagination.totalItems = result.count;
+    });
+  };
+
+  $scope.pageChanged = function() {
+    console.log('Page changed to: ' + $scope.pagination.currentPage);
+    getFiles();
+  };
 
   $scope.cancel = function() {
     $modalInstance.dismiss('cancel');
