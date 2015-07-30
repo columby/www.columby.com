@@ -10,15 +10,15 @@
         <li ng-hide="$root.user.id"><a ui-sref="user.signin">Sign in</a></li>
         <li dropdown on-toggle="toggleUsermenu(open)" ng-show="$root.user.id">
           <a href class="dropdown-toggle avatar" dropdown-toggle>
-            <img class="img-circle avatar" ng-src="{{$root.config.filesRoot}}/image/thumbnail/{{user.primary.avatar.filename}}"/><span class="caret"></span>
+            <img class="img-circle avatar" ng-src="{{$root.config.filesRoot}}/image/thumbnail/{{user.primary.avatar.filename}}"/> {{ $root.user.primary.displayName }} <span class="caret"></span>
           </a>
           <ul class="dropdown-menu usermenu">
-            <li>
+            <!-- <li>
               <div class="usermenu-header">
                 {{ $root.user.primary.displayName }}
                 <span ng-show="$root.user.admin" class="label label-success">admin</span>
               </div>
-            </li>
+            </li> -->
             <li><a ui-sref="account.view({slug: $root.user.primary.slug})">Your profile</a></li>
             <li><a ui-sref="user.edit({slug: $root.user.primary.slug})">Settings</a></li>
             <!-- <li><a href="http://docs.columby.com">Help</a></li> -->

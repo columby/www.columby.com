@@ -6,8 +6,8 @@
 
       <div class="editor" ng-show="account.canEdit">
         <div class="label label-success" data-ng-show="account.id===$root.user.primary.id">This is you!</div>
-        <a ui-sref="user.edit({slug: account.slug})" ng-show="account.primary">Edit</a>
-        <a ui-sref="account.edit({slug: account.slug})" ng-show="!account.primary">Edit</a>
+        <div><a ui-sref="user.edit({slug: account.slug})" ng-show="account.primary" class="icon-edit-link"><i class="fa fa-pencil"></i> Edit</a>
+        <a ui-sref="account.edit({slug: account.slug})" ng-show="!account.primary">Edit</a></div>
       </div>
 
       <div class="registries">

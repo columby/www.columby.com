@@ -7,7 +7,8 @@
 
           <!-- Editable title -->
           <h1 class="title" ng-bind-html="dataset.title || 'No title yet'"></h1>
-
+           <div><a ui-sref="dataset.edit({id: dataset.shortid})" ng-show="dataset.canEdit" class="icon-edit-link"><i class="fa fa-pencil"></i> Edit</a></div>
+             
           <!-- Meta -->
           <div class="meta">
 						<span ng-show="dataset.private" class="label label-warning">private</span>

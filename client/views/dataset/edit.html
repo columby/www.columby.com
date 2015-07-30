@@ -16,9 +16,6 @@
             >
           </textarea>
 
-          <!-- options -->
-          <div class="options"><a href="#" ng-click="showOptions()"><i class="fa fa-cog"></i> Options</a></div>
-
           <!-- Meta -->
           <div class="meta">
 						<span ng-show="dataset.status === true" class="label bg-primary">private</span>
@@ -32,7 +29,11 @@
                 <a ui-sref="tag.view({slug: tag.slug })"><i class="fa fa-tag"></i>{{tag.text}}</a>
               </span>
             </p>
-            <a href ng-click="showTagsModal()"><i class="fa fa-edit"></i> edit</a>
+            <a href ng-click="showTagsModal()" class="icon-edit-link"><i class="fa fa-pencil"></i> edit tags</a>
+            
+            <!-- options -->
+            <div class="options"><a href="#" ng-click="showOptions()" class="icon-edit-link"><i class="fa fa-cog"></i> Dataset options</a></div>
+            
           </div>
 			    <div class="avatar img-rounded">
             <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" />

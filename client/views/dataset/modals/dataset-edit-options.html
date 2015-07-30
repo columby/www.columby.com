@@ -62,9 +62,9 @@
 
       <div class="registries">
         <h3>Connected registries</h3>
-        <p ng-hide="account.registries.length>0">There are no validated registries connected to this publication account</p>
-        <p ng-hide="dataset.registries.length>0">There are no registries connected to this dataset</p>
-        <a ui-href="account.edit({slug: dataset.account.slug})">Manage settings at  the organisation settings page</a>
+        <p ng-hide="account.registries.length>0" class="advisory-notice">There are no validated registries connected to this publication account</p>
+        <p ng-hide="dataset.registries.length>0" class="advisory-notice">There are no registries connected to this dataset</p>
+        <a ui-href="account.edit({slug: dataset.account.slug})">Manage settings at the organisation settings page</a>
 
         <table class="table table-hover">
           <thead>
