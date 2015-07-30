@@ -9,7 +9,8 @@ angular.module('columbyApp')
     function setUser(u){
       user = u;
       $rootScope.user = u;
-      //console.log('New user: ', user);
+      // update avatar links
+      // console.log('New user: ', user);
     };
 
     return {
