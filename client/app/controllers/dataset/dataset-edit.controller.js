@@ -27,7 +27,7 @@ angular.module('columbyApp')
 
   // Initialisation
   $scope.dataset = dataset;
-  if ($scope.dataset.accout.avatar) {
+  if ($scope.dataset.account.avatar) {
     $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/image/small/' + $scope.dataset.account.avatar.filename;
   }
   var modalOpened = false;
