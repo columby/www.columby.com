@@ -28,16 +28,16 @@ angular.element(document).ready(
           window.user = data;
         }
         // start the app
-        angular.bootstrap(document, ['columbyApp']);
+        angular.bootstrap(angular.element(document), ['columbyApp']);
       }).error(function(data, status, headers, config){
         console.log(data);
         // there was an error fetching the user. load the app anyway and remove the token for security reasons
         localStorage.removeItem('columby_token');
-        angular.bootstrap(document, ['columbyApp']);
+        angular.bootstrap(angular.element(document), ['columbyApp']);
       });
     } else {
       // No token present, start the app.
-      angular.bootstrap(document, ['columbyApp']);
+      angular.bootstrap(angular.element(document), ['columbyApp']);
     }
   }
 );

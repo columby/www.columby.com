@@ -109,7 +109,7 @@ angular.module('columbyApp')
  ***/
 .controller('RegisterCtrl', function ($window, $scope, $rootScope, $location, $http, $state, AccountSrv, UserSrv, ngNotify, Slug, AuthSrv,$modal) {
 
-  $window.document.title = 'Register | columby.com';
+  $rootScope.title = 'Register | columby.com';
 
   // if user is already logged in
   if($rootScope.user.id){

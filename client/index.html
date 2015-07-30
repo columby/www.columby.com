@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="bower_components/ngprogress/ngProgress.css">
     <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.min.css">
     <link rel="stylesheet" href="bower_components/ng-notify/src/styles/ng-notify.css">
-    <link rel="stylesheet" href="bower_components/textAngular/src/textAngular.css">
+    <link rel="stylesheet" href="bower_components/textAngular/dist/textAngular.css">
     <!-- endinject -->
     <link rel="stylesheet" href="assets/styles/css/app.css">
     <!-- endbuild -->
@@ -71,11 +71,9 @@
 
     <script src="bower_components/angular/angular.js"></script>
 
-    <script src="bower_components/json3/lib/json3.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
 
-    <script src="bower_components/es5-shim/es5-shim.js"></script>
-
-    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular-gettext/dist/angular-gettext.js"></script>
 
     <script src="bower_components/angular-resource/angular-resource.js"></script>
 
@@ -83,9 +81,27 @@
 
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 
-    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
-
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+
+    <script src="bower_components/angular-slugify/angular-slugify.js"></script>
+
+    <script src="bower_components/angular-jwt/dist/angular-jwt.js"></script>
+
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+
+    <script src="bower_components/json3/lib/json3.js"></script>
+
+    <script src="bower_components/lodash/lodash.js"></script>
+
+    <script src="bower_components/ngprogress/build/ngProgress.js"></script>
+
+    <script src="bower_components/ng-tags-input/ng-tags-input.min.js"></script>
+
+    <script src="bower_components/ng-file-upload-shim/ng-file-upload-shim.js"></script>
+
+    <script src="bower_components/ng-notify/src/scripts/ng-notify.js"></script>
+
+    <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
 
     <script src="bower_components/rangy/rangy-core.js"></script>
 
@@ -99,35 +115,17 @@
 
     <script src="bower_components/rangy/rangy-textrange.js"></script>
 
-    <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
-
     <script src="bower_components/xml2json/xml2json.js"></script>
-
-    <script src="bower_components/angular-easy-social-share/easy-social-share.js"></script>
-
-    <script src="bower_components/angular-slugify/angular-slugify.js"></script>
-
-    <script src="bower_components/angular-jwt/dist/angular-jwt.js"></script>
-
-    <script src="bower_components/ngprogress/build/ngProgress.js"></script>
-
-    <script src="bower_components/ng-tags-input/ng-tags-input.min.js"></script>
-
-    <script src="bower_components/ng-file-upload-shim/ng-file-upload-shim.js"></script>
 
     <script src="bower_components/satellizer/satellizer.js"></script>
 
-    <script src="bower_components/ng-notify/src/scripts/ng-notify.js"></script>
+    <script src="bower_components/angular-easy-social-share/easy-social-share.js"></script>
 
-    <script src="bower_components/angular-gettext/dist/angular-gettext.js"></script>
+    <script src="bower_components/textAngular/dist/textAngular.js"></script>
 
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/textAngular/dist/textAngular-sanitize.js"></script>
 
-    <script src="bower_components/textAngular/src/textAngular.js"></script>
-
-    <script src="bower_components/textAngular/src/textAngular-sanitize.js"></script>
-
-    <script src="bower_components/textAngular/src/textAngularSetup.js"></script>
+    <script src="bower_components/textAngular/dist/textAngularSetup.js"></script>
 
     <!-- endinject -->
 
@@ -227,6 +225,8 @@
 
     <script src="app/controllers/pages/pages.controller.js"></script>
 
+    <script src="app/controllers/home/home.controller.js"></script>
+
     <script src="app/controllers/distribution/primary-new.controller.js"></script>
 
     <script src="app/controllers/distribution/primary-edit.controller.js"></script>
@@ -234,8 +234,6 @@
     <script src="app/controllers/distribution/distribution-edit.controller.js"></script>
 
     <script src="app/controllers/distribution/distribution-create.controller.js"></script>
-
-    <script src="app/controllers/home/home.controller.js"></script>
 
     <script src="app/controllers/dataset/dataset.controller.js"></script>
 

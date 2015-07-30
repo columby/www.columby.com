@@ -8,7 +8,7 @@ angular.module('columbyApp')
         slug: '@slug'
       }, {
         update: { method: 'PUT' },
-        query:  { method: 'GET', isArray: true, responseType: 'json' },
+        query:  { method: 'GET', isArray: true, responseType: 'json' }
         //get:  { method: 'GET', isArray: true, responseType: 'json' },
       }
     );

@@ -27,7 +27,7 @@ var toDelete = [];
 module.exports = function (done) {
   runSequence(
     ['clean:dist', 'less'],
-    ['usemin', 'copy:dist', 'icons'],
+    ['copy:dist', 'usemin', 'icons'],
     ['replace', 'scripts', 'cssmin'],
     'rev',
     'clean:finish',
@@ -62,8 +62,9 @@ gulp.task('icons', function() { 
 gulp.task('usemin', ['inject'], function () {
   return gulp.src('client/index.html')
     .pipe(plumber())
-    .pipe(usemin({ css: [cssRebaseUrls({ root: 'client' }), 'concat'] }))
-    .pipe(gulp.dest('dist/client/'));
+    .pipe(usemin({
+      css: [cssRebaseUrls({ root: 'client' }), 'concat']
+    })).pipe(gulp.dest('dist/client/'));
 });
 
 gulp.task('cssmin', function () {

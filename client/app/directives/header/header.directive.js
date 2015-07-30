@@ -2,7 +2,7 @@
 
 angular.module('columbyApp')
 
-  .directive('header', function($document, $window) {
+  .directive('header', function($window) {
 
     return {
       restrict: 'EA',

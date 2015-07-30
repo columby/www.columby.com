@@ -15,9 +15,9 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 
 if ( (process.env.NODE_ENV === 'staging') || (process.env.NODE_ENV==='production') ) {
-  app.use(express.static(path.join(__dirname, '../public')));
+  app.use(express.static(path.join(__dirname, '../client')));
   app.all('/*', function(req,res,next) {
-    res.sendFile(path.resolve(path.join(__dirname, '../public/index.html')));
+    res.sendFile(path.resolve(path.join(__dirname, '../client/index.html')));
   });
 } else {
   app.use(express.static(path.join(__dirname, '../.tmp')));

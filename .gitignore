@@ -8,3 +8,5 @@ client/bower_components
 server/config/local.env.js
 /client/config/environments/local.json
 /html-angular-validate-report.json
+
+/client/assets/styles/css/app.css
