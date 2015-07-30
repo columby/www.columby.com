@@ -8,12 +8,14 @@ angular.module('columbyApp')
 
     function setUser(u){
       // update avatar links.
-      if (u.primary.avatar){
-        u.primary.avatar.url = configSrv.filesRoot + '/image/small/' + u.primary.avatar.filename;
-      }
-      for (var i=0; i<u.organisations.length;i++){
-        if (u.organisations[ i].avatar){
-          u.organisations[ i].avatar.url = configSrv.filesRoot + '/image/small/' + u.organisations[ i].avatar.filename;
+      if (u.id){
+        if (u.primary.avatar){
+          u.primary.avatar.url = configSrv.filesRoot + '/image/small/' + u.primary.avatar.filename;
+        }
+        for (var i=0; i<u.organisations.length;i++){
+          if (u.organisations[ i].avatar){
+            u.organisations[ i].avatar.url = configSrv.filesRoot + '/image/small/' + u.organisations[ i].avatar.filename;
+          }
         }
       }
       user = u;

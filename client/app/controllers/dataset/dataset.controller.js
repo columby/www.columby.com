@@ -3,7 +3,8 @@
 angular.module('columbyApp')
 
 .controller('DatasetViewCtrl', function(dataset, $window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, configSrv, DataService, UserSrv, AuthSrv, ngNotify) {
-
+  console.log(';');
+  console.log(dataset);
   if (!dataset.id) {
     console.log('nooo');
     ngNotify.set('Sorry, the requested dataset was not found. ', 'error');
@@ -12,8 +13,9 @@ angular.module('columbyApp')
 
   /* --------- INITIALISATION ------------------------------------------------------------ */
   $scope.dataset = angular.copy(dataset);
-  if ($scope.dataset.account.avatar) {
-    $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/image/small/' + $scope.dataset.account.avatar.filename;
+
+  if ($scope.dataset.account.avatar){
+    $scope.dataset.account.avatar.url = configSrv.filesRoot + '/image/small/' + $scope.dataset.account.avatar.filename;
   }
 
   $scope.hostname = $location.protocol() + '://' + $location.host();
