@@ -56,7 +56,7 @@ angular.module('columbyApp')
       for (var i = 0; i < files.length; i++) {
         var file = files[i];
         // console.log(file);
-        // console.log('o', options);
+        //console.log('o', options);
         FileSrv.sign({
           type: 'image',
           account_id: options.account_id,
@@ -64,7 +64,7 @@ angular.module('columbyApp')
           filetype: file.type,
           filesize: file.size
         }).then(function(result){
-          // console.log(result);
+          //console.log(result);
           // console.log(result.credentials.fields);
           if (result.status==='error') {
             ngNotify.set('Error: ' + result.msg, 'error');
@@ -118,6 +118,7 @@ angular.module('columbyApp')
       FileSrv.destroy(file.id).then(function(result){
         // console.log(result);
         $scope.files.rows.splice(index,1);
+        $scope.pagination.totalItems = $scope.files.rows.splice(index,1);
       });
     });
   }
