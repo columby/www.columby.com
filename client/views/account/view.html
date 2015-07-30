@@ -72,13 +72,11 @@
                   <a ui-sref="dataset.view({ id: dataset.shortid })">{{dataset.title}}</a>
                   <span ng-show="dataset.private === true" class="label bg-primary">private</span>
                 </h4>
-                
+
                 <div class="user-date">
-                  <!-- <img ng-src="dataset.account.avatar.img" class="img-rounded"/> -->
-                  <img class="img-circle avatar-small" ng-src="{{dataset.account.avatar.url || 'assets/img/avatar.png'}}" alt="{{dataset.account.name}}"/>
-                  <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.displayName || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
+                  <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
                 </div>
-                
+
                 <ul class="properties">
                   <!-- <li><label>Created</label><date>{{dataset.created_at | date:'d MMMM yyyy'}}</date></li> -->
                   <li ng-show="dataset.distributions.length>0"><label>Data sources</label>{{dataset.distributions.length}}</li>
