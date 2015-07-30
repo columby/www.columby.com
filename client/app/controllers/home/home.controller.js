@@ -23,7 +23,6 @@ angular.module('columbyApp')
 
     /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
     $scope.doSearch = function(){
-
       if ($scope.search.searchTerm.length>2){
         $scope.search.message = 'Searching for: ' + $scope.search.searchTerm;
         SearchSrv.query({

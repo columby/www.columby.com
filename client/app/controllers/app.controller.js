@@ -15,7 +15,6 @@ angular.module('columbyApp')
   UserSrv.setUser(window.user || {});
   delete window.user;
 
-  console.log('User in userService: ', UserSrv.user());
   // Set configuration in rootScope
   $rootScope.config = configSrv;
 

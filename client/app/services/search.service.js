@@ -24,7 +24,8 @@ angular.module('columbyApp')
         url: configSrv.apiRoot + '/v2/search',
         params: {
           query: _query.text,
-          options: _query.options
+          options: _query.options,
+          limit: _query.limit
         }
       }).then(function(response){
         // store search result in this service
