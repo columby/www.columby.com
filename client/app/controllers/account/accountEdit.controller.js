@@ -25,7 +25,7 @@ angular.module('columbyApp')
 
     //
     $scope.account = account;
-    $scope.account.avatar.url = $rootScope.config.filesRoot + '/image/thumbnail/' + $scope.account.avatar.filename;
+    $scope.account.avatar.url = $rootScope.config.filesRoot + '/image/small/' + $scope.account.avatar.filename;
 
     //
     $rootScope.title = 'columby.com | ' + $scope.account.displayName;

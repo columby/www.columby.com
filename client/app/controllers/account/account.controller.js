@@ -15,7 +15,7 @@ angular.module('columbyApp')
   }
   $scope.account = account;
   if ($scope.account.avatar){
-    $scope.account.avatar.url = $rootScope.config.filesRoot + '/image/thumbnail/' + $scope.account.avatar.filename;
+    $scope.account.avatar.url = $rootScope.config.filesRoot + '/image/small/' + $scope.account.avatar.filename;
   }
 
   $rootScope.title = 'columby.com | ' + $scope.account.displayName;
@@ -25,12 +25,11 @@ angular.module('columbyApp')
     numberOfItems: 10
   };
 
+  $scope.search = {};
   // Set header background image
-  if ($scope.account.headerImg) {
-    updateHeaderImage();
-  }
+  if ($scope.account.headerImg) { updateHeaderImage(); }
 
-  getDatasets();
+
 
   // check if current user can edit the account
   if ($scope.account.primary){
@@ -42,12 +41,20 @@ angular.module('columbyApp')
 
   function getDatasets() {
     $scope.datasets.loading = true;
-    var offset = ($scope.datasets.currentPage - 1) * 10;
-    DatasetSrv.index({accountId: $scope.account.id, offset: offset}, function (d) {
-      $scope.datasets.rows = d.rows;
-      $scope.datasets.count = d.count;
-      $scope.datasets.numPages = parseInt(d.count/$scope.datasets.numberOfItems + 1);
+    var options = {
+      offset: ($scope.datasets.currentPage - 1) * 10,
+      account_id: $scope.account.id,
+    }
+    if ($scope.search.term){
+      options.search = $scope.search.term
+    }
+
+    DatasetSrv.index(options, function (result) {
+      $scope.datasets.rows = result.rows;
+      $scope.datasets.count = result.count;
+      $scope.datasets.numPages = parseInt(result.count/$scope.datasets.numberOfItems + 1);
       $scope.datasets.loading = false;
+      $scope.search.query = null;
     });
   }
 
@@ -61,9 +68,20 @@ angular.module('columbyApp')
   }
 
 
-  /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
+
   $scope.pageChanged = function() {
-    console.log('Page changed to: ' + $scope.datasets.currentPage);
     getDatasets();
   };
+
+  $scope.searchAccount = function() {
+    $scope.search.term = $scope.search.query;
+    getDatasets();
+  }
+  $scope.clearSearch = function(){
+    $scope.datasets.currentPage = 1;
+    $scope.search.term = null;
+    getDatasets();
+  }
+
+  getDatasets();
 });

@@ -55,20 +55,19 @@
       <div class="container">
         <div class="col-md-12">
 
-					<input class="searchbox"
-                 type="text"
-                 ng-model="search.$"
-                 placeholder="Search this dataset list"
-                 ng-show="datasets.numPages>1">
+					<form>
+            <input class="searchbox" type="text" ng-model="search.query" placeholder="Search this dataset list"/>
+            <button class="btn btn-default" type="submit" ng-click="searchAccount()">Search</button>
+          </form>
 
-          <h3>{{datasets.count}} Datasets</h3>
-          <p ng-show="datasets.rows.length<1">No datasets for this account</p>
+          <h3>{{datasets.count}} Datasets <span ng-show="search.term">[Filter: {{search.term}}]<a href ng-click="clearSearch()"><i class="fa fa-trash"></i></a></span></h3>
+          <p ng-show="datasets.rows.length<1">No datasets found.</p>
 
           <div class="dataset-listing" ng-show="datasets.rows.length>0">
             <div class="loader" ng-show="datasets.loading"><i class="fa fa-spinner fa-spin"></i>&nbsp;Loading</div>
 
 						<ul ng-hide="datasets.loading">
-              <li ng-repeat="dataset in datasets.rows | filter:search" class="dataset">
+              <li ng-repeat="dataset in datasets.rows" class="dataset">
                 <h4>
                   <a ui-sref="dataset.view({ id: dataset.shortid })">{{dataset.title}}</a>
                   <span ng-show="dataset.private === true" class="label bg-primary">private</span>
