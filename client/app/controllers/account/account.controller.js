@@ -14,7 +14,9 @@ angular.module('columbyApp')
     $state.go('home');
   }
   $scope.account = account;
-  $scope.account.avatar.url = $rootScope.config.filesRoot + '/image/thumbnail/' + $scope.account.avatar.filename;
+  if ($scope.account.avatar){
+    $scope.account.avatar.url = $rootScope.config.filesRoot + '/image/thumbnail/' + $scope.account.avatar.filename;
+  }
 
   $rootScope.title = 'columby.com | ' + $scope.account.displayName;
 

@@ -28,11 +28,16 @@
             </p>
             <div class="tags-wrapper">
               <span class="col-md-2 tags-title">Tags: </span>
-              <tags-input ng-model="dataset.tags"
-                          on-tag-added="addTag($tag)"
-                          on-tag-removed="removeTag($tag)">
-                <!--<auto-complete source="loadTags($query)"></auto-complete>-->
-              </tags-input>
+              <ul class="tag-list">
+                <li class="tag-item" ng-repeat="tag in dataset.tags">
+                  {{tag.text}}<a href ng-click="removeTag()"><i class="fa fa-trash"></i></a>
+                </li>
+              </ul>
+              <form name="addTagForm">
+                <label>Add a new tag: </label>
+                <input ng-model="newTag"/>
+                <button class="btn btn-default" ng-click="addTag()" ng-disabled="addTagForm.$pristine">Add tag</button>
+              </form>
             </div>
           </div>
 			    <!-- <div class="change-account meta" ng-hide="dataset.id">

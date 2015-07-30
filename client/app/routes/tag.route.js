@@ -1,16 +1,22 @@
 'use strict';
 
 angular.module('columbyApp')
-  .config(function ($stateProvider) {
 
-    $stateProvider
+.config(function ($stateProvider) {
 
-      .state('tag', {
-        url: '/t/:slug',
-        templateUrl: 'views/tag/view.html',
-        controller: 'TagCtrl',
-        data: {
-          bodyClasses: 'tag view'
-        }
-      });
-  });
+  $stateProvider
+
+    .state('tag', {
+      abstract: true,
+      url: '/t',
+      template: '<ui-view/>'
+    })
+    .state('tag.view', {
+      url: '/:slug',
+      templateUrl: 'views/tag/view.html',
+      controller: 'TagCtrl',
+      data: {
+        bodyClasses: 'tag view'
+      }
+    });
+});

@@ -27,6 +27,7 @@ angular.module('columbyApp')
 
   // Initialisation
   $scope.dataset = dataset;
+  $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/image/small/' + $scope.dataset.account.avatar.filename;
   var modalOpened = false;
   $rootScope.title = 'columby.com | ' + dataset.title;
   // Make sure there is a reference array
@@ -387,13 +388,18 @@ angular.module('columbyApp')
 
 
   $scope.addTag = function(tag){
-    console.log($scope.dataset.id);
-    console.log(tag);
     DatasetSrv.addTag({
       id: $scope.dataset.id,
-      tag: tag
+      tag: {text: $scope.newTag}
     }, function(result){
-        console.log('dtaset addtag result: ', result);
+      console.log('Dataset tags: ', $scope.dataset.tags);
+      console.log('New tag created: ' + result.created);
+      console.log('Tag added to dataset ' + result.added);
+      console.log('Tag received ', result.tag);
+      if (result.added){
+        $scope.dataset.tags.push(result.tag);
+        $scope.newTag = null;
+      }
     });
   };
 
