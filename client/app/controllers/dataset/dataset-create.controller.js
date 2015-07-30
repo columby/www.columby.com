@@ -61,7 +61,7 @@ angular.module('columbyApp')
       showAccountSelector();
     };
 
-
+    
     //Create a new dataset
     $scope.create = function() {
       console.log('Sending dataset: ', $scope.dataset);

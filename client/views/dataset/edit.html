@@ -26,25 +26,15 @@
               <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.displayName || 'unknown'}}</a></span>,
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
             </p>
-            <div class="tags-wrapper">
-              <span class="col-md-2 tags-title">Tags: </span>
-              <ul class="tag-list">
-                <li class="tag-item" ng-repeat="tag in dataset.tags">
-                  {{tag.text}}<a href ng-click="removeTag()"><i class="fa fa-trash"></i></a>
-                </li>
-              </ul>
-              <form name="addTagForm">
-                <label>Add a new tag: </label>
-                <input ng-model="newTag"/>
-                <button class="btn btn-default" ng-click="addTag()" ng-disabled="addTagForm.$pristine">Add tag</button>
-              </form>
-            </div>
-          </div>
-			    <!-- <div class="change-account meta" ng-hide="dataset.id">
-			      <p>Publish on: {{dataset.account.name}} <a ng-click="showAccountSelector()" ng-show="$root.user.accounts.length>1">Change</a></p>
-			    </div> -->
 
-          <div class="avatar img-rounded">
+            <p ng-show="dataset.tags.length>0">
+              <span class="tag" ng-repeat="tag in dataset.tags">
+                <a ui-sref="tag.view({slug: tag.slug })"><i class="fa fa-tag"></i>{{tag.text}}</a>
+              </span>
+            </p>
+            <a href ng-click="showTagsModal()"><i class="fa fa-edit"></i> edit</a>
+          </div>
+			    <div class="avatar img-rounded">
             <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" />
           </div>
         </div>

@@ -40,11 +40,10 @@ angular.module('columbyApp')
   if ($scope.dataset.headerImg && $scope.dataset.headerImg.id) {
     updateHeaderImage();
   }
-
+  $scope.newTag = {text:null};
 
   // Show or hide the options menu
   $scope.showOptions = function(){
-    console.log(AccountSrv.get({slug:dataset.account.slug}).$promise);
     var modalInstance = $modal.open({
       size: 'lg',
       templateUrl: 'views/dataset/modals/dataset-edit-options.html',
@@ -61,6 +60,19 @@ angular.module('columbyApp')
     })
   };
 
+  $scope.showTagsModal = function() {
+    var modalInstance = $modal.open({
+      size: 'lg',
+      templateUrl: 'views/dataset/modals/dataset-tag-options.html',
+      controller: 'DatasetTagsCtrl',
+      backdrop: 'static',
+      resolve: {
+        dataset: function() {
+          return $scope.dataset;
+        }
+      }
+    });
+  }
 
   /**
    *
@@ -388,30 +400,4 @@ angular.module('columbyApp')
   //   ngDialog.closeAll();
   // };
 
-
-  $scope.addTag = function(tag){
-    DatasetSrv.addTag({
-      id: $scope.dataset.id,
-      tag: {text: $scope.newTag}
-    }, function(result){
-      console.log('Dataset tags: ', $scope.dataset.tags);
-      console.log('New tag created: ' + result.created);
-      console.log('Tag added to dataset ' + result.added);
-      console.log('Tag received ', result.tag);
-      if (result.added){
-        $scope.dataset.tags.push(result.tag);
-        $scope.newTag = null;
-      }
-    });
-  };
-
-
-  $scope.removeTag = function(tag){
-    console.log('removing tag, ', tag);
-    var id = $scope.dataset.tags.indexOf(tag);
-    console.log(tag);
-    DatasetSrv.removeTag({id:$scope.dataset.id, tid:tag.id},function(result){
-      console.log('dataset remove result: ', result);
-    });
-  };
 });

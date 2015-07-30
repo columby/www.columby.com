@@ -1,0 +1,13 @@
+<div class="tags-wrapper">
+  <span class="col-md-2 tags-title">Tags: </span>
+  <ul class="tag-list">
+    <li class="tag-item" ng-repeat="tag in dataset.tags">
+      {{tag.text}}<a href ng-click="removeTag(tag)"><i class="fa fa-trash"></i></a>
+    </li>
+  </ul>
+  <form name="addTagForm">
+    <label>Add a new tag: </label>
+    <input ng-model="newTag.text" ng-change="slugifyTag()"/>
+    <button class="btn btn-default" ng-click="addTag()" ng-disabled="addTagForm.$pristine">Add tag</button>
+  </form>
+</div>

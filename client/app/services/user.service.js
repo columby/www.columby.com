@@ -7,6 +7,7 @@ angular.module('columbyApp')
     var user;
 
     function setUser(u){
+      console.log(configSrv);
       // update avatar links.
       if (u.id){
         if (u.primary.avatar){
