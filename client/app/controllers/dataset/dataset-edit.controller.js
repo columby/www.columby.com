@@ -27,7 +27,9 @@ angular.module('columbyApp')
 
   // Initialisation
   $scope.dataset = dataset;
-  $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/image/small/' + $scope.dataset.account.avatar.filename;
+  if ($scope.dataset.accout.avatar.url) {
+    $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/image/small/' + $scope.dataset.account.avatar.filename;
+  }
   var modalOpened = false;
   $rootScope.title = 'columby.com | ' + dataset.title;
   // Make sure there is a reference array

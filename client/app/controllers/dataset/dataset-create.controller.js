@@ -70,7 +70,8 @@ angular.module('columbyApp')
         console.log('New dataset received: ' + res.id);
         if (res.id) {
           ngNotify.set('Your dataset is published. Now go and add some data!');
-          $state.go('dataset.edit', {shortid:res.shortid});
+          console.log('go to ' + res.shortid);
+          $state.go('dataset.edit', {id:res.shortid});
         } else {
           ngNotify.set('There was an error creating the dataset. (message: ' + res.message + ' )');
         }
