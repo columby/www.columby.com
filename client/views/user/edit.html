@@ -6,8 +6,11 @@
     <div class="header wrapper">
       <div class="container">
         <div>
-          <h1 class="title">User settings <br><a ui-sref="account({slug: user.primary.slug})">{{user.primary.displayName}}</a></h1>
-          <h2 class="page-subtitle">Edit your account details and organisations</h2>
+          <h1 class="title">User settings</h1>
+          <div class="meta">
+            <!-- <p><a ui-sref="account({slug: user.primary.slug})">{{user.primary.displayName}}</a></p> -->
+            <p>Edit your account details and organisations</p>
+          </div>
         </div>
       </div>
     </div>
@@ -31,6 +34,7 @@
             <!-- <tr><td><a href="#" ng-click="changePanel('billing')" ng-class="{ active: activePanel==='billing'}">Billing</a></td></tr> -->
             <tr><td><a href="#" ng-click="changePanel('organisations')" ng-class="{ active: activePanel==='organisations'}">Organisations</a></td></tr>
             <tr><td><a href="#" ng-click="changePanel('support')" ng-class="{ active: activePanel==='support'}">Support</a></td></tr>
+            <tr><td><a ui-sref="account({slug: user.primary.slug})">View profile</a></td></tr>
           </table>
         </div>
 

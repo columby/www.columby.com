@@ -1,4 +1,4 @@
-<div class="page-header wrapper" ng-style="headerStyle">
+<div class="page-header header wrapper" ng-style="headerStyle">
   <div class="container">
   	<div class="col-md-12">
       <!-- Dataset title -->
@@ -22,6 +22,8 @@
         <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" />
       </div>
     </div>
+  </div>
+</div>
 
 
     <!-- Dataset Description -->
@@ -52,15 +54,13 @@
     <div class="c wrapper">
 			<div class="container">
 				<div class="col-md-12">
-		      <p data-ng-hide  = "dataset.title">Please add a title first.</p>
+		      <p data-ng-hide  = "dataset.title" class="advisory-notice">Please add a title first.</p>
 		      <button
-		        class    = "btn btn-default btn-create"
+		        class    = "default-button lightblue filled"
             ng-hide  = "dataset.id || !dataset.title"
-            ng-click = "create()">Save draft & proceed to add data
+            ng-click = "create()">Save draft &amp; proceed to add data
 		      </button>
-					<p data-ng-hide  = "dataset.id || !dataset.title">Don't worry, you can still change your title and description.</p>
+					<p data-ng-hide  = "dataset.id || !dataset.title" class="advisory-notice">Don't worry, you can still change your title and description.</p>
 				</div>
 			</div>
 		</div>
-  </div>
-</div>
