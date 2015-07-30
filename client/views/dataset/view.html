@@ -10,7 +10,7 @@
 
           <!-- Meta -->
           <div class="meta">
-						<span ng-show="dataset.private === true" class="label label-warning">private</span>
+						<span ng-show="dataset.private" class="label label-warning">private</span>
             <p>A dataset by
               <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.displayName || 'noname'}}</a></span>,
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
@@ -20,6 +20,8 @@
                 <a ui-sref="tag.view({slug: tag.slug })"><i class="fa fa-tag"></i>{{tag.text}}</a>
               </span>
             </p>
+
+            <a href ui-sref="dataset.edit({id: '{{dataset.shortid}}' })"><i class="fa fa-edit"></i>&nbsp;Edit</a>
           </div>
 
           <div class="avatar">

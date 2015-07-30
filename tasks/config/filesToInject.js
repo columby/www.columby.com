@@ -11,6 +11,5 @@ module.exports = [
   'client/app/filters/**/*.js', '!client/app/filters/**/*.spec.js',
   'client/app/routes/**/*.js', '!client/app/routes/**/*.spec.js',
   'client/app/services/**/*.js', '!client/app/services/**/*.spec.js',
-  'client/views/**/*.js', '!client/views/**/*.spec.js', '!client/views/**/*.e2e.js',
-  'client/app/config.js',
+  'client/views/**/*.js', '!client/views/**/*.spec.js', '!client/views/**/*.e2e.js'
 ];
