@@ -6,8 +6,8 @@
 
       <div class="editor" ng-show="account.canEdit">
         <div class="label label-success" data-ng-show="account.id===$root.user.primary.id">This is you!</div>
-        <a ui-sref="user.edit({slug: account.slug})" ng-show="account.primary">Edit</a>
-        <a ui-sref="account.edit({slug: account.slug})" ng-show="!account.primary">Edit</a>
+        <div><a ui-sref="user.edit({slug: account.slug})" ng-show="account.primary" class="icon-edit-link"><i class="fa fa-pencil"></i> Edit</a>
+        <a ui-sref="account.edit({slug: account.slug})" ng-show="!account.primary">Edit</a></div>
       </div>
 
       <div class="registries">
@@ -53,7 +53,7 @@
 
     <div class="datasets wrapper">
       <div class="container">
-        <div class="col-md-12">
+        <div class="col-md-12 publications">
 
 					<form>
             <input class="searchbox" type="text" ng-model="search.query" placeholder="Search this dataset list"/>
@@ -63,17 +63,24 @@
           <h3>{{datasets.count}} Datasets <span ng-show="search.term">[Filter: {{search.term}}]<a href ng-click="clearSearch()"><i class="fa fa-trash"></i></a></span></h3>
           <p ng-show="datasets.rows.length<1">No datasets found.</p>
 
-          <div class="dataset-listing" ng-show="datasets.rows.length>0">
+          <div class="publication-listing" ng-show="datasets.rows.length>0">
             <div class="loader" ng-show="datasets.loading"><i class="fa fa-spinner fa-spin"></i>&nbsp;Loading</div>
 
 						<ul ng-hide="datasets.loading">
-              <li ng-repeat="dataset in datasets.rows" class="dataset">
+              <li ng-repeat="dataset in datasets.rows" class="publication-item">
                 <h4>
                   <a ui-sref="dataset.view({ id: dataset.shortid })">{{dataset.title}}</a>
                   <span ng-show="dataset.private === true" class="label bg-primary">private</span>
                 </h4>
+                
+                <div class="user-date">
+                  <!-- <img ng-src="dataset.account.avatar.img" class="img-rounded"/> -->
+                  <img class="img-circle avatar-small" ng-src="{{dataset.account.avatar.url || 'assets/img/avatar.png'}}" alt="{{dataset.account.name}}"/>
+                  <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.displayName || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
+                </div>
+                
                 <ul class="properties">
-                  <li><label>Created</label><date>{{dataset.created_at | date:'d MMMM yyyy'}}</date></li>
+                  <!-- <li><label>Created</label><date>{{dataset.created_at | date:'d MMMM yyyy'}}</date></li> -->
                   <li ng-show="dataset.distributions.length>0"><label>Data sources</label>{{dataset.distributions.length}}</li>
                   <li ng-show="dataset.references.length>0"><label>References</label>{{dataset.references.length}}</li>
 
