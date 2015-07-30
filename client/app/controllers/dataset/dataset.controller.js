@@ -12,7 +12,7 @@ angular.module('columbyApp')
 
   /* --------- INITIALISATION ------------------------------------------------------------ */
   $scope.dataset = angular.copy(dataset);
-  if ($scope.dataset.accout.avatar.url) {
+  if ($scope.dataset.accout.avatar) {
     $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/image/small/' + $scope.dataset.account.avatar.filename;
   }
 
