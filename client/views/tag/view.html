@@ -1,20 +1,31 @@
-<div class="page-header wrapper">
+<div class="page-header header wrapper">
   <div class="container">
     <div class="col-md-12">
-      <h1 class="title">Tag: {{tag.text}}</h1>
+      <h1 class="title">{{tag.text}}</h1>
+      <h2 class="page-subtitle">All datasets tagged with {{tag.text}}</h2>
     </div>
   </div>
 </div>
 
 <div class="page-content wrapper">
   <div class="container">
-    <div class="col-md-12">
+    <div class="col-md-offset-1 col-md-10 publications">
       <h3>Datasets</h3>
-      <ul>
-        <li ng-repeat="dataset in tag.datasets">
-          <p><a ui-sref="dataset.view({id:dataset.shortid})">{{dataset.title}}</a></p>
-        </li>
-      </ul>
+      <div class="publication-listing">
+        <ul>
+          <li ng-repeat="dataset in tag.datasets" class="publication-item">
+            <h4><a ui-sref="dataset.view({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
+            <div class="user-date">
+              <!-- <img ng-src="dataset.account.avatar.img" class="img-rounded"/> -->
+              <img class="img-circle avatar-small" ng-src="{{dataset.account.avatar.url || 'assets/img/avatar.png'}}" alt="{{dataset.account.name}}"/>
+              <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.displayName || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
+            </div>
+            <!-- <p><a ui-sref="dataset.view({id:dataset.shortid})">{{dataset.title}}</a></p> -->
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
+
+
