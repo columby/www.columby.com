@@ -1,6 +1,16 @@
 <div class="page-loading" ng-hide="dataset.id"><i class="fa fa-spinner fa-spin"></i> Loading dataset</div>
 
 <div ng-show="dataset.id">
+  <div class="buttons">
+    <!-- view dataset -->
+    <button class="default-button white filled icon" ui-sref="dataset.view({ id: dataset.shortid })"><i class="fa fa-chevron-left"></i>view dataset</button>
+
+    <button class="default-button white filled icon" ng-click="showTagsModal()"><i class="fa fa-pencil"></i>edit tags</button>
+    
+    <!-- options -->
+    <button class="default-button white filled icon" ng-click="showOptions()"><i class="fa fa-cog"></i>dataset options</button>
+
+  </div>
   <div class="page-header header wrapper" ng-style="headerStyle">
       <div class="container">
   			<div class="col-md-12">
@@ -24,16 +34,13 @@
               <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
             </p>
 
+            <!-- tags -->
             <p ng-show="dataset.tags.length>0">
               <span class="tag" ng-repeat="tag in dataset.tags">
                 <a ui-sref="tag.view({slug: tag.slug })"><i class="fa fa-tag"></i>{{tag.text}}</a>
               </span>
             </p>
-            <a href ng-click="showTagsModal()" class="icon-edit-link"><i class="fa fa-pencil"></i> edit tags</a>
-            
-            <!-- options -->
-            <div class="options"><a href="#" ng-click="showOptions()" class="icon-edit-link"><i class="fa fa-cog"></i> Dataset options</a></div>
-            
+
           </div>
 			    <div class="avatar img-rounded">
             <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" />
