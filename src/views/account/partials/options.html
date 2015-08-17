@@ -15,7 +15,7 @@
       <div class="row">
         <div class="col-md-3" ng-repeat="user in account.users">
           <a ui-sref="account({slug: user.slug})" data-popover-placement="bottom" data-popover-trigger="mouseenter" popover="{{user.name}}">
-            <img class="img-responsive img-circle" ng-src="{{$root.config.filesRoot + '/a/' + user.avatar.shortid + '/' + user.avatar.filename || '/images/avatar.png'}}"/>
+            <img class="img-responsive img-circle" ng-src="user.avatar.url || '/images/avatar.png'}}"/>
           </a>
         </div>
       </div>

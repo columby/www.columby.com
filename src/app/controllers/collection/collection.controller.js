@@ -1,14 +1,21 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-  .controller('CollectionsCtrl', function ($rootScope, $scope, CollectionSrv) {
+  angular
+    .module('columbyApp')
+    .controller('CollectionsCtrl', function ($rootScope, $scope, CollectionSrv) {
 
     $scope.collections = CollectionSrv.index();
 
-  })
+  });
+})();
 
-  .controller('CollectionCtrl', function ($rootScope, $scope, $stateParams, CollectionSrv, UserSrv) {
+(function() {
+  'use strict';
+
+  angular
+    .module('columbyApp')
+    .controller('CollectionCtrl', function ($rootScope, $scope, $stateParams, CollectionSrv, UserSrv,appConstants) {
 
     // Initiate pagination
     $scope.pagination = {
@@ -30,7 +37,7 @@ angular.module('columbyApp')
         // restructure result
         result.account = result.Account;
         delete result.Account;
-        result.account.avatar.url = $rootScope.config.filesRoot + '/a/' + result.account.avatar.shortid + '/' + result.account.avatar.filename;
+        result.account.avatar.url = appConstants.filesRoot + '/a/' + result.account.avatar.shortid + '/' + result.account.avatar.filename;
 
         // Add collection to the scope
         $scope.collection = result;
@@ -70,6 +77,5 @@ angular.module('columbyApp')
     // Initiate the page
     getCollection();
 
-  })
-
-;
+  });
+})();

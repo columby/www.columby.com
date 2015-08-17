@@ -4,9 +4,9 @@
 /*
 // Delete the created datasource
 DatasetReferenceSrv.delete({id:$scope.dataset.id, reference: $scope.reference}, function(res){
-  console.log('Reference deleted', res);
+  $log.debug('Reference deleted', res);
 });
-console.log('Modal dismissed at: ' + new Date());
+$log.debug('Modal dismissed at: ' + new Date());
 
 
 

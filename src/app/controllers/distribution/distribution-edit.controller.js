@@ -28,7 +28,7 @@ angular.module('columbyApp')
 
       if ($scope.distribution.type === 'remoteService') {
         DistributionSrv.validateLink({url: $scope.distribution.accessUrl}, function (response) {
-          console.log(response);
+          $log.debug(response);
           $scope.distribution.validation = {
             status: 'done',
             result: response
@@ -48,7 +48,7 @@ angular.module('columbyApp')
 
     $scope.update = function () {
       if (originalDistribution.accessUrl !== $scope.distribution.accessUrl){
-        console.log('Url changed: ', $scope.distribution.accessUrl);
+        $log.debug('Url changed: ', $scope.distribution.accessUrl);
 
         updateDistribution();
       } else {

@@ -8,7 +8,7 @@
   /** @ngInject */
   function config($logProvider, $locationProvider, $urlRouterProvider, $authProvider, appConstants) {
     // Enable log
-    $logProvider.debugEnabled(true);
+    $logProvider.debugEnabled(appConstants.debug);
 
 
     /***

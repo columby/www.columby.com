@@ -1,8 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-  .controller('DistributionNewCtrl', function($log, $rootScope, $scope, $modalInstance, dataset, FileService, ngNotify, ngProgress, DistributionSrv, $upload) {
+  angular
+    .module('columbyApp')
+    .controller('DistributionNewCtrl', function($log, $rootScope, $scope, $modalInstance, dataset, FileService, ngNotify, ngProgress, DistributionSrv, $upload, appConstants) {
 
 
     $scope.distribution = {
@@ -63,20 +64,20 @@ angular.module('columbyApp')
 
       $upload.upload({
         method: 'POST',
-        url   : $rootScope.config.filesRoot + '/upload',
+        url   : appConstants.filesRoot + '/upload',
         fields: params,
         file  : file,
       })
 
       .progress(function (evt) {
         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-        //console.log('progress: ' + progressPercentage + '% for ' + evt.config.file.name);
+        //$log.debug('progress: ' + progressPercentage + '% for ' + evt.config.file.name);
         ngProgress.set(progressPercentage);
       })
 
       .success(function (data, status, headers, config) {
-        //console.log('File ' + config.file.name + 'uploaded.');
-        //console.log('Data', data);
+        //$log.debug('File ' + config.file.name + 'uploaded.');
+        //$log.debug('Data', data);
         // File upload is done
         if (data.status === 'ok') {
           ngProgress.complete();
@@ -88,9 +89,9 @@ angular.module('columbyApp')
           $scope.distribution.file_id = data.file.id;
           $scope.distribution.byteSize = data.file.size;
           $scope.distribution.mediaType = data.file.filetype;
-          $scope.distribution.downloadUrl = $rootScope.config.filesRoot + '/d/' + data.file.shortid + '/' + data.file.filename;
+          $scope.distribution.downloadUrl = appConstants.filesRoot + '/d/' + data.file.shortid + '/' + data.file.filename;
 
-          // console.log('dist', $scope.distribution);
+          // $log.debug('dist', $scope.distribution);
 
           // Go to the next step.
           $scope.wizard.step++ ;
@@ -128,7 +129,7 @@ angular.module('columbyApp')
       };
 
       DistributionSrv.validateLink({url:$scope.distribution.accessUrl}, function(response){
-        //console.log('r', response);
+        //$log.debug('r', response);
         $scope.distribution.validation = {
           status: 'done',
           result: response
@@ -146,11 +147,11 @@ angular.module('columbyApp')
 
 
     $scope.submitLink = function(){
-      console.log('submitting link.');
+      $log.debug('submitting link.');
 
       // Update the distribution (save the url and validity
       DistributionSrv.update($scope.distribution, function(response){
-        console.log('submitlink respononse, ', response);
+        $log.debug('submitlink respononse, ', response);
         if (response.id){
           //ngNotify.set('success',null,'Distribution updated.');
           // Go to metadata screen
@@ -161,7 +162,7 @@ angular.module('columbyApp')
 
 
     $scope.next = function(){
-      console.log($scope.wizard.step);
+      $log.debug($scope.wizard.step);
       if ($scope.wizard.step === 3){
         $scope.wizard.step = 4;
         $scope.wizard.nextShow=false;
@@ -177,7 +178,7 @@ angular.module('columbyApp')
 
 
     $scope.close = function(){
-      console.log('Closing with distribution: ', $scope.distribution);
+      $log.debug('Closing with distribution: ', $scope.distribution);
       $modalInstance.close($scope.distribution);
     };
 
@@ -198,3 +199,4 @@ angular.module('columbyApp')
     };
 
   });
+})();

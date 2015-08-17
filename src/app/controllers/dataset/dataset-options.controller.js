@@ -1,14 +1,11 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
+  angular
+    .module('columbyApp')
+    .controller('DatasetOptionsCtrl', function($log,dataset, account, $modalInstance, $rootScope, $scope, DatasetSrv,ngNotify,appConstants, $modal,$state,Slug,FileService,ngProgress,$upload) {
 
-/**
- *
- *  Controller for a dataset Edit options page
- *
- */
-.controller('DatasetOptionsCtrl', function(dataset, account, $modalInstance, $rootScope, $scope, DatasetSrv) {
-
+      var modalOpened = false;
 
   // add account datasets that have not been added tot the account to the dataset
   var datasetRegistryIds = [];
@@ -16,16 +13,16 @@ angular.module('columbyApp')
     datasetRegistryIds.push(dataset.registries[ i].id);
   }
 
-  for (var i=0; i<account.registries.length; i++){
-    console.log('Account registry id: ' + account.registries[ i].id);
+  for (i=0; i<account.registries.length; i++){
+    $log.debug('Account registry id: ' + account.registries[ i].id);
     if (datasetRegistryIds.indexOf(account.registries[ i].id) === -1) {
-      console.log(account.registries[ i]);
+      $log.debug(account.registries[ i]);
       var dr = account.registries[ i];
       dr.dataset_registries = {
         status: false,
         registry_id: dr.id,
         dataset_id: dataset.id
-      }
+      };
       dataset.registries.push(dr);
     } else {
       dataset.registries[ datasetRegistryIds.indexOf(account.registries[ i].id)].account_registries = account.registries[ i].account_registries;
@@ -41,7 +38,7 @@ angular.module('columbyApp')
    */
   function updateHeaderImage(){
     if ($scope.dataset.headerImg) {
-      $scope.dataset.headerImg.url = $rootScope.config.filesRoot + '/a/' + $scope.dataset.headerImg.shortid + '/' + $scope.dataset.headerImg.filename;
+      $scope.dataset.headerImg.url = appConstants.filesRoot + '/a/' + $scope.dataset.headerImg.shortid + '/' + $scope.dataset.headerImg.filename;
       $scope.headerStyle = {
         'background-image': 'linear-gradient(transparent,transparent), url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
         'background-blend-mode': 'multiply'
@@ -69,7 +66,7 @@ angular.module('columbyApp')
         };
         switch($scope.fileUpload.target){
           case 'header':
-            console.log('updating header image');
+            $log.debug('updating header image');
             $scope.dataset.headerImg = res;
             updated.headerImg=res.id;
             updateHeaderImage();
@@ -97,7 +94,7 @@ angular.module('columbyApp')
       slug: slug
     };
     DatasetSrv.update({id: d.id}, d, function(res){
-      //console.log(res);
+      //$log.debug(res);
       if (res.id) {
         $scope.dataset.slug = res.slug;
         ngNotify.set('Dataset custom URL updated.');
@@ -123,7 +120,7 @@ angular.module('columbyApp')
 
     modalOpened=true;
 
-    var modalInstance = $modal.open({
+    $modal.open({
       templateUrl: 'views/dataset/confirm-delete.html',
       controller: 'DatasetDeleteCtrl',
       size: 'lg',
@@ -135,7 +132,7 @@ angular.module('columbyApp')
         }
       }
     }).result.then(function(result) {
-      console.log(result);
+      $log.debug(result);
       if (result.status === 'error'){
         ngNotify.set('There was a problem deleting the dataset. (' + result.msg + ')', 'error');
       } else {
@@ -180,19 +177,19 @@ angular.module('columbyApp')
 
     // Check if there is a file
     if (!file) { return ngNotify.set('warning',null,'No file selected.'); }
-    console.log('Yes there is a file. ');
+    $log.debug('Yes there is a file. ');
 
     // Check if there is already an upload in progress
     if ($scope.upload && $scope.upload.file) {
       return ngNotify.set('There is already an upload in progress. ','error');
     }
-    console.log('There is not already an upload in progress. ');
+    $log.debug('There is not already an upload in progress. ');
 
     // Check if the file has the right type
     if (!FileService.validateFile(file.type,type,target)) {
       return ngNotify.set('The file you chose is not valid. ' + file.type, 'error');
     }
-    console.log('File is valid. ');
+    $log.debug('File is valid. ');
 
     $scope.upload = {
       file: file
@@ -211,27 +208,25 @@ angular.module('columbyApp')
 
     $upload.upload({
       method: 'POST',
-      url   : $rootScope.config.filesRoot + '/upload',
+      url   : appConstants.filesRoot + '/upload',
       fields: params,
       file  : file,
     })
 
     .progress(function (evt) {
       var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-      //console.log('progress: ' + progressPercentage + '% for ' + evt.config.file.name);
+      //$log.debug('progress: ' + progressPercentage + '% for ' + evt.config.file.name);
       ngProgress.set(progressPercentage);
-    })
-
-    .success(function (data, status, headers, config) {
-      //console.log('File ' + config.file.name + 'uploaded.');
-      //console.log('Data', data);
+    }).success(function (data) {
+      //$log.debug('File ' + config.file.name + 'uploaded.');
+      //$log.debug('Data', data);
       // File upload is done
       if (data.status === 'ok') {
         ngProgress.complete();
         // finish
         $scope.upload.file = null;
         ngNotify.set('File uploaded. ');
-        console.log('File uploaded: ', data);
+        $log.debug('File uploaded: ', data);
 
         var updated = {
           id: $scope.dataset.shortid
@@ -239,7 +234,7 @@ angular.module('columbyApp')
 
         switch(target){
           case 'header':
-            console.log('updating header image');
+            $log.debug('updating header image');
             $scope.dataset.headerImg = data.file;
             $scope.dataset.headerimg_id = data.file.id;
             updateHeaderImage();
@@ -248,7 +243,7 @@ angular.module('columbyApp')
         }
         $scope.fileUpload = null;
         ngNotify.set('File uploaded, updating account...');
-        console.log('updating, ', updated);
+        $log.debug('updating, ', updated);
 
         // Update Account at server
         DatasetSrv.update({id: $scope.dataset.id}, updated, function(result){
@@ -269,5 +264,6 @@ angular.module('columbyApp')
     DatasetSrv.updateRegistry({id: dataset.id, rid: registry.id},{ status:status }, function(result){
       $scope.dataset.registries[ $index].dataset_registries = result;
     });
-  }
+  };
 });
+})();

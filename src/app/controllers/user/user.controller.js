@@ -39,7 +39,7 @@ angular.module('columbyApp')
 
     // Authenticate with the authentication service.
     AuthSrv.authenticate(provider).then(function(response){
-      console.log(response);
+      $log.debug(response);
       modal.dismiss();
 
       if (response.status === 'warning'){
@@ -134,11 +134,11 @@ angular.module('columbyApp')
       register: 'true'
     }
 
-    console.log('p', provider);
+    $log.debug('p', provider);
 
     AuthSrv.authenticate(provider).then(function(response){
 
-      console.log(response);
+      $log.debug(response);
       if (response.status === 'warning'){
         ngNotify.set(response.msg, 'error');
         modal.dismiss();
@@ -163,7 +163,7 @@ angular.module('columbyApp')
 
 
 .controller('UserViewCtrl', function($window, $rootScope, $scope, $stateParams, AuthSrv, UserSrv, AccountSrv, ngNotify) {
-  console.log('User view controller');
+  $log.debug('User view controller');
 
   $scope.contentLoading  = true;
   $rootScope.title = 'columby.com';
@@ -202,7 +202,7 @@ angular.module('columbyApp')
  ***/
 .controller('UserEditCtrl', function (user, $scope, $rootScope, $location, $state, $stateParams, UserSrv, AccountSrv, ngNotify, Slug, $modal) {
 
-  console.log('User edit controller',user);
+  $log.debug('User edit controller',user);
 
   // Set the default active panel
   $scope.activePanel = 'profile';
@@ -218,13 +218,13 @@ angular.module('columbyApp')
 
 
   $scope.updateAccount = function(){
-    console.log('updating account');
-    console.log($scope.user.primary);
+    $log.debug('updating account');
+    $log.debug($scope.user.primary);
     // check for update
     if (angular.equals($scope.user.primary, $scope.originalUser.account) === false){
       // send to server
       AccountSrv.update({id: $scope.user.primary.id}, $scope.user.primary, function(result){
-        console.log(result);
+        $log.debug(result);
         if (result.statusCode===200){
           //$scope.account = result;
           $scope.originalUser = angular.copy($scope.user);
@@ -277,8 +277,8 @@ angular.module('columbyApp')
     });
   }
   $scope.$on('fileManagerSelected', function(event,data){
-    console.log(event);
-    console.log(data);
+    $log.debug(event);
+    $log.debug(data);
     if (data.action === 'updateAvatar') {
       $scope.user.primary.avatar_id = data.file.id;
       $scope.user.primary.avatar = data.file;

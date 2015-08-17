@@ -32,7 +32,7 @@
       <table class="table table-hover table-striped">
         <tr ng-repeat="file in files.rows">
           <td>
-            <a ng-href="{{$root.config.filesRoot}}/{{file.type}}/large/{{file.filename}}" target="_blank"><img ng-src="{{$root.config.filesRoot}}/{{file.type}}/small/{{file.filename}}" style="width:120px;"/></a>
+            <a ng-href="{{filesRoot}}/{{file.type}}/large/{{file.filename}}" target="_blank"><img ng-src="{{filesRoot}}/{{file.type}}/small/{{file.filename}}" style="width:120px;"/></a>
           </td>
           <td>{{file.filename}} - {{file.title}}<br> <small>Added {{file.created_at | date:'short'}}</small></td>
           <td>

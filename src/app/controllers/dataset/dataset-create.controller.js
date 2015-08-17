@@ -3,7 +3,7 @@
 angular.module('columbyApp')
   .controller('DatasetCreateCtrl', function($rootScope, $scope, $modal, $state, DatasetSrv, ngNotify){
 
-    console.log('Initiating new dataset.');
+    $log.debug('Initiating new dataset.');
     $scope.dataset = {
       title: null,
       description: null,
@@ -64,13 +64,13 @@ angular.module('columbyApp')
     
     //Create a new dataset
     $scope.create = function() {
-      console.log('Sending dataset: ', $scope.dataset);
+      $log.debug('Sending dataset: ', $scope.dataset);
       DatasetSrv.save($scope.dataset, function(res){
-        console.log(res);
-        console.log('New dataset received: ' + res.id);
+        $log.debug(res);
+        $log.debug('New dataset received: ' + res.id);
         if (res.id) {
           ngNotify.set('Your dataset is published. Now go and add some data!');
-          console.log('go to ' + res.shortid);
+          $log.debug('go to ' + res.shortid);
           $state.go('dataset.edit', {id:res.shortid});
         } else {
           ngNotify.set('There was an error creating the dataset. (message: ' + res.message + ' )');

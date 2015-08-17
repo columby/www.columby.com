@@ -19,7 +19,7 @@ angular.module('columbyApp')
 
     // save reference
     ReferenceSrv.update($scope.reference.id, $scope.reference, function(res){
-      console.log('Reference result', res);
+      $log.debug('Reference result', res);
       if (res.id) {
         $modalInstance.close(res);
       } else {

@@ -1,8 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-  .controller('CollectionEditCtrl', function ($rootScope, $scope, $state, $stateParams, AuthSrv, CollectionSrv, ngNotify) {
+  angular
+    .module('columbyApp')
+    .controller('CollectionEditCtrl', function ($rootScope, $scope, $state, $stateParams, AuthSrv, CollectionSrv, ngNotify, appConstants) {
 
     // Configuration
     $scope.contentLoading = true;
@@ -13,7 +14,7 @@ angular.module('columbyApp')
       CollectionSrv.show({id:$stateParams.id }, function(result){
         if (AuthSrv.canEdit('collection', result)){
           $scope.collection = result;
-          $scope.collection.Account.avatar.url = $rootScope.config.filesRoot + '/a/' + $scope.collection.Account.avatar.shortid + '/' + $scope.collection.Account.avatar.filename;
+          $scope.collection.Account.avatar.url = appConstants.filesRoot + '/a/' + $scope.collection.Account.avatar.shortid + '/' + $scope.collection.Account.avatar.filename;
           // set draft title and description
           $scope.collectionUpdate = {
             title: $scope.collection.title,
@@ -60,7 +61,6 @@ angular.module('columbyApp')
 
 
     $scope.delete = function(){
-      console.log('delete collection');
       CollectionSrv.delete({id: $scope.collection.id}, function(res){
         if (res){
           ngNotify.set('Collection deleted.');
@@ -76,6 +76,5 @@ angular.module('columbyApp')
     // START
     init();
 
-  })
-
-;
+  });
+})();

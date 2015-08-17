@@ -52,6 +52,6 @@ angular.module('columbyApp')
     //$scope.search.searchTerm = SearchSrv.queryTerm();
     //$scope.search.hits = SearchSrv.result();
 
-    console.log('search', $scope.search);
+    $log.debug('search', $scope.search);
 
   });

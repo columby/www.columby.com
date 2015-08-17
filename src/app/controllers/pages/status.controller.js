@@ -1,7 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-  .controller('StatusCtrl', function ($rootScope, $scope, $http) {
+  angular
+    .module('columbyApp')
+    .controller('StatusCtrl', function($log,$rootScope, $scope, $http,appConstants) {
 
     $scope.ckan = {
       action: 'dashboard_activity_list_html'
@@ -15,16 +17,16 @@ angular.module('columbyApp')
 
       $http({
         method: 'GET',
-        url: $rootScope.config.apiRoot + '/v2/registry/ckan',
+        url: appConstants.apiRoot + '/v2/registry/ckan',
         params: params
       }).then(function(result){
-        console.log(result);
+        $log.debug(result);
         $scope.ckan.result = JSON.parse(result.data.body).result;
         $scope.ckan.error = result.data.error;
       }).catch(function(err){
-        console.log(err);
+        $log.debug(err);
       });
-    }
+    };
 
 
     $rootScope.title = 'columby.com | Status';
@@ -32,7 +34,7 @@ angular.module('columbyApp')
     $scope.statusList = [
       {
         name: 'API',
-        source: $rootScope.config.apiRoot,
+        source: appConstants.apiRoot,
         description: 'The columby api',
         status: false,
       },
@@ -44,17 +46,17 @@ angular.module('columbyApp')
       },
       {
         name: 'Files',
-        source: $rootScope.config.filesRoot,
+        source: appConstants.filesRoot,
         description: 'The columby files server',
         status: false,
       },
-    ]
+    ];
 
     for (var i=0; i<$scope.statusList.length;i++){
       checkStatus({url:$scope.statusList[ i].source, index:i}, function(result){
-        console.log(result);
+        $log.debug(result);
         $scope.statusList[ result.index].status = result.status;
-      })
+      });
     }
 
     function checkStatus(params,cb){
@@ -62,5 +64,6 @@ angular.module('columbyApp')
         result.index = params.index;
         cb(result);
       });
-    };
+    }
   });
+})();

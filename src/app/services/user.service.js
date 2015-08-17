@@ -35,9 +35,9 @@
 
 
         get: function(slug){
-          //console.log(slug);
+          //$log.debug(slug);
           return $http.get(appConstants.apiRoot + '/v2/user/' + slug).then(function (response) {
-            //console.log(response);
+            //$log.debug(response);
             return response.data;
           });
         },

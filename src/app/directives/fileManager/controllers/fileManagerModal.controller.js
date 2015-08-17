@@ -4,7 +4,7 @@
   angular
     .module('columbyApp')
     .controller('FileManagerModalCtrl', function(options, $rootScope, $scope, $modal, $modalInstance, FileSrv, Upload, ngNotify){
-    //console.log('options', options);
+    //$log.debug('options', options);
     $scope.file = [];
     $scope.options = options;
     $scope.pagination = {
@@ -31,7 +31,7 @@
     }
 
     $scope.pageChanged = function() {
-      //console.log('Page changed to: ' + $scope.pagination.currentPage);
+      //$log.debug('Page changed to: ' + $scope.pagination.currentPage);
       getFiles();
     };
 
@@ -56,8 +56,8 @@
       if (files && files.length) {
         for (var i = 0; i < files.length; i++) {
           var file = files[i];
-          // console.log(file);
-          //console.log('o', options);
+          // $log.debug(file);
+          //$log.debug('o', options);
           FileSrv.sign({
             type: 'image',
             account_id: options.account_id,
@@ -65,8 +65,8 @@
             filetype: file.type,
             filesize: file.size
           }).then(function(result){
-            //console.log(result);
-            // console.log(result.credentials.fields);
+            //$log.debug(result);
+            // $log.debug(result.credentials.fields);
             if (result.status==='error') {
               ngNotify.set('Error: ' + result.msg, 'error');
             } else {
@@ -78,22 +78,22 @@
                 file: file
               }).progress(function (evt) {
                   var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                  // console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                  // $log.debug('progress: ' + progressPercentage + '% ' + evt.config.file.name);
                   $scope.progress=progressPercentage;
               }).success(function (data, status, headers, config) {
                 $scope.progress=0;
-                // console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+                // $log.debug('file ' + config.file.name + 'uploaded. Response: ' + data);
                 FileSrv.finishUpload({id: result.file.id}).then(function(){
                   ngNotify.set('File uploaded!');
                   $scope.files.rows.unshift(result.file);
                 }).catch(function(error){
                   ngNotify.set('Error: ' + error, 'error');
-                  // console.log('error: ', error)
+                  // $log.debug('error: ', error)
                 });
               }).error(function (data, status, headers, config) {
-                // console.log(data, headers);
+                // $log.debug(data, headers);
                 $scope.progress=0;
-                // console.log('error status: ' + status);
+                // $log.debug('error status: ' + status);
               });
             }
           });
@@ -110,14 +110,14 @@
 
     // Delete a file from db and file-storage
     $scope.delete = function(index, file){
-      // console.log('index', index);
-      // console.log(file);
+      // $log.debug('index', index);
+      // $log.debug(file);
       $modal.open({
         size:'lg',
         template: '<div class="row"><div class="col-md-offset-1 col-md-10"><h3>Do you really want to delete the image?</h3><br><br><br><a href ng-click="$dismiss()">cancel</a><button class="btn btn-default btn-danger pull-right" ng-click="$close()">DELETE</button></div><br></div>'
       }).result.then(function(){
         FileSrv.destroy(file.id).then(function(){
-          // console.log(result);
+          // $log.debug(result);
           $scope.files.rows.splice(index,1);
           $scope.pagination.totalItems = $scope.files.rows.splice(index,1);
         });

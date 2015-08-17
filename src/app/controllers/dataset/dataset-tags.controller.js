@@ -49,11 +49,11 @@ angular.module('columbyApp')
 
 
   $scope.removeTag = function(tag){
-    console.log('removing tag, ', tag);
+    $log.debug('removing tag, ', tag);
     var id = $scope.dataset.tags.indexOf(tag);
-    console.log(tag);
+    $log.debug(tag);
     DatasetSrv.removeTag({id:$scope.dataset.id, tid:tag.id},function(result){
-      console.log('dataset remove result: ', result);
+      $log.debug('dataset remove result: ', result);
       $scope.dataset.tags.splice(id,1);
     });
   };

@@ -29,9 +29,9 @@ angular.module('columbyApp')
 
     $scope.confirm = function() {
       // Save the Primary
-      console.log('Saving primary, ', $scope.primary);
+      $log.debug('Saving primary, ', $scope.primary);
       PrimaryService.save($scope.primary, function(primary){
-        console.log('Save result: ', primary);
+        $log.debug('Save result: ', primary);
         if (primary.id){
           // Send to queue
           var job = {
@@ -39,24 +39,24 @@ angular.module('columbyApp')
             data: $scope.primary
           };
           WorkerSrv.add(job).then(function(jobResult){
-            console.log('Job result: ', jobResult);
+            $log.debug('Job result: ', jobResult);
             if (jobResult.id){
               // update primary job status
               primary.jobStatus='queued';
               primary.$update(function(e){
-                console.log('updated');
-                console.log(e);
+                $log.debug('updated');
+                $log.debug(e);
               });
             }
             //
             // All done, close modal
             $modalInstance.close(primary);
           }, function(err){
-            console.log('err', err);
-            console.log(primary);
+            $log.debug('err', err);
+            $log.debug(primary);
             ngNotify.set('There was an error sending the primary for processing...','error');
             PrimaryService.delete({id: primary.id}, function(result){
-              console.log('result', result);
+              $log.debug('result', result);
             });
           });
 

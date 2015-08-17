@@ -45,7 +45,7 @@
           <table class="table">
             <tr ng-repeat="account in user.organisations">
               <td>
-                <a ui-sref="account.edit({slug:account.slug})"><img class="avatar" ng-src="{{$root.config.filesRoot}}/image/thumbnail/{{account.avatar.filename}}"/> {{account.displayName}}</a>
+                <a ui-sref="account.edit({slug:account.slug})"><img class="avatar" ng-src="{{account.avatar.url}}"/> {{account.displayName}}</a>
               </td>
             </tr>
           </table>
@@ -65,7 +65,7 @@
                   <label for="displayname">Profile picture</label>
                   <div class="row">
                     <div class="col-md-3">
-                      <img class="img-circle avatar" ng-src="{{$root.config.filesRoot}}/image/thumbnail/{{user.primary.avatar.filename}}"/>
+                      <img class="img-circle avatar" ng-src="{{user.primary.avatar.url}}"/>
                       <a class="btn btn-default" href ng-click="openFileBrowser()">change</a>
                     </div>
                     <div class="col-md-9">

@@ -1,13 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-/**
- *
- *  Controller for a dataset Edit page
- *
- */
-.controller('DatasetEditCtrl', function(dataset, $rootScope, $scope, appConstants, $state, $stateParams, AccountSrv, DatasetSrv, DistributionSrv, PrimaryService, ReferenceSrv, TagService, Slug, FileSrv,ngProgress, $timeout,$modal,Upload, ngNotify, AuthSrv) {
+  angular
+    .module('columbyApp')
+    .controller('DatasetEditCtrl', function($log, dataset, $rootScope, $scope, appConstants, $state, $stateParams, AccountSrv, DatasetSrv, DistributionSrv, PrimaryService, ReferenceSrv, TagService, Slug, FileSrv,ngProgress, $timeout,$modal,Upload, ngNotify, AuthSrv) {
 
   // Check existence
   if (!dataset.id){
@@ -28,7 +24,7 @@ angular.module('columbyApp')
   // Initialisation
   $scope.dataset = dataset;
   if ($scope.dataset.account.avatar) {
-    $scope.dataset.account.avatar.url = $rootScope.config.filesRoot + '/image/small/' + $scope.dataset.account.avatar.filename;
+    $scope.dataset.account.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.dataset.account.avatar.filename;
   }
   var modalOpened = false;
   $rootScope.title = 'columby.com | ' + dataset.title;
@@ -38,13 +34,13 @@ angular.module('columbyApp')
   $scope.datasetOriginal = angular.copy($scope.dataset);
   // Update the header image
   if ($scope.dataset.headerImg && $scope.dataset.headerImg.id) {
-    updateHeaderImage();
+    //updateHeaderImage();
   }
   $scope.newTag = {text:null};
 
   // Show or hide the options menu
   $scope.showOptions = function(){
-    var modalInstance = $modal.open({
+    $modal.open({
       size: 'lg',
       templateUrl: 'views/dataset/modals/dataset-edit-options.html',
       controller: 'DatasetOptionsCtrl',
@@ -57,11 +53,11 @@ angular.module('columbyApp')
           return AccountSrv.get({slug: dataset.account.slug}).$promise;
         }
       }
-    })
+    });
   };
 
   $scope.showTagsModal = function() {
-    var modalInstance = $modal.open({
+    $modal.open({
       size: 'lg',
       templateUrl: 'views/dataset/modals/dataset-tag-options.html',
       controller: 'DatasetTagsCtrl',
@@ -72,7 +68,7 @@ angular.module('columbyApp')
         }
       }
     });
-  }
+  };
 
   /**
    *
@@ -82,7 +78,7 @@ angular.module('columbyApp')
   $scope.update = function(){
     // check for change
     var changed = !angular.equals($scope.datasetOriginal, $scope.dataset);
-    console.log('Dataset changed: ' + changed);
+    $log.debug('Dataset changed: ' + changed);
     if (changed) {
       DatasetSrv.update({id: $scope.dataset.id}, $scope.dataset, function(result){
         if (result.id){
@@ -128,7 +124,7 @@ angular.module('columbyApp')
   };
 
   $scope.editReference = function(reference) {
-    console.log('edit reference', reference);
+    $log.debug('edit reference', reference);
     // Make sure only 1 modal is opened at a time.
     if (modalOpened) { return; }
 
@@ -173,9 +169,9 @@ angular.module('columbyApp')
    */
   $scope.deleteReference = function(reference){
     var idx = $scope.dataset.references.indexOf(reference);
-    console.log(reference);
+    $log.debug(reference);
     ReferenceSrv.delete({id:reference.id}, function(res){
-      console.log(res);
+      $log.debug(res);
       if (res.status === 'success') {
         $scope.dataset.references.splice(idx, 1);
         ngNotify.set('Reference deleted.');
@@ -215,8 +211,8 @@ angular.module('columbyApp')
     }, function () {
       // Delete the created datasource
       DistributionSrv.delete($scope.distribution, function(res){
-        console.log('deleted');
-        console.log(res);
+        $log.debug('deleted');
+        $log.debug(res);
       });
       $log.info('Modal dismissed at: ' + new Date());
     });
@@ -239,7 +235,7 @@ angular.module('columbyApp')
     });
 
     modalInstance.result.then(function (selectedItem) {
-      console.log(selectedItem);
+      $log.debug(selectedItem);
       $scope.selected = selectedItem;
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
@@ -270,7 +266,7 @@ angular.module('columbyApp')
         $scope.dataset.distributions.splice(idx,1);
         ngNotify.set('Distribution deleted.');
       } else {
-        console.log(res);
+        $log.debug(res);
         ngNotify.set('There was a problem deleting the distribution.', 'error');
       }
     });
@@ -296,7 +292,7 @@ angular.module('columbyApp')
         title: $scope.dataset.title
       }
     };
-    console.log('newPrimary: ', $scope.newPrimary);
+    $log.debug('newPrimary: ', $scope.newPrimary);
 
     var modalInstance = $modal.open({
       templateUrl: 'views/dataset/primary/new.html',
@@ -315,8 +311,8 @@ angular.module('columbyApp')
     });
 
     modalInstance.result.then(function(primary) {
-      console.log(primary);
-      console.log($scope.dataset);
+      $log.debug(primary);
+      $log.debug($scope.dataset);
       //$scope.selected = selectedItem;
       $scope.dataset.primary = primary;
     }, function () {
@@ -333,7 +329,7 @@ angular.module('columbyApp')
   $scope.deletePrimarySource = function(){
     if ($scope.dataset.primary.id){
       PrimaryService.delete({id: $scope.dataset.primary.id}, function(result){
-        console.log(result);
+        $log.debug(result);
         if (result.status === 'success'){
           $scope.dataset.primary = null;
           ngNotify.set('The primary source was deleted successfully');
@@ -346,7 +342,7 @@ angular.module('columbyApp')
 
 
   $scope.editPrimarySource = function(){
-    console.log($scope.dataset.primary);
+    $log.debug($scope.dataset.primary);
 
     var modalInstance = $modal.open({
       templateUrl: 'views/dataset/primary/edit.html',
@@ -362,7 +358,7 @@ angular.module('columbyApp')
     });
 
     modalInstance.result.then(function (primary) {
-      console.log(primary);
+      $log.debug(primary);
       $scope.dataset.primary = primary;
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
@@ -391,7 +387,7 @@ angular.module('columbyApp')
       ngNotify.set('The primary source will be synchronised. ');
       $scope.dataset.primary.jobStatus = 'active';
       // Process response
-      console.log('result', r);
+      $log.debug('result', r);
     });
   };
 
@@ -400,4 +396,5 @@ angular.module('columbyApp')
   //   ngDialog.closeAll();
   // };
 
-});
+  });
+})();

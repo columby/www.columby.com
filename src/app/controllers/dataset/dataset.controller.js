@@ -1,12 +1,13 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-.controller('DatasetViewCtrl', function(dataset, $window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, appConstants, DataService, UserSrv, AuthSrv, ngNotify) {
-  console.log(';');
-  console.log(dataset);
+  angular
+    .module('columbyApp')
+    .controller('DatasetViewCtrl', function($log, dataset, $window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, appConstants, DataService, UserSrv, AuthSrv, ngNotify,$modal) {
+  $log.debug(';');
+  $log.debug(dataset);
   if (!dataset.id) {
-    console.log('nooo');
+    $log.debug('nooo');
     ngNotify.set('Sorry, the requested dataset was not found. ', 'error');
     $state.go('home');
   }
@@ -27,7 +28,7 @@ angular.module('columbyApp')
   // filter out private sources
   if (!$scope.dataset.canEdit){
     angular.forEach($scope.dataset.distributions, function(value,key){
-      //console.log(value);
+      //$log.debug(value);
       if (value.private){
         $scope.dataset.distributions.splice(key,1);
       }
@@ -46,7 +47,7 @@ angular.module('columbyApp')
   /* --------- FUNCTIONS ------------------------------------------------------------------ */
   function processData(){
     if (!$scope.dataset.primary){
-      console.log('No primary source. Skip creating data preview.');
+      $log.debug('No primary source. Skip creating data preview.');
       return;
     }
 
@@ -59,7 +60,7 @@ angular.module('columbyApp')
 
     // Query string for api call example.
     $scope.dataQuery = '{"type":"select","table":"primary_' + $scope.dataset.primary.id + '","fields":"*","limit":"10"}';
-    $scope.apiLink = $rootScope.config.apiRoot + '/v2/data/sql?q='+ $scope.dataQuery;
+    $scope.apiLink = appConstants.apiRoot + '/v2/data/sql?q='+ $scope.dataQuery;
 
     DataService.sql(q).then(function(result){
       if (result.status === 'success') {
@@ -94,10 +95,10 @@ angular.module('columbyApp')
    */
   function updateHeaderImage(){
 
-    console.log($scope.dataset);
+    $log.debug($scope.dataset);
 		if ($scope.dataset.headerImg) {
-      console.log('updating header image');
-      $scope.dataset.headerImg.url = $rootScope.config.filesRoot + '/a/' + $scope.dataset.headerImg.shortid + '/' + $scope.dataset.headerImg.filename;
+      $log.debug('updating header image');
+      $scope.dataset.headerImg.url = appConstants.filesRoot + '/a/' + $scope.dataset.headerImg.shortid + '/' + $scope.dataset.headerImg.filename;
       $scope.headerStyle={
         'background-image': 'linear-gradient(transparent,transparent), url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
         'background-blend-mode': 'multiply'
@@ -116,3 +117,4 @@ angular.module('columbyApp')
   };
 
 });
+})();
