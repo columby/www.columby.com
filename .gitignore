@@ -10,3 +10,4 @@ server/config/local.env.js
 /html-angular-validate-report.json
 
 /client/assets/styles/css/app.css
+/bower_components/

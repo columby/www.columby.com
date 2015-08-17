@@ -1,16 +1,29 @@
+/**
+ *  Welcome to your gulpfile!
+ *  The gulp tasks are splitted in several files in the gulp directory
+ *  because putting all here was really too long
+ */
+
 'use strict';
 
 var gulp = require('gulp');
+var wrench = require('wrench');
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+/**
+ *  This will load all js or coffee files in the gulp directory
+ *  in order to load all gulp tasks
+ */
+wrench.readdirSyncRecursive('./gulp').filter(function(file) {
+  return (/\.(js|coffee)$/i).test(file);
+}).map(function(file) {
+  require('./gulp/' + file);
+});
 
-gulp.task('default',    ['serve']);
-gulp.task('serve',      ['watch'],  require('./tasks/serve').nodemon);
-gulp.task('watch',      ['inject'],   require('./tasks/watch'));
-gulp.task('inject',     ['less'],     require('./tasks/inject'));
-gulp.task('less',                     require('./tasks/less'));
-gulp.task('preview',    ['build'],    require('./tasks/preview'));
-gulp.task('build',                    require('./tasks/build'));
-gulp.task('bump',       ['version'],  require('./tasks/chore').bump);
-gulp.task('version',                  require('./tasks/chore').version);
-gulp.task('apidoc',                   require('./tasks/doc').apidoc);
+
+/**
+ *  Default task clean temporaries directories and launch the
+ *  main optimization build task
+ */
+gulp.task('default', ['clean'], function () {
+  gulp.start('build');
+});
