@@ -1,6 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-  .controller('AdminCtrl', function ($scope) {
+  angular
+    .module('columbyApp')
+    .controller('AdminCtrl', function ($scope) {
     $scope.message = 'Hello';
   });
+})();

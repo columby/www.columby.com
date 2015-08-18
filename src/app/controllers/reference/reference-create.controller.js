@@ -1,8 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-.controller('ReferenceCreateCtrl', function($log, $scope, $modalInstance, dataset, ReferenceSrv, EmbedlySrv, ngNotify) {
+  angular
+    .module('columbyApp')
+    .controller('ReferenceCreateCtrl', function($log, $scope, $modalInstance, dataset, ReferenceSrv, EmbedlySrv, ngNotify) {
 
   // Add received dataset from parent to this scope.
   $scope.dataset = dataset;
@@ -31,7 +32,7 @@ angular.module('columbyApp')
   // Helper to the steps of the wizard.
   $scope.nextStep = function(step){
     $scope.step=step;
-  }
+  };
 
 
   // Validate a given link through the embedly api.
@@ -78,7 +79,7 @@ angular.module('columbyApp')
       $scope.reference.selectedImage = 0;
     }
     $scope.reference.image = $scope.reference.result.images[ $scope.reference.selectedImage].url;
-  }
+  };
 
 
   // Save the reference.
@@ -92,8 +93,9 @@ angular.module('columbyApp')
       if (res.id) {
         $modalInstance.close(res);
       } else {
-        ngNotify.set('There was an error saving the reference. (' + response.msg + ')', 'error');
+        ngNotify.set('There was an error saving the reference. (' + res.msg + ')', 'error');
       }
     });
   };
 });
+})();

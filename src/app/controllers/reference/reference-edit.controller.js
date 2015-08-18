@@ -1,8 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-.controller('ReferenceEditCtrl', function($scope, $modalInstance, dataset, reference, ReferenceSrv, EmbedlySrv, ngNotify) {
+  angular
+    .module('columbyApp')
+    .controller('ReferenceEditCtrl', function($log, $scope, $modalInstance, dataset, reference, ReferenceSrv, EmbedlySrv, ngNotify) {
 
   // Add received dataset from parent to this scope.
   $scope.dataset = dataset;
@@ -23,9 +24,10 @@ angular.module('columbyApp')
       if (res.id) {
         $modalInstance.close(res);
       } else {
-        ngNotify.set('There was an error updating the reference. (' + response.msg + ')', 'error');
+        ngNotify.set('There was an error updating the reference. (' + res.msg + ')', 'error');
       }
     });
   };
 
 });
+})();

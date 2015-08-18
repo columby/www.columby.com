@@ -1,7 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-  .controller('AccountSelectorCtrl',
+  angular
+    .module('columbyApp')
+    .controller('AccountSelectorCtrl',
   function ($rootScope, $scope, $modalInstance, organisations) {
 
     $scope.organisations = organisations;
@@ -15,3 +17,4 @@ angular.module('columbyApp')
     };
   }
 );
+})();

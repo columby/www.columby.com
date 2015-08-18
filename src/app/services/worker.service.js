@@ -1,8 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-  .service('WorkerSrv', function($http, appConstants) {
+  angular
+    .module('columbyApp')
+    .service('WorkerSrv', function($log,$http, appConstants) {
 
     return {
 
@@ -26,3 +27,4 @@ angular.module('columbyApp')
 
     };
   });
+})();

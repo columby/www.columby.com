@@ -5,25 +5,25 @@
     .module('columbyApp')
     .service('AuthSrv', function($log,$rootScope, $http, $auth, appConstants, UserSrv) {
 
-    var permissionsList = [
-      // user permissions
-      'signin user',
-      'register user',
-      'verify user login',
-      'view user',
-      'edit user',
-      'delete user',
-      // organisation permissions
-      'create organisation',
-      'view organisation',
-      'edit organisation',
-      'delete organisation',
-      // dataset permissions
-      'create dataset',
-      'view dataset',
-      'edit dataset',
-      'delete dataset',
-    ];
+    // var permissionsList = [
+    //   // user permissions
+    //   'signin user',
+    //   'register user',
+    //   'verify user login',
+    //   'view user',
+    //   'edit user',
+    //   'delete user',
+    //   // organisation permissions
+    //   'create organisation',
+    //   'view organisation',
+    //   'edit organisation',
+    //   'delete organisation',
+    //   // dataset permissions
+    //   'create dataset',
+    //   'view dataset',
+    //   'edit dataset',
+    //   'delete dataset',
+    // ];
 
 
     function logout() {
@@ -122,13 +122,10 @@
           // User permissions
           case 'signin user':
             return !$auth.isAuthenticated();
-            break;
           case 'register user':
             return !$auth.isAuthenticated();
-            break;
           case 'verify user login':
             return !$auth.isAuthenticated();
-            break;
           case 'edit user':
             if (!$auth.isAuthenticated()) { return false; }
             if ($rootScope.user.primary.slug === params.slug) {
@@ -139,17 +136,14 @@
             break;
           case 'delete user':
             return false;
-            break;
 
 
           // Account permissions
           case 'create organisation':
             return false;
-            break;
           case 'view organisation':
           case 'view account':
             return true;
-            break;
           case 'edit organisation':
           case 'edit account':
             if (!$auth.isAuthenticated()) { return false; }
@@ -168,21 +162,17 @@
                   case 3:
                     $log.debug('yes!');
                     return true;
-                    break;
                 }
               }
             }
             return false;
-            break;
 
           case 'delete organisation':
             return false;
-            break;
 
           // Dataset permissions
           case 'create dataset':
             return $auth.isAuthenticated();
-            break;
           case 'edit dataset':
             // should be authenticated.
             if (!$auth.isAuthenticated()) { return false; }
@@ -200,19 +190,15 @@
                   case 1: case 2: case 3:
                     role = $rootScope.user.organisations[ i].UserAccounts.role;
                     return true;
-                    break;
                 }
               }
             }
             return false;
-            break;
           case 'view dataset':
             $log.debug('true');
             return true;
-            break;
           case 'delete dataset':
             return false;
-            break;
 
 
             /***

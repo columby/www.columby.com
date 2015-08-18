@@ -1,7 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-  .controller('SearchCtrl', function ($rootScope, $scope, SearchSrv) {
+  angular
+    .module('columbyApp')
+    .controller('SearchCtrl', function($log,$rootScope, $scope, SearchSrv) {
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
     $scope.contentLoading = true;
@@ -20,7 +22,7 @@ angular.module('columbyApp')
       tags:{
         currentPage: 1
       }
-    }
+    };
 
     /* ---------- SCOPE FUNCTIONS ------------------------------------------------------------------- */
     $scope.doSearch = function(){
@@ -51,7 +53,6 @@ angular.module('columbyApp')
     // get last search result if present
     //$scope.search.searchTerm = SearchSrv.queryTerm();
     //$scope.search.hits = SearchSrv.result();
-
     $log.debug('search', $scope.search);
-
   });
+})();

@@ -80,7 +80,7 @@
                   var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                   // $log.debug('progress: ' + progressPercentage + '% ' + evt.config.file.name);
                   $scope.progress=progressPercentage;
-              }).success(function (data, status, headers, config) {
+              }).success(function() {
                 $scope.progress=0;
                 // $log.debug('file ' + config.file.name + 'uploaded. Response: ' + data);
                 FileSrv.finishUpload({id: result.file.id}).then(function(){
@@ -90,7 +90,7 @@
                   ngNotify.set('Error: ' + error, 'error');
                   // $log.debug('error: ', error)
                 });
-              }).error(function (data, status, headers, config) {
+              }).error(function () {
                 // $log.debug(data, headers);
                 $scope.progress=0;
                 // $log.debug('error status: ' + status);

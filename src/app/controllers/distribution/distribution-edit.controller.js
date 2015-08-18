@@ -1,8 +1,10 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-  .controller('DistributionEditCtrl',
-  function ($scope, $modalInstance, distribution, DistributionSrv, ngNotify) {
+  angular
+    .module('columbyApp')
+    .controller('DistributionEditCtrl',
+  function ($log,$scope, $modalInstance, distribution, DistributionSrv, ngNotify) {
 
     var originalDistribution = distribution;
     $scope.distribution = distribution;
@@ -69,3 +71,4 @@ angular.module('columbyApp')
     };
   }
 );
+})();

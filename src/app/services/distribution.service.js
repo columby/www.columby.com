@@ -1,8 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-  .service('DistributionSrv', function($resource, appConstants) {
+  angular
+    .module('columbyApp')
+    .service('DistributionSrv', function($resource, appConstants) {
 
     return $resource(appConstants.apiRoot + '/v2/distribution/:id', {
         id: '@id'
@@ -16,5 +17,5 @@ angular.module('columbyApp')
         }
       }
     );
-  })
-;
+  });
+})();

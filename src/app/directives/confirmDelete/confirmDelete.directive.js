@@ -1,8 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-  .directive('confirmDelete', function($timeout) {
+  angular
+    .module('columbyApp')
+    .directive('confirmDelete', function($timeout) {
 
     return {
       replace: true,
@@ -50,3 +51,4 @@ angular.module('columbyApp')
       }
     };
   });
+})();

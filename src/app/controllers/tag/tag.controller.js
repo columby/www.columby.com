@@ -1,7 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-  .controller('TagCtrl', function ($scope, $stateParams, TagService) {
+  angular
+    .module('columbyApp')
+    .controller('TagCtrl', function ($log,$scope, $stateParams, TagService) {
 
     function getDatasets(){
       $log.debug($stateParams);
@@ -18,3 +20,4 @@ angular.module('columbyApp')
     getDatasets();
 
   });
+})();

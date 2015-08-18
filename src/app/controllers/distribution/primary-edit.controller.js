@@ -1,7 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-  .controller('PrimaryEditCtrl', function($scope, $modalInstance, primary){
+  angular
+    .module('columbyApp')
+    .controller('PrimaryEditCtrl', function($scope, $modalInstance, primary){
 
     $scope.primary = primary;
 
@@ -12,3 +14,4 @@ angular.module('columbyApp')
       $modalInstance.dismiss('cancel');
     };
   });
+})();

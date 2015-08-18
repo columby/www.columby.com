@@ -1,7 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-  .service('EmbedlySrv', function ($rootScope, $http, $q, appConstants) {
+  angular
+    .module('columbyApp')
+    .service('EmbedlySrv', function ($rootScope, $http, $q, appConstants) {
 
     var key = appConstants.embedlyKey;
 
@@ -52,3 +54,4 @@ angular.module('columbyApp')
       }
     };
   });
+})();

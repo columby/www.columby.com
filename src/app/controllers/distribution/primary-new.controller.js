@@ -1,9 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-  // Controller for a new primary source modal
-  .controller('PrimaryNewCtrl', function($scope, $modalInstance, distribution, primary, DistributionSrv, PrimaryService, WorkerSrv, ngNotify){
+  angular
+    .module('columbyApp')
+    .controller('PrimaryNewCtrl', function($log,$scope, $modalInstance, distribution, primary, DistributionSrv, PrimaryService, WorkerSrv, ngNotify){
 
     $scope.loading = true;
     $scope.distribution = distribution;
@@ -73,3 +73,4 @@ angular.module('columbyApp')
       $modalInstance.dismiss('cancel');
     };
   });
+})();

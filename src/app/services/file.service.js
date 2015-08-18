@@ -8,11 +8,12 @@
  *
  */
 
-'use strict';
+ (function() {
+   'use strict';
 
-angular.module('columbyApp')
-
-  .service('FileSrv', function ($log, $http, $q, appConstants) {
+   angular
+     .module('columbyApp')
+     .service('FileSrv', function ($log, $http, $q, appConstants) {
 
     return {
 
@@ -72,10 +73,11 @@ angular.module('columbyApp')
           validTypes = ['application/pdf'];
           return (validTypes.indexOf(filetype) !== -1);
         } else if (type === 'datafile'){
-          validTypes = ['text/csv']
+          validTypes = ['text/csv'];
           return (validTypes.indexOf(filetype) !== -1);
         }
         return false;
       }
     };
   });
+})();

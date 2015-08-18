@@ -1,8 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-.directive('focus', function($timeout) {
+  angular
+    .module('columbyApp')
+    .directive('focus', function($timeout) {
   return {
     scope : {
       trigger : '@focus'
@@ -17,3 +18,4 @@ angular.module('columbyApp')
     }
   };
 });
+})();

@@ -1,7 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-  .controller('DatasetDeleteCtrl',
+  angular
+    .module('columbyApp')
+    .controller('DatasetDeleteCtrl',
   function ($scope, $modalInstance, dataset, DatasetSrv) {
 
     // Handle confirm delete button click
@@ -14,5 +16,5 @@ angular.module('columbyApp')
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
-  }
-);
+  });
+})();

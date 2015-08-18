@@ -1,16 +1,12 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-/**
- *
- *  Controller for a dataset Edit options page
- *
- */
-.controller('DatasetTagsCtrl', function(dataset, $modalInstance, $rootScope, $scope, DatasetSrv, Slug) {
+  angular
+    .module('columbyApp')
+    .controller('DatasetTagsCtrl', function($log,dataset, $modalInstance, $rootScope, $scope, DatasetSrv, Slug) {
   $scope.dataset = dataset;
 
-  $scope.addTag = function(tag){
+  $scope.addTag = function(){
     DatasetSrv.addTag({
       id: $scope.dataset.id,
       tag: {text: $scope.newTag.text}
@@ -25,15 +21,15 @@ angular.module('columbyApp')
   };
 
 
-  function slugify(text) {
-    return text.toString().toLowerCase()
-      .replace(/\s+/g, '-')       // Replace spaces with -
-      .replace(/[^\w\-]+/g, '')   // Remove all non-word chars
-      .replace(/\-\-+/g, '-')     // Replace multiple - with single -
-      .replace(/^-+/, '')         // Trim - from start of text
-      .replace(/-+$/, '');        // Trim - from end of text
-                                  // Limit characters
-  }
+  // function slugify(text) {
+  //   return text.toString().toLowerCase()
+  //     .replace(/\s+/g, '-')       // Replace spaces with -
+  //     .replace(/[^\w\-]+/g, '')   // Remove all non-word chars
+  //     .replace(/\-\-+/g, '-')     // Replace multiple - with single -
+  //     .replace(/^-+/, '')         // Trim - from start of text
+  //     .replace(/-+$/, '');        // Trim - from end of text
+  //                                 // Limit characters
+  // }
 
   $scope.slugifyTag = function(){
 
@@ -60,3 +56,4 @@ angular.module('columbyApp')
 
 
 });
+})();

@@ -1,22 +1,24 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-  .config(function ($stateProvider) {
-    $stateProvider
+  angular
+    .module('columbyApp')
+    .config(function($stateProvider) {
+      $stateProvider
 
-    .state('status', {
-      url: '/status',
-      templateUrl: 'views/pages/status.html',
-      controller : 'StatusCtrl',
-      data: {
-        bodyClasses: 'page status'
-      }
-    })
+        .state('status', {
+        url: '/status',
+        templateUrl: 'views/pages/status.html',
+        controller: 'StatusCtrl',
+        data: {
+          bodyClasses: 'page status'
+        }
+      })
 
-    .state('terms', {
+      .state('terms', {
         url: '/terms',
         templateUrl: 'views/pages/terms.html',
-        controller : 'PagesCtrl',
+        controller: 'PagesCtrl',
         data: {
           bodyClasses: 'page terms'
         }
@@ -25,7 +27,7 @@ angular.module('columbyApp')
       .state('about', {
         url: '/about',
         templateUrl: 'views/pages/about.html',
-        controller : 'PagesCtrl',
+        controller: 'PagesCtrl',
         data: {
           bodyClasses: 'page about'
         }
@@ -34,7 +36,7 @@ angular.module('columbyApp')
       .state('roadmap', {
         url: '/roadmap',
         templateUrl: 'views/pages/roadmap.html',
-        controller : 'PagesCtrl',
+        controller: 'PagesCtrl',
         data: {
           bodyClasses: 'page roadmap'
         }
@@ -43,7 +45,7 @@ angular.module('columbyApp')
       .state('features', {
         url: '/features',
         templateUrl: 'views/pages/features.html',
-        controller : 'PagesCtrl',
+        controller: 'PagesCtrl',
         data: {
           bodyClasses: 'page features'
         }
@@ -52,9 +54,10 @@ angular.module('columbyApp')
       .state('columby-update', {
         url: '/columby-update',
         templateUrl: 'views/pages/columby-update.html',
-        controller : 'PagesCtrl',
+        controller: 'PagesCtrl',
         data: {
           bodyClasses: 'page single'
         }
       });
-  });
+    });
+})();

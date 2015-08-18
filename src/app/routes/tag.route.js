@@ -1,8 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-.config(function ($stateProvider) {
+  angular
+    .module('columbyApp')
+    .config(function ($stateProvider) {
 
   $stateProvider
 
@@ -20,3 +21,4 @@ angular.module('columbyApp')
       }
     });
 });
+})();

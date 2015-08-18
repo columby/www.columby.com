@@ -1,14 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-
-
-/***
- *
- * Signin controller for an existing user.
- *
- ***/
-.controller('SigninCtrl', function ($rootScope, $scope, $state, UserSrv, AuthSrv, ngNotify, $modal) {
+  angular
+    .module('columbyApp')
+    .controller('SigninCtrl', function ($log,$rootScope, $scope, $state, UserSrv, AuthSrv, ngNotify, $modal) {
 
   // Set page title
   $rootScope.title = 'Sign in | columby.com';
@@ -35,7 +30,7 @@ angular.module('columbyApp')
       service: provider,
       email: $scope.email,
       register: 'false'
-    }
+    };
 
     // Authenticate with the authentication service.
     AuthSrv.authenticate(provider).then(function(response){
@@ -74,10 +69,10 @@ angular.module('columbyApp')
       } else {
         ngNotify.set('Sorry, something went wrong... ' + JSON.stringify(response.err), 'error');
       }
-    })
+    });
   };
-
-})
+});
+})();
 
 
 /***
@@ -85,7 +80,12 @@ angular.module('columbyApp')
  * Check if user sent a verification token with page request.
  *
  ***/
-.controller('UserVerifyCtrl', function($rootScope, $scope,$location, $state, UserSrv, ngNotify){
+ (function() {
+   'use strict';
+
+   angular
+     .module('columbyApp')
+     .controller('UserVerifyCtrl', function($rootScope, $scope,$location, $state, UserSrv, ngNotify){
 
   var token = $location.search().token;
 
@@ -99,7 +99,8 @@ angular.module('columbyApp')
       $state.go('home');
     }
   });
-})
+});
+})();
 
 
 /***
@@ -107,7 +108,12 @@ angular.module('columbyApp')
  * Register controller for a new user.
  *
  ***/
-.controller('RegisterCtrl', function ($window, $scope, $rootScope, $location, $http, $state, AccountSrv, UserSrv, ngNotify, Slug, AuthSrv,$modal) {
+ (function() {
+   'use strict';
+
+   angular
+     .module('columbyApp')
+     .controller('RegisterCtrl', function($log,$window, $scope, $rootScope, $location, $http, $state, AccountSrv, UserSrv, ngNotify, Slug, AuthSrv,$modal) {
 
   $rootScope.title = 'Register | columby.com';
 
@@ -132,7 +138,7 @@ angular.module('columbyApp')
       email: $scope.newuser.email,
       displayName: $scope.newuser.name,
       register: 'true'
-    }
+    };
 
     $log.debug('p', provider);
 
@@ -159,10 +165,15 @@ angular.module('columbyApp')
       $scope.newuser.name = n;
     }
   };
-})
+});
+})();
 
+(function() {
+  'use strict';
 
-.controller('UserViewCtrl', function($window, $rootScope, $scope, $stateParams, AuthSrv, UserSrv, AccountSrv, ngNotify) {
+  angular
+    .module('columbyApp')
+    .controller('UserViewCtrl', function($log,$window, $rootScope, $scope, $stateParams, AuthSrv, UserSrv, AccountSrv) {
   $log.debug('User view controller');
 
   $scope.contentLoading  = true;
@@ -192,7 +203,8 @@ angular.module('columbyApp')
   }
 
   fetchAccount();
-})
+});
+})();
 
 
 /***
@@ -200,7 +212,12 @@ angular.module('columbyApp')
  * Edit a user account
  *
  ***/
-.controller('UserEditCtrl', function (user, $scope, $rootScope, $location, $state, $stateParams, UserSrv, AccountSrv, ngNotify, Slug, $modal) {
+ (function() {
+   'use strict';
+
+   angular
+     .module('columbyApp')
+     .controller('UserEditCtrl', function($log,user, $scope, $rootScope, $location, $state, $stateParams, UserSrv, AccountSrv, ngNotify, Slug, $modal) {
 
   $log.debug('User edit controller',user);
 
@@ -239,7 +256,7 @@ angular.module('columbyApp')
   // Change the active panel when a user clicks on a menu-link
   $scope.changePanel = function(panel) {
     $scope.activePanel = panel;
-  }
+  };
 
   // Logout the current user
   $scope.logout = function() {
@@ -275,7 +292,8 @@ angular.module('columbyApp')
       select: true,
       action: 'updateAvatar'
     });
-  }
+  };
+
   $scope.$on('fileManagerSelected', function(event,data){
     $log.debug(event);
     $log.debug(data);
@@ -290,7 +308,7 @@ angular.module('columbyApp')
   // Update a slug input
   $scope.slugify = function() {
     $scope.user.primary.slug = Slug.slugify($scope.user.primary.slug);
-  }
+  };
 
   // Update a slug at the server.
   $scope.updateSlug = function() {
@@ -306,6 +324,6 @@ angular.module('columbyApp')
         $scope.user.primary.slug = $scope.originalUser.primary.slug;
       }
     });
-  }
-
+  };
 });
+})();

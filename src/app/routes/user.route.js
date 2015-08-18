@@ -1,7 +1,9 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('columbyApp')
-  .config(function ($stateProvider) {
+  angular
+    .module('columbyApp')
+    .config(function ($stateProvider) {
     $stateProvider
 
       .state('user', {
@@ -54,6 +56,6 @@ angular.module('columbyApp')
           bodyClasses: 'page user edit',
           permission: 'edit user'
         }
-      })
-
+      });
   });
+})();
