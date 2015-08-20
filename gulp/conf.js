@@ -8,7 +8,8 @@
 
 var gutil = require('gulp-util');
 
-exports.appName = 'columbyApp';
+exports.settings = require('./settings.json');
+
 /**
  *  The main paths of your project handle these with care
  */
