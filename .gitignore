@@ -11,3 +11,4 @@ server/config/local.env.js
 
 /client/assets/styles/css/app.css
 /bower_components/
+/npm-debug.log

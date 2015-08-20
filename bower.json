@@ -10,7 +10,6 @@
     "angular-bootstrap": "~0.13.0",
     "angular-ui-router": "~0.2.15",
     "angular-jwt": "~0.0.9",
-    "angular-easy-social-share": "*",
     "es5-shim": "~4.1.10",
     "font-awesome": ">=4.4.0",
     "json3": "~3.3.2",
@@ -19,12 +18,13 @@
     "ng-tags-input": "~3.0.0",
     "ng-file-upload-shim": "~5.0.9",
     "ng-notify": "~0.5.3",
-    "ng-file-upload": "~6.2.1",
+    "ng-file-upload": "~7.0.6",
     "textAngular": "~1.4.3",
     "xml2json": "~1.1.1",
-    "satellizer": "~0.12.1",
+    "satellizer": "~0.12.2",
     "bootstrap": "~3.3.5",
-    "angular-slugify": "~1.0.1"
+    "angular-slugify": "~1.0.1",
+    "angular-easy-social-share": "*"
   },
   "devDependencies": {
     "angular-mocks": ">=1.4.*",
