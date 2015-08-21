@@ -33,7 +33,7 @@
             <tr><td><a href="#" ng-click="changePanel('account')" ng-class="{ active: activePanel==='account'}">Account settings</a></td></tr>
             <!-- <tr><td><a href="#" ng-click="changePanel('billing')" ng-class="{ active: activePanel==='billing'}">Billing</a></td></tr> -->
             <tr><td><a href="#" ng-click="changePanel('organisations')" ng-class="{ active: activePanel==='organisations'}">Organisations</a></td></tr>
-            <tr><td><a href="#" ng-click="changePanel('support')" ng-class="{ active: activePanel==='support'}">Support</a></td></tr>
+            <!-- <tr><td><a href="#" ng-click="changePanel('support')" ng-class="{ active: activePanel==='support'}">Support</a></td></tr> -->
             <tr><td><a ui-sref="account.view({slug: user.primary.slug})">View profile</a></td></tr>
           </table>
         </div>
@@ -117,7 +117,7 @@
               </div>
             </div>
 
-            <div class="panel panel-default">
+            <!-- <div class="panel panel-default">
               <div class="panel-heading">
                 Account url
               </div>
@@ -130,7 +130,7 @@
                   <button class="btn btn-default" ng-disabled="accountForm.$pristine || accountForm.$invalid || updatingSlug" ng-click="updateSlug()"><span class="btn-text" ng-hide="updatingSlug">Change url</span><span class="loader"><i class="fa fa-spinner fa-spin" ng-show="updatingSlug"></i></span></button>
                 </form>
               </div>
-            </div>
+            </div> -->
 
             <!-- <div class="panel panel-danger">
               <div class="panel-heading">
@@ -173,7 +173,7 @@
             </div>
           </div>
 
-          <div class="support-panels" ng-switch-when="support">
+          <!-- <div class="support-panels" ng-switch-when="support">
             <div class="panel panel-default">
               <div class="panel-heading">
                 Support
@@ -182,7 +182,7 @@
                 <p>Some support information</p>
               </div>
             </div>
-          </div>
+          </div> -->
 
         </div>
       </div>

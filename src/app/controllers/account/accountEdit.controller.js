@@ -6,7 +6,7 @@
 
     .controller('AccountEditCtrl', function(account, $rootScope, $scope, $state, $stateParams, AccountSrv, ngNotify, Upload, FileSrv, RegistrySrv,appConstants) {
 
-      $scope.activePanel = 'registries';
+      $scope.activePanel = 'profile';
 
       //
       if (!account.id){

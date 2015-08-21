@@ -15,15 +15,16 @@ angular.element(document).ready(function() {
 
   if (token) {
     $http({
-      method: 'GET',
-      url: 'https://columby.nl/api/user/me',
+      method: 'POST',
+      url: 'https://api.columby.com/v2/user/me',
+      //url: 'https://columby.nl/api/user/me',
       headers: { 'Authorization': 'Bearer ' + token }
     }).success(function(data) {
       // If response has no user object, delete the local token.
-      if (!data.user.id) {
-        localStorage.removeItem('columby_token');
-      } else {
+      if (data.id) {
         window.user = data.user;
+      } else {
+        localStorage.removeItem('columby_token');
       }
       // start the app
       angular.bootstrap(document, ['columbyApp']);

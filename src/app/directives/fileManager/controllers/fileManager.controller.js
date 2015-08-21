@@ -17,7 +17,7 @@
           $log.debug('options', options);
           // Open modal
           $scope.modalInstance = $modal.open({
-            templateUrl: 'views/directives/fileManager/views/fileManager.html',
+            templateUrl: 'views/directives/fileManager/fileManager.html',
             controller: 'FileManagerModalCtrl',
             size: 'lg',
             windowClass: 'filebrowser-modal',

@@ -6,7 +6,8 @@
     .constant('appConstants', {
       appTitle: 'Columby',
       debug: true,
-      apiRoot: 'https://dev-api.columby.com',
-      filesRoot: 'https://dev-files.columby.com'
+      apiRoot: 'https://api.columby.com',
+      //apiRoot: 'http://localhost:8000',
+      filesRoot: 'https://files.columby.com'
     });
 })();
