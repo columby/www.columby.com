@@ -1,0 +1,78 @@
+<div class="page register">
+
+  <!-- Signin content -->
+  <div class="content">
+
+    <div class="header wrapper">
+      <div class="container">
+        <div>
+          <h1 class="title">Join Columby</h1>
+          <!-- <h2 class="page-subtitle">Register your account here</h2> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="col-md-12">
+        <h2>Register your account</h2>
+        <p>Register your new account! </p>
+
+        <div class="oauth-register">
+          <div class="google-register">
+            <a class="btn btn-default btn-google" ng-click="register('google')"><i class="fa fa-google"></i> | Register with your Google account</a>
+          </div>
+        </div>
+
+        <div class="separator">
+          <hr>
+          <p>Or register with your email using a login-link:</p>
+          <hr>
+        </div>
+
+        <div class="email-register">
+          <form class="form-horizontal" role="form" name="registerForm" ng-submit="register('email')">
+            <div class="form-group">
+              <div class="col-sm-4">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" ng-model="newuser.email" required>
+              </div>
+              <div class="col-sm-4">
+                <input
+                  type="text" class="form-control" id="name" name="name" placeholder="Name" data-ng-minlength="3" data-ng-maxlength="20" data-ng-model="newuser.name" data-ng-change="slugifyName()" required>
+              </div>
+              <div class="col-sm-4">
+                <button type="submit" class="btn btn-default btn-black"
+                  data-ng-disabled="registerForm.$pristing || registerForm.name.$invalid || registerForm.email.$invalid || registerForm.$invalid">Register</button>
+                <span ng-show="registrationInProgress"><i class="fa fa-spinner fa-spin"></i></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-8">
+                <p>I accept the <a ui-sref="terms" target="_blank">terms</a>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-12">
+                <p><a ui-sref="signin">Already have an account? Sign in</a>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-8">
+                <div ng-show="registerForm.$invalid && !registerForm.$pristine" class="alert alert-warning" role="alert">
+                  <span ng-show="registerForm.email.$invalid">Please enter a valid email.</span>
+                  <span ng-show="registerForm.name.$invalid">Your username should between 3 and 20 characters.</span>
+                </div>
+              </div>
+            </div>
+          </form>
+
+        <!-- passwordless explanation -->
+        <!-- <div class="col-md-12"> -->
+          <!-- <h2>Wait whuuut, no password?</h2>
+          <p>'12345', 'password', ... Inventing great passwords is hard. So many users still don't do it. Worse: the same passwords are repeated across several websites, so if one of the sites is broken all of the user's accounts are broken simultaneously.</p>
+          <p>Columby has chosen for passwordless login. We email you "one-time passwords" for everytime you would like to sign in.</p> -->
+        <!-- </div> -->
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,109 @@
+
+<div class="modal-header row">
+  <div class="col-md-10">
+    <h4 class="modal-title">Dataset options</h4>
+  </div>
+  <div class="col-md-2 pull-right">
+    <a class="close" href ng-click="$dismiss()"><span class="fa fa-close"></span></a>
+  </div>
+</div>
+
+<div class="modal-body row">
+  <div class="col-md-12">
+
+    <div class="visibility setting">
+      <h3>Visibility <span class="pull-right">
+        <a class="btn btn-xs btn-tooltip pull-right"
+        popover="Change visibility settings for your dataset."
+        popover-trigger="mouseenter"
+        popover-placement="left"><i class="fa fa-question"></i></a>
+      </span></h3>
+
+      <div class="btn-group btn-toggle">
+            <button class="btn btn-lg btn-default btn-private"
+              ng-click="toggleDatasetPrivacy()"
+              ng-model="dataset.private"
+              ng-disabled="dataset.private">Private</button>
+            <button class="btn btn-lg btn-success"
+              ng-click="toggleDatasetPrivacy()"
+              ng-model="dataset.private"
+              ng-disabled="!dataset.private">Public</button>
+            </div>
+        </div>
+
+      <!-- <div class="slug">
+        <h3>Custom URL <span class="pull-right">
+          <button
+            class="btn btn-default btn-xs btn-tooltip"
+            popover="Create a custom URL for this dataset that is more memorable than a random string of characters. Many people create a URL that matches the dataset title."
+            popover-trigger="mouseenter"
+            popover-placement="left"><i class="fa fa-question"></i>
+          </button></span>
+        </h3>
+        <span>https://columby.com/d/{{dataset.slug | slugify}}</span>
+
+
+        <form class="form-horizontal novalidate" role="form" name="slugForm">
+          <div class="form-group">
+            <input class="form-control input-slug"
+              name="slug"
+              ng-model="dataset.slug"
+              ng-minlength="3"
+              ng-maxlength="30"/>
+            <span class="error" ng-show="slugForm.slug.$error.maxlength">Too long!</span>
+            <span class="error" ng-show="slugForm.slug.$error.minlength">Too short!</span>
+            <button
+              class="btn btn-xs btn-default"
+              ng-click="updateSlug()"
+              ng-show="slugForm.$valid">update url</button>
+          </div>
+        </form>
+      </div> -->
+
+      <div class="registries">
+        <h3>Connected registries</h3>
+        <p ng-hide="account.registries.length>0" class="advisory-notice">There are no validated registries connected to this publication account</p>
+        <p ng-hide="dataset.registries.length>0" class="advisory-notice">There are no registries connected to this dataset</p>
+        <a ui-href="account.edit({slug: dataset.account.slug})">Manage settings at the organisation settings page</a>
+
+        <table class="table table-hover">
+          <thead>
+            <td></td>
+            <td>Registry title</td>
+            <td>Registry status</td>
+            <td>Active</td>
+          </thead>
+          <tr ng-repeat="registry in dataset.registries">
+            <td><img ng-src="{{registry.icon}}" style="width:40px;"/></td>
+            <td>{{registry.title}}</td>
+            <td>{{registry.account_registries.active}}</td>
+            <td>{{registry.dataset_registries.status || false}}</td>
+            <td><a href ng-click="toggleDatasetRegistry($index, registry)">toggle</a></td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="background">
+        <h3>Background image
+          <button
+            class="btn btn-default right btn-xs btn-tooltip"
+            data-popover="Upload a background image for your dataset"
+            data-popover-trigger="mouseenter"
+            data-popover-placement="left"><i class="fa fa-question"></i>
+          </button>
+        </h3>
+        <div>
+          <button
+            class="btn btn-xs btn-default upload-button"
+            ng-file-select
+            ng-file-change="startUpload($files,'image','header')">upload your image</button>
+        </div>
+      </div>
+
+      <div class="delete">
+        <hr>
+        <button type="button" class="btn btn-danger btn-xs" ng-click="delete()"><i class="fa fa-trash-o"></i> Delete dataset</button>
+      </div>
+    </div>
+  </div>
+</div>

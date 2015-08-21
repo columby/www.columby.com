@@ -1,0 +1,152 @@
+<section class="page page-home">
+
+  <!-- <div class="actions-bar"
+    scroll-position="scroll"
+    ng-class="{top: scroll<562}">
+  </div> -->
+
+  <div class="page-header">
+    <div class="container">
+      <div class="col-md-12">
+        <img src="/assets/img/logo.png" class="logo img-responsive" />
+        <h2 class="page-subtitle" translate>publish and discover data</h2>
+        <button type="button" class="big-button" ng-show="$root.user.id"  ui-sref="dataset.create" translate>Publish new dataset</button>
+        <button type="button" class="big-button" ng-hide="$root.user.id"  ui-sref='user.signin' translate>Login or Signup</button>
+        <p>or</p>
+        <a ui-sref="about" translate>Read about Columby</a>
+        <!-- <a href="#more"><div class="arrow animated bounce"></div></a> -->
+      </div>
+    </div>
+		<div class="container search-bar">
+      <div class="searchbox">
+        <form >
+          <div class="col-md-offset-3 col-md-5">
+            <input id="search-datasets"
+                  class="input-large"
+                  type="text"
+                  ng-model="search.searchTerm"
+                  placeholder="{{'Looking for data and publishers?' | translate}}" />
+          </div>
+          <div class="col-md-1">
+            <button class="btn btn-primary btn-search" type="submit" ng-click="doSearch()" translate>Search!</button>
+          </div>
+        </form>
+      </div>
+
+			<div class="col-md-3">
+				<div class="search-message">{{search.message}}</div>
+			</div>
+		</div>
+  </div>
+
+  <!-- <div class="news-flash">
+    <div class="container">
+      <div class="col-md-12">
+        <h2 class="news-flash-title">Welcome to the new Columby! <a ui-sref="columby-update">Read more about our major update</a>.</h2>
+      </div>
+    </div>
+  </div> -->
+  <a id="more"></a>
+  <div class="showcase-presentation" ng-hide="$root.user.id">
+
+			<div class="container-fluid about-facts-columby">
+				<div class="about-columby col-xs-12 col-sm-6">
+          <h3>About Columby</h3>
+          <p>Columby helps you create an online page per dataset with all relevant information in one clear overview which you can use as a unique source in all your communications. We process your data and make them available for downloading, embedded previews or distribution via our API.</p>
+					<button type="button" class="" ng-hide="$root.user.id"  ui-sref='signin'>Login or Signup</button>
+        </div>
+        <div class="facts-columby col-xs-12 col-sm-6 col-md-6 col-lg-6">
+					<ul>
+						<li><i class="fa fa-check"></i>Create <a ui-sref="about">dataset pages</a></li>
+						<li><i class="fa fa-check"></i><a ui-sref="about">Upload or sync</a> your data</li>
+						<li><i class="fa fa-check"></i>Add <a ui-sref="about">references</a></li>
+						<li><i class="fa fa-check"></i>Distribute your data with our <a ui-sref="about">API</a></li>
+						<li><i class="fa fa-check"></i>Create <a ui-sref="about">collections</a></li>
+						<li><i class="fa fa-check"></i>Manage your account with <a ui-sref="about">colleagues</a></li>
+						<li><i class="fa fa-check"></i>Register for <a ui-sref="about">free</a></li>
+					</ul>
+        </div>
+      </div>
+
+
+      <div class="container-fluid slide">
+        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
+          <h3>Publish your data in a beautiful way.</h3>
+          <p>You carefully gather your data. We help you to present it in it's best way. Attach beautiful pictures, describe your dataset and add some references.</p>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <img src="/assets/img/showcase-presentation.png" class="img-responsive pull-right"/>
+        </div>
+      </div>
+
+        <div class="container-fluid slide">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <img src="/assets/img/showcase-presentation-embed.png" class="img-responsive pull-left"/>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
+          <h3>Embed your data with ease.</h3>
+          <p>Distributing your data has become easy. Use our API to integrate your data in your apps or embed datasets on your website.</p>
+        </div>
+      </div>
+
+
+  </div>
+
+  <div class="page-content">
+    <div class="container">
+
+      <!-- <div class="searchbox col-md-offset-1 col-md-10">
+        <label for="search-datasets" class="sr-only">Search datasets</label>
+        <input id="search-datasets" class="input-large"
+          type="text"
+          ng-model="search.searchTerm"
+          placeholder="Search datasets"
+          ng-change="doSearch()"
+          ng-model-options="{debounce: 250}">
+        <div class="search-message">{{search.message}}</div>
+      </div> -->
+
+      <!-- Search result -->
+      <!-- <div class="col-md-offset-1 col-md-10 results recent-publications">
+        <h3 ng-show="search.hits">Search results</h3>
+        <div class="result publication-listing">
+          <div class="no-result" ng-show="search.hits.length === 0">
+            No Result
+          </div>
+					<ul>
+            <li ng-repeat="result in search.hits" class="publication-item">
+              <h4><a ui-sref="dataset({id: result.shortid})">{{result.title}}</a><em>{{result._source.publishStatus}}</em></h4>
+              <span>{{result.contentType}}</span>
+              <div class="user-date"><time class="post-date">{{result._source.created_at | date:'d MMMM yyyy'}}</time></div>
+            </li>
+        	</ul>
+        </div>
+      </div> -->
+
+
+      <div class="col-md-offset-1 col-md-10 publications">
+        <h3 translate>Recently published</h3>
+        <div class="publication-listing">
+					<ul>
+            <li ng-repeat="dataset in datasets.rows" class="publication-item">
+              <h4><a ui-sref="dataset.view({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
+              <div class="user-date">
+                <!-- <img ng-src="dataset.account.avatar.img" class="img-rounded"/> -->
+                <img class="img-circle avatar-small" ng-src="{{dataset.account.avatar.url || 'assets/img/avatar.png'}}" alt="{{dataset.account.name}}"/>
+                <a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.displayName || '[Oops! No publisher found]'}}</a> on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
+              </div>
+            </li>
+        	</ul>
+				</div>
+        <!-- <nav>
+          <ul class="pager">
+            <li><a href="#">Previous</a></li>
+            <li><a href="#">Next</a></li>
+          </ul>
+        </nav> -->
+      </div>
+
+
+    </div>
+  </div>
+</section>

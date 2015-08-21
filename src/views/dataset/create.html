@@ -1,0 +1,66 @@
+<div class="page-header header wrapper" ng-style="headerStyle">
+  <div class="container">
+  	<div class="col-md-12">
+      <!-- Dataset title -->
+      <textarea
+        class = "title edit"
+        auto-grow
+        name = "title"
+        placeholder = "Your title"
+        data-ng-model = "dataset.title"
+        ng-blur = "update()"
+        focus = "true"
+        >
+      </textarea>
+
+      <!-- Meta -->
+      <div class="meta">
+				<p>A dataset by {{dataset.account.displayName || 'Not set'}} <a href="#" ng-click="showAccountSelector()"><i class="fa fa-edit"></i> Change</a></p>
+      </div>
+
+      <div class="avatar img-rounded">
+        <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" />
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <!-- Dataset Description -->
+    <div class="description wrapper">
+      <!-- Editable description -->
+      <div class="container">
+        <div class="col-md-12">
+          <h3>Description
+            <button
+              class="right btn-tooltip"
+              data-popover="Add a nice description to your dataset. If your audience may contact you, write down how."
+              data-popover-trigger="mouseenter"
+              data-popover-placement="left"><i class="fa fa-question"></i>
+            </button>
+          </h3>
+          <div
+            placeholder="Add a nice description to your dataset. If your audience may contact you, write down how."
+            data-ng-model        = "dataset.description"
+            text-angular
+            data-ta-default-wrap = "p"
+            data-ng-blur         = "update()",
+            data-ta-toolbar      = "[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="c wrapper">
+			<div class="container">
+				<div class="col-md-12">
+		      <p data-ng-hide  = "dataset.title" class="advisory-notice">Please add a title first.</p>
+		      <button
+		        class    = "default-button lightblue filled"
+            ng-hide  = "dataset.id || !dataset.title"
+            ng-click = "create()">Save draft &amp; proceed to add data
+		      </button>
+					<p data-ng-hide  = "dataset.id || !dataset.title" class="advisory-notice">Don't worry, you can still change your title and description.</p>
+				</div>
+			</div>
+		</div>

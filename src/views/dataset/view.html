@@ -1,0 +1,279 @@
+<div class="page-loading" ng-hide="dataset.id"><i class="fa fa-spinner fa-spin"></i> Loading dataset</div>
+
+  <div class="content" ng-show="dataset.id">
+    <div class="header wrapper" ng-style="headerStyle">
+      <div class="container">
+  			<div class="col-md-12">
+
+          <!-- Editable title -->
+          <h1 class="title" ng-bind-html="dataset.title || 'No title yet'"></h1>
+           <div><a ui-sref="dataset.edit({id: dataset.shortid})" ng-show="dataset.canEdit" class="icon-edit-link"><i class="fa fa-pencil"></i> Edit</a></div>
+
+          <!-- Meta -->
+          <div class="meta">
+						<span ng-show="dataset.private" class="label label-warning">private</span>
+            <p>A dataset by
+              <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.displayName || 'noname'}}</a></span>,
+              <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span>
+            </p>
+            <p ng-show="dataset.tags.length>0">
+              <span class="tag" ng-repeat="tag in dataset.tags">
+                <a ui-sref="tag.view({slug: tag.slug })"><i class="fa fa-tag"></i>{{tag.text}}</a>
+              </span>
+            </p>
+
+          </div>
+
+          <div class="avatar">
+            <a ui-sref="account.view({slug:dataset.account.slug})">
+              <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" alt="{{dataset.account.displayName}}"/>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dataset Description -->
+    <div class="description wrapper">
+      <div class="container">
+        <div class="col-md-12">
+          <div class="description"
+            ng-bind-html="dataset.description || '<p>The publisher of this dataset has not yet provided a description yet.</p>'">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dataset Info -->
+    <!-- <div class="info wrapper" ng-hide="true">
+      <div class="container">
+        <div class="col-md-12">
+          <div class="content" ng-bind-html="summary"></div>
+          <div class="content"><p>Dit is een voorbeeld van een data licentie regel die automatisch gegenereerd zal worden. Deze dataset heeft <span class="highlight">Licentie X.3.0</span>. De dataset bevat <span class="highlight">3</span> data distributions met in totaal <span class="highlight">351</span> rijen. Er zijn <span class="highlight">2</span> referenties.</p>
+            <h3>Columby score<button class="right btn-xs btn-tooltip" popover="The Columby Score meter gauges how specified your publication is. The strength will increase as you fill in the details and add more content." popover-trigger="mouseenter" popover-placement="left" class="btn btn-default">?</button></h3><progressbar class="progress-striped active" max="100" value="55"><i>55%</i></progressbar>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Dataset Sources -->
+    <div class="distributions wrapper">
+      <div class="container">
+        <div class="col-md-12">
+
+          <h3>Sources</h3>
+
+          <!-- Primary source (Columby API) -->
+          <!-- <h2 class="datasource-title">Primary source</h2> -->
+          <ul ng-show="dataset.primary.id">
+            <li class="dataset-primary">
+
+							<!-- START PRIMARY SOURCE -->
+              <div>
+								<div class="row">
+									<div class="col-md-8">
+
+										<h4 class="datasource-title">Primary source</h4>
+
+										<ul class="properties">
+											<li>
+												<label>Issued</label>{{dataset.primary.created_at | date:'d MMMM yyyy'}}
+											</li>
+											<li ng-show="dataset.primary.created_at !== dataset.primary.updated_at">
+												<label>Modified</label>{{dataset.primary.updated_at | date:'d MMMM yyyy'}}
+											</li>
+											<li ng-show="dataset.primary.jobStatus">
+												<label>Jobstatus</label>{{dataset.primary.jobStatus}}
+											</li>
+											<li ng-show="dataset.primary.syncDate">
+												<label>Last synchronisation</label>{{dataset.primary.syncDate | date:'d MMMM yyyy - H:mm'}}
+											</li>
+										</ul>
+                		<p ng-show="dataset.primary.jobStatus==='error'">There was an error processing this dataset. The data is currently unavailable.</p>
+
+									</div>
+
+									<div class="col-md-4">
+
+		                <div class="download datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
+                      <a href="{{filesRoot}}{{dataset.primary.file.url}}"><button class="lightblue filled"><i class="fa fa-download"></i>Download source</button></a>
+		                </div>
+
+		                <!-- <div class="link datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
+		                  <a href="{{dataset.primary.accessUrl}}" target="_blank"><button class="lightblue filled"><i class="fa fa-external-link"></i>Go to Source</button></a>
+		                </div> -->
+
+										<div class="link datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
+											<a ng-href="{{apiLink}}"><button class="lightblue filled disabled last"><i class="fa fa-link"></i>Use Columby API</button></a>
+										</div>
+
+									</div>
+								</div>
+              </div>
+							<!-- END PRIMARY SOURCE -->
+
+            </li>
+						<hr/>
+          </ul>
+
+          <ul ng-hide="!dataset.distributions || dataset.distributions.length===0">
+            <li ng-repeat="distribution in dataset.distributions" class="dataset-source">
+
+							<!-- START SOURCE -->
+							<div class="row">
+								<div class="col-md-8">
+
+		              <h4 class="datasource-title">{{distribution.title}}</h4>
+
+		              <span ng-show="distribution.private" class="label label-warning">private</span>
+		              <ul class="properties">
+
+		                <li ng-show="distribution.type"><label>Type</label>{{distribution.type}}</li>
+		                <li ng-show="distribution.license"><label>License</label>{{distribution.license}}</li>
+		                <li ng-show="distribution.mediaType"><label>Media type</label>{{distribution.type}}</li>
+		                <li ng-show="distribution.fileSize"><label>File size</label>{{distribution.size}}</li>
+		                <li ng-show="distribution.issueDate"><label>Issued</label>{{distribution.issueDate}}</li>
+		                <li ng-show="distribution.modifiedDate"><label>Modified</label>{{distribution.modifiedDate}}</li>
+		                <li><label>Issued</label>{{distribution.created_at | date:'d MMMM yyyy'}}</li>
+		                <li ng-show="distribution.created_at !== distribution.updated_at"><label>Modified</label>{{distribution.updated_at | date:'d MMMM yyyy'}}</li>
+		                <li ng-show="distribution.syncPeriod"><label>Sync</label>{{distribution.syncPeriod}}</li>
+		                <li ng-show="distribution.lastSync"><label>Last sync</label>{{distribution.lastSync}}</li>
+		              </ul>
+
+								</div>
+								<div class="col-md-4">
+
+		              <div class="download datasource-icon" ng-show="distribution.downloadUrl">
+		                <a href="{{distribution.downloadUrl}}"><button class="lightblue filled"><i class="fa fa-download"></i>Download source</button></a>
+		              </div>
+		              <div class="link datasource-icon" ng-show="distribution.accessUrl">
+		                <a href="{{distribution.accessUrl}}" target="_blank"><button class="lightblue filled"><i class="fa fa-external-link"></i>Go to Source</button></a>
+		              </div>
+
+								</div>
+							</div>
+							<!-- END SOURCE -->
+
+  					</li>
+          </ul>
+          <div class="highlight" ng-show="dataset.distributions && !dataset.primary.id">
+						<h2>No sources added yet</h2>
+					</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dataset Preview -->
+    <div class="preview wrapper">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <td ng-repeat="header in datapreview.header">{{header.name}}</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in datapreview.data.rows">
+              <td ng-repeat="field in datapreview.header">{{row[field.name]}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Dataset Use -->
+    <div class="use wrapper">
+      <div class="container">
+        <div class="col-md-12">
+
+          <div class="content" ng-show="dataset.primary.id">
+            <h3>Use this dataset</h3>
+            <p>Great! This dataset has a Primary Source. You can read the data trough the Columby API. </p>
+						<p>The API url for this Primary Source is http://api.columby.com/v2/data/{{dataset.primary.shortid}}</p>
+          </div>
+
+          <div class="content" ng-show="!dataset.primary.id">
+            <h3>Use this dataset</h3>
+            <p>Sorry, this dataset hasn't got a Primary Source. Without this, we can't create an API for this dataset.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Dataset UUID -->
+    <!-- <div class="uuid wrapper" ng-show="dataset._id && !editMode">
+      <div class="container">
+        <div class="col-md-12">
+
+          <div class="content uuid">
+            <h4>UUID: {{dataset._id}}</h4>
+          </div>
+
+        </div>
+      </div>
+    </div> -->
+
+    <!-- Dataset references -->
+    <div class="references wrapper">
+      <div class="container">
+        <div class="heading col-md-12">
+          <div class="content" ng-show="dataset.references.length>0">
+            <h3>References</h3>
+            <h2 class="highlight" ng-show="!dataset.references || dataset.references.length===0">No references added yet</h2>
+  					</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
+						<div class="reference">
+							<img src="images/reference-spaceholder.png" class="placeholder">
+							<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
+								<div class="reference-top"></div>
+							  <h3 class="reference-title"><a href="{{reference.url}}" target="_blank">{{reference.title}}</a></h3>
+							  <p class="small reference-source"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
+							</div>
+						</div>
+						<div class="small reference-text">{{reference.description}}</div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Embed Dataset -->
+    <div class="embed wrapper">
+      <div class="container">
+        <div class="col-md-12 content">
+					<h3>Embed this dataset</h3>
+          <div class="link datasource-icon">
+            <a href="#" ng-click="showEmbedModal()" class="fa fa-code"></a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Share Dataset -->
+    <div class="share wrapper">
+      <div class="container">
+        <div class="col-md-12 content">
+					<h3>Share this dataset</h3>
+          <div data-share-square="false" data-share-links="Facebook, Twitter, LinkedIn, Google-Plus"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dataset Account -->
+    <div class="account wrapper">
+      <div class="container">
+        <div class="col-md-12">
+          <div class="content">
+            <h3>About {{dataset.account.displayName}}</h3>
+            <div ng-bind-html="dataset.account.description" class="description"></div>
+  					<p class="more-about"><a ui-sref="account.view({slug: dataset.account.slug})">More about {{dataset.account.displayName}}</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

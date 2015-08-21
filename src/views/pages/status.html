@@ -1,0 +1,41 @@
+<div class="page-header wrapper">
+  <div class="container">
+    <div class="col-md-12">
+      <h1 class="title">Status</h1>
+      <h2 class="page-subtitle">Status of columby processes</h2>
+    </div>
+  </div>
+</div>
+
+<div class="page-content wrapper">
+  <div class="container">
+
+    <div class="col-md-12">
+      <input type="text" ng-model="ckan.action"></imput>
+      <button class="btn btn-default" ng-click="ckanQuery()">Check CKAN</button>
+      <pre>{{ckan.result}}</pre>
+      <pre>{{ckan.error}}</pre>
+    </div>
+
+    <div class="col-md-12">
+      <p> Version: {{$root.config.version}}</p>
+      <table class="table table-hover">
+        <tr ng-repeat="status in statusList">
+          <td>{{status.name}}</td>
+          <td>{{status.status}}</td>
+          <td>{{status.description}}</td>
+          <td><a ng-href="{{status.source}}" target="_blank">{{status.source}}</a></td>
+        </tr>
+
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="page-footer wrapper">
+  <div class="container">
+    <div class="col-md-12">
+
+    </div>
+  </div>
+</div>

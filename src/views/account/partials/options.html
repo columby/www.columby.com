@@ -1,0 +1,43 @@
+<div class="modal-header row">
+  <div class="col-md-10">
+    <h4 class="modal-title">Account options</h4>
+  </div>
+  <div class="col-md-2 right">
+    <a class="close" href ng-click="$dismiss()"><span class="fa fa-close"></span></a>
+  </div>
+</div>
+
+<div class="modal-body row">
+
+  <div class="col-md-12">
+    <div class="editors" ng-show="!account.primary">
+      <h2>Editors</h2>
+      <div class="row">
+        <div class="col-md-3" ng-repeat="user in account.users">
+          <a ui-sref="account({slug: user.slug})" data-popover-placement="bottom" data-popover-trigger="mouseenter" popover="{{user.name}}">
+            <img class="img-responsive img-circle" ng-src="user.avatar.url || '/images/avatar.png'}}"/>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <h2>Background image
+      <button
+        class="btn btn-default right btn-xs btn-tooltip"
+        data-popover="Upload a background image for your account"
+        data-popover-trigger="mouseenter"
+        data-popover-placement="left"><i class="fa fa-question"></i>
+      </button>
+    </h2>
+    <div class="btn btn-default upload-button"
+         ng-file-select
+         ng-file-change="startUpload($files,'image','header')">upload your image</div>
+  </div>
+</div>
+
+<div class="modal-footer center clearfix">
+  <a ng-click="$dismiss()" type="button" class="pull-left">Cancel</a>
+  <button type="button" class="btn btn-primary pull-right" ng-click="$close()">Done</button>
+</div>
