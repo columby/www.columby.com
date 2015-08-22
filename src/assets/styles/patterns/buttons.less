@@ -29,7 +29,7 @@ button, .default-button{
     color: #fff;
     text-decoration: none;
   }
-  
+
   &.black{
     border: 2px solid #000;
     color: #000;
@@ -41,7 +41,7 @@ button, .default-button{
       color: #FFF;
     }
   }
-  
+
   &.white{
     border: 2px solid #FFF;
     color: #FFF;
@@ -60,7 +60,7 @@ button, .default-button{
       }
     }
   }
-  
+
   &.lightblue{
     border: 2px solid @lightblue;
     color: @lightblue;
@@ -79,7 +79,7 @@ button, .default-button{
       }
     }
   }
-  
+
   &.darkblue{
     border: 2px solid @darkblue;
     color: @darkblue;
@@ -93,8 +93,8 @@ button, .default-button{
       color: #fff;
     }
   }
-  
-  
+
+
   &.lightgrey{
     border: 2px solid @lightgrey;
     color: @lightgrey;
@@ -113,7 +113,7 @@ button, .default-button{
       }
     }
   }
-  
+
   &.darkgrey{
     border: 2px solid @darkgrey;
     color: @darkgrey;
@@ -132,7 +132,7 @@ button, .default-button{
       }
     }
   }
-  
+
   &.orange{
     border: 2px solid @orange;
     color: @orange;
@@ -144,13 +144,13 @@ button, .default-button{
       color: #FFF;
     }
   }
-  
+
   &.icon{
     i.fa {
       margin-right: 10px;
     }
   }
-  
+
 }
 
 .btn-tooltip{
@@ -170,5 +170,40 @@ button, .default-button{
   padding-top: 0;
   &:hover{
     border-color: rgb(0,0,0);
+  }
+}
+
+.btn-google {
+  display: inline-block;
+  background: #4285f4;
+  color: white;
+  /* width: 190px; */
+  border-radius: 5px;
+  white-space: nowrap;
+  border: 0;
+  padding: 0;
+  .icon {
+    display: inline-block;
+    vertical-align: middle;
+    width: 42px;
+    height: 42px;
+    border-right: #2265d4 1px solid;
+    font-size: 1.5em;
+    line-height: 45px;
+  }
+  .buttonText {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 42px;
+    padding-right: 42px;
+    font-size: 14px;
+    font-weight: bold;
+    /* Use the Roboto font that is loaded in the <head> */
+    font-family: 'Roboto', sans-serif;
+  }
+  &:hover {
+    background-color: #4285f4;
+    color: #fff;
+    border: 0;
   }
 }
