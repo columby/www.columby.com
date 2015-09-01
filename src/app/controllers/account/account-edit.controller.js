@@ -4,7 +4,7 @@
   angular
     .module('columbyApp')
 
-    .controller('AccountEditCtrl', function(account, $rootScope, $scope, $state, $stateParams, AccountSrv, ngNotify, Upload, FileSrv, RegistrySrv,appConstants) {
+    .controller('AccountEditCtrl', function($log, account, $rootScope, $scope, $state, $stateParams, AccountSrv, ngNotify, Upload, FileSrv, RegistrySrv,appConstants) {
 
       $scope.activePanel = 'profile';
 
@@ -20,6 +20,7 @@
       }
 
       //
+      //$log.debug('a', account);
       $scope.account = account;
       $scope.account.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.account.avatar.filename;
 

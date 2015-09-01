@@ -8,9 +8,8 @@
       var user;
 
       function setUser(u){
-        $log.debug(appConstants);
         // update avatar links.
-        if (u.id){
+        if (u && u.id){
           if (u.primary.avatar){
             u.primary.avatar.url = appConstants.filesRoot + '/image/small/' + u.primary.avatar.filename;
           }

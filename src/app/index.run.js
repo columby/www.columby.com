@@ -1,15 +1,12 @@
 (function() {
   'use strict';
 
-  angular
-    .module('columbyApp')
-    .run(runBlock);
+  angular.module('columbyApp').run(function($log, $rootScope, $state, UserSrv, ngNotify, gettextCatalog, AuthSrv, appConstants) {
 
-  /** @ngInject */
-  function runBlock($log, $rootScope, $state, UserSrv, ngNotify, gettextCatalog, AuthSrv, appConstants) {
-
+    // Set up internationalisation
     gettextCatalog.setCurrentLanguage('nl_NL');
 
+    // Notification settings
     ngNotify.config({
       theme: 'pure',
       position: 'top',
@@ -18,8 +15,10 @@
       sticky: false
     });
 
-    $rootScope.user = UserSrv.me();
+    // User was already fetched, set it in the user service
+    UserSrv.setUser(window.user);
 
+    // SEO main configuration
     $rootScope.meta = {
       description: 'Columby - Find and discover data.'
     };
@@ -28,13 +27,8 @@
       $log.debug(error);
     });
 
-    /***
-     *
-     * Check permission for each state change
-     *
-     ***/
+    // Check permission for each state change
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
-      //Check if the user has the required role
       if (toState.data && toState.data.permission) {
         if (!AuthSrv.hasPermission(toState.data.permission, toParams)){
           event.preventDefault();
@@ -65,5 +59,5 @@
         return;
       }
     });
-  }
+  });
 })();

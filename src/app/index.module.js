@@ -22,7 +22,7 @@ angular.element(document).ready(function() {
     }).success(function(data) {
       // If response has no user object, delete the local token.
       if (data.id) {
-        window.user = data.user;
+        window.user = data;
       } else {
         localStorage.removeItem('columby_token');
       }

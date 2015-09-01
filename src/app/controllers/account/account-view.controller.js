@@ -1,14 +1,14 @@
 (function() {
   'use strict';
 
-  angular
-    .module('columbyApp')
-  .controller('AccountCtrl', function (account, $rootScope, $scope, $stateParams, $state, ngNotify, AuthSrv, AccountSrv, DatasetSrv, appConstants) {
+  angular.module('columbyApp').controller('AccountCtrl', function(account, $rootScope, $scope, $stateParams, $state, ngNotify, AuthSrv, AccountSrv, DatasetSrv, appConstants, $log) {
 
     if (!account.id){
       ngNotify.set('The requested account was not found. ','error');
       $state.go('home');
     }
+    $log.debug('a', account);
+
     $scope.account = account;
     if ($scope.account.avatar){
       $scope.account.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.account.avatar.filename;
