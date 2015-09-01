@@ -40,7 +40,7 @@
       },
       {
         name: 'Worker',
-        source: $rootScope.config.workerRoot,
+        source: appConstants.workerRoot,
         description: 'The columby worker process',
         status: false,
       },

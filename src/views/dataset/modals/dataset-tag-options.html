@@ -10,20 +10,24 @@
 
 <div class="modal-body row">
   <div class="col-md-12">
-
-
     <div class="tags-wrapper">
-      <h3>Tags: </h3>
-      <p ng-show="dataset.tags.length>0">
+      <div class="tags-list" ng-show="dataset.tags.length>0">
+        <h3>Tags: </h3>
         <span class="tag tag-delete" ng-repeat="tag in dataset.tags">
-          <i class="fa fa-tag"></i>{{tag.text}}<a href ng-click="removeTag(tag)"><i class="fa fa-trash"></i></a>
+            <i class="fa fa-tag"></i>{{tag.text}}<a href ng-click="removeTag(tag)"><i class="fa fa-trash"></i></a>
         </span>
-      </p>
-      <h3>Add a new tag: </h3>
-      <form name="addTagForm">
-        <input ng-model="newTag.text" ng-change="slugifyTag()"/>
-        <button class="default-button lightblue filled" ng-click="addTag()" ng-disabled="addTagForm.$pristine">Add tag</button>
-      </form>
+      </div>
+      <div class="tag-add">
+        <h3>Add a new tag: </h3>
+        <form name="addTagForm">
+          <div class="col-md-6">
+            <input class="form-control" ng-model="newTag.text" ng-change="slugifyTag()"/>
+          </div>
+          <div class="col-md-3">
+            <button class="btn btn-default btn-primary" ng-click="addTag()" ng-disabled="addTagForm.$pristine">Add tag</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>

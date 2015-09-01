@@ -1,37 +1,32 @@
-
 <div class="modal-header row">
   <div class="col-md-10">
     <h4 class="modal-title">Dataset options</h4>
   </div>
   <div class="col-md-2 pull-right">
-    <a class="close" href ng-click="$dismiss()"><span class="fa fa-close"></span></a>
+    <a class="close" href ng-click="$dismiss()">
+      <span class="fa fa-close"></span>
+    </a>
   </div>
 </div>
-
+hhhlll
 <div class="modal-body row">
   <div class="col-md-12">
-
     <div class="visibility setting">
-      <h3>Visibility <span class="pull-right">
-        <a class="btn btn-xs btn-tooltip pull-right"
-        popover="Change visibility settings for your dataset."
-        popover-trigger="mouseenter"
-        popover-placement="left"><i class="fa fa-question"></i></a>
-      </span></h3>
+      <h3>Visibility
+        <span class="pull-right">
+          <a class="btn btn-xs btn-tooltip pull-right" popover-placement="left" popover-trigger="mouseenter" popover="Change visibility settings for your dataset.">
+            <i class="fa fa-question"></i>
+          </a>
+        </span>
+      </h3>
 
       <div class="btn-group btn-toggle">
-            <button class="btn btn-lg btn-default btn-private"
-              ng-click="toggleDatasetPrivacy()"
-              ng-model="dataset.private"
-              ng-disabled="dataset.private">Private</button>
-            <button class="btn btn-lg btn-success"
-              ng-click="toggleDatasetPrivacy()"
-              ng-model="dataset.private"
-              ng-disabled="!dataset.private">Public</button>
-            </div>
-        </div>
+        <button class="btn btn-lg btn-default btn-private" ng-click="toggleDatasetPrivacy()" ng-disabled="dataset.private" ng-model="dataset.private">Private</button>
+        <button class="btn btn-lg btn-success" ng-click="toggleDatasetPrivacy()" ng-disabled="!dataset.private" ng-model="dataset.private">Public</button>
+      </div>
+    </div>
 
-      <!-- <div class="slug">
+<!-- <div class="slug">
         <h3>Custom URL <span class="pull-right">
           <button
             class="btn btn-default btn-xs btn-tooltip"
@@ -60,50 +55,48 @@
         </form>
       </div> -->
 
-      <div class="registries">
-        <h3>Connected registries</h3>
-        <p ng-hide="account.registries.length>0" class="advisory-notice">There are no validated registries connected to this publication account</p>
-        <p ng-hide="dataset.registries.length>0" class="advisory-notice">There are no registries connected to this dataset</p>
-        <a ui-href="account.edit({slug: dataset.account.slug})">Manage settings at the organisation settings page</a>
+    <!-- <div class="registries">
+      <h3>Connected registries</h3>
+      <p class="advisory-notice" ng-hide="account.registries.length>0">There are no validated registries connected to this publication account</p>
+      <p class="advisory-notice" ng-hide="dataset.registries.length>0">There are no registries connected to this dataset</p>
+      <a ui-href="account.edit({slug: dataset.account.slug})">Manage settings at the organisation settings page</a>
 
-        <table class="table table-hover">
-          <thead>
-            <td></td>
-            <td>Registry title</td>
-            <td>Registry status</td>
-            <td>Active</td>
-          </thead>
-          <tr ng-repeat="registry in dataset.registries">
-            <td><img ng-src="{{registry.icon}}" style="width:40px;"/></td>
-            <td>{{registry.title}}</td>
-            <td>{{registry.account_registries.active}}</td>
-            <td>{{registry.dataset_registries.status || false}}</td>
-            <td><a href ng-click="toggleDatasetRegistry($index, registry)">toggle</a></td>
-          </tr>
-        </table>
-      </div>
+      <table class="table table-hover">
+        <thead>
+          <td></td>
+          <td>Registry title</td>
+          <td>Registry status</td>
+          <td>Active</td>
+        </thead>
+        <tr ng-repeat="registry in dataset.registries">
+          <td><img ng-src="{{registry.icon}}" style="width:40px;"/></td>
+          <td>{{registry.title}}</td>
+          <td>{{registry.account_registries.active}}</td>
+          <td>{{registry.dataset_registries.status || false}}</td>
+          <td>
+            <a href ng-click="toggleDatasetRegistry($index, registry)">toggle</a>
+          </td>
+        </tr>
+      </table>
+    </div> -->
 
-      <div class="background">
-        <h3>Background image
-          <button
-            class="btn btn-default right btn-xs btn-tooltip"
-            data-popover="Upload a background image for your dataset"
-            data-popover-trigger="mouseenter"
-            data-popover-placement="left"><i class="fa fa-question"></i>
-          </button>
-        </h3>
-        <div>
-          <button
-            class="btn btn-xs btn-default upload-button"
-            ng-file-select
-            ng-file-change="startUpload($files,'image','header')">upload your image</button>
-        </div>
-      </div>
-
-      <div class="delete">
-        <hr>
-        <button type="button" class="btn btn-danger btn-xs" ng-click="delete()"><i class="fa fa-trash-o"></i> Delete dataset</button>
+    <div class="background">
+      <h3>Background image
+        <button class="btn btn-default right btn-xs btn-tooltip" data-popover-placement="left" data-popover-trigger="mouseenter" data-popover="Upload a background image for your dataset">
+          <i class="fa fa-question"></i>
+        </button>
+      </h3>
+      <div>
+        <button class="btn btn-xs btn-default upload-button" ng-file-change="startUpload($files,'image','header')" ng-file-select>upload your image</button>
       </div>
     </div>
+
+    <div class="delete">
+      <hr>
+      <button class="btn btn-danger btn-xs" ng-click="delete()" type="button">
+        <i class="fa fa-trash-o"></i>
+        Delete dataset</button>
+    </div>
   </div>
+</div>
 </div>

@@ -9,11 +9,8 @@
       $log.debug($stateParams);
 
       TagService.get({slug: $stateParams.slug}, function(result){
-        result.datasets = result.tags;
-        delete result.tags;
-
+        $log.debug(result);
         $scope.tag = result;
-        $log.debug($scope.tag);
       });
     }
 

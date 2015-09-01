@@ -24,9 +24,9 @@
   </div>
 </div>
 
-<div class="content-wrapper" ng-hide="contentLoading">
+<div class="content wrapper" ng-hide="contentLoading">
   <!-- Dataset Description -->
-  <div class="description wrapper">
+  <div class="description-wrapper">
     <div class="container">
       <div class="col-md-12">
         <div class="description" ng-bind-html="account.description || '<p>No account description yet.</p>'"></div>
@@ -34,33 +34,25 @@
     </div>
   </div>
 
-  <!-- <div class="collections wrapper">
+  <!-- Search datasets -->
+  <div class="search wrapper">
     <div class="container">
-      <div class="col-md-12">
-        <h3>Collections</h3>
-				<div class="collection-listing">
-          <div class="empty" ng-show="account.collections.length < 1">No collections created yet</div>
-  				<ul>
-            <li ng-repeat="collection in account.collections" class="collection">
-              <h4><a ui-sref="collection({id: collection.shortid})">{{collection.title}}</a></h4>
-              <p>{{collection.description}}</p>
-            </li>
-          </ul>
-				</div>
-      </div>
+      <form name="searchForm">
+        <div class="col-xs-10">
+          <input class="form-control searchbox" type="text" ng-model="search.query" placeholder="Search this dataset list"/>
+        </div>
+        <div class="col-xs-2">
+          <button class="btn btn-default" type="submit" ng-click="searchAccount()" ng-disabled="searchForm.$pristine">Search</button>
+        </div>
+      </form>
     </div>
-  </div> -->
+  </div>
 
-    <div class="datasets wrapper">
-      <div class="container">
-        <div class="col-md-12 publications">
-
-					<form>
-            <input class="searchbox" type="text" ng-model="search.query" placeholder="Search this dataset list"/>
-            <button class="btn btn-default" type="submit" ng-click="searchAccount()">Search</button>
-          </form>
-
-          <h3>{{datasets.count}} Datasets <span ng-show="search.term">[Filter: {{search.term}}]<a href ng-click="clearSearch()"><i class="fa fa-trash"></i></a></span></h3>
+  <!-- Datasets listing -->
+  <div class="datasets wrapper">
+    <div class="container">
+      <div class="col-md-12 publications">
+        <h3>{{datasets.count}} Datasets <span ng-show="search.term">[Filter: {{search.term}}]<a href ng-click="clearSearch()"><i class="fa fa-trash"></i></a></span></h3>
           <p ng-show="datasets.rows.length<1">No datasets found.</p>
 
           <div class="publication-listing" ng-show="datasets.rows.length>0">
@@ -87,17 +79,7 @@
               </li>
             </ul>
 
-            <pagination
-              ng-change="pageChanged()"
-              total-items="datasets.count"
-              ng-model="datasets.currentPage"
-              max-size="5"
-              class="pagination-sm"
-              boundary-links="true"
-              rotate="false"
-              num-pages="datasets.numPages"
-              ng-show="datasets.numPages>1">
-            </pagination>
+            <pagination ng-change="pageChanged()" total-items="datasets.count" ng-model="datasets.currentPage" max-size="5" class="pagination-sm" boundary-links="true" rotate="false" num-pages="datasets.numPages" ng-show="datasets.numPages>1"></pagination>
           </div>
         </div>
       </div>

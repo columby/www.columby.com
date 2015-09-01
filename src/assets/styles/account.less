@@ -1,20 +1,7 @@
-.account{
-
-	.editorSidebar {
-
-	}
-	.content {
-
+.page.account{
+	.page-content {
 	  .header.wrapper {
       position:relative;
-      .upload-button {
-        overflow: hidden;
-        position: absolute;
-        right: 10px;
-        bottom: 10px;
-        color: white;
-        cursor: pointer;
-      }
       h1 {
         &.editable-placeholder {
           opacity:0.5;
@@ -23,65 +10,29 @@
           width:100%;
         }
 	    }
-
 	  }
+		.content.wrapper {
+			.description.wrapper {
+				.description {}
+			}
+			.search.wrapper {
+				padding: 1.5em 0;
+				input {
 
-		.searchbox{
-			margin-top: 70px;
-			margin-bottom: 40px;
-			padding: 10px;
-			width: 100%;
-			font-size: 24px;
-			border: 1px solid #CFCFCF;
-			-webkit-border-radius: 5px;
-			-moz-border-radius: 5px;
-			border-radius: 5px;
+				}
+				.btn {
+					margin: 0;
+				}
+			}
+			.datasets.wrapper {
+				.publications {
+
+				}
+			}
 		}
-
-    .datasets, .collections {
-      h3{
-      }
-      .dataset-listing, .collection-listing {
-
-        ul{
-          padding: 0;
-        }
-        .dataset, .collection {
-          list-style: none;
-          padding: 6px;
-          margin: 0 0 30px 0;
-        	color: #666;
-          h4 {
-            word-wrap: break-word;
-            a {
-              font-family: "lato", sans-serif;
-              font-size: 30px;
-              font-weight: 700;
-              color: #222;
-            }
-          }
-          .properties{
-            // padding: 10px 0 20px 0;
-            li{
-              display: inline-block;
-              margin: 0;
-							padding: 0;
-              label{
-                margin-right: 5px;
-                color: #428bca;
-                text-align: center;
-                // font-family: "lato", sans-serif;
-              }
-							date{
-								color: #666;
-							}
-            }
-          }
-        }
-      }
-    }
 	}
 
+	/* Edit Account page */
   &.edit {
     .avatar-container {
       img {
