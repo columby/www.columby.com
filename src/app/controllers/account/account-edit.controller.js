@@ -4,7 +4,7 @@
   angular
     .module('columbyApp')
 
-    .controller('AccountEditCtrl', function($log, account, $rootScope, $scope, $state, $stateParams, AccountSrv, ngNotify, Upload, FileSrv, RegistrySrv,appConstants) {
+    .controller('AccountEditCtrl', function($log, account, $rootScope, $scope, $state, $stateParams, AccountSrv, ngNotify, Upload, FileSrv, RegistrySrv,appConstants,CategorySrv) {
 
       $scope.activePanel = 'profile';
 
@@ -85,6 +85,7 @@
           action: 'updateAccountAvatar'
         });
       };
+
       $scope.$on('fileManagerSelected', function(event,data){
         if (data.action === 'updateAccountAvatar') {
           $scope.account.avatar_id = data.file.id;
@@ -124,6 +125,29 @@
           } else {
             ngNotify.set('Something went wrong ' + result, 'error');
           }
+        });
+      };
+
+      // Category functions
+      $scope.addCategory = function(category) {
+        $log.debug('add category: ' + category);
+        var c = {
+          account_id: account.id,
+          name: category
+        };
+        CategorySrv.save(c, function(result){
+          $scope.account.categories.push(result);
+          $log.debug(result);
+        });
+      };
+
+      $scope.showStandardCategoriesModal = function(){
+        $log.debug('show');
+      };
+      $scope.deleteCategory = function(index){
+        $log.debug(index);
+        CategorySrv.delete({id:$scope.account.categories[ index].id}, function(result){
+          $scope.account.categories.splice(index, 1);
         });
       };
     });

@@ -23,12 +23,19 @@
       </div>
       <div class="col-md-3 menus">
         <div class="panel panel-default panel-usermenu">
-          <div class="panel-heading">
-            Organisation settings
-          </div>
+          <div class="panel-heading">Organisation settings</div>
 
           <table class="table">
-            <tr><td><a href="#" ng-click="changePanel('profile')" ng-class="{ active: activePanel==='profile'}">Profile</a></td></tr>
+            <tr>
+              <td>
+                <a href ng-click="changePanel('profile')" ng-class="{ active: activePanel==='profile'}">Profile</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href ng-click="changePanel('categories')" ng-class="{ active: activePanel==='categories'}">Categories</a>
+              </td>
+            </tr>
             <!-- <tr><td><a href="#" ng-click="changePanel('account')" ng-class="{ active: activePanel==='account'}">Account</a></td></tr> -->
             <!-- <tr><td><a href="#" ng-click="changePanel('people')" ng-class="{ active: activePanel==='people'}">People</a></td></tr> -->
             <!-- <tr><td><a href="#" ng-click="changePanel('registries')" ng-class="{ active: activePanel==='registries'}">Registries</a></td></tr> -->
@@ -86,6 +93,29 @@
 
                   <button class="btn btn-default btn-blue" ng-disabled="profileForm.$pristine || profileForm.$invalid || updatingAccount" ng-click="updateAccount()"><span class="btn-text" ng-hide="updatingAccount">Update profile</span><i class="fa fa-spinner fa-spin" ng-show="updatingAccount"></i></span></button>
                 </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Categories panel -->
+          <div class="profile-panels" ng-switch-when="categories">
+            <div class="panel panel-default panel-categories">
+              <div class="panel-heading">Organisation categories</div>
+              <div class="panel-body">
+                <p>You can organise datasets by adding categories.</p>
+                <div class="category-list">
+                  <form class="novalidate" role="form" name="categoryForm">
+                    <div class="form-group">
+                      <label for="category">Add a new category</label>
+                      <input type="text" class="form-control" id="category" ng-model="newCategory"></input>
+                    </div>
+                    <button class="btn btn-default btn-blue" ng-disabled="categoryForm.$pristine || addingCategory" ng-click="addCategory(newCategory)"><span class="btn-text" ng-hide="addingCategory">Add category</span><i class="fa fa-spinner fa-spin" ng-show="addingCategory"></i></span></button>
+                  </form>
+                  <p>Categories: </p>
+                  <ul>
+                    <li ng-repeat="category in account.categories">{{category.name}} <a href ng-click="deleteCategory($index)"><i class="fa fa-trash"></i></a></li>
+                </div>
+                <a href ng-click="showStandardCategoriesModal()">Import a standard category set</a>
               </div>
             </div>
           </div>

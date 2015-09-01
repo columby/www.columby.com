@@ -1,11 +1,9 @@
 (function() {
   'use strict';
 
-  angular
-    .module('columbyApp')
-    .service('CollectionSrv', function ($resource, appConstants) {
+  angular.module('columbyApp').service('CategorySrv', function ($resource, appConstants) {
 
-    return $resource(appConstants.apiRoot + '/v2/collection/:id', {
+    return $resource(appConstants.apiRoot + '/v2/category/:id', {
       id: '@id',
       offset: '@offset'
     }, {
@@ -15,7 +13,7 @@
       getDatasets: {
         method: 'GET',
         responseType: 'json',
-        url: appConstants.apiRoot + '/v2/collection/:id/datasets'
+        url: appConstants.apiRoot + '/v2/category/:id/datasets'
       }
     });
   });
