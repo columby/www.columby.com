@@ -133,7 +133,7 @@
     			</li>
         </ul>
 
-        <div class="highlight" ng-show="dataset.distributions && !dataset.primary.id">
+        <div class="highlight" ng-show="!dataset.distributions && !dataset.primary.id">
     			<h2>No sources added yet</h2>
     		</div>
       </div>
@@ -208,7 +208,7 @@
   </div>
 
   <!-- Dataset Account -->
-  <div class="publisher">
+  <div class="publisher-wrapper">
     <div class="container">
       <div class="col-md-12">
         <h3>About {{dataset.account.displayName}}</h3>
