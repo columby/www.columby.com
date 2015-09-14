@@ -8,6 +8,7 @@
 angular.element(document).ready(function() {
 
   window.user = {};
+  window.settings = window.settings || {};
 
   var initInjector = angular.injector(['ng']);
   var $http = initInjector.get('$http');
@@ -16,13 +17,12 @@ angular.element(document).ready(function() {
   if (token) {
     $http({
       method: 'POST',
-      url: 'https://api.columby.com/v2/user/me',
-      //url: 'https://columby.nl/api/user/me',
+      url: window.settings.apiRoot + '/v2/user/me',
       headers: { 'Authorization': 'Bearer ' + token }
     }).success(function(data) {
       // If response has no user object, delete the local token.
       if (data.id) {
-        window.user = data.user;
+        window.user = data;
       } else {
         localStorage.removeItem('columby_token');
       }

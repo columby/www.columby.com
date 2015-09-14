@@ -12,11 +12,11 @@ function isOnlyChange(event) {
 
 gulp.task('watch', ['inject'], function () {
 
-  gulp.watch([path.join(conf.paths.src, '/*.html'), 'bower.json'], ['inject']);
+  gulp.watch([path.join(conf.paths.src, '/**/*.html'), 'bower.json'], ['inject']);
 
   gulp.watch([
-    path.join(conf.paths.src, '/app/**/*.css'),
-    path.join(conf.paths.src, '/assets/styles/scss/**/*.scss')
+    path.join(conf.paths.src, '/app/**/*.less'),
+    path.join(conf.paths.src, '/assets/styles/**/*.less')
   ], function(event) {
     if(isOnlyChange(event)) {
       gulp.start('styles');

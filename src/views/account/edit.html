@@ -1,224 +1,266 @@
-<!-- Account edit -->
-<div class="settings view">
-  <div class="content">
+<div class="page-header">
+  <div class="actions-bar">
+    <a class="btn btn-default" ui-sref="account.view({slug: '{{account.slug}}'})"><i class="fa fa-chevron-left"></i>view account</a>
+  </div>
 
-    <div class="header wrapper">
-      <div class="container">
-        <div>
-          <h1 class="title">Organisation settings</h1>
-          <div class="meta">
-            <!-- <h2><a ui-sref="account.view({slug: account.slug})">{{account.displayName}}</a></h2> -->
-            <p>Edit your organisation details</p>
-          </div>
-        </div>
+  <div class="container">
+    <div class="col-md-12 title">
+      <h1>{{account.displayName}}</h1>
+    </div>
+    <div class="col-md-12 meta">
+      <p>Edit your organisation details</p>
+    </div>
+  </div>
+</div>
+
+<div class="page-body">
+  <div class="container">
+
+    <div class="col-md-12" ng-show="errorMsg">
+      <div class="alert alert-danger" role="alert">
+        <span class="fa fa-warning" aria-hidden="true"></span>
+        {{errorMsg}}
       </div>
     </div>
 
-    <div class="container">
-      <div class="col-md-12" ng-show="errorMsg">
-        <div class="alert alert-danger" role="alert">
-          <span class="fa fa-warning" aria-hidden="true"></span>
-          {{errorMsg}}
-        </div>
-      </div>
-      <div class="col-md-3 menus">
-        <div class="panel panel-default panel-usermenu">
-          <div class="panel-heading">
-            Organisation settings
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-3 menus">
+          <div class="panel panel-default panel-usermenu">
+            <div class="panel-heading">Organisation settings</div>
+            <table class="table">
+              <tr>
+                <td>
+                  <a href ng-click="changePanel('profile')" ng-class="{ active: activePanel==='profile'}">Profile</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href ng-click="changePanel('categories')" ng-class="{ active: activePanel==='categories'}">Categories</a>
+                </td>
+              </tr>
+              <!-- <tr><td><a href="#" ng-click="changePanel('account')" ng-class="{ active: activePanel==='account'}">Account</a></td></tr> -->
+              <!-- <tr><td><a href="#" ng-click="changePanel('people')" ng-class="{ active: activePanel==='people'}">People</a></td></tr> -->
+              <!-- <tr><td><a href="#" ng-click="changePanel('registries')" ng-class="{ active: activePanel==='registries'}">Registries</a></td></tr> -->
+              <!-- <tr><td><a href="#" ng-click="changePanel('support')" ng-class="{ active: activePanel==='support'}">Support</a></td></tr> -->
+            </table>
           </div>
-
-          <table class="table">
-            <tr><td><a href="#" ng-click="changePanel('profile')" ng-class="{ active: activePanel==='profile'}">Profile</a></td></tr>
-            <!-- <tr><td><a href="#" ng-click="changePanel('account')" ng-class="{ active: activePanel==='account'}">Account</a></td></tr> -->
-            <!-- <tr><td><a href="#" ng-click="changePanel('people')" ng-class="{ active: activePanel==='people'}">People</a></td></tr> -->
-            <!-- <tr><td><a href="#" ng-click="changePanel('registries')" ng-class="{ active: activePanel==='registries'}">Registries</a></td></tr> -->
-            <!-- <tr><td><a href="#" ng-click="changePanel('support')" ng-class="{ active: activePanel==='support'}">Support</a></td></tr> -->
-          </table>
         </div>
-      </div>
 
-      <div class="col-md-9">
-        <div ng-switch on="activePanel">
-
-          <!-- Profile panel -->
-          <div class="profile-panels" ng-switch-when="profile">
-            <div class="panel panel-default panel-profile">
-              <div class="panel-heading">Basic profile</div>
-              <div class="panel-body">
-                <form class="novalidate" role="form" name="profileForm">
-                  <label for="displayname">Profile picture</label>
-                  <div class="row">
-                    <div class="col-md-3">
-                      <img class="img-circle avatar" ng-src="{{account.avatar.url || 'assets/img/avatar.png'}}"/>
+        <div class="col-md-9">
+          <div ng-switch on="activePanel">
+            <!-- Profile panel -->
+            <div class="profile-panels" ng-switch-when="profile">
+              <div class="panel panel-default panel-profile">
+                <div class="panel-heading">Basic profile</div>
+                <div class="panel-body">
+                  <form class="novalidate" role="form" name="profileForm">
+                    <label for="displayname">Profile picture</label>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <img class="img-circle img-responsive avatar" ng-src="{{account.avatar.url || 'assets/img/avatar.png'}}"/>
+                      </div>
+                      <div class="col-md-9">
+                        <div class="form-group">
+                          <a class="btn btn-default" ng-click="openFileBrowser('accountAvatar')">Upload new picture</a>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-md-9">
+
+                    <div class="form-group">
+                      <label for="displayname">Display name</label>
+                      <input type="text" class="form-control" id="displayname" ng-model="account.displayName"></input>
+                    </div>
+
+
+                    <div class="form-group">
+                      <label for="description">Description</label>
+                      <div text-angular ta-toolbar="[['h1','h2','h3'],['bold','italics']]" ng-model="account.description"></div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="contact">Contact</label>
+                      <textarea class="form-control" id="contact" rows="3" ng-model="account.contact"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="url">URL</label>
+                      <input type="text" class="form-control" id="url" ng-model="account.url"></input>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="displayname">Location</label>
+                      <input type="text" class="form-control" id="location" ng-model="account.location"></input>
+                    </div>
+
+                    <button class="btn btn-default btn-blue" ng-disabled="profileForm.$pristine || profileForm.$invalid || updatingAccount" ng-click="updateAccount()"><span class="btn-text" ng-hide="updatingAccount">Update profile</span><i class="fa fa-spinner fa-spin" ng-show="updatingAccount"></i></span></button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Categories panel -->
+            <div class="profile-panels" ng-switch-when="categories">
+              <div class="panel panel-default panel-categories">
+                <div class="panel-heading">Organisation categories</div>
+                <div class="panel-body">
+                  <p>Organise datasets by adding categories.</p>
+                  <div class="category-list">
+                    <form class="novalidate" role="form" name="categoryForm">
                       <div class="form-group">
-                        <a class="btn btn-default" ng-click="openFileBrowser('accountAvatar')">Upload new picture</a>
+                        <label for="category">Add a new category</label>
+                        <input type="text" class="form-control" id="category" ng-model="newCategory"></input>
                       </div>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="displayname">Display name</label>
-                    <input type="text" class="form-control" id="displayname" ng-model="account.displayName"></input>
-                  </div>
-
-
-                  <div class="form-group">
-                    <label for="description">Description</label>
-                    <div text-angular ta-toolbar="[['h1','h2','h3'],['bold','italics']]" ng-model="account.description"></div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="contact">Contact</label>
-                    <textarea class="form-control" id="contact" rows="3" ng-model="account.contact"></textarea>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="url">URL</label>
-                    <input type="text" class="form-control" id="url" ng-model="account.url"></input>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="displayname">Location</label>
-                    <input type="text" class="form-control" id="location" ng-model="account.location"></input>
-                  </div>
-
-                  <button class="btn btn-default btn-blue" ng-disabled="profileForm.$pristine || profileForm.$invalid || updatingAccount" ng-click="updateAccount()"><span class="btn-text" ng-hide="updatingAccount">Update profile</span><i class="fa fa-spinner fa-spin" ng-show="updatingAccount"></i></span></button>
-                </form>
-              </div>
-            </div>
-          </div>
-
-          <div class="account-panels" ng-switch-when="account">
-            <!-- <div class="panel panel-default panel-account">
-              <div class="panel-heading">
-                Registered email-address
-              </div>
-              <div class="panel-body">
-                <p>{{account.email}}
-              </div>
-            </div> -->
-
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                Account url
-              </div>
-              <div class="panel-body">
-                <form class="novalidate" role="form" name="accountForm">
-                  <div class="form-group">
-                    <input type="text" class="form-control" id="slug" ng-model="account.slug" ng-change="slugify()" ng-required="true"></input>
-                  </div>
-
-                  <button class="btn btn-default" ng-disabled="accountForm.$pristine || accountForm.$invalid || updatingSlug" ng-click="updateSlug()"><span class="btn-text" ng-hide="updatingSlug">Change url</span><span class="loader"><i class="fa fa-spinner fa-spin" ng-show="updatingSlug"></i></span></button>
-                </form>
-              </div>
-            </div>
-
-            <div class="panel panel-danger">
-              <div class="panel-heading">
-                Delete account
-              </div>
-              <div class="panel-body">
-                <p>Be careful, do not just delete your account!</p>
-                <button class="btn btn-danger" ng-click="destroy()">Delete account</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="billing-panels" ng-switch-when="people">
-            <div class="panel panel-default panel-people">
-              <div class="panel-heading">
-                People
-              </div>
-              <div class="panel-body">
-                <h3>The public data team</h3>
-                <p>This is the public data team. <a href="">Add team member</a></p>
-
-                <h3>Organisation editors</h3>
-                <table class="table">
-                  <li>{{account}}</li>
-                  <tr ng-repeat="user in account.people">
-                    <td><img ng-src="{{user.avatar.url || 'assets/img/avatar.png'}}"/> </td>
-                    <td>{{user.role}}</td>
-                    <td><a ui-sref="account.view({slug: user.slug})">{{user.displayName}}</a></td>
-                    <td><a href="#"><i class="fa fa-edit"></i></a><a href="#"><i class="fa fa-trash"></i></a></td>
-                  </td>
-                </table>
-                <a href="#">Add user</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="organisations-panels" ng-switch-when="registries">
-            <div class="panel panel-default panel-registries">
-              <div class="panel-heading">
-                Registries
-              </div>
-              <div class="panel-body">
-                <div class="registry-active col-md-12">
-                  <h3>Connected registries</h3>
-                  <div class="registry" ng-repeat="registry in registries.active">
-                    <form class="form">
-                      <div class="col-md-2">
-                        <img class="img-responsive avatar" ng-src="{{registry.icon}}"/>
-                      </div>
-                      <div class="col-md-10">
-                        <h4>{{registry.title}}</h4>
-                      </div>
-                      <div class="col-md-12">
-                        <p>Validated: {{registry.account_registries.valid || false}}</p>
-                        <input type="checkbox" ng-model="registry.account_registries.active" ng-click="updateRegistry($index,registry)" ng-show="registry.account_registries.valid">Active
-                        <input type="checkbox" ng-model="registry.account_registries.autoadd" ng-click="updateRegistry($index,registry)" ng-show="registry.account_registries.valid" ng-disabled="!registry.account_registries.active">Auto add
-                        <div class="form-group">
-                          <label for="apikey">API key</label>
-                          <input type="text" class="form-control" id="apikey" ng-model="registry.account_registries.apikey"></input>
-                          <a class="btn btn-default" ng-click="validateRegistry(registry)">validate</a>
-                        </div>
-                      </div>
-                      <div class="col-md-12">
-                        <p ng-hide="registry.account_registries.valid">This registry is added to this account, but it is not validated yet. Add the required key and validate it. </p>
-                      </div>
-                      <div class="col-md-12" ng-show={{registry.account_registries.status}}>
-                        <div class="form-group">
-                          <label class="checkbox">
-                            <input type="checkbox" ng-model="registry.account_registries.autosync">Autosync
-                          </label>
-                        </div>
-                      </div>
+                      <button class="btn btn-default btn-blue" ng-disabled="categoryForm.$pristine || addingCategory" ng-click="addCategory(newCategory)"><span class="btn-text" ng-hide="addingCategory">Add category</span><i class="fa fa-spinner fa-spin" ng-show="addingCategory"></i></span></button>
                     </form>
+                    <p>Categories: </p>
+                    <ul class="categories">
+                      <li ng-repeat="category in account.categories">{{category.name}} ({{category.count}})
+                        <a href ng-click="deleteCategory(category)" ng-hide="category.children.length>0"><i class="fa fa-trash"></i></a>
+                        <ul class="subcategories">
+                          <li ng-repeat="subcat in category.children">{{subcat.name}} ({{subcat.count}})
+                            <a href ng-click="deleteCategory(subcat)"><i class="fa fa-trash"></i></a>
+                          </li>
+                        </ul>
+                      </li>
                   </div>
-
-                </div>
-
-                <!-- <div class="row registry-inactive">
-                  <h3>Inactive registries</h3>
-                  <div class="registry" ng-repeat="a in registries.inactive track by a.id">
-                    <pre>{{registry}}</pre>
-                  </div>
-                </div> -->
-
-                <div class="col-md-12">
-                  <p>Your registry not listed? Contact us to discuss the possibilities! </p>
+                  <a href ng-click="showStandardCategoriesModal()">Import a standard category set</a>
                 </div>
               </div>
             </div>
-          </div>
 
+            <div class="account-panels" ng-switch-when="account">
+              <!-- <div class="panel panel-default panel-account">
+                <div class="panel-heading">
+                  Registered email-address
+                </div>
+                <div class="panel-body">
+                  <p>{{account.email}}
+                </div>
+              </div> -->
 
-          <div class="support-panels" ng-switch-when="support">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                Support
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  Account url
+                </div>
+                <div class="panel-body">
+                  <form class="novalidate" role="form" name="accountForm">
+                    <div class="form-group">
+                      <input type="text" class="form-control" id="slug" ng-model="account.slug" ng-change="slugify()" ng-required="true"></input>
+                    </div>
+
+                    <button class="btn btn-default" ng-disabled="accountForm.$pristine || accountForm.$invalid || updatingSlug" ng-click="updateSlug()"><span class="btn-text" ng-hide="updatingSlug">Change url</span><span class="loader"><i class="fa fa-spinner fa-spin" ng-show="updatingSlug"></i></span></button>
+                  </form>
+                </div>
               </div>
-              <div class="panel-body">
-                <p>Some support information</p>
+
+              <div class="panel panel-danger">
+                <div class="panel-heading">
+                  Delete account
+                </div>
+                <div class="panel-body">
+                  <p>Be careful, do not just delete your account!</p>
+                  <button class="btn btn-danger" ng-click="destroy()">Delete account</button>
+                </div>
               </div>
             </div>
-          </div>
 
+            <div class="billing-panels" ng-switch-when="people">
+              <div class="panel panel-default panel-people">
+                <div class="panel-heading">
+                  People
+                </div>
+                <div class="panel-body">
+                  <h3>The public data team</h3>
+                  <p>This is the public data team. <a href="">Add team member</a></p>
+
+                  <h3>Organisation editors</h3>
+                  <table class="table">
+                    <li>{{account}}</li>
+                    <tr ng-repeat="user in account.people">
+                      <td><img ng-src="{{user.avatar.url || 'assets/img/avatar.png'}}"/> </td>
+                      <td>{{user.role}}</td>
+                      <td><a ui-sref="account.view({slug: user.slug})">{{user.displayName}}</a></td>
+                      <td><a href="#"><i class="fa fa-edit"></i></a><a href="#"><i class="fa fa-trash"></i></a></td>
+                    </td>
+                  </table>
+                  <a href="#">Add user</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="organisations-panels" ng-switch-when="registries">
+              <div class="panel panel-default panel-registries">
+                <div class="panel-heading">
+                  Registries
+                </div>
+                <div class="panel-body">
+                  <div class="registry-active col-md-12">
+                    <h3>Connected registries</h3>
+                    <div class="registry" ng-repeat="registry in registries.active">
+                      <form class="form">
+                        <div class="col-md-2">
+                          <img class="img-responsive avatar" ng-src="{{registry.icon}}"/>
+                        </div>
+                        <div class="col-md-10">
+                          <h4>{{registry.title}}</h4>
+                        </div>
+                        <div class="col-md-12">
+                          <p>Validated: {{registry.account_registries.valid || false}}</p>
+                          <input type="checkbox" ng-model="registry.account_registries.active" ng-click="updateRegistry($index,registry)" ng-show="registry.account_registries.valid">Active
+                          <input type="checkbox" ng-model="registry.account_registries.autoadd" ng-click="updateRegistry($index,registry)" ng-show="registry.account_registries.valid" ng-disabled="!registry.account_registries.active">Auto add
+                          <div class="form-group">
+                            <label for="apikey">API key</label>
+                            <input type="text" class="form-control" id="apikey" ng-model="registry.account_registries.apikey"></input>
+                            <a class="btn btn-default" ng-click="validateRegistry(registry)">validate</a>
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <p ng-hide="registry.account_registries.valid">This registry is added to this account, but it is not validated yet. Add the required key and validate it. </p>
+                        </div>
+                        <div class="col-md-12" ng-show={{registry.account_registries.status}}>
+                          <div class="form-group">
+                            <label class="checkbox">
+                              <input type="checkbox" ng-model="registry.account_registries.autosync">Autosync
+                            </label>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+
+                  </div>
+
+                  <!-- <div class="row registry-inactive">
+                    <h3>Inactive registries</h3>
+                    <div class="registry" ng-repeat="a in registries.inactive track by a.id">
+                      <pre>{{registry}}</pre>
+                    </div>
+                  </div> -->
+
+                  <div class="col-md-12">
+                    <p>Your registry not listed? Contact us to discuss the possibilities! </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="support-panels" ng-switch-when="support">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  Support
+                </div>
+                <div class="panel-body">
+                  <p>Some support information</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<div class="page-footer"></div>

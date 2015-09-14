@@ -1,8 +1,7 @@
 (function() {
   'use strict';
 
-  angular
-    .module('columbyApp')
+  angular.module('columbyApp')
     .controller('SearchCtrl', function($log,$rootScope, $scope, SearchSrv) {
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */
@@ -50,9 +49,12 @@
 
 
     /* ---------- INIT ---------------------------------------------------------------------------- */
-    // get last search result if present
-    //$scope.search.searchTerm = SearchSrv.queryTerm();
-    //$scope.search.hits = SearchSrv.result();
-    $log.debug('search', $scope.search);
+    if ($rootScope.searchTerm){
+      if ($rootScope.searchTerm){
+        $scope.search.searchTerm = $rootScope.searchTerm;
+        delete $rootScope.searchTerm;
+        $scope.doSearch();
+      }
+    }
   });
 })();

@@ -1,21 +1,10 @@
-
-button:focus {
-    outline: 0;
-}
-
-// UI BLOCKS
-
-.actions-bar {
-  text-align: right;
-  position: fixed;
-  z-index: 600;
-  background: rgba(0,0,0,0.2);
-  width: 100%;
-  padding: 20px;
-  padding-bottom: 55px;
-  ul{
-    float: right;
-  }
+// MIXIN elements
+.FirstBigLetter {
+  color: #2fccff;
+  font-size: 4em;
+  line-height: 1;
+  margin: 0 7px;
+  float: left;
 }
 
 .top {
@@ -43,76 +32,14 @@ button:focus {
 		margin-top: 10px;
 	}
 }
-// TITLES AND TEXT + EDIT
 
-.title{
 
-}
 
-.description{
-	line-height: 2em;
-	color: #555;
-  word-wrap: break-word;
-	font-size: 1em;
-	line-height: 2em;
-  &:first-letter {
-    color: #2fccff;
-    font-size: 4em;
-    line-height: 1;
-    margin: 0 7px;
-    float: left;
-  }
-}
-
-textarea.edit{
-  background: none;
-  border-radius: 10px;
-  padding: 10px;
-  width: 720px;
-  height: auto;
-  border: 1px solid RGBA(255,255,255,0.3);
-  resize: none;
-  &:hover{
-    border: 1px solid #fff;
-  }
-}
 
 .label{
   vertical-align: top;
   line-height: 2.3em;
   margin-left: 5px;
-}
-
-h3{
-  font-size: 24px;
-  line-height: 40px;
-  border-bottom: 1px solid #d9d9d9;
-  margin-bottom: 10px;
-  font-weight: bold;
-  color: #7a7a7a;
-  padding: 6px
-}
-
-
-div > a{
-  color: #2fccff;
-  border-bottom: solid 1px rgba(47, 204, 255, 0.2);
-  text-decoration: none;
-  &:hover{
-    color: #2fccff;
-    border-bottom: solid 1px rgba(47, 204, 255, 1);
-    text-decoration: none;
-  }
-}
-
-li{
-  font-family: "lato", sans-serif;
-  font-weight: 900;
-  label{
-    color: #666;
-    opacity: 0.4;
-    font-weight: 700;
-  }
 }
 
 
@@ -130,126 +57,4 @@ li{
 	font-size: 0.6em;
 	line-height: 1.8em;
 	color: #000;
-}
-
-// ACTION BAR
-
-.actions-bar {
-  text-align: right;
-  ul{
-    li{
-  		list-style: none;
-      margin-left: 10px;
-    }
-  }
-
-  button, a{
-    background: none;
-    border: 2px solid #fff;
-    color: #fff;
-    font-weight: bolder;
-    float: right;
-    &:focus {
-      color: #fff;
-      outline: 0 !important;
-    }
-    &:hover{
-      background: none;
-      color: #000;
-      border: solid 2px #000;
-    }
-    &.active{
-      color: #000;
-      border: solid 2px #000;
-    }
-  }
-
-  button.logout{
-    background: RGBA(255,66,66,0.6);
-    border: 3px solid RGBA(255,66,66,0.0);
-    &:hover{
-      background: #F03C02;
-      color: #fff;
-    }
-  }
-
-}
-
-
-// TAGS
-span.tag{
-	display: inline-block;
-	height: 28px;
-	position: relative;
-	content: "";
-	// cursor: pointer;
-	margin: 13px 15px 0 5px;
-	padding: 0 13px 13px 13px;
-	border: 0 solid rgba(0,0,0,0);
-	border-radius: 4px 4px 4px 4px;
-	font-size: 12px;
-	font-family: "lato", sans-serif;
-	color: rgba(255,255,255,1);
-	text-align: center;
-	text-transform: uppercase;
-	background: rgba(0, 0, 0, 0.24);
-  line-height: 2.5;
-  i.fa {
-    margin-right: 10px;
-  }
-  a {
-    text-decoration: none;
-    border: 0;
-    color: #FFF;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-  &.tag-delete{
-    a i.fa-trash{
-      margin-left: 10px;
-      margin-right: 0;
-      color: #F00;
-    }
-  }
-}
-
-
-// HELP TEXT
-h3{
-	.popover{
-		font-size:0.5em;
-	}
-}
-
-
-// ICON LINKS
-
-.icon-edit-link{
-  color: #fff;
-}
-
-
-
-// MODAL 
-.modal-content {
-  .modal-header {
-    background-color: @lightblue;
-    color: #fff;
-    .close{
-      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
-      opacity: 1;
-      padding-top:4px;
-      color:#fff;
-    }
-  }
-  .modal-body{
-    h3{
-      margin-top:0;
-      font-size: 20px;
-    }
-    thead{
-      font-weight: bold;
-    }
-  }
 }

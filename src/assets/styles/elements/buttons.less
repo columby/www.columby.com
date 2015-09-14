@@ -1,0 +1,208 @@
+button, .default-button{
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  width: auto;
+	background: none;
+	border: 2px solid #fff;
+	color: #fff;
+  font-family: "lato", sans-serif;
+  font-weight: bolder;
+
+  &:hover{
+    // border: 2px solid #000;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  &.black{
+    border: 2px solid #000;
+    color: #000;
+    &.filled{
+      background: #FFF;
+    }
+    &:hover{
+      background: #000;
+      color: #FFF;
+    }
+  }
+
+  &.white{
+    border: 2px solid #FFF;
+    color: #FFF;
+    &:hover{
+      background: none;
+      border: 2px solid #000;
+      color: #000;
+    }
+    &.filled{
+      background: #FFF;
+      color: #000;
+      &:hover{
+        background: #000;
+        border: 2px solid #000;
+        color: #fff;
+      }
+    }
+  }
+
+  &.lightblue{
+    border: 2px solid @lightblue;
+    color: @lightblue;
+    &:hover{
+      background: none;
+      border: 2px solid @darkblue;
+      color: @darkblue;
+    }
+    &.filled{
+      background: @lightblue;
+      color: #fff;
+      &:hover{
+        background: @darkblue;
+        border: 2px solid @darkblue;
+        color: #fff;
+      }
+    }
+  }
+
+  &.darkblue{
+    border: 2px solid @darkblue;
+    color: @darkblue;
+    &.filled{
+      background: @darkblue;
+      color: #fff;
+    }
+    &:hover{
+      background: @lightblue;
+      border: 2px solid @lightblue;
+      color: #fff;
+    }
+  }
+
+
+  &.lightgrey{
+    border: 2px solid @lightgrey;
+    color: @lightgrey;
+    &:hover{
+      background: @lightgrey;
+      border: 2px solid @lightgrey;
+      color: #FFF;
+    }
+    &.filled{
+      background: @lightgrey;
+      color: #fff;
+      &:hover{
+        background: @darkgrey;
+        border: 2px solid @darkgrey;
+        color: #fff;
+      }
+    }
+  }
+
+  &.darkgrey{
+    border: 2px solid @darkgrey;
+    color: @darkgrey;
+    &:hover{
+      background: none;
+      border: 2px solid @lightgrey;
+      color: @lightgrey;
+    }
+    &.filled{
+      background: @darkgrey;
+      color: #fff;
+      &:hover{
+        background: @lightgrey;
+        border: 2px solid @lightgrey;
+        color: #fff;
+      }
+    }
+  }
+
+  &.orange{
+    border: 2px solid @orange;
+    color: @orange;
+    &.filled{
+      background: @orange;
+    }
+    &:hover{
+      background: @orange;
+      color: #FFF;
+    }
+  }
+
+  &.icon{
+    i.fa {
+      margin-right: 10px;
+    }
+  }
+
+}
+
+.btn-tooltip{
+  float: right;
+  display: block;
+  padding: 0;
+  height: 18px;
+  width: 18px;
+  color: #333;
+  border: solid 1px #b3b3b3;
+  border-radius: 50%;
+  font-size: 11px;
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Garuda, Verdana, Tahoma, sans-serif;
+  font-weight: 100;
+  background-color: #fff;
+  margin-top: 25px;
+  padding-top: 0;
+  &:hover{
+    border-color: rgb(0,0,0);
+  }
+}
+
+.btn-google {
+  display: inline-block;
+  background: #4285f4;
+  color: white;
+  /* width: 190px; */
+  border-radius: 5px;
+  white-space: nowrap;
+  border: 0;
+  padding: 0;
+  .icon {
+    display: inline-block;
+    vertical-align: middle;
+    width: 42px;
+    height: 42px;
+    border-right: #2265d4 1px solid;
+    font-size: 1.5em;
+    line-height: 45px;
+  }
+  .buttonText {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 42px;
+    padding-right: 42px;
+    font-size: 14px;
+    font-weight: normal;
+    /* Use the Roboto font that is loaded in the <head> */
+    font-family: 'Roboto', sans-serif;
+  }
+  &:hover, &:active {
+    background-color: #4285f4;
+    color: #fff;
+    border: 0;
+  }
+}

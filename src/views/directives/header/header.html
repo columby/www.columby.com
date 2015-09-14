@@ -13,15 +13,8 @@
             <img class="img-circle avatar" ng-src="{{user.primary.avatar.url}}"/> {{ $root.user.primary.displayName }} <span class="caret"></span>
           </a>
           <ul class="dropdown-menu usermenu">
-            <!-- <li>
-              <div class="usermenu-header">
-                {{ $root.user.primary.displayName }}
-                <span ng-show="$root.user.admin" class="label label-success">admin</span>
-              </div>
-            </li> -->
             <li><a ui-sref="account.view({slug: $root.user.primary.slug})">Your profile</a></li>
             <li><a ui-sref="user.edit({slug: $root.user.primary.slug})">Settings</a></li>
-            <!-- <li><a href="http://docs.columby.com">Help</a></li> -->
             <li><a href ng-click="logout()">Sign out</a></li>
           </ul>
         </li>

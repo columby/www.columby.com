@@ -1,0 +1,37 @@
+// TAGS
+span.tag{
+	display: inline-block;
+	height: 28px;
+	position: relative;
+	content: "";
+	// cursor: pointer;
+	margin: 13px 15px 0 5px;
+	padding: 0 13px 13px 13px;
+	border: 0 solid rgba(0,0,0,0);
+	border-radius: 4px 4px 4px 4px;
+	font-size: 12px;
+	font-family: "lato", sans-serif;
+	color: rgba(255,255,255,1);
+	text-align: center;
+	text-transform: uppercase;
+	background: rgba(0, 0, 0, 0.24);
+  line-height: 2.5;
+  i.fa {
+    margin-right: 10px;
+  }
+  a {
+    text-decoration: none;
+    border: 0;
+    color: #FFF;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  &.tag-delete{
+    a i.fa-trash{
+      margin-left: 10px;
+      margin-right: 0;
+      color: #F00;
+    }
+  }
+}

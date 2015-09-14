@@ -3,7 +3,7 @@
 
   angular
     .module('columbyApp')
-    .controller('DistributionNewCtrl', function($log, $rootScope, $scope, $modalInstance, dataset, FileService, ngNotify, ngProgress, DistributionSrv, $upload, appConstants) {
+    .controller('DistributionNewCtrl', function($log, $rootScope, $scope, $modalInstance, dataset, FileSrv, ngNotify, ngProgress, DistributionSrv, $upload, appConstants) {
 
 
     $scope.distribution = {
@@ -47,7 +47,7 @@
         return ngNotify.set('There is already an upload in progress. ', 'error');
       }
       // Check if the file has the right type
-      if (!FileService.validateFile(file.type, 'datafile')) {
+      if (!FileSrv.validateFile(file.type, 'datafile')) {
         return ngNotify.set('The file you chose is not valid. ' + file.type, 'error');
       }
 

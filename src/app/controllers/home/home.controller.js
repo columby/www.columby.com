@@ -16,7 +16,6 @@
           $scope.datasets = response;
           angular.forEach($scope.datasets.rows, function(value,key){
             $scope.datasets.rows[ key].account.avatar.url = appConstants.filesRoot + '/image/thumbnail/' + $scope.datasets.rows[ key].account.avatar.filename;
-            $log.debug($scope.datasets.rows[ key].account.avatar.url);
           });
           $scope.contentLoading = false;
         });
@@ -27,13 +26,8 @@
       $scope.doSearch = function(){
         if ($scope.search.searchTerm.length>2){
           $scope.search.message = 'Searching for: ' + $scope.search.searchTerm;
-          SearchSrv.query({
-            text: $scope.search.searchTerm
-          }).then(function(response) {
-            $state.go('search');
-          }, function(err){
-            $scope.search.message = 'Error: ' + err.data.message;
-          });
+          $rootScope.searchTerm = $scope.search.searchTerm;
+          $state.go('search');
         } else {
           $scope.search.message = 'Type at least 3 characters.';
         }

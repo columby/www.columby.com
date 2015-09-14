@@ -1,0 +1,66 @@
+<div class="header wrapper" ng-style="headerStyle">
+  <div class="container" >
+      <h1>{{category.name}}</h1>
+      <a ui-sref="account.view({slug: account.slug})"><h2 ng-bind-html="account.displayName"></h2></a>
+      <div class="registries">
+        <div class="col-md-1" ng-repeat="registry in account.registries">
+          <img class="img-responsive img-circle registry-icon" ng-src="{{registry.icon || 'assets/img/avatar.png'}}" popover="{{registry.title}}" popover-trigger="mouseenter" popover-placement="bottom"/>
+        </div>
+      </div>
+      <div class="avatar">
+        <img class="img-circle" ng-src="{{account.avatar.url || '/assets/img/avatar.png'}}"/>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content wrapper">
+  <!-- Dataset Description -->
+  <div class="description-wrapper">
+    <div class="container">
+      <div class="col-md-12">
+        <div class="description" ng-bind-html="account.description || '<p>No account description yet.</p>'"></div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- Datasets listing -->
+  <div class="datasets wrapper">
+    <div class="container">
+
+      <div class="col-md-12 publications">
+        <h3>{{datasets.count}} Datasets</h3>
+        <p ng-show="datasets.rows.length<1">No datasets found for this category.</p>
+
+          <div class="publication-listing" ng-show="datasets.rows.length>0">
+            <div class="loader" ng-show="datasets.loading"><i class="fa fa-spinner fa-spin"></i>&nbsp;Loading</div>
+
+						<ul ng-hide="datasets.loading">
+              <li ng-repeat="dataset in datasets.rows" class="publication-item">
+                <h4>
+                  <a ui-sref="dataset.view({ id: dataset.shortid })">{{dataset.title}}</a>
+                  <span ng-show="dataset.private === true" class="label bg-primary">private</span>
+                </h4>
+
+                <div class="user-date">
+                  <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
+                </div>
+
+                <ul class="properties">
+                  <!-- <li><label>Created</label><date>{{dataset.created_at | date:'d MMMM yyyy'}}</date></li> -->
+                  <li ng-show="dataset.distributions.length>0"><label>Data sources</label>{{dataset.distributions.length}}</li>
+                  <li ng-show="dataset.references.length>0"><label>References</label>{{dataset.references.length}}</li>
+
+                  <li ng-show="dataset.tags.length>0"><label>Tags</label><span ng-repeat="tag in dataset.tags">{{tag}}</span></li>
+                </ul>
+              </li>
+            </ul>
+
+            <pagination ng-change="pageChanged()" total-items="datasets.count" ng-model="datasets.currentPage" max-size="5" class="pagination-sm" boundary-links="true" rotate="false" num-pages="datasets.numPages" ng-show="datasets.numPages>1"></pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

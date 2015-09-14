@@ -1,0 +1,83 @@
+/*** ---- MAIN TYPOGRAPHY ---------------------------- ***/
+html, body, p {
+  font-family: "merriweather", serif;
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-family: "lato", sans-serif;
+}
+
+h1 {
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-weight: 400;
+  font-size: 18px;
+}
+
+h3 {
+  font-size: 30px;
+  font-size: 2em;
+  line-height: 2.2em;
+  border-bottom: 1px solid @darkgrey;
+  margin-bottom: 1em;
+  color: @darkgrey;
+  padding: 6px;
+  font-weight: bold;
+}
+
+p {
+	font-size: 18px;
+	font-weight: 300;
+	line-height: 30px;
+	color: #4d4d4d;
+	padding: 6px
+}
+
+ul {
+	padding: 0;
+	li {
+    list-style: none;
+		padding: 6px;
+		margin-top: 15px;
+		margin-bottom: 15px;
+		h4 a {
+			font-family: "lato", sans-serif;
+			font-size: 1.5em;
+			font-weight: 700;
+			color: #222;
+      margin-bottom: 0;
+		}
+		date, p {
+      padding: 0;
+			color: #c8c8c8;
+      font-size: 1em;
+		}
+		.new {
+			color: #ccc;
+			font-size: 1em;
+		}
+	}
+}
+
+*:focus{
+  outline: none;
+}
+
+.page-content {
+  .title {
+    h1 {
+      font-size: 5em;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 1em;
+      position: relative;
+      text-align: center;
+      text-transform: none;
+      word-wrap: break-word;
+      line-height: 1.2em;
+    }
+  }
+}

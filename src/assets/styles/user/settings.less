@@ -1,12 +1,16 @@
-// Styling for user settings page /u/settings
-
-.page.user.settings {
+body.user.edit {
   .menus {
-    .panel-usermenu {
-      a.active {
-        font-weight: 600;
-        text-decoration: underline;
+    a {
+      &.active {
+        text-decoration: none;
+        font-weight: bold;
       }
+    }
+  }
+  .panel-profile {
+    img {
+      width: 35px;
+      height: 35px;
     }
   }
 }

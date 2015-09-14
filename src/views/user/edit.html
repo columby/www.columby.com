@@ -39,13 +39,11 @@
         </div>
 
         <div class="panel panel-default panel-organisationsmenu" ng-show="user.organisations.length>0">
-          <div class="panel-heading">
-            Organisations
-          </div>
+          <div class="panel-heading">Organisations</div>
           <table class="table">
             <tr ng-repeat="account in user.organisations">
               <td>
-                <a ui-sref="account.edit({slug:account.slug})"><img class="avatar" ng-src="{{account.avatar.url}}"/> {{account.displayName}}</a>
+                <a ui-sref="account.edit({slug:account.slug})"><img class="avatar" ng-src="{{account.avatar.url}}"/>{{account.displayName}}</a>
               </td>
             </tr>
           </table>
@@ -65,13 +63,11 @@
                   <label for="displayname">Profile picture</label>
                   <div class="row">
                     <div class="col-md-3">
-                      <img class="img-circle avatar" ng-src="{{user.primary.avatar.url}}"/>
-                      <a class="btn btn-default" href ng-click="openFileBrowser()">change</a>
+                      <img class="img-circle img-responsive avatar" ng-src="{{user.primary.avatar.url}}"/>
                     </div>
                     <div class="col-md-9">
                       <div class="form-group">
-
-                        <!-- <button class="btn btn-default">Upload new picture</button> -->
+                        <a class="btn btn-default" href ng-click="openFileBrowser()">change</a>
                       </div>
                     </div>
                   </div>
@@ -161,9 +157,7 @@
 
           <div class="organisations-panels" ng-switch-when="organisations">
             <div class="panel panel-default">
-              <div class="panel-heading">
-                Organisations
-              </div>
+              <div class="panel-heading">Organisations</div>
               <div class="panel-body">
                 <div class="empty" ng-show="user.organisations.length<1"><p>No organisations added yet.</p></div>
                 <ul>

@@ -113,7 +113,7 @@
         $log.debug('Checking permission: ' + permission + ' with params: ', params);
 
         // admin is always true
-        if ($rootScope.user.admin === true) {
+        if ($rootScope.user && ($rootScope.user.admin === true)) {
           $log.debug('user is admin');
           return true;
         }
@@ -128,7 +128,7 @@
             return !$auth.isAuthenticated();
           case 'edit user':
             if (!$auth.isAuthenticated()) { return false; }
-            if ($rootScope.user.primary.slug === params.slug) {
+            if ($rootScope.user && ($rootScope.user.primary.slug === params.slug)) {
               return true;
             } else {
               return false;

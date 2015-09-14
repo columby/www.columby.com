@@ -23,6 +23,10 @@
             method: 'PUT',
             url: appConstants.apiRoot + '/v2/account/:id/registry/:rid'
           },
+          addDefaultCategories: {
+            method: 'POST',
+            url: appConstants.apiRoot + '/v2/account/:id/defaultcategories'
+          }
         }
       );
     }

@@ -1,13 +1,7 @@
+// Will be overwritten by gulp['constants'] based on NODE_ENV
+
 (function() {
   'use strict';
 
-  angular
-    .module('columbyApp')
-    .constant('appConstants', {
-      appTitle: 'Columby',
-      debug: true,
-      apiRoot: 'https://api.columby.com',
-      //apiRoot: 'http://localhost:8000',
-      filesRoot: 'https://files.columby.com'
-    });
+  angular.module('columbyApp').constant('appConstants', window.settings);
 })();
