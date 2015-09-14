@@ -50,11 +50,11 @@
 
     /* ---------- INIT ---------------------------------------------------------------------------- */
     if ($rootScope.searchTerm){
-      if ($rootScope.searchTerm){
-        $scope.search.searchTerm = $rootScope.searchTerm;
-        delete $rootScope.searchTerm;
-        $scope.doSearch();
-      }
+      $scope.search.searchTerm = $rootScope.searchTerm;
+      $log.debug($scope.search.searchTerm);
+      delete $rootScope.searchTerm;
+      $log.debug($scope.search.searchTerm);
+      $scope.doSearch();
     }
   });
 })();
