@@ -1,8 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('columbyApp')
-    .controller('DatasetOptionsCtrl', function($log, dataset, account, $modalInstance, $rootScope, $scope, DatasetSrv,ngNotify,appConstants, $modal,$state,Slug,FileSrv) {
+  angular.module('columbyApp').controller('DatasetOptionsCtrl', function($log, dataset, account, $modalInstance, $rootScope, $scope, DatasetSrv,ngNotify,appConstants, $modal,$state,Slug,CategorySrv) {
 
       var modalOpened = false;
 
@@ -30,7 +29,6 @@
 
       $scope.dataset = dataset;
       $scope.account = account;
-
 
       /**
        * Update the header background image
@@ -62,6 +60,40 @@
             ngNotify.set('There was an error updating the custom URL.');
           }
         });
+      };
+
+
+      // CATEGORIES
+      $scope.activeCategory = function(category){
+        var active = false;
+        for (var i=0; i<$scope.dataset.categories.length; i++){
+          if ($scope.dataset.categories[ i].id === category.id){
+            active = true;
+          }
+        }
+        return active;
+      };
+
+      $scope.toggleSelectedCategory = function(category){
+        $log.debug($scope.activeCategory(category));
+        if (!$scope.activeCategory(category)){
+          //add
+          DatasetSrv.addCategory({id: $scope.dataset.id}, {category: category}, function(result){
+            $log.debug(result);
+            $scope.dataset.categories.push(result);
+            $log.debug($scope.dataset.categories);
+          });
+        } else {
+          //remove
+          DatasetSrv.removeCategory({id: $scope.dataset.id, cid: category.id}, function(result){
+            $log.debug(result);
+            for (var i=0;i<$scope.dataset.categories.length;i++){
+              if ($scope.dataset.categories[ i].id === category.id){
+                $scope.dataset.categories.splice(i,1);
+              }
+            }
+          });
+        }
       };
 
 
@@ -104,11 +136,7 @@
       };
 
 
-      /**
-       *
-       * Toggle private mode for a dataset.
-       *
-       */
+      // Dataset privacy
       $scope.toggleDatasetPrivacy = function(){
         var newStatus = !$scope.dataset.private;
         $scope.dialogMsg = 'Setting visibility status to ' + !newStatus;
@@ -127,10 +155,39 @@
       };
 
 
+      // REGISTRIES
       $scope.toggleDatasetRegistry = function($index, registry){
         var status = !registry.dataset_registries.status;
         DatasetSrv.updateRegistry({id: dataset.id, rid: registry.id},{ status:status }, function(result){
           $scope.dataset.registries[ $index].dataset_registries = result;
+        });
+      };
+
+
+      // TAGS
+      $scope.slugifyTag = function(){
+        $scope.newTag.text = Slug.slugify($scope.newTag.text);
+      };
+      $scope.addTag = function(){
+        DatasetSrv.addTag({
+          id: $scope.dataset.id,
+          tag: {text: $scope.newTag.text}
+        }, function(result){
+          if (result.added){
+            $scope.dataset.tags.push(result.tag);
+            $scope.newTag = null;
+          } else {
+            $scope.newTag = null;
+          }
+        });
+      };
+      $scope.removeTag = function(tag){
+        $log.debug('removing tag, ', tag);
+        var id = $scope.dataset.tags.indexOf(tag);
+        $log.debug(tag);
+        DatasetSrv.removeTag({id:$scope.dataset.id, tid:tag.id},function(result){
+          $log.debug('dataset remove result: ', result);
+          $scope.dataset.tags.splice(id,1);
         });
       };
     });

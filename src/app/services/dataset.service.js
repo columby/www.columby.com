@@ -11,7 +11,8 @@
       id: '@id',
       offset: '@offset',
       tid: '@tid',
-      rid: '@rid'
+      rid: '@rid',
+      cid: '@cid'
     }, {
 
       query: { method: 'GET', isArray: false, responseType: 'json' },
@@ -26,6 +27,16 @@
       removeTag: {
         method: 'DELETE',
         url: appConstants.apiRoot + '/v2/dataset/:id/tag/:tid'
+      },
+
+      addCategory: {
+        method: 'POST',
+        url: appConstants.apiRoot + '/v2/dataset/:id/category'
+      },
+
+      removeCategory: {
+        method: 'DELETE',
+        url: appConstants.apiRoot + '/v2/dataset/:id/category/:cid'
       },
 
       updateRegistry: {

@@ -9,8 +9,8 @@
     // Notification settings
     ngNotify.config({
       theme: 'pure',
-      position: 'top',
-      duration: 5000,
+      position: 'bottom',
+      duration: 3000,
       type: 'info',
       sticky: false
     });

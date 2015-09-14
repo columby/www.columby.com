@@ -1,9 +1,7 @@
 (function() {
   'use strict';
 
-  angular
-    .module('columbyApp')
-    .controller('DatasetEditCtrl', function($log, dataset, $rootScope, $scope, appConstants, $state, $stateParams, AccountSrv, DatasetSrv, DistributionSrv, PrimaryService, ReferenceSrv, TagService, Slug, FileSrv,ngProgress, $timeout,$modal,Upload, ngNotify, AuthSrv) {
+  angular.module('columbyApp').controller('DatasetEditCtrl', function($log, dataset, $rootScope, $scope, appConstants, $state, $stateParams, AccountSrv, DatasetSrv, DistributionSrv, PrimaryService, ReferenceSrv, TagService, Slug, FileSrv,ngProgress, $timeout,$modal,Upload, ngNotify, AuthSrv) {
 
   // Check existence
   if (!dataset.id){
@@ -20,6 +18,11 @@
     return;
   }
 
+  // get account details for dataset accuont
+  AccountSrv.get({slug: dataset.account.slug}, function(result){
+    $log.debug(result);
+    $scope.dataset.account = result;
+  });
 
   // Initialisation
   $scope.dataset = dataset;
@@ -162,11 +165,6 @@
     }, 5000);
   };
 
-  /**
-   *
-   * Delete an attached reference
-   *
-   */
   $scope.deleteReference = function(reference){
     var idx = $scope.dataset.references.indexOf(reference);
     $log.debug(reference);

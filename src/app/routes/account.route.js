@@ -42,6 +42,41 @@
           bodyClasses: 'account organisation edit',
           permission: 'edit organisation'
         }
+      })
+
+      .state('account.categories', {
+        url: '/:slug/category',
+        templateUrl: 'views/account/categories/index.html',
+        resolve: {
+          // First try to fetch dataset.
+          account: function(AccountSrv, $stateParams) {
+            return AccountSrv.get({slug: $stateParams.slug}).$promise;
+          }
+        },
+        controller: 'AccountCategoriesCtrl',
+        data: {
+          bodyClasses: 'account organisation categories'
+        }
+      })
+      .state('account.category', {
+        url: '/:slug/category/:id',
+        templateUrl: 'views/account/categories/show.html',
+        resolve: {
+          category: function(CategorySrv, $stateParams) {
+            return CategorySrv.get({id: $stateParams.id}).$promise;
+          },
+          account: function(AccountSrv, $stateParams) {
+            console.log($stateParams);
+            return AccountSrv.get({slug: $stateParams.slug}).$promise;
+          },
+          datasets: function(CategorySrv,$stateParams) {
+            return CategorySrv.getDatasets({id: $stateParams.id}).$promise;
+          }
+        },
+        controller: 'AccountCategoryCtrl',
+        data: {
+          bodyClasses: 'account organisation category'
+        }
       });
   });
 })();

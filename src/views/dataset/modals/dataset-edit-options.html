@@ -8,10 +8,52 @@
     </a>
   </div>
 </div>
-hhhlll
+
 <div class="modal-body row">
-  <div class="col-md-12">
-    <div class="visibility setting">
+  <!-- Tags -->
+  <div class="tags-wrapper">
+    <div class="col-md-12">
+      <h3>Tags</h3>
+      <div class="tags-list" ng-show="dataset.tags.length>0">
+        <span class="tag tag-delete" ng-repeat="tag in dataset.tags">
+            <i class="fa fa-tag"></i>{{tag.text}}<a href ng-click="removeTag(tag)"><i class="fa fa-trash"></i></a>
+        </span>
+      </div>
+      <div class="tag-add">
+        <p>Add a new tag: </p>
+        <form name="addTagForm">
+          <div class="col-md-6">
+            <input class="form-control" ng-model="newTag.text" ng-change="slugifyTag()"/>
+          </div>
+          <div class="col-md-3">
+            <button class="btn btn-default btn-primary" ng-click="addTag()" ng-disabled="addTagForm.$pristine">Add tag</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Categories -->
+  <div class="category-wrapper">
+    <div class="col-md-12">
+      <h3>Categories
+        <span class="pull-right">
+          <a class="btn btn-xs btn-tooltip pull-right" popover-placement="left" popover-trigger="mouseenter" popover="Add this dataset to one or more categories."><i class="fa fa-question"></i></a>
+        </span>
+      </h3>
+
+      <div class="categories">
+        <div class="col-md-3 category" ng-repeat="category in dataset.account.categories">
+          <input type="checkbox" ng-checked="activeCategory(category)" ng-click="toggleSelectedCategory(category)">{{category.name}}</input>
+        </div>
+      selected: {{selectedCategories}}
+      <p><a href ui-sref="account.edit({slug: '{{dataset.account.slug}}'})">Manage dataset categories at the account administration page</a></p></div>
+    </div>
+  </div>
+
+  <!-- Visibility -->
+  <div class="visibility-wrapper">
+    <div class="col-md-12">
       <h3>Visibility
         <span class="pull-right">
           <a class="btn btn-xs btn-tooltip pull-right" popover-placement="left" popover-trigger="mouseenter" popover="Change visibility settings for your dataset.">
@@ -19,12 +61,9 @@ hhhlll
           </a>
         </span>
       </h3>
-
-      <div class="btn-group btn-toggle">
-        <button class="btn btn-lg btn-default btn-private" ng-click="toggleDatasetPrivacy()" ng-disabled="dataset.private" ng-model="dataset.private">Private</button>
-        <button class="btn btn-lg btn-success" ng-click="toggleDatasetPrivacy()" ng-disabled="!dataset.private" ng-model="dataset.private">Public</button>
-      </div>
+      <input type="checkbox" ng-checked="dataset.private" ng-click="toggleDatasetPrivacy()">This is a private dataset</input>
     </div>
+  </div>
 
 <!-- <div class="slug">
         <h3>Custom URL <span class="pull-right">
@@ -80,7 +119,9 @@ hhhlll
       </table>
     </div> -->
 
-    <div class="background">
+  <!-- Background image -->
+  <div class="background-wrapper">
+    <div class="col-md-12">
       <h3>Background image
         <button class="btn btn-default right btn-xs btn-tooltip" data-popover-placement="left" data-popover-trigger="mouseenter" data-popover="Upload a background image for your dataset">
           <i class="fa fa-question"></i>
@@ -90,13 +131,12 @@ hhhlll
         <button class="btn btn-xs btn-default upload-button" ng-file-change="startUpload($files,'image','header')" ng-file-select>upload your image</button>
       </div>
     </div>
+  </div>
 
-    <div class="delete">
-      <hr>
-      <button class="btn btn-danger btn-xs" ng-click="delete()" type="button">
-        <i class="fa fa-trash-o"></i>
-        Delete dataset</button>
+  <div class="delete-wrapper">
+    <div class="col-md-12">
+      <h3>Delete</h3>
+      <button class="btn btn-danger btn-xs" ng-click="delete()" type="button"><i class="fa fa-trash-o"></i>Delete dataset</button>
     </div>
   </div>
-</div>
 </div>

@@ -4,7 +4,7 @@
   angular
     .module('columbyApp')
 
-    .controller('AccountEditCtrl', function($log, account, $rootScope, $scope, $state, $stateParams, AccountSrv, ngNotify, Upload, FileSrv, RegistrySrv,appConstants,CategorySrv) {
+    .controller('AccountEditCtrl', function($log, account, $rootScope, $scope, $state, $stateParams, AccountSrv, ngNotify, Upload, FileSrv, RegistrySrv,appConstants,CategorySrv,$modal) {
 
       $scope.activePanel = 'profile';
 
@@ -142,11 +142,30 @@
       };
 
       $scope.showStandardCategoriesModal = function(){
-        $log.debug('show');
+        $modal.open({
+          templateUrl: 'views/account/modals/standardCategories.html',
+          size: 'lg',
+          backdrop: 'static',
+          keyboard: false,
+        }).result.then(function() {
+          AccountSrv.addDefaultCategories({id:$scope.account.id}, {standard:'overheid-nl'}, function(result){
+            $log.debug(result);
+            if (result.status==='success') {
+              AccountSrv.get({slug: $scope.account.slug},function(account){
+                $log.debug(account);
+              });
+            }
+          });
+        }, function () {
+          //console.log('cancel');
+          //modalOpened=false;
+        });
       };
+
       $scope.deleteCategory = function(index){
         $log.debug(index);
         CategorySrv.delete({id:$scope.account.categories[ index].id}, function(result){
+          console.log(result);
           $scope.account.categories.splice(index, 1);
         });
       };

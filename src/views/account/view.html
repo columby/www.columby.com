@@ -1,30 +1,31 @@
-<div class="header wrapper" ng-style="headerStyle">
-  <div class="loader" ng-show="contentLoading" style="text-align: center;"><i class="fa fa-spinner fa-spin"></i> <p>Loading account</p></div>
+<div class="page-header" ng-style="headerStyle">
 
-  <div class="container" ng-hide="contentLoading">
-      <h1 ng-bind-html="account.displayName"></h1>
+  <div class="actions-bar" ng-show="account.canEdit">
+    <div class="label label-success" data-ng-show="account.id===$root.user.primary.id">This is you!</div>
+    <a class="btn btn-default white filled icon" ui-sref="user.edit({slug: account.slug})" ng-show="account.primary"><i class="fa fa-pencil"></i>Edit</a>
+    <a class="btn btn-default white filled icon" ui-sref="account.edit({slug: account.slug})" ng-show="!account.primary"><i class="fa fa-pencil"></i>Edit</a>
+  </div>
 
-      <div class="editor" ng-show="account.canEdit">
-        <div class="label label-success" data-ng-show="account.id===$root.user.primary.id">This is you!</div>
-        <div><a ui-sref="user.edit({slug: account.slug})" ng-show="account.primary" class="icon-edit-link"><i class="fa fa-pencil"></i> Edit</a>
-        <a ui-sref="account.edit({slug: account.slug})" ng-show="!account.primary">Edit</a></div>
+  <div class="container">
+    <div class="col-md-12 title">
+      <h1>{{account.displayName}}</h1>
+    </div>
+
+
+
+    <div class="registries">
+      <div class="col-md-1" ng-repeat="registry in account.registries">
+        <img class="img-responsive img-circle registry-icon" ng-src="{{registry.icon || 'assets/img/avatar.png'}}" popover="{{registry.title}}" popover-trigger="mouseenter" popover-placement="bottom"/>
       </div>
+    </div>
 
-      <div class="registries">
-        <div class="col-md-1" ng-repeat="registry in account.registries">
-          <img class="img-responsive img-circle registry-icon" ng-src="{{registry.icon || 'assets/img/avatar.png'}}" popover="{{registry.title}}" popover-trigger="mouseenter" popover-placement="bottom"/>
-        </div>
-      </div>
-
-      <div class="avatar">
-        <img class="img-circle" ng-src="{{account.avatar.url || '/assets/img/avatar.png'}}"/>
-      </div>
-
+    <div class="avatar">
+      <img class="img-circle" ng-src="{{account.avatar.url || '/assets/img/avatar.png'}}"/>
     </div>
   </div>
 </div>
 
-<div class="content wrapper" ng-hide="contentLoading">
+<div class="page-content">
   <!-- Dataset Description -->
   <div class="description-wrapper">
     <div class="container">
@@ -51,6 +52,19 @@
   <!-- Datasets listing -->
   <div class="datasets wrapper">
     <div class="container">
+
+      <div class="col-md-12 categories" ng-show="account.categories.length>0">
+        <p>Browse by category
+          <span class="show-empty small" ng-hide="showEmptyCategories"><a href ng-click="toggleEmptyCategories()">Show empty categories</a></span>
+          <span class="hide-empty small" ng-show="showEmptyCategories"><a href ng-click="toggleEmptyCategories()">Hide empty categories</a></span>
+        </p>
+        <div class="categories">
+          <div class="col-md-4 category" ng-repeat="category in account.categories" ng-show="category.count>0 || showEmptyCategories">
+            <a href ng-class="{active: selectedCategory==={{category.id}}}" ui-sref="account.category({slug: '{{account.slug}}', id: '{{category.id}}'})">{{category.name}}</a>
+          </div>
+        </div>
+      </div>
+
       <div class="col-md-12 publications">
         <h3>{{datasets.count}} Datasets <span ng-show="search.term">[Filter: {{search.term}}]<a href ng-click="clearSearch()"><i class="fa fa-trash"></i></a></span></h3>
           <p ng-show="datasets.rows.length<1">No datasets found.</p>
@@ -65,16 +79,11 @@
                   <span ng-show="dataset.private === true" class="label bg-primary">private</span>
                 </h4>
 
-                <div class="user-date">
-                  <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time>
-                </div>
-
                 <ul class="properties">
-                  <!-- <li><label>Created</label><date>{{dataset.created_at | date:'d MMMM yyyy'}}</date></li> -->
-                  <li ng-show="dataset.distributions.length>0"><label>Data sources</label>{{dataset.distributions.length}}</li>
-                  <li ng-show="dataset.references.length>0"><label>References</label>{{dataset.references.length}}</li>
-
-                  <li ng-show="dataset.tags.length>0"><label>Tags</label><span ng-repeat="tag in dataset.tags">{{tag}}</span></li>
+                  <li><label>Created: </label>{{dataset.created_at | date:'d MMMM yyyy'}}</li>
+                  <li ng-hide="!dataset.distributions.length"><label>Data sources: </label>{{dataset.distributions.length}}</li>
+                  <li ng-hide="!dataset.references.length"><label>References: </label>{{dataset.references.length}}</li>
+                  <li ng-hide="!dataset.tags.length"><label>Tags:</label><span ng-repeat="tag in dataset.tags">{{tag}}</span></li>
                 </ul>
               </li>
             </ul>
@@ -117,5 +126,6 @@
         </div>
       </div>
     </div>
-  </div>
 </div>
+
+<div class="page-footer"></div>

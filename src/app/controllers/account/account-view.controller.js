@@ -3,29 +3,32 @@
 
   angular.module('columbyApp').controller('AccountCtrl', function(account, $rootScope, $scope, $stateParams, $state, ngNotify, AuthSrv, AccountSrv, DatasetSrv, appConstants, $log) {
 
+    // Check if requested account was fetched
     if (!account.id){
       ngNotify.set('The requested account was not found. ','error');
       $state.go('home');
     }
-    $log.debug('a', account);
 
+    // Add account to scope
     $scope.account = account;
+
+    // Update the avatar url based on the filename
     if ($scope.account.avatar){
       $scope.account.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.account.avatar.filename;
     }
 
+    // Set page tittle based on result
     $rootScope.title = 'columby.com | ' + $scope.account.displayName;
 
+    // Initial settings
     $scope.datasets = {
       currentPage: 1,
       numberOfItems: 10
     };
-
     $scope.search = {};
+
     // Set header background image
     if ($scope.account.headerImg) { updateHeaderImage(); }
-
-
 
     // check if current user can edit the account
     if ($scope.account.primary){
@@ -33,6 +36,11 @@
     } else {
       $scope.account.canEdit = AuthSrv.hasPermission('edit organisation', account);
     }
+
+    // Selection filters
+    $scope.showEmptyCategories = false;
+    $scope.selectedCategory = false;
+
 
 
     function getDatasets() {
@@ -56,7 +64,7 @@
 
 
     function updateHeaderImage(){
-      $scope.account.headerImg.url = appConstants.filesRoot + '/a/' + $scope.account.headerImg.shortid + '/' + $scope.account.headerImg.filename;
+      $scope.account.headerImg.url = appConstants.filesRoot + '/image/large/' + $scope.account.headerImg.filename;
       $scope.headerStyle={
         'background-image': 'linear-gradient(transparent,transparent), url(/assets/img/default-header-bw.svg), url(' + $scope.account.headerImg.url + ')',
         'background-blend-mode': 'multiply'
@@ -78,6 +86,10 @@
       $scope.datasets.currentPage = 1;
       $scope.search.term = null;
       getDatasets();
+    };
+
+    $scope.toggleEmptyCategories = function(){
+      $scope.showEmptyCategories = !$scope.showEmptyCategories;
     };
 
     getDatasets();
