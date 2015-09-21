@@ -15,7 +15,7 @@
       .state('user.signin', {
         url: '/signin',
         templateUrl: 'views/user/signin.html',
-        controller: 'SigninCtrl',
+        controller: 'UserSigninCtrl',
         data: {
           bodyClasses: 'page user signin',
           permission: 'signin user'
@@ -32,13 +32,13 @@
         }
       })
 
-      .state('user.register', {
-        url: '/register',
-        templateUrl: 'views/user/register.html',
-        controller: 'RegisterCtrl',
+      .state('user.signup', {
+        url: '/signup',
+        templateUrl: 'views/user/signup.html',
+        controller: 'UserSignupCtrl',
         data: {
-          bodyClasses: 'page user register',
-          permission: 'register user'
+          bodyClasses: 'page user signup',
+          permission: 'signup user'
         }
       })
 

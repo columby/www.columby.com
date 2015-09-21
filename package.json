@@ -2,8 +2,7 @@
   "name": "columby-ui",
   "version": "1.0.9",
   "main": "server/server.js",
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "browser-sync": "~2.8.2",
     "browser-sync-spa": "~1.0.2",
     "chalk": "~1.1.0",
