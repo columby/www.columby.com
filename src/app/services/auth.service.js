@@ -122,7 +122,7 @@
           // User permissions
           case 'signin user':
             return !$auth.isAuthenticated();
-          case 'register user':
+          case 'signup user':
             return !$auth.isAuthenticated();
           case 'verify user login':
             return !$auth.isAuthenticated();

@@ -1,22 +1,22 @@
-<div class="page signin verify">
-
-  <!-- Signin content -->
-  <div class="content">
-    <div class="header wrapper">
-      <div class="container">
-        <div>
-          <h1 class="title">Verify Signin</h1>
-        </div>
+<div class="page-header">
+  <div class="container">
+    <div class="col-md-12">
+      <div class="title">
+        <h1>Verify</h1>
+        <br>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- login & register forms -->
-    <div class="container">
-        <div class="col-md-12">
-          <h2>Verify</h2>
-          <p ng-hide="message">Please wait while we verify your login token. </p>
-          <p>{{message}}. Please login <a ui-sref="signin">again</a></p>
-        </div>
-      </div>
+<!-- Signin content -->
+<div class="content">
+  <div class="container">
+    <div class="col-md-12">
+      <h2>Verify</h2>
+      <p ng-hide="message">Please wait while we verify your login token. </p>
+      <p class="bg-danger">{{message}}. Please login <a ui-sref="user.signin">again</a></p>
+      <br><br><br>
+    </div>
   </div>
 </div>

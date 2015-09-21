@@ -6,7 +6,7 @@
       	<img src="/assets/img/logo-transparant-white.png">
       </a>
       <ul class="nav navbar-nav navbar-right">
-        <li ng-hide="$root.user.id"><a ui-sref="user.register">Sign up</a></li>
+        <li ng-hide="$root.user.id"><a ui-sref="user.signup">Sign up</a></li>
         <li ng-hide="$root.user.id"><a ui-sref="user.signin">Sign in</a></li>
         <li dropdown on-toggle="toggleUsermenu(open)" ng-show="$root.user.id">
           <a href class="dropdown-toggle avatar" dropdown-toggle>

@@ -1,4 +1,4 @@
-button, .default-button{
+button,.btn {
   display: inline-block;
   padding: 6px 12px;
   font-size: 14px;
@@ -21,14 +21,25 @@ button, .default-button{
 	color: #fff;
   font-family: "lato", sans-serif;
   font-weight: bolder;
-
   &:hover{
-    // border: 2px solid #000;
     background: #000;
     color: #fff;
     text-decoration: none;
   }
+}
 
+.btn-primary {
+  color: #FFF;
+  background-color: @darkblue;
+  border-color: @darkblue;
+  &:hover {
+    background-color: @lightblue;
+    border-color: @lightblue;
+  }
+}
+
+button,
+.btn{
   &.black{
     border: 2px solid #000;
     color: #000;
@@ -182,6 +193,7 @@ button, .default-button{
   border: 0;
   padding: 0;
   .icon {
+    text-align: center;
     display: inline-block;
     vertical-align: middle;
     width: 42px;
@@ -200,7 +212,9 @@ button, .default-button{
     /* Use the Roboto font that is loaded in the <head> */
     font-family: 'Roboto', sans-serif;
   }
-  &:hover, &:active {
+  &:hover,
+  &:focus,
+  &:active {
     background-color: #4285f4;
     color: #fff;
     border: 0;
