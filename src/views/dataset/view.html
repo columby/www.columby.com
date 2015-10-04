@@ -20,7 +20,7 @@
       <!-- Tags -->
       <div class="tags" ng-show="dataset.tags.length>0">
         <span class="tag" ng-repeat="tag in dataset.tags">
-          <a ui-sref="tag.view({slug: tag.slug })"><i class="fa fa-tag"></i>{{tag.text}}</a>
+          <a ui-sref="tag.view({slug: '{{tag.slug}}' })"><i class="fa fa-tag"></i>{{tag.text}}</a>
         </span>
       </div>
       <!-- Categories -->
