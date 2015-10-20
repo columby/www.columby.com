@@ -1,71 +1,75 @@
-body.dataset.edit {
-  .page-content {
-    padding-bottom: 3em;
-    .page-header {
-      .page-title {
-        padding: 1.5em 0;
-        textarea {
-          width: 100%;
-          border: 1px solid #fff;
-          border: 1px solid rgba(255, 0, 0, 0);
-          border-radius: 4px;
-          padding: 10px;
-          font-size: 3em;
-        }
-      	.tags-title{
-      		color: #fff;
-      		padding: 7px 0 0 50px;
-      	}
-      }
-    }
-    .page-body {
-
-    }
-    .page-footer {
-
-    }
-  }
-  .reference {
-    position: relative;
-    .actions {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 40px;
-      background-color: rgba(0,0,0,0.5);
+body.dataset.edit,
+body.dataset.create {
+  .page-header {
+    textarea.page-title {
+      width: 100%;
+      border: 1px solid #fff;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 4px;
       padding: 10px;
-      text-align: right;
+      font-size: 3em;
+      background-color: rgba(255,255,255,0.2);
+      text-align: center;
+      color: #FFF;
+    }
+    .tags-title{
+      color: #fff;
+      padding: 7px 0 0 50px;
     }
   }
-
-  .create {
-    text-align: center;
-    padding-top: 20px;
-    button{
-      background: #345;
-      font-size: 1.2em;
-      border-radius: 45px;
-      position: relative;
-      padding: 8px 34px;
-      &:hover {
-        background: #1E2730;
-        color: #fff;
+  .page-body {
+    .description-wrapper {
+      .ta-bind {
+        min-height: 5em;
       }
     }
-    button.disabled{
-      background: #DDD;
-      font-size: 1.2em;
-      border-radius: 45px;
+    .reference {
       position: relative;
-      padding: 8px 34px;
+      .actions {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background-color: rgba(0,0,0,0.5);
+        padding: 10px;
+        text-align: right;
+      }
     }
-    p{
-      font-style: italic;
-      font-size: 0.8em;
-      margin-top: 12px;
-      opacity: 0.8;
+    .create {
+      text-align: center;
+      padding-top: 20px;
+      button{
+        background: #345;
+        font-size: 1.2em;
+        border-radius: 45px;
+        position: relative;
+        padding: 8px 34px;
+        &:hover {
+          background: #1E2730;
+          color: #fff;
+        }
+      }
+      button.disabled{
+        background: #DDD;
+        font-size: 1.2em;
+        border-radius: 45px;
+        position: relative;
+        padding: 8px 34px;
+      }
+      p{
+        font-style: italic;
+        font-size: 0.8em;
+        margin-top: 12px;
+        opacity: 0.8;
+      }
     }
   }
-
+  .page-footer {
+    padding: 3em 0;
+    p.notice {
+      font-size: 0.9em;
+      font-weight: 600;
+    }
+  }
 }
