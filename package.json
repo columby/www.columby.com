@@ -6,22 +6,7 @@
   "repository": "https://www.github.com/columby/www.columby.com",
   "license": "proprietary",
   "scripts": {
-    "deploy": "gulp deploy",
-    "prestart": "npm test",
-    "start": "gulp serve",
-    "test": "standard --verbose"
-  },
-  "standard": {
-    "ignore": [
-      "dist/**",
-      "node_modules/**"
-    ]
-  },
-  "echint": {
-    "ignore": [
-      "dist/**",
-      "node_modules"
-    ]
+    "start": "gulp serve"
   },
   "dependencies": {
     "browser-sync": "~2.8.2",

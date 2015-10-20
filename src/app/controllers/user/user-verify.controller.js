@@ -6,7 +6,7 @@
     var token = $location.search().token;
 
     UserSrv.verify(token).then(function(result){
-      if (result.status==="error") {
+      if (result.status==='error') {
         $scope.message = result.err;
         ngNotify.set('There was an error verifying the login. Please try again.', 'error');
         delete $scope.verificationInProgress;
