@@ -1,42 +1,30 @@
-.switcher{
-  h3{
-    margin-bottom: 40px;
-  }
-  ul{
-    li{
-      list-style: none;
-      div{
-        display: block;
-        margin: 0 auto;
-        width: 450px;
-        background: #EEE;
+.modal {
+  .account-switcher-wrapper {
+    h3 {
+      margin-bottom: 40px;
+    }
+    .account {
+      padding: 10px;
+      margin-bottom: 11px;
+      a {
+        display: inline-block;
+        width: 100%;
         padding: 10px;
-        margin-bottom: 11px;
-        height: 120px;
-        &:hover{
-          background: #ABABAB;
+        border: 1px solid @verylightblue;
+        border-radius: 2px;
+        &:hover {
+          background-color: @verylightblue;
         }
-        img{
-          width: 100px;
-          height: 100px;
-          margin-right: 20px;
-          float: left;
-          display: block;
+      }
+      &.active {
+        a {
+          background-color: @lightblue;
         }
-        span.account{
-          float: left;
-          font-size: 2em;
-          margin-top: 30px;
-          color: #444;
-        }
-        .label {
-          vertical-align: top;
-          // margin-left: 10px;
-          float: right;
-          // margin-top: 40px;
-          height: 21px;
-          line-height: 1.4em;
-        }
+      }
+      .account-name {
+        font-size: 1.5em;
+        color: #444;
+        line-height: 1.5;
       }
     }
   }

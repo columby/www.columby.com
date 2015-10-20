@@ -1,7 +1,28 @@
 {
-  "name": "columby-ui",
-  "version": "1.0.9",
-  "main": "server/server.js",
+  "private": true,
+  "name": "www.columby.com",
+  "version": "1.2.0",
+  "homepage": "https://www.columby.com",
+  "repository": "https://www.github.com/columby/www.columby.com",
+  "license": "proprietary",
+  "scripts": {
+    "deploy": "gulp deploy",
+    "prestart": "npm test",
+    "start": "gulp serve",
+    "test": "standard --verbose"
+  },
+  "standard": {
+    "ignore": [
+      "dist/**",
+      "node_modules/**"
+    ]
+  },
+  "echint": {
+    "ignore": [
+      "dist/**",
+      "node_modules"
+    ]
+  },
   "dependencies": {
     "browser-sync": "~2.8.2",
     "browser-sync-spa": "~1.0.2",
@@ -54,9 +75,5 @@
   "engines": {
     "node": "0.10.x",
     "npm": "1.2.x"
-  },
-  "scripts": {
-    "start": "node server/server.js"
-  },
-  "private": true
+  }
 }

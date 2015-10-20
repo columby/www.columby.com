@@ -111,7 +111,7 @@
   $scope.showEmbedModal = function(){
     var modal = $modal.open({
       template: 'views/dataset/embedModal.html',
-      className: 'ngDialog-theme-default fullscreenDialog embedModal',
+      className: 'ngDialog-theme-default fullscreen embedModal',
       scope: $scope
     });
   };
