@@ -1,11 +1,9 @@
 (function() {
   'use strict';
 
-  angular
-    .module('columbyApp')
-    .controller('DatasetViewCtrl', function($log, dataset, $window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, appConstants, DataService, UserSrv, AuthSrv, ngNotify,$modal) {
-  $log.debug(';');
-  $log.debug(dataset);
+  angular.module('columbyApp')
+  .controller('DatasetViewCtrl', function($log, dataset, $window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, appConstants, DataService, UserSrv, AuthSrv, ngNotify,$modal) {
+
   if (!dataset.id) {
     $log.debug('nooo');
     ngNotify.set('Sorry, the requested dataset was not found. ', 'error');
@@ -110,7 +108,7 @@
   /* --------- SCOPE FUNCTIONS ------------------------------------------------------------ */
   $scope.showEmbedModal = function(){
     var modal = $modal.open({
-      template: 'views/dataset/embedModal.html',
+      templateUrl: 'views/dataset/modals/dataset-embed.html',
       className: 'ngDialog-theme-default fullscreen embedModal',
       scope: $scope
     });
