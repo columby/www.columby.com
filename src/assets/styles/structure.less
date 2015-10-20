@@ -33,11 +33,55 @@
   padding: 0.2em 0;
 }
 
+
+
+// General page layout
 .page-header {
-  padding: 50px 0 0 0;
+  margin-bottom: 0 0 1.5em 0;
   border: 0;
-  margin: 0 0 1.5em 0;
+  padding: 50px 0 50px 0;
+  background-image: url('/assets/img/default-header.png');
+  background-image: linear-gradient(transparent,transparent), url('/assets/img/default-header.svg');
+  background-position: 50% 50%;
+  background-size: cover;
+  height: auto;
+  text-align: center;
+  p {
+    text-align: center;
+  }
+	.meta {
+		p {
+	    color: #fff;
+    }
+		.account a {
+			color: #fff;
+			padding-bottom: 5px;
+			border-bottom: solid 1px rgba(255, 255, 255, 0.3);
+			&:hover {
+				color: #fff;
+				border-bottom: solid 1px rgb(255,255,255);
+				text-decoration: none;
+			}
+	  }
+	}
+  .avatar {
+		width: 125px;
+		margin: 0 auto;
+    -ms-transform: translate(0,30px);
+    -webkit-transform: translate(0,30px);
+    transform: translate(0,30px);
+    img {
+      display: block;
+      margin: 0 auto;
+      width: 125px;
+      height: 125px;
+      /* background-color: #eee; */
+      border: 5px solid #eee;
+      border: 5px solid rgba(112, 112, 112, 0.2);
+    }
+  }
 }
+
 .page-content {
 
 }

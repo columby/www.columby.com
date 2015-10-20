@@ -13,8 +13,8 @@ var _ = require('lodash');
 
 gulp.task('styles', function () {
   var injectFiles = gulp.src([
-    path.join(conf.paths.src, '/app/**/*.less'),
     path.join(conf.paths.src, '/assets/styles/**/*.less'),
+    path.join(conf.paths.src, '/app/**/*.less'),
     path.join('!' + conf.paths.src, '/assets/styles/style.less')
   ], { read: false });
 
@@ -28,7 +28,6 @@ gulp.task('styles', function () {
     addRootSlash: false
   };
 
-
   return gulp.src([
     path.join(conf.paths.src, '/assets/styles/style.less')
   ])
@@ -39,5 +38,5 @@ gulp.task('styles', function () {
     .pipe($.autoprefixer()).on('error', conf.errorHandler('Autoprefixer'))
     .pipe($.sourcemaps.write())
     .pipe(gulp.dest(path.join(conf.paths.tmp, '/serve/app/')))
-    .pipe(browserSync.reload({ stream: true }));
+    .pipe(browserSync.reload({stream:true}));
 });

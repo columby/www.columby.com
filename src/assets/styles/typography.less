@@ -1,14 +1,18 @@
 /*** ---- MAIN TYPOGRAPHY ---------------------------- ***/
+
+/// Variables
+@serif: "merriweather", serif;
+@sans-serif: "lato", sans-serif;
+
+
 html, body, p {
-  font-family: "merriweather", serif;
+  font-family: @serif;
 }
 
 h1,h2,h3,h4,h5,h6{
-  font-family: "lato", sans-serif;
+  font-family: @sans-serif;
 }
 
-@serif: "merriweather", serif;
-@sans-serif: "lato", sans-serif;
 
 h1 {
   font-weight: 400;
@@ -69,18 +73,23 @@ ul {
   outline: none;
 }
 
-.page-content {
-  .title {
-    h1 {
-      font-size: 5em;
-      font-weight: 700;
-      color: #fff;
-      margin-top: 1em;
-      position: relative;
-      text-align: center;
-      text-transform: none;
-      word-wrap: break-word;
-      line-height: 1.2em;
-    }
+
+
+.page-header {
+  h1.page-title {
+    font-size: 5em;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 1em;
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    word-wrap: break-word;
+    line-height: 1.2em;
+  }
+  h2.page-subtitle {
+    font-size: 2em;
+    line-height: 1;
+    color:#FFF;
   }
 }
