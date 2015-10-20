@@ -4,18 +4,18 @@
   </div>
 
   <div class="container">
-  	<div class="col-md-12 title">
-      <h1>{{dataset.title || 'No title yet'}}</h1>
+  	<div class="col-xs-12 page-title-container">
+      <h1 class="page-title">{{dataset.title || 'No title yet'}}</h1>
     </div>
 
     <!-- Meta -->
-    <div class="col-md-12 meta">
+    <div class="col-xs-12 meta">
 			<div class="private">
         <span ng-show="dataset.private" class="label label-warning">private</span>
       </div>
       <!-- Author -->
       <div class="account-date">
-        <p>A dataset by <span class="account-name"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.displayName || 'noname'}}</a></span>, <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span></p>
+        <p>A dataset by <span class="account-name"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.displayName || 'noname'}}</a></span>, <span class="published">created on  <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span></p>
       </div>
       <!-- Tags -->
       <div class="tags" ng-show="dataset.tags.length>0">
