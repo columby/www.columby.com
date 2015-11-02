@@ -25,13 +25,9 @@
         $scope.tag = result;
       });
     }
-    $scope.setPage = function (pageNo) {
-      console.log(pageNo);
-      $scope.pagination.currentPage = pageNo;
-    };
 
     $scope.pageChanged = function() {
-      console.log($scope.pagination.currentPage);
+      delete $scope.tag;
       getDatasets();
     };
 

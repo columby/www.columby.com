@@ -12,6 +12,9 @@
     <div class="col-md-offset-1 col-md-10 publications">
       <h3>Datasets</h3>
       <div class="publication-listing">
+        <div class="loader" ng-hide="tag">
+          <i class="fa fa-spinner fa-spin"></i>
+        </div>
         <ul>
           <li ng-repeat="dataset in tag.hits.datasets.rows" class="publication-item">
             <h4><a ui-sref="dataset.view({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
