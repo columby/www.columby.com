@@ -13,7 +13,7 @@
       <h3>Datasets</h3>
       <div class="publication-listing">
         <ul>
-          <li ng-repeat="dataset in tag.datasets" class="publication-item">
+          <li ng-repeat="dataset in tag.hits.datasets.rows" class="publication-item">
             <h4><a ui-sref="dataset.view({ id: dataset.shortid })" ng-bind-html="dataset.title || 'Untitled'"></a></h4>
             <div class="user-date">
               <!-- <img ng-src="dataset.account.avatar.img" class="img-rounded"/> -->
@@ -23,6 +23,9 @@
             <!-- <p><a ui-sref="dataset.view({id:dataset.shortid})">{{dataset.title}}</a></p> -->
           </li>
         </ul>
+
+        <pagination ng-change="pageChanged()" total-items="tag.hits.datasets.count" ng-model="pagination.currentPage" max-size="5" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" ng-show="numPages>1"></pagination>
+
       </div>
     </div>
   </div>

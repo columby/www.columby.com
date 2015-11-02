@@ -111,20 +111,21 @@
       <h3>References</h3>
 
       <div class="row">
-        <div class="col-sm-6 col-md-6" ng-repeat="reference in dataset.references">
-          <div class="reference">
-            <img src="assets/img/reference/placeholder.png" class="placeholder">
-						<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
-              <div class="reference-top"></div>
-              <h3 class="reference-title"><a href="{{reference.url}}" target="_blank">{{reference.title}}</a></h3>
-              <p class="small reference-source"><a href="{{reference.url}}">{{reference.provider_display}}</a></p>
-            </div>
-            <div class="small reference-text">{{reference.description}}</div>
+        <div class="col-sm-6 col-md-6 reference" ng-repeat="reference in dataset.references">
+          <div class="reference-container">
+            <img src="assets/images/reference-placeholder.png" class="placeholder"/>
+            <a ng-href="{{reference.url}}" target="_blank">
+              <div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
+                <div class="reference-top"></div>
+                <h3 class="reference-title">{{reference.title}}</h3>
+                <p class="small reference-source">{{reference.provider_display}}</p>
+              </div>
+            </a>
             <div class="reference-actions">
               <div class="edit"><a class="btn btn-warning btn-xs" ng-click="editReference(reference)">Edit</a></div>
               <div class="confirm-delete" confirm-delete on-confirm="deleteReference(reference)"></div>
             </div>
-					</div>
+          </div>
 				</div>
       </div>
 

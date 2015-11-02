@@ -25,9 +25,8 @@ body.dataset.create {
         min-height: 5em;
       }
     }
-    .reference {
-      position: relative;
-      .actions {
+    .references-wrapper {
+      .reference-actions {
         position: absolute;
         top: 0;
         left: 0;
@@ -36,8 +35,13 @@ body.dataset.create {
         background-color: rgba(0,0,0,0.5);
         padding: 10px;
         text-align: right;
+        .edit {
+          float: left;
+          margin-right: 10px;
+        }
       }
     }
+
     .create {
       text-align: center;
       padding-top: 20px;

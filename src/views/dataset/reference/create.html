@@ -2,11 +2,11 @@
 
   <!-- Modal header -->
   <div class="modal-header row">
-    <div class="col-md-10">
-      <h2 class="modal-title" ng-hide="reference.id">Add a reference to a dataset</h2>
+    <div class="col-xs-10">
+      <h2 class="modal-title" ng-hide="reference.id">ssAdd a reference to a dataset</h2>
       <h2 class="modal-title" ng-show="reference.id">Edit reference</h2>
     </div>
-    <div class="col-md-2 pull-right">
+    <div class="col-xs-2 pull-right">
       <a class="close" href ng-click="$dismiss()"><span class="fa fa-close"></span></a>
     </div>
   </div>
@@ -45,7 +45,7 @@
               <input class="form-control form-group-lg" type="url" ng-model="reference.url" placeholder="http://www.website.com/reference"/>
             </div>
             <div class="col-md-2">
-              <button class="btn btn-default" ng-disabled="reference.checkingLink || checkForm.$invalid || checkForm.$pristine" ng-click="validateLink()">Check</button>
+              <button class="btn btn-default btn-primary" ng-disabled="reference.checkingLink || checkForm.$invalid || checkForm.$pristine" ng-click="validateLink()">Check</button>
             </div>
           </div>
         </form>
@@ -53,7 +53,7 @@
       <!-- // Step 2a -->
 
       <!-- Step 2b: Upload file -->
-      <div ng-switch-when="upload-file" class="upload-file">
+      <div ng-switch-when="upload-files" class="upload-file">
         upload file
       </div>
       <!-- // Step 2b -->
@@ -82,7 +82,7 @@
             <label>Title</label>
             <input class="form-control" ng-model="reference.title"/>
             <label>description</label>
-            <textarea class="form-control" ng-model="reference.description"/>
+            <textarea class="form-control" ng-model="reference.description"></textarea>
           </form>
         </div>
       </div>
@@ -101,12 +101,13 @@
 
   <!-- Modal footer -->
   <div class="modal-footer">
-    <button class="btn btn-warning pull-left" href ng-click="$dismiss()">Cancel</button>
-    <button class="btn btn-default btn-lightblue btn-filled pull-right"
+    <a class="btn-cancel pull-left" href ng-click="$dismiss()">Cancel</a>
+
+    <button class="btn btn-default btn-primary pull-right"
       ng-show="reference.valid"
       ng-click="save()"
       ng-disabled="saveInProgress">Add Reference</button>
-    <button class="btn btn-default btn-lightblue btn-filled pull-right"
+    <button class="btn btn-default btn-primary pull-right"
       ng-show="reference.id"
       ng-click="update()"
       ng-disabled="saveInProgress">Update Reference</button>
