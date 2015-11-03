@@ -1,20 +1,22 @@
-(function() {
+(function () {
   'use strict';
 
-  angular
-    .module('columbyApp')
+  angular.module('columbyApp')
+
     .controller('AccountSelectorCtrl',
-  function ($rootScope, $scope, $modalInstance, organisations) {
 
-    $scope.organisations = organisations;
+    function (organisations, selectedAccount, $rootScope, $scope, $modalInstance) {
+      // initialize the scope
+      $scope.selectedAccount = selectedAccount;
+      $scope.organisations = organisations;
 
-    $scope.selectAccount = function(item){
-      $modalInstance.close(item);
-    };
+      $scope.selectAccount = function (account) {
+        $modalInstance.close(account);
+      };
 
-    $scope.cancel = function () {
-      $modalInstance.dismiss('cancel');
-    };
-  }
-);
+      $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+      };
+    }
+  );
 })();

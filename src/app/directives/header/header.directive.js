@@ -15,7 +15,7 @@
         $scope.hideHeader = false;
 
         // Hide header on scrollDown > 100px
-        angular.element($window).bind("scroll", function() {
+        angular.element($window).bind('scroll', function() {
           var scrollNew = $window.pageYOffset;
           if ( (scrollNew > 100) && (scrollNew > scrollOriginal) ){
             $scope.hideHeader = true;

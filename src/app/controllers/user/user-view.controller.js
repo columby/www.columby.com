@@ -3,7 +3,7 @@
 
   angular.module('columbyApp').controller('UserViewCtrl', function($log,$window, $rootScope, $scope, $stateParams, AuthSrv, UserSrv, AccountSrv) {
     $log.debug('User view controller');
-    
+
     $scope.contentLoading  = true;
     $rootScope.title = 'columby.com';
     $scope.datasets = {
@@ -24,9 +24,9 @@
 
         // Set header background image
         if ($scope.user.headerImg) {
+          $log.debug('update header');
           //updateHeaderImage();
         }
-
       });
     }
 

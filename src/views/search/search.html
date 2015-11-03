@@ -1,75 +1,74 @@
-<section class="">
+<div class="page-header">
+  <div class="container">
+    <div class="col-xs-12 page-title-container">
+      <h1 class="page-title">Search</h1>
+      <h2 class="page-subtitle">Find datasets, accounts and tags</h2>
+    </div>
+  </div>
+</div>
 
-  <div class="page-header wrapper">
+<div class="page-body">
+  <div class="search-form">
     <div class="container">
-      <div class="title">
-        <h1>Search</h1>
+      <div class="col-md-12">
+        <input class="input-search" type="text" ng-model="search.searchTerm" placeholder="Search" ng-change="doSearch()" focus ng-model-options="{debounce: 500}"/>
       </div>
-      <h2 class="subtitle">find datasets, collections and accounts</h2>
     </div>
   </div>
 
-  <div class="page-content">
-    <div class="search-form">
-      <div class="container">
-        <div class="col-md-12">
-          <input class="input-search" type="text" ng-model="search.searchTerm" placeholder="Search" ng-change="doSearch()" focus ng-model-options="{debounce: 500}"/>
+  <div class="search-results" ng-show="search.hits">
+    <div class="container">
+      <div class="col-md-12 results">
+        <h3>Search results</h3>
+  			<div class="search-message">{{search.message}}</div>
+
+        <div class="search-result-datasets">
+          <h4>Datasets <span class="count">{{search.hits.datasets.count}}</span></h4>
+          <div class="no-result" ng-show="search.hits.datasets.count<1"><p>No result</p></div>
+          <ul>
+            <li ng-repeat="dataset in search.hits.datasets.rows">
+              <a ui-sref="dataset.view({id: '{{dataset.shortid}}' })">{{dataset.title}}</a>
+            </li>
+          </ul>
+          <pagination
+            ng-change="pageChanged('dataset')"
+            total-items="search.hits.datasets.count"
+            ng-model="pagination.datasets.currentPage"
+            max-size="5"
+            class="pagination-sm"
+            boundary-links="true"
+            rotate="false"
+            num-pages="pagination.datasets.numPages"
+            ng-show="pagination.datasets.numPages>1">
+          </pagination>
         </div>
-      </div>
-    </div>
 
-    <div class="search-results" ng-show="search.hits">
-      <div class="container">
-        <div class="col-md-12 results">
-          <h3>Search results</h3>
-    			<div class="search-message">{{search.message}}</div>
+        <div class="search-result-accounts">
+          <h4>Accounts <span class="count">{{search.hits.accounts.count}}</span></h4>
+          <div class="no-result" ng-show="search.hits.accounts.rows.length<1"><p>No result</p></div>
+          <ul>
+            <li ng-repeat="account in search.hits.accounts.rows" class="publication-item">
+              <a ui-sref="account.view({slug: account.slug})">{{account.title}}</a>
+            </li>
+          </ul>
+          <pagination ng-change="pageChanged('account')" total-items="search.hits.accounts.count" ng-model="pagination.account.currentPage" max-size="5" class="pagination-sm" boundary-links="true" rotate="false" num-pages="pagination.accounts.numPages" ng-show="pagination.accounts.numPages>1">
+          </pagination>
+        </div>
 
-          <div class="search-result-accounts">
-            <h4>Accounts <span class="count">{{search.hits.accounts.count}}</span></h4>
-            <div class="no-result" ng-show="search.hits.accounts.rows.length<1"><p>No result</p></div>
-            <ul>
-              <li ng-repeat="account in search.hits.accounts.rows" class="publication-item">
-                <a ui-sref="account.view({slug: account.slug})">{{account.title}}</a>
-              </li>
-            </ul>
-            <pagination ng-change="pageChanged('account')" total-items="search.hits.accounts.count" ng-model="pagination.account.currentPage" max-size="5" class="pagination-sm" boundary-links="true" rotate="false" num-pages="pagination.accounts.numPages" ng-show="pagination.accounts.numPages>1">
-            </pagination>
-          </div>
-
-          <div class="search-result-datasets">
-            <h4>Datasets <span class="count">{{search.hits.datasets.count}}</span></h4>
-            <div class="no-result" ng-show="search.hits.datasets.count<1"><p>No dataset result</p></div>
-            <ul>
-              <li ng-repeat="dataset in search.hits.datasets.rows">
-                <a ui-sref="dataset.view({id: '{{dataset.shortid}}' })">{{dataset.title}}</a>
-              </li>
-            </ul>
-            <pagination
-              ng-change="pageChanged('dataset')"
-              total-items="search.hits.datasets.count"
-              ng-model="pagination.datasets.currentPage"
-              max-size="5"
-              class="pagination-sm"
-              boundary-links="true"
-              rotate="false"
-              num-pages="pagination.datasets.numPages"
-              ng-show="pagination.datasets.numPages>1">
-            </pagination>
-          </div>
-
-          <div class="search-result-tags">
-            <h4>Tags <span class="count">{{search.hits.tags.count}}</span></h4>
-            <div class="no-result" ng-show="search.hits.tags.rows.length<1">
-      				<p>No result</p>
-      			</div>
-            <ul>
-              <li ng-repeat="tag in search.hits.tags.rows">
-                <h4><a ui-sref="tag.view({slug: tag.slug})">{{tag.title}}</a></h4>
-              </li>
-            </ul>
-          </div>
+        <div class="search-result-tags">
+          <h4>Tags <span class="count">{{search.hits.tags.count}}</span></h4>
+          <div class="no-result" ng-show="search.hits.tags.rows.length<1">
+    				<p>No result</p>
+    			</div>
+          <ul>
+            <li ng-repeat="tag in search.hits.tags.rows">
+              <h4><a ui-sref="tag.view({slug: tag.slug})">{{tag.title}}</a></h4>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
+
+<div class="page-footer"></div>

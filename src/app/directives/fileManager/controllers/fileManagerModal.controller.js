@@ -3,7 +3,8 @@
 
   angular
     .module('columbyApp')
-    .controller('FileManagerModalCtrl', function(options, $rootScope, $scope, $modal, $modalInstance, FileSrv, Upload, ngNotify){
+    .controller('FileManagerModalCtrl',
+    function(options, $rootScope, $scope, $modal, $modalInstance, FileSrv, Upload, ngNotify){
     //$log.debug('options', options);
     $scope.file = [];
     $scope.options = options;
