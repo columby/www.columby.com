@@ -1,7 +1,7 @@
 node_modules
-dist
-public
 .tmp
+public
+dist
 .idea
 client/bower_components
 *.bts

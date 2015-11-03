@@ -11,20 +11,20 @@ var $ = require('gulp-load-plugins')({
 
 gulp.task('partials', function () {
   return gulp.src([
-    path.join(conf.paths.src, '/app/**/*.html'),
-    path.join(conf.paths.src, '/views/**/*.html'),
-    path.join(conf.paths.tmp, '/serve/app/**/*.html')
+    path.join(conf.paths.src, '/www/app/**/*.html'),
+    path.join(conf.paths.src, '/www/views/**/*.html'),
+    path.join(conf.paths.tmp, '/www/serve/app/**/*.html')
   ])
-    .pipe($.minifyHtml({
-      empty: true,
-      spare: true,
-      quotes: true
-    }))
-    .pipe($.angularTemplatecache('templateCacheHtml.js', {
-      module: conf.settings.appName,
-      root: 'views'
-    }))
-    .pipe(gulp.dest(conf.paths.tmp + '/partials/'));
+  .pipe($.minifyHtml({
+    empty: true,
+    spare: true,
+    quotes: true
+  }))
+  .pipe($.angularTemplatecache('templateCacheHtml.js', {
+    module: conf.settings.appName,
+    root: 'views'
+  }))
+  .pipe(gulp.dest(conf.paths.tmp + '/partials/'));
 });
 
 gulp.task('html', ['inject', 'partials'], function () {
@@ -64,8 +64,8 @@ gulp.task('html', ['inject', 'partials'], function () {
       conditionals: true
     }))
     .pipe(htmlFilter.restore)
-    .pipe(gulp.dest(path.join(conf.paths.dist, '/')))
-    .pipe($.size({ title: path.join(conf.paths.dist, '/'), showFiles: true }));
+    .pipe(gulp.dest(path.join(conf.paths.dist, '/www')))
+    .pipe($.size({ title: conf.paths.dist, showFiles: true }));
 });
 
 // Only applies for fonts from bower dependencies
@@ -74,7 +74,7 @@ gulp.task('fonts', function () {
   return gulp.src(path.join(conf.paths.src, '../bower_components/**/*.{eot,svg,ttf,woff,woff2}'))
     .pipe($.filter('**/*.{eot,svg,ttf,woff,woff2}'))
     .pipe($.flatten())
-    .pipe(gulp.dest(path.join(conf.paths.dist, '/assets/fonts/')));
+    .pipe(gulp.dest(path.join(conf.paths.dist, '/www/assets/fonts/')));
 });
 
 gulp.task('other', function () {
@@ -83,16 +83,16 @@ gulp.task('other', function () {
   });
 
   return gulp.src([
-    path.join(conf.paths.src, '/**/*'),
-    path.join('!' + conf.paths.src, '/config'),
-    path.join('!' + conf.paths.src, '/**/*.{html,css,js,scss,less}')
+    path.join(conf.paths.src, '/www/**/*'),
+    path.join('!' + conf.paths.src, '/www/config'),
+    path.join('!' + conf.paths.src, '/www/**/*.{html,css,js,scss,less}')
   ])
     .pipe(fileFilter)
-    .pipe(gulp.dest(path.join(conf.paths.dist, '/')));
+    .pipe(gulp.dest(path.join(conf.paths.dist,'/www')));
 });
 
 gulp.task('clean', function (done) {
-  $.del([path.join(conf.paths.dist, '/'), path.join(conf.paths.tmp, '/')], done);
+  $.del([conf.paths.dist, conf.paths.tmp], done);
 });
 
 gulp.task('build', ['html', 'fonts', 'other']);

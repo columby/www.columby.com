@@ -13,9 +13,9 @@ var _ = require('lodash');
 
 gulp.task('styles', function () {
   var injectFiles = gulp.src([
-    path.join(conf.paths.src, '/assets/styles/**/*.less'),
-    path.join(conf.paths.src, '/app/**/*.less'),
-    path.join('!' + conf.paths.src, '/assets/styles/style.less')
+    path.join(conf.paths.src, '/www/assets/styles/**/*.less'),
+    path.join(conf.paths.src, '/www/app/**/*.less'),
+    path.join('!' + conf.paths.src, '/www/assets/styles/style.less')
   ], { read: false });
 
   var injectOptions = {
@@ -29,7 +29,7 @@ gulp.task('styles', function () {
   };
 
   return gulp.src([
-    path.join(conf.paths.src, '/assets/styles/style.less')
+    path.join(conf.paths.src, '/www/assets/styles/style.less')
   ])
     .pipe($.inject(injectFiles, injectOptions))
     .pipe(wiredep(_.extend({}, conf.wiredep)))
