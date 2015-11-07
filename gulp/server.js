@@ -66,42 +66,49 @@ browserSync.use(browserSyncSpa({
 gulp.task('serve', ['watch'], function () {
   browserSyncInit([path.join(conf.paths.tmp, '/serve'), path.join(conf.paths.src, '/www')]);
 
-  // Start API
-  var openOpts = {
-    url: 'http://localhost:' + conf.apiPort,
-    already: false
-  };
+  // // Start API
+  // var openOpts = {
+  //   url: 'http://localhost:' + conf.apiPort,
+  //   already: false
+  // };
+  //
+  //
+  // try {
+  //   env({
+  //     file: 'src/api/server/config/env.js'
+  //   });
+  // } catch(err) {
+  //   console.log('No env.js found');
+  // }
 
-
-  try {
-    env({
-      file: 'src/api/server/config/env.js'
-    });
-  } catch(err) {
-    console.log('No env.js found');
-  }
-
-  return nodemon({
-    script: 'src/api/server/server.js',
-    ext: 'js',
-    ignore: ['client', 'dist', 'node_modules', 'gulpfile.js']
-  })
-  .on('start', function () {
-    // if (!openOpts.already) {
-    //   openOpts.already = true;
-    //   ripe.wait(function () {
-    //     gulp.src('client/index.html')
-    //       .pipe(open('', openOpts));
-    //   });
-    // } else {
-    //   ripe.wait(function () {
-    //     livereload.changed('/');
-    //   });
-    // }
-  })
-  .on('error', function(err){
-    console.log('err', err);
-  });
+  // nodemon({
+  //   script: 'src/api/server/server.js',
+  //   ext: 'js',
+  //   ignore: ['client', 'dist', 'node_modules', 'gulpfile.js']
+  // })
+  // .on('start', function () {
+  //   // if (!openOpts.already) {
+  //   //   openOpts.already = true;
+  //   //   ripe.wait(function () {
+  //   //     gulp.src('client/index.html')
+  //   //       .pipe(open('', openOpts));
+  //   //   });
+  //   // } else {
+  //   //   ripe.wait(function () {
+  //   //     livereload.changed('/');
+  //   //   });
+  //   // }
+  // });
+  //
+  // nodemon({
+  //   script: 'src/files/server/server.js',
+  //   ext: 'js',
+  //   port: 8989,
+  //   ignore: ['client', 'dist', 'node_modules', 'gulpfile.js']
+  // })
+  // .on('start', function () {
+  //
+  // });
 
 });
 
