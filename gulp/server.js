@@ -11,6 +11,11 @@ var util = require('util');
 
 var proxyMiddleware = require('http-proxy-middleware');
 
+var nodemon    = require('gulp-nodemon');
+var env        = require('gulp-env');
+var ripe       = require('ripe');
+var livereload = require('gulp-livereload');
+
 function browserSyncInit(baseDir, browser) {
   browser = browser === undefined ? 'default' : browser;
 
@@ -41,6 +46,17 @@ function browserSyncInit(baseDir, browser) {
     browser: browser,
     port: 9000
   });
+
+  // var bs2 = browserSync.create('api');
+  // bs2.init({
+  //   startPath: '/',
+  //     port: 8000,
+  //     server: conf.paths.src + '/api',
+  //     ui: {
+  //       port: 8001
+  //   }
+  // });
+
 }
 
 browserSync.use(browserSyncSpa({
@@ -49,6 +65,44 @@ browserSync.use(browserSyncSpa({
 
 gulp.task('serve', ['watch'], function () {
   browserSyncInit([path.join(conf.paths.tmp, '/serve'), path.join(conf.paths.src, '/www')]);
+
+  // Start API
+  var openOpts = {
+    url: 'http://localhost:' + conf.apiPort,
+    already: false
+  };
+
+
+  try {
+    env({
+      file: 'src/api/server/config/env.js'
+    });
+  } catch(err) {
+    console.log('No env.js found');
+  }
+
+  return nodemon({
+    script: 'src/api/server/server.js',
+    ext: 'js',
+    ignore: ['client', 'dist', 'node_modules', 'gulpfile.js']
+  })
+  .on('start', function () {
+    // if (!openOpts.already) {
+    //   openOpts.already = true;
+    //   ripe.wait(function () {
+    //     gulp.src('client/index.html')
+    //       .pipe(open('', openOpts));
+    //   });
+    // } else {
+    //   ripe.wait(function () {
+    //     livereload.changed('/');
+    //   });
+    // }
+  })
+  .on('error', function(err){
+    console.log('err', err);
+  });
+
 });
 
 gulp.task('serve:dist', ['build'], function () {

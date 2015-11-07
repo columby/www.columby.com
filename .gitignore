@@ -14,3 +14,4 @@ server/config/local.env.js
 /npm-debug.log
 logs
 src/files/server/config/env.js
+src/api/server/config/env.js
