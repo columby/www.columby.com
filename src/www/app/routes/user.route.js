@@ -22,35 +22,16 @@
         }
       })
 
-      .state('user.verify', {
-        url: '/verify',
-        templateUrl: 'views/user/verify.html',
-        controller: 'UserVerifyCtrl',
-        data: {
-          bodyClasses: 'page user verify',
-          permission: 'verify user login'
-        }
-      })
-
-      .state('user.signup', {
-        url: '/signup',
-        templateUrl: 'views/user/signup.html',
-        controller: 'UserSignupCtrl',
-        data: {
-          bodyClasses: 'page user signup',
-          permission: 'signup user'
-        }
-      })
-
+      // Edit the currently logged in user
       .state('user.edit', {
         url: '/:slug/edit',
         templateUrl: 'views/user/edit.html',
-        resolve: {
-          // First try to fetch dataset.
-          user: function(UserSrv, $stateParams) {
-            return UserSrv.get($stateParams.slug);
-          }
-        },
+        // resolve: {
+        //   // First try to fetch user.
+        //   user: function(UserSrv, $stateParams) {
+        //     return UserSrv.get($stateParams.slug);
+        //   }
+        // },
         controller: 'UserEditCtrl',
         data: {
           bodyClasses: 'page user edit',

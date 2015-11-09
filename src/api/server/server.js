@@ -23,7 +23,8 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 var express = require('express'),
     config = require('./config/config');
 
-/**
+
+/**************************************************************
  *
  * Setup server
  *
@@ -33,7 +34,7 @@ var server = require('http').createServer(app);
 require('./config/express')(app);
 
 
-/**
+/**************************************************************
  *
  * Setup models
  *
@@ -41,7 +42,7 @@ require('./config/express')(app);
 var models = require('./models');
 
 
-/**
+/**************************************************************
  *
  * Setup routes
  *
@@ -49,7 +50,7 @@ var models = require('./models');
 var routes = require('./routes')(app);
 
 
-/**
+/**************************************************************
  *
  * Start server
  *

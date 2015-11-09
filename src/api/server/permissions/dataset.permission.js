@@ -10,7 +10,6 @@ var models = require('../models/index'),
 
 // helper to check if a user has access to a certain account.
 function validateAccountAccess(user, account_id, cb) {
-
   if (user.admin) { return cb(true); }
 
   if (user.primary.id === account_id) {
@@ -22,9 +21,9 @@ function validateAccountAccess(user, account_id, cb) {
     // Check if account is same as requested account
     if (parseInt(user.organisations[ i].id) === parseInt(account_id)) {
       // Check if account has the right role to edit.
-      var role = user.organisations[ i].role;
       // User account with role owner or admin can edit an account. (not editor or viewer)
-      if ( (role === 1) || (role === 2) ) {
+      var roles = [1,2];
+      if (roles.indexOf(user.organisations[ i].role) !== -1) {
         return cb(true);
       }
     }
@@ -128,9 +127,19 @@ exports.canCreate = function(req,res,next) {
  ***/
 exports.canEdit = function(req,res,next){
 
-  if (!req.jwt || !req.jwt.sub) { return res.status(401).json({status: 'Error', msg: 'No access token provided'}); }
-  if (!req.user || !req.user.id) { return res.status(401).json({status: 'Error', msg: 'No user found'}); }
-  if (!req.params.id) { return res.json({status:'error', msg: 'Required parameter dataset id missing.'}); }
+  if (!req.params.id) {
+    return res.json({status:'error', msg: 'Required parameter dataset id missing.'});
+  }
+
+  // Check if user is in req
+  if (!req.user || !req.user.email) {
+    return res.json({ status:'error', msg:'No access.' });
+  }
+
+  // Check if user is admin
+  if (req.user.admin === true) {
+    return next();
+  }
 
   // Get the dataset's publication Account
   models.Dataset.findById(req.params.id, {
@@ -138,6 +147,7 @@ exports.canEdit = function(req,res,next){
   }).then(function(dataset){
     req.dataset = dataset;
     validateAccountAccess(req.user, dataset.dataValues.account_id, function(result){
+      console.log(result);
       if (!result) { return res.status(401).json({status: 'Error', msg: 'No user found'}); }
       // Valid
       return next();

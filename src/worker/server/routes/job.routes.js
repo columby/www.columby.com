@@ -9,15 +9,15 @@ var express = require('express'),
 module.exports = function(app) {
 
   // get specific job
-  router.get('/'        , auth.validateJWT, jobCtrl.index);
-  router.get('/:id'    , auth.validateJWT, jobCtrl.show);
-  router.get('/:id/log', auth.validateJWT, jobCtrl.jobLog);
+  router.get('/'        , auth.checkJWT, jobCtrl.index);
+  router.get('/:id'    , auth.checkJWT, jobCtrl.show);
+  router.get('/:id/log', auth.checkJWT, jobCtrl.jobLog);
 
-  router.post('/'       , auth.validateJWT, jobCtrl.canManage, jobCtrl.create);
+  router.post('/'       , auth.checkJWT, jobCtrl.canManage, jobCtrl.create);
 
-  router.put('/:id'    , auth.validateJWT, jobCtrl.canManage, jobCtrl.update);
+  router.put('/:id'    , auth.checkJWT, jobCtrl.canManage, jobCtrl.update);
 
-  router.delete('/:id' , auth.validateJWT, jobCtrl.canManage, jobCtrl.destroy);
+  router.delete('/:id' , auth.checkJWT, jobCtrl.canManage, jobCtrl.destroy);
 
   app.use('/api/job', router);
 

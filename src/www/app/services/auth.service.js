@@ -1,84 +1,54 @@
 (function() {
   'use strict';
 
-  angular
-    .module('columbyApp')
-    .service('AuthSrv', function($log,$rootScope, $http, $auth, appConstants, UserSrv) {
-
-    // var permissionsList = [
-    //   // user permissions
-    //   'signin user',
-    //   'register user',
-    //   'verify user login',
-    //   'view user',
-    //   'edit user',
-    //   'delete user',
-    //   // organisation permissions
-    //   'create organisation',
-    //   'view organisation',
-    //   'edit organisation',
-    //   'delete organisation',
-    //   // dataset permissions
-    //   'create dataset',
-    //   'view dataset',
-    //   'edit dataset',
-    //   'delete dataset',
-    // ];
-
-
-    function logout() {
-      $auth.logout().then(function(){
-        $rootScope.user = {};
-        return true;
-      });
-    }
-
+  angular.module('columbyApp')
+    .service('AuthSrv', function($log, $rootScope, $http, auth, store, appConstants, UserSrv) {
 
     return {
 
-      /**
+      /***
        *
-       * Authenticate a user login (email or oauth).
+       * Authentication functions
        *
        **/
-      authenticate: function(provider) {
 
-        // handle email login
-        if (provider.service === 'email') {
-          if (provider.register === 'false' ) {
-            return $http.post(appConstants.apiRoot + '/v2/user/login', {email: provider.email}).then(function (response) {
-              return response.data;
-            });
-          }
-          if (provider.register === 'true' ) {
-            return $http.post(appConstants.apiRoot + '/v2/user/register', provider).then(function (response) {
-              return response.data;
-            });
-          }
-        } else {
-          // handle ouath login
-          return $auth.authenticate(provider.service, {register:provider.register}).then(function(result){
-            if (result.data.user){
-              $log.debug('setting user ', result.data.user);
-              UserSrv.setUser(result.data.user);
-            }
-            return result.data;
-          }).catch(function(data) {
-            return data.data;
-          });
-        }
+      // Login
+      login: function(){
+        auth.signin({}, function(profile, token) {
+          $log.debug(profile);
+          $log.debug(token);
+          // success callback
+          store.set('profile', profile);
+          store.set('token', token);
+          $rootScope.user = profile;
+        });
       },
 
+      // Logout
+      signout: function() {
+        auth.signout();
+        store.remove('profile');
+        store.remove('token');
+        $rootScope.user = {};
+      },
 
+      // Check if user is logged in
       isAuthenticated: function(){
-        return $auth.isAuthenticated();
+        return auth.isAuthenticated;
       },
 
-
-      logout: function(){
-        return logout();
+      // Authenticate the user with auth0
+      authenticate: function(){
+        var token = store.get('token');
+        auth.authenticate(store.get('profile'), token);
+        $rootScope.user = auth.profile;
       },
 
+      /***
+       *
+       * Authorization functions
+       *
+       **/
 
       hasRole: function(roles){
         // Make no access the default, to be sure.
@@ -111,42 +81,37 @@
 
       hasPermission: function(permission, params){
         $log.debug('Checking permission: ' + permission + ' with params: ', params);
-
         // admin is always true
         if ($rootScope.user && ($rootScope.user.admin === true)) {
           $log.debug('user is admin');
           return true;
         }
 
-        switch (permission){
+        switch (permission) {
+
           // User permissions
           case 'signin user':
-            return !$auth.isAuthenticated();
+            return !auth.isAuthenticated;
           case 'signup user':
-            return !$auth.isAuthenticated();
+            return !auth.isAuthenticated;
           case 'verify user login':
-            return !$auth.isAuthenticated();
+            return !auth.isAuthenticated;
           case 'edit user':
-            if (!$auth.isAuthenticated()) { return false; }
-            if ($rootScope.user && ($rootScope.user.primary.slug === params.slug)) {
-              return true;
-            } else {
-              return false;
-            }
-            break;
+            return $rootScope.user && ($rootScope.user.primary.slug === params.slug);
           case 'delete user':
             return false;
 
 
-          // Account permissions
+          // Account (organisation) permissions
           case 'create organisation':
             return false;
           case 'view organisation':
           case 'view account':
+            $log.debug('Permision granted.');
             return true;
           case 'edit organisation':
           case 'edit account':
-            if (!$auth.isAuthenticated()) { return false; }
+            if (!auth.isAuthenticated) { return false; }
             if ($rootScope.user.primary.slug === params.slug) {
               $log.debug('User primary account');
               return true;
@@ -156,7 +121,7 @@
               // Check if user is connected to the organisation
               if ($rootScope.user.organisations[ i].slug === params.slug) {
                 // Check for the proper role
-                switch ($rootScope.user.organisations[ i].UserAccounts.role ) {
+                switch ($rootScope.user.organisations[ i].role ) {
                   case 1:
                   case 2:
                   case 3:
@@ -172,10 +137,10 @@
 
           // Dataset permissions
           case 'create dataset':
-            return $auth.isAuthenticated();
+            return auth.isAuthenticated;
           case 'edit dataset':
             // should be authenticated.
-            if (!$auth.isAuthenticated()) { return false; }
+            if (!auth.isAuthenticated) { return false; }
             // check if dataset's publication account is in current user's primary and organisations list
             if ($rootScope.user.primary.id === params.account_id) {
               return  true;
@@ -184,12 +149,9 @@
             for (i=0; i<$rootScope.user.organisations.length; i++){
               // Check if user is connected to the organisation
               if ($rootScope.user.organisations[ i].id === params.account_id) {
-                var role;
-                // Check for the proper role
-                switch ($rootScope.user.organisations[ i].UserAccounts.role ) {
-                  case 1: case 2: case 3:
-                    role = $rootScope.user.organisations[ i].UserAccounts.role;
-                    return true;
+                var roles = [1,2,3];
+                if (roles.indexOf($rootScope.user.organisations[ i].role) !== -1) {
+                  return true;
                 }
               }
             }

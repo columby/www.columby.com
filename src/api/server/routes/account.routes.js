@@ -11,51 +11,50 @@ var express = require('express'),
 module.exports = function(app) {
 
   router.get('/',
-    auth.validateJWT,
+    auth.checkJWT,
     controller.index
   );
 
   router.get('/:slug',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     controller.show
   );
 
   router.post('/',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     permission.canCreate,
     controller.create
   );
 
   router.post('/:id/addFile',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     permission.canEdit,
     controller.addFile
   );
 
   router.put('/:id',
-    auth.validateJWT,
-    auth.validateUser,
-    auth.ensureAuthenticated,
+    auth.checkJWT,
+    auth.checkUser,
     permission.canEdit,
     controller.update
   );
 
   router.put('/:id/registry/:rid',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     permission.canEdit,
     controller.updateRegistry
   );
 
   router.post('/:id/defaultcategories',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     permission.canEdit,
     controller.addDefaultCategories

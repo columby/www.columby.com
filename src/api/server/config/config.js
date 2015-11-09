@@ -1,9 +1,10 @@
 // All configuration with environment variables. Loaded by forever script or with foreman with local development.
 
 var path = require('path');
+var env = {};
 
 try {
-  var env = require('./env.js');
+  env = require('./env.js');
   console.log(env);
 } catch(err){
   console.log('No local env.js');
@@ -26,6 +27,7 @@ module.exports = {
   },
 
   jwt: {
+    key         : process.env.JWT_KEY               || env.JWT_KEY                 || '',
     secret      : process.env.JWT_SECRET            || env.JWT_SECRET              || '',
   },
 
@@ -40,7 +42,7 @@ module.exports = {
   aws: {
     key         : process.env.AWS_ACCESS_KEY_ID     || env.AWS_ACCESS_KEY_ID       || '',
     secret      : process.env.AWS_SECRET_ACCESS_KEY || env.AWS_SECRET_ACCESS_KEY   || '',
-    bucket      : process.env.S3_BUCKET_NAME        || env.AWS_S3_BUCKET_NAME      || '',
+    bucket      : process.env.AWS_S3_BUCKET_NAME        || env.AWS_S3_BUCKET_NAME      || '',
     endpoint    : process.env.AWS_S3_ENDPOINT       || env.AWS_S3_ENDPOINT         || '',
   },
 

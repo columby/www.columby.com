@@ -5,7 +5,6 @@ var _             = require('lodash'),
     models        = require('../models/index'),
 
     config        = require('../config/config'),
-    tokenCtrl          = require('../controllers/token.controller'),
     emailService  = require('../controllers/email.controller');
 
 
@@ -355,73 +354,6 @@ exports.delete = function(req, res) {
     if (err) { return handleError(res, err); }
   });
 };
-
-
-/**
- *
- * Verify a supplied token and return a JWT when validated.
- *
- * Public access
- *
- * @param req.query.token
- *
- **/
-exports.verify = function(req,res) {
-  console.log('verify token');
-  var loginToken = req.query.token;
-  // Check if supplied token exists and delete it after use
-  models.Token.find({
-    where:{
-      token: loginToken
-    }
-  }).then(function(token) {
-    console.log('result', token);
-
-    if (!token) {
-      return res.json({status: 'error', err: 'The provided token was not found.'});
-    }
-
-    // Token found, fetch the user and associated account
-    console.log('Fetch user with id: ' + token.dataValues.user_id);
-    models.User.find({
-      where: {
-        id: token.dataValues.user_id
-      },
-      include: [ { model: models.Account, as: 'account' } ]
-    }).then(function (user) {
-      if (!user) { return res.json(user); }
-
-      // Make user verified if needed
-      // if (user.dataValues.verified !== true) {
-      //   user.dataValues.verified = true;
-      //   user.save().then(function(user){
-      //     console.log('user updated, now verified.');
-      //   }).catch(function(err){
-      //     return handleError(res,err);
-      //   });
-      // }
-
-        //delete the token
-        token.destroy().then(function(res){}).catch(function(err){
-          console.log('err token delete, ', err);
-        });
-
-        // Restructure associated accounts for this user.
-        transformAccounts(user, function(_user){
-          console.log('new user',_user);
-          var t = tokenCtrl.createToken({id: user.id});
-          // Send back a JWT
-          return res.json({
-            user: _user,
-            token: t
-          });
-        });
-
-      }).catch(function (err) {
-        return handleError(res, err);
-      });
-    });
-}
 
 
 

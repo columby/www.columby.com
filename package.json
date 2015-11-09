@@ -11,6 +11,7 @@
   "dependencies": {
     "apidoc": "^0.13.1",
     "aws-sdk": "2.1.40",
+    "babyparse": "^0.4.3",
     "basic-auth": "1.0.3",
     "body-parser": "^1.14.1",
     "browser-sync": "~2.8.2",

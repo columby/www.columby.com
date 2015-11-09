@@ -21,7 +21,6 @@ module.exports = function(app) {
    */
   router.post('/login', controller.login);
   router.post('/register', controller.register);
-  router.get('/verify', controller.verify);
 
 
   /**
@@ -30,8 +29,8 @@ module.exports = function(app) {
    *
    **/
   router.post( '/me',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     controller.me
   );
@@ -42,8 +41,8 @@ module.exports = function(app) {
    *
    **/
   router.get('/',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     permission.canShow,
     controller.index
@@ -54,8 +53,8 @@ module.exports = function(app) {
    *
    **/
   router.get('/:slug',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     permission.canShow,
     controller.show
@@ -76,16 +75,16 @@ module.exports = function(app) {
    *
    */
   router.put('/:id',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     permission.canEdit,
     controller.update
   );
 
   router.delete('/:id',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     permission.canDelete,
     controller.delete

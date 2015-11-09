@@ -15,8 +15,8 @@ module.exports = function(app){
     referenceCtrl.index);
 
   router.post('/',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     referencePerms.canCreate,
     referenceCtrl.create);
@@ -25,15 +25,15 @@ module.exports = function(app){
     referenceCtrl.get);
 
   router.put('/:id',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     referencePerms.canEdit,
     referenceCtrl.update);
 
   router.delete('/:id',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     referencePerms.canDelete,
     referenceCtrl.destroy);

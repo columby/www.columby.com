@@ -18,22 +18,22 @@ module.exports = function(app){
     datasetCtrl.show);
 
   router.post('/',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     datasetPerms.canCreate,
     datasetCtrl.create);
 
   router.put('/:id',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     datasetPerms.canEdit,
     datasetCtrl.update);
 
   router.delete('/:id',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     datasetPerms.canDelete,
     datasetCtrl.destroy);
@@ -41,8 +41,8 @@ module.exports = function(app){
 
   // Dataset registry routes
   router.put('/:id/registry/:rid',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     datasetPerms.canEdit,
     datasetCtrl.updateRegistry
@@ -50,30 +50,30 @@ module.exports = function(app){
 
   // Dataset tags routes
   router.post('/:id/tag',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     datasetPerms.canEdit,
     datasetCtrl.addTag);
 
   router.delete('/:id/tag/:tid',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     datasetPerms.canEdit,
     datasetCtrl.removeTag);
 
   // Dataset categories routes
   router.post('/:id/category',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     datasetPerms.canEdit,
     datasetCtrl.addCategory);
 
   router.delete('/:id/category/:cid',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     datasetPerms.canEdit,
     datasetCtrl.removeCategory);
@@ -83,8 +83,8 @@ module.exports = function(app){
     datasetCtrl.listDistributions);
 
   router.post('/:id/distribution',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     datasetPerms.canEdit,
     datasetCtrl.createDistribution);
@@ -93,15 +93,15 @@ module.exports = function(app){
     datasetCtrl.getDistribution);
 
   router.put('/:id/distribution/:did',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     datasetPerms.canEdit,
     datasetCtrl.updateDistribution);
 
   router.delete('/:id/distribution/:did',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     datasetPerms.canEdit,
     datasetCtrl.destroyDistribution);

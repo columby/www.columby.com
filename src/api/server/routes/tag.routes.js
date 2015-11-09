@@ -13,8 +13,8 @@ module.exports = function(app) {
     controller.index);
 
   // router.post('/',
-  //   auth.validateJWT,
-  //   auth.validateUser,
+  //   auth.checkJWT,
+  //   auth.checkUser,
   //   auth.ensureAuthenticated,
   //   tagPerms.canCreate,
   //   controller.create);

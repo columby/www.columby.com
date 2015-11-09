@@ -32,8 +32,12 @@
           $rootScope.$broadcast('toggleSidebar');
         };
 
+        $scope.login = function(){
+          AuthSrv.login();
+        };
+
         $scope.logout = function(){
-          AuthSrv.logout();
+          AuthSrv.signout();
           $state.go('home');
           ngNotify.set('You are now signed out', 'notice');
         };

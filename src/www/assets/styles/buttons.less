@@ -1,4 +1,6 @@
 .btn-default {
+  background-color: @darkblue;
+  border-color: @darkblue;
   display: inline-block;
   padding: 6px 12px;
   font-size: 14px;
@@ -13,18 +15,23 @@
   -ms-user-select: none;
   user-select: none;
   background-image: none;
-  border: 2px solid transparent;
   border-radius: 4px;
   width: auto;
-	background: none;
-	border: 2px solid #fff;
 	color: #fff;
   font-family: "lato", sans-serif;
   font-weight: bolder;
   &:hover{
-    background: #000;
-    color: #fff;
+    background: @lightblue;
+    border-color: @lightblue;
+    color: #FFF;
     text-decoration: none;
+  }
+  &[disabled] {
+    background-color: @lightblue;
+    color: #000;
+    &:hover {
+      background-color: @lightblue;
+    }
   }
 }
 

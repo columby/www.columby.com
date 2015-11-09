@@ -12,7 +12,7 @@ var config = require('../config/config')
  * And add the contents to req.
  *
  */
-exports.validateJWT = function (req, res, next) {
+exports.checkJWT = function (req, res, next) {
   console.log('Validating JWT.')
 
   req.jwt = req.jwt || {}
@@ -43,7 +43,7 @@ exports.validateJWT = function (req, res, next) {
  * Validate the user from the JWT token
  *
  */
-exports.validateUser = function (req, res, next) {
+exports.checkUser = function (req, res, next) {
   req.user = req.user || {}
 
   // fetch user if not present and JWT is present

@@ -6,9 +6,9 @@
       	<img src="/assets/img/logo-transparant-white.png">
       </a>
       <ul class="nav navbar-nav navbar-right">
-        <li ng-hide="$root.user.id"><a ui-sref="user.signup">Sign up</a></li>
-        <li ng-hide="$root.user.id"><a ui-sref="user.signin">Sign in</a></li>
-        <li dropdown on-toggle="toggleUsermenu(open)" ng-show="$root.user.id">
+        <!-- <li ng-hide="$root.user.id"><a ui-sref="user.signup">Sign up</a></li> -->
+        <li ng-hide="$root.user.email"><a href ng-click="login()">Sign in</a></li>
+        <li dropdown on-toggle="toggleUsermenu(open)" ng-show="$root.user.email">
           <a href class="dropdown-toggle avatar" dropdown-toggle>
             <img class="img-circle avatar" ng-src="{{user.primary.avatar.url}}"/> {{ $root.user.primary.displayName }} <span class="caret"></span>
           </a>

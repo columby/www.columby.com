@@ -16,22 +16,22 @@ module.exports = function(app){
   router.get('/:id', controller.show);
 
   router.post('/',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     permission.canCreate,
     controller.create);
 
   router.put('/:id',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     permission.canEdit,
     controller.update);
 
   router.delete('/:id',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     permission.canDelete,
     controller.destroy);
@@ -41,15 +41,15 @@ module.exports = function(app){
   );
 
   router.post('/:id/addDataset',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     permission.canEdit,
     controller.addDataset
   );
   router.post('/:id/removeDataset',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     permission.canEdit,
     controller.removeDataset

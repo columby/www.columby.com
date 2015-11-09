@@ -15,7 +15,7 @@ var config = require('../config/config'),
  * And add the user id to req
  *
  */
-exports.validateJWT = function(req,res,next){
+exports.checkJWT = function(req,res,next){
   console.log('checking jwt');
   req.jwt = req.jwt || null;
   // Decode the token if present
@@ -41,7 +41,7 @@ exports.validateJWT = function(req,res,next){
 };
 
 
-exports.validateUser = function(req,res,next){
+exports.checkUser = function(req,res,next){
   console.log('Validating user. ');
   req.user = req.user || null;
   console.log(req.user);

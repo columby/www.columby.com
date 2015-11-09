@@ -10,23 +10,23 @@ var express = require('express'),
 module.exports = function(app) {
 
   router.post('/sign',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     perm.canUpload,
     controller.sign
   );
 
   router.post('/finish-upload',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     controller.finishUpload
   );
 
   router.get('/',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     controller.index);
 
@@ -34,15 +34,15 @@ module.exports = function(app) {
     controller.show);
 
   router.put('/:id',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     perm.canUpdate,
     controller.update);
 
   router.delete('/:id',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     perm.canDelete,
     controller.delete);

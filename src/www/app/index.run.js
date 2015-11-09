@@ -3,7 +3,11 @@
 
   angular
   .module('columbyApp')
-  .run(function ($log, $rootScope, $state, UserSrv, ngNotify, gettextCatalog, AuthSrv, appConstants) {
+  .run(function ($log, $rootScope, $state, UserSrv, ngNotify, gettextCatalog, AuthSrv, appConstants, auth, store, jwtHelper) {
+
+    // Auth0 authentication events
+    auth.hookEvents();
+
     // Set up internationalisation
     gettextCatalog.setCurrentLanguage('nl_NL');
 
@@ -17,7 +21,7 @@
     });
 
     // User was already fetched, set it in the user service
-    UserSrv.setUser(window.user);
+    // UserSrv.setUser(window.user);
 
     // SEO main configuration
     $rootScope.meta = {
@@ -30,6 +34,17 @@
 
     // Check permission for each state change
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+
+      // Auth0 token check
+      var token = store.get('token');
+      if (token) {
+        if (!jwtHelper.isTokenExpired(token)){
+          if (!auth.isAuthenticated) {
+            AuthSrv.authenticate();
+          }
+        }
+      }
+
       if (toState.data && toState.data.permission) {
         if (!AuthSrv.hasPermission(toState.data.permission, toParams)) {
           event.preventDefault();

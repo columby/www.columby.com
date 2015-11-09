@@ -93,7 +93,7 @@
                       <input type="text" class="form-control" id="location" ng-model="account.location"></input>
                     </div>
 
-                    <button class="btn btn-default btn-blue" ng-disabled="profileForm.$pristine || profileForm.$invalid || updatingAccount" ng-click="updateAccount()"><span class="btn-text" ng-hide="updatingAccount">Update profile</span><i class="fa fa-spinner fa-spin" ng-show="updatingAccount"></i></span></button>
+                    <button class="btn btn-default btn-blue" ng-disabled="profileForm.$pristine || profileForm.$invalid || updatingAccount" ng-click="updateAccount()"><span ng-hide="updatingAccount">Update profile</span><i class="fa fa-spinner fa-spin" ng-show="updatingAccount"></i></span></button>
                   </form>
                 </div>
               </div>

@@ -10,19 +10,19 @@ module.exports = function(app) {
 
   // get job listing
   router.get('/',
-    auth.validateJWT,
-    auth.validateUser,
+    auth.checkJWT,
+    auth.checkUser,
     //workerPerm.canView,
     jobCtrl.home
   );
 
   router.get('/status',
-    auth.validateJWT,
+    auth.checkJWT,
     jobCtrl.status
   );
 
   router.get('/stats',
-    auth.validateJWT,
+    auth.checkJWT,
     jobCtrl.stats
   );
 

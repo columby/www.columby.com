@@ -15,8 +15,8 @@ module.exports = function(app) {
 
 
   router.get('/ckan',
-    authCtrl.validateJWT,
-    authCtrl.validateUser,
+    authCtrl.checkJWT,
+    authCtrl.checkUser,
     registryPerms.canQuery,
     registryCtrl.query
   );

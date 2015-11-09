@@ -55,5 +55,8 @@ angular.module('columbyApp', [
   'ngProgress',
   'ngTagsInput',
   'ngNotify',
-  'gettext'
+  'gettext',
+  'auth0',
+  'angular-storage',
+  'angular-jwt'
 ]);

@@ -15,7 +15,7 @@ var models = require('../models/index');
 exports.index = function(req, res) {
   // Define WHERE clauses
   var filter = {
-    
+
   };
   // Set (default) limit
   var limit = req.query.limit || 10;
@@ -188,6 +188,7 @@ exports.create = function(req, res) {
  *    }]
  */
 exports.update = function(req, res) {
+  console.log('Updating account: ', req.body);
   models.Account.update(req.body, { where: { id: req.params.id } } ).then(function(result){
     console.log(result);
     return res.json({status: 'success', statusCode: 200, msg: result});

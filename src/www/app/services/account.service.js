@@ -3,7 +3,7 @@
 
   angular
     .module('columbyApp')
-    .service('AccountSrv', function($resource, $rootScope, $http, $auth, appConstants) {
+    .service('AccountSrv', function($resource, appConstants) {
 
       return $resource(appConstants.apiRoot + '/v2/account/:slug', {
           slug: '@slug',

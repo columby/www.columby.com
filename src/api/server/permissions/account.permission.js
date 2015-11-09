@@ -41,8 +41,11 @@ exports.canCreate = function(req, res, next) {
  *
  */
 exports.canEdit = function(req, res, next) {
-  console.log('Check if user can edit this account.');
+  console.log('Check if user can edit this organisation account.');
   console.log(req.params);
+  console.log(req.user);
+  console.log(req.token);
+  console.log(req.body);
 
   if (!req.jwt) { return res.json({status: 'error', msg: 'No jwt found.'}); }
   if (!req.user) { return res.json({status: 'error', msg: 'No user found.'}); }
