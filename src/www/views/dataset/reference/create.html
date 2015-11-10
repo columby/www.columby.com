@@ -3,7 +3,7 @@
   <!-- Modal header -->
   <div class="modal-header row">
     <div class="col-xs-10">
-      <h2 class="modal-title" ng-hide="reference.id">ssAdd a reference to a dataset</h2>
+      <h2 class="modal-title" ng-hide="reference.id">Add a reference to a dataset</h2>
       <h2 class="modal-title" ng-show="reference.id">Edit reference</h2>
     </div>
     <div class="col-xs-2 pull-right">
@@ -76,14 +76,21 @@
         </div>
 
         <div class="change-details row">
-          <form role="form">
-            <p>{{reference.url}}</p>
-            <a href ng-click="nextImage()">Next image</a> ({{reference.selectedImage +1}}/{{reference.result.images.length}})
+          <div class="col-xs-12">
+            <h3>Change details</h3>
+          </div>
+          <div class="col-xs-12" ng-show="reference.result.images.length>0">
+            <label>Select Image</label>
+            <a href ng-click="nextImage()">Next <i class="fa fa-arrow-right"></i></a> ({{reference.selectedImage +1}}/{{reference.result.images.length}})
+          </div>
+          <div class="col-xs-12">
             <label>Title</label>
             <input class="form-control" ng-model="reference.title"/>
-            <label>description</label>
-            <textarea class="form-control" ng-model="reference.description"></textarea>
-          </form>
+          </div>
+          <div class="col-xs-12">
+            <label>Description</label>
+            <textarea class="form-control" rows="5" ng-model="reference.description"></textarea>
+          </div>
         </div>
       </div>
       <!-- // Step 3 -->

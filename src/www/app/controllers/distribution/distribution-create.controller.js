@@ -1,9 +1,8 @@
 (function() {
   'use strict';
 
-  angular
-    .module('columbyApp')
-    .controller('DistributionNewCtrl', function($log, $rootScope, $scope, $modalInstance, dataset, FileSrv, ngNotify, ngProgress, DistributionSrv, $upload, appConstants) {
+  angular.module('columbyApp')
+  .controller('DistributionNewCtrl', function($log, $rootScope, $scope, $modalInstance, dataset, FileSrv, ngNotify, ngProgress, DistributionSrv, Upload, appConstants) {
 
 
     $scope.distribution = {
@@ -62,7 +61,7 @@
         accountId: $scope.distribution.account_id
       };
 
-      $upload.upload({
+      Upload.upload({
         method: 'POST',
         url   : appConstants.filesRoot + '/upload',
         fields: params,

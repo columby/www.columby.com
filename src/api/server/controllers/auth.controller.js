@@ -40,7 +40,7 @@ exports.checkUser = function(req,res,next) {
   req.user = req.user || {};
 
   // Check if there is an authorization token supplied
-  if (!req.user.email && req.headers.authorization){
+  if (!req.user.email && (req.headers && req.headers.authorization)){
     // get the token
     var token = req.headers.authorization.split(' ')[1];
     // Send a request to auth0 to get user info based on token
@@ -60,6 +60,9 @@ exports.checkUser = function(req,res,next) {
         next();
       }
     );
+  } else {
+    console.log('Anonymous');
+    next();
   }
 };
 

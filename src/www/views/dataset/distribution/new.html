@@ -1,18 +1,23 @@
-
-<div class="modal-header">
-  <h3 class="modal-title">Add a datasource</h3>
+<div class="modal-header row">
+  <div class="col-xs-10">
+    <h2 class="modal-title">Add a datasource</h2>
+  </div>
+  <div class="col-xs-2 pull-right">
+    <a class="close" href ng-click="$dismiss()"><span class="fa fa-close"></span></a>
+  </div>
 </div>
-<div class="modal-body">
 
-  <div ng-bind-html="statusText"></div>
+<div class="modal-body row">
+  <div class="status" ng-bind-html="statusText"></div>
 
-  <!-- Select the type of data upload -->
-  <div class="type-select" ng-show="wizard.step === 1">
-    <h2>1. Select the type of datasource</h2>
-    <button class="default-button lightblue filled"
-            ng-click="initSync()">Synchronise an external service</button>
-    <button class="default-button lightblue filled"
-            ng-click="initUpload()">Upload a file from your computer</button>
+  <div ng-switch="wizard.step">
+    <div ng-switch-when="1" class="type-select">
+      <div class="col-xs-12">
+        <h2>1. Select the type of datasource</h2>
+        <button class="btn btn-default" ng-click="initSync()">Synchronise an external service</button>
+        <button class="btn btn-default" ng-click="initUpload()">Upload a file from your computer</button>
+      </div>
+    </div>
   </div>
 
   <!-- Upload a file -->
@@ -134,10 +139,7 @@
 </div>
 
 <div class="modal-footer">
-  <button class="btn orange pull-left"
-          ng-show="wizard.cancelShow"
-          ng-disabled="wizard.cancelDisabled"
-          ng-click="cancel()">Cancel</button>
+  <a class="btn-cancel pull-left" href ng-click="cancel()">Cancel</a>
   <button class="default-button lightblue filled pull-right"
           ng-show="wizard.finishShow"
           ng-disabled="wizard.finishDisabled"
