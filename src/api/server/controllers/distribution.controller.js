@@ -1,20 +1,23 @@
 'use strict';
 
-/**
- * Dependencies
- *
- */
 var config = require('../config/config'),
     models = require('../models/index'),
     request = require('request'),
     fileController = require('./file.controller');
 
-exports.index = function(req,res) {
-  console.log(req.params);
-  var id = req.params.id;
-  console.log(id);
-};
+/**
+ *
+ * Get a list of distributions
+ *
+ */
+exports.index = function(req,res) { };
 
+
+/**
+ *
+ * Show a distribution
+ *
+ */
 exports.show = function(req,res){
   console.log(req.params);
 };
@@ -23,7 +26,6 @@ exports.show = function(req,res){
 /**
  *
  * Create a new distribution
- * required: dataset_id;
  *
  */
 exports.create = function(req,res) {
@@ -43,14 +45,15 @@ exports.create = function(req,res) {
  *
  */
 exports.update = function(req,res) {
-  console.log(req.body);
-  models.Distribution.find(req.body.id).then(function(distribution){
+  if (!req.distribution) return res.json({ status:'error', err: 'Failed to load distribution' });
+
+  models.Distribution.findById(req.body.id).then(function(distribution){
     distribution.updateAttributes(req.body).then(function(distribution){
-      res.json(distribution);
-    })
+      return res.json(distribution);
+    });
   }).catch(function(err){
     return handleError(res,err);
-  })
+  });
 };
 
 
@@ -61,6 +64,8 @@ exports.update = function(req,res) {
  */
 exports.destroy = function(req,res) {
 
+  console.log('Destoying datasource: ' + req.distribution.id);
+
   /**
    * Distribution is already attached to req by the auth middleware
    * Delete the local File
@@ -68,42 +73,31 @@ exports.destroy = function(req,res) {
    * Delete the distribution entry
    **/
 
-  console.log('Destoying datasource: ' + req.distribution.id);
-
   if (!req.distribution) return res.json({ status:'error', err: 'Failed to load distribution' });
 
   if (req.distribution.file_id){
     // Todo: delete the file from disk
 
     // Delete the file entry
-    models.File.destroy({ where: { id: req.distribution.file_id } })
-      .then(function(result){
-        console.log('File entry ' + req.distribution.file_id + ' deleted.');
-
-        // delete the distribution entry
-        models.Distribution.destroy({where: { id: req.distribution.id } })
-          .then(function(result){
-            console.log('Distribution entry ' + req.distribution.id + 'deleted. ');
-            res.json({status:'success', msg: result});
-          })
-          .catch(function(err){
-            handleError(res,err);
-          });
-      })
-      .catch(function(err){
-        handleError(res,err);
-      });
-
-
-  } else {
-
-    // delete the distribution entry
-    models.Distribution.destroy({where: { id: req.distribution.id } })
-      .then(function(result){
+    models.File.destroy({ where: { id: req.distribution.file_id } }).then(function(result){
+      console.log('File entry ' + req.distribution.file_id + ' deleted.');
+      // delete the distribution entry
+      models.Distribution.destroy({where: { id: req.distribution.id } }).then(function(result){
+        console.log('Distribution entry ' + req.distribution.id + 'deleted. ');
         res.json({status:'success', msg: result});
       }).catch(function(err){
         handleError(res,err);
       });
+    }).catch(function(err) {
+      handleError(res,err);
+    });
+  } else {
+    // delete the distribution entry
+    models.Distribution.destroy({where: { id: req.distribution.id } }).then(function(result){
+      res.json({status:'success', msg: result});
+    }).catch(function(err){
+      handleError(res,err);
+    });
   }
 };
 

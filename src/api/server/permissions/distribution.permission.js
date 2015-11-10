@@ -64,42 +64,27 @@ exports.canCreate = function(req,res,next){
  *
  ***/
 exports.canEdit = function(req,res,next){
-  console.log('Checking canEdit for distribution ' + req.params.id + ' for user id ' + req.jwt.sub);
-  // user should be registered
-  if (!req.jwt.sub) {
-    return res.status(401).json({status: 'Error', msg: 'Not authorized'});
-  }
+  console.log('Checking canEdit for distribution ' + req.params.id);
 
-  models.User.find({
-    where: { id: req.jwt.sub},
-    include: [
-      { model: models.Account, as: 'account' }
-    ]
-  }).then(function(user){
-      if (!user) { return res.status(401).json({status: 'Error', msg: 'No user found. '}); }
-      models.Distribution.find({
-        where:{ id:req.params.id },
-        include: [{ model: models.Dataset, as: 'dataset' }]
-      }).then(function(result){
-        if (!result.dataset.dataValues.account_id) {
-          return res.status(401).json({status: 'Error', msg: 'Account id not found for dataset. '});
-        }
-        if (user.account.indexOf(result.dataset.dataValues.account_id !== -1)){
-          console.log('The user can edit this distribution! ');
-          req.distribution = result.dataValues;
-          next();
-        } else {
-          console.log('No access! ', user.Accounts);
-          return res.status(401).json({status: 'Error', msg: 'No access'});
-        }
-      })
-      .catch(function(err){
-        console.log(err);
-        return res.status(401).json({status: 'Error', msg: err});
-      });
-    }).catch(function(err){
-      console.log(err);
-      return res.status(401).json({status: 'Error', msg: err});
+  // check if dataset_id is provided
+  if (!req.params.id) { return res.status(401).json({status: 'Error', msg: 'Missing parameter id'}); }
+  // Check if user is in req
+  if (!req.user || !req.user.email) { return res.json({ status:'error', msg:'No access.' }); }
+  // Check if user is admin
+  if (req.user.admin === true) { return next(); }
+
+  // get account for dataset for Distribution
+  models.Distribution.findById(req.params.id, {
+    include: [{ model: models.Dataset, as: 'dataset' }]
+  }).then(function(result){
+    req.distribution = result;
+    validateAccountAccess(req.user, result.dataValues.account_id, function(result){
+      if (!result) { return res.status(401).json({status: 'Error', msg: 'No user found'}); }
+      console.log('Can edit TRUE');
+      return next();
+    });
+  }).catch(function(err){
+    return res.status(401).json({status: 'Error', msg: err});
   });
 }
 
@@ -111,47 +96,26 @@ exports.canEdit = function(req,res,next){
  *
  ***/
 exports.canDelete = function(req,res,next){
-  console.log('Checking canDelete for distribution ' + req.params.id + ' for user id ' + req.jwt.sub);
-  if (!req.jwt.sub) {
-    return res.status(401).json({status: 'Error', msg: 'Not authorized'});
-  }
-  models.User.find({
-    where: { id: req.jwt.sub},
-    include: [
-      { model: models.Account, as: 'account' }
-    ]
-  })
-    .then(function(user){
-      if (!user) { return res.status(401).json({status: 'Error', msg: 'No user found. '}); }
-      // get account for dataset for Distribution
-      models.Distribution.find({
-        where:{
-          id:req.params.id
-        },
-        include: [{ model: models.Dataset, as: 'dataset' }]
+  console.log('Checking canDelete for distribution ' + req.params.id);
 
-      })
-        .then(function(result){
-          if (!result.dataset.dataValues.account_id) {
-            return res.status(401).json({status: 'Error', msg: 'Account id not found for dataset. '});
-          }
-          if (user.account.indexOf(result.dataset.dataValues.account_id !== -1)){
-            console.log('The user can delete this distribution! ');
-            req.distribution = result.dataValues;
-            next();
-          } else {
-            console.log('No access! ', user.Accounts);
-            return res.status(401).json({status: 'Error', msg: 'No access'});
-          }
-        })
-        .catch(function(err){
-          console.log(err);
-          return res.status(401).json({status: 'Error', msg: err});
-        })
+  // check if dataset_id is provided
+  if (!req.params.id) { return res.status(401).json({status: 'Error', msg: 'Missing parameter id'}); }
+  // Check if user is in req
+  if (!req.user || !req.user.email) { return res.json({ status:'error', msg:'No access.' }); }
+  // Check if user is admin
+  if (req.user.admin === true) { return next(); }
 
-    })
-    .catch(function(err){
-      console.log(err);
-      return res.status(401).json({status: 'Error', msg: err});
+  // get account for dataset for Distribution
+  models.Distribution.findById(req.params.id, {
+    include: [{ model: models.Dataset, as: 'dataset' }]
+  }).then(function(result){
+    req.distribution = result;
+    validateAccountAccess(req.user, result.dataValues.account_id, function(result){
+      if (!result) { return res.status(401).json({status: 'Error', msg: 'No user found'}); }
+      console.log('Can delete TRUE');
+      return next();
     });
+  }).catch(function(err){
+    return res.status(401).json({status: 'Error', msg: err});
+  });
 }

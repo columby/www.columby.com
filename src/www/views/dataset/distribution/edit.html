@@ -1,73 +1,77 @@
-
-  <div class="modal-header">
-    <h3 class="modal-title">Edit datasource: {{distribution.title}}</h3>
+<div class="modal-header row">
+  <div class="col-xs-10">
+    <h2 class="modal-title">Edit datasource: {{distribution.title}}</h2>
   </div>
-  <div class="modal-body">
-
-    <form class="form-horizontal novalidate" role="form" name="metadataForm">
-
-      <div class="form-group">
-        <div class="col-xs-4"><label>Title</label></div>
-        <div class="col-xs-8">
-          <input class="form-control"
-                 name="title"
-                 ng-model="distribution.title"
-                 ng-minlength="3"
-                 ng-maxlength="30"/>
-          <span class="error" ng-show="slugForm.slug.$error.maxlength">Too long!</span>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="col-xs-4">
-          <label>Description</label>
-        </div>
-        <div class="col-xs-8">
-          <textarea class="form-control"
-                    rows="5"
-                    placeholder="Please add your description"
-                    ng-model="distribution.description"></textarea>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="col-xs-4">
-          <label>License</label>
-        </div>
-        <div class="col-xs-8">
-          <div class="btn-group">
-            <label class="col-xs-6 btn btn-success" ng-model="distribution.license" btn-radio="'cc0'">CC0</label>
-            <label class="col-xs-6 btn btn-success" ng-model="distribution.license" btn-radio="'Other'">Other</label>
-          </div>
-          <input class="col-xs-6 form-control"
-                 ng-show="distribution.license!=='cc0'"
-                 ng-model="distribution.license"
-                 placeholder="Your license">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="col-xs-4">
-          <!--<label>Hide?</label>-->
-        </div>
-        <div class="col-xs-8">
-          <div class="btn-group">
-            <label>
-              <input type="checkbox" ng-model="distribution.private">Hide this datasource for the public
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <p ng-show="distribution.type==='sync'"><strong>Sync Period:</strong> {{distribution.syncperiod}}</p>
-
-    </form>
+  <div class="col-xs-2 pull-right">
+    <a class="close" href ng-click="$dismiss()"><span class="fa fa-close"></span></a>
   </div>
+</div>
+
+<div class="modal-body row">
+  <form class="form-horizontal novalidate" role="form" name="metadataForm">
+
+    <div class="form-group">
+      <div class="col-xs-4"><label>Title</label></div>
+      <div class="col-xs-8">
+        <input class="form-control"
+               name="title"
+               ng-model="distribution.title"
+               ng-minlength="3"
+               ng-maxlength="30"/>
+        <span class="error" ng-show="slugForm.slug.$error.maxlength">Too long!</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-xs-4">
+        <label>Description</label>
+      </div>
+      <div class="col-xs-8">
+        <textarea class="form-control"
+                  rows="5"
+                  placeholder="Please add your description"
+                  ng-model="distribution.description"></textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-xs-4">
+        <label>License</label>
+      </div>
+      <div class="col-xs-8">
+        <div class="btn-group">
+          <label class="col-xs-6 btn btn-success" ng-model="distribution.license" btn-radio="'cc0'">CC0</label>
+          <label class="col-xs-6 btn btn-success" ng-model="distribution.license" btn-radio="'Other'">Other</label>
+        </div>
+        <input class="col-xs-6 form-control"
+               ng-show="distribution.license!=='cc0'"
+               ng-model="distribution.license"
+               placeholder="Your license">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-xs-4">
+        <!--<label>Hide?</label>-->
+      </div>
+      <div class="col-xs-8">
+        <div class="btn-group">
+          <label>
+            <input type="checkbox" ng-model="distribution.private">Hide this datasource for the public
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <p ng-show="distribution.type==='sync'"><strong>Sync Period:</strong> {{distribution.syncperiod}}</p>
+
+  </form>
+</div>
 
 
-  <div class="modal-footer">
-    <button class="btn orange pull-left"
-            ng-click="cancel()">Cancel</button>
-    <button class="default-button lightblue filled pull-right"
-            ng-click="update()">Save</button>
+<div class="modal-footer">
+  <div class="col-xs-12">
+    <a href class="pull-left" ng-click="cancel()">Cancel</a>
+    <button class="btn btn-default pull-right" ng-click="update()">Save</button>
   </div>
+</div>
