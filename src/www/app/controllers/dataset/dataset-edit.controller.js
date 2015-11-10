@@ -206,13 +206,14 @@
       ngNotify.set('Datasource saved.');
       $scope.dataset.distributions.push(distribution);
       modalOpened=false;
-    }, function () {
+    }, function() {
       // Delete the created datasource
       DistributionSrv.delete($scope.distribution, function(res){
         $log.debug('deleted');
         $log.debug(res);
       });
       $log.info('Modal dismissed at: ' + new Date());
+      modalOpened=false;
     });
   };
 

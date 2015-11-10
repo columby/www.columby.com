@@ -91,19 +91,25 @@
               <li><label>Issued</label>{{distribution.created_at | date:'d MMMM yyyy'}}</li>
               <li ng-show="distribution.created_at !== distribution.updated_at"><label>Modified</label>{{distribution.updated_at | date:'d MMMM yyyy'}}</li>
             </ul>
-            <div class="distribution-actions">
-              <div class="col-xs-1">
-                <button type="button" class="btn btn-warning btn-xs" ng-click="editDistribution(distribution)"><i class="fa fa-edit"></i> Edit</button>
+            <div>
+              <div class="download datasource-icon" ng-show="distribution.downloadUrl">
+                <a href="{{distribution.downloadUrl}}"><button class="btn btn-default"><i class="fa fa-download"></i> Download source</button></a>
               </div>
-              <div class="col-xs-1">
-                <button class="valid-api btn btn-primary btn-xs" ng-click="convertPrimary(distribution)" ng-hide="!distribution.valid || dataset.primary.id || distribution.id === dataset.primary.distribution_id">Convert to API</button>
+              <div class="link datasource-icon" ng-show="distribution.accessUrl">
+                <a href="{{distribution.accessUrl}}" target="_blank">
+                  <button class="btn btn-default"><i class="fa fa-external-link"></i> Go to Source</button>
+                </a>
               </div>
-              <div class="col-xs-5 confirm-delete" ng-hide="distribution.id === dataset.primary.distribution_id" confirm-delete on-confirm="deleteDistribution(distribution)"></div>
+            </div>
+            <div class="distribution-actions row">
+              <button type="button" class="btn btn-warning btn-xs pull-right" ng-click="editDistribution(distribution)"><i class="fa fa-edit"></i> Edit</button>
+              <button class="valid-api btn btn-primary btn-xs pull-right" ng-click="convertPrimary(distribution)" ng-hide="!distribution.valid || dataset.primary.id || distribution.id === dataset.primary.distribution_id">Convert to API</button>
+              <div class="confirm-delete pull-right" ng-hide="distribution.id === dataset.primary.distribution_id" confirm-delete on-confirm="deleteDistribution(distribution)"></div>
             </div>
   				</li>
         </ul>
       </div>
-      <button class="lightblue filled pull-right" type="button" ng-click="newDistribution()">Add a new datasource</button>
+      <button class="btn btn-default pull-right" type="button" ng-click="newDistribution()">Add a new datasource</button>
     </div>
 
     <!-- Dataset references -->
@@ -131,7 +137,7 @@
 
       <div class="row add-reference">
         <div class="col-md-12">
-          <button class="lightblue filled pull-right" type="button" ng-click="createReference()">Add a new reference</button>
+          <button class="btn btn-default pull-right" type="button" ng-click="createReference()">Add a new reference</button>
         </div>
       </div>
     </div>

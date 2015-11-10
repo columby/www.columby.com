@@ -5,14 +5,29 @@ var models = require('../models/index'),
     User = models.User;
 
 
-/***
- *
- * Check to see if a user can view a specific distribution
- *
- ***/
-exports.canView = function(req,res,next){
+// helper to check if a user has access to a certain account.
+function validateAccountAccess(user, account_id, cb) {
+  if (user.admin) { return cb(true); }
 
+  if (user.primary.id === account_id) {
+    return cb(true);
+  }
+
+  // Iterate over user's accounts
+  for (var i=0; i<user.organisations.length; i++){
+    // Check if account is same as requested account
+    if (parseInt(user.organisations[ i].id) === parseInt(account_id)) {
+      // Check if account has the right role to edit.
+      // User account with role owner or admin can edit an account. (not editor or viewer)
+      var roles = [1,2];
+      if (roles.indexOf(user.organisations[ i].role) !== -1) {
+        return cb(true);
+      }
+    }
+  }
+  return cb(false);
 }
+
 
 
 /***
@@ -22,32 +37,22 @@ exports.canView = function(req,res,next){
  ***/
 exports.canCreate = function(req,res,next){
   console.log('Checking canCreate for user id ' + req.jwt.sub);
-  // Make sure a token exists (handled by auth.controller)
-  if (!req.jwt.sub) {
-    return res.status(401).json({status: 'Error', msg: 'Not authorized'});
-  }
 
-  // Fetch the user based on the token-user_id
-  models.User.find({
-    where: { id: req.jwt.sub},
-    include: [
-      { model: models.Account, as: 'account' }
-    ]
-  }).then(function(user){
-    if (!user) { return res.status(401).json({status: 'Error', msg: 'No user found. '}); }
-    console.log(req.body);
-    console.log('User ' + req.jwt.sub + ' would like to add a distribution to account ' + req.body.account_id + ' for dataset ' + req.body.dataset_id);
-    if (user.account.indexOf(req.body.account_id !== -1)){
-      console.log('The user can create a new distribution for this account! ');
+  // check if dataset_id is provided
+  if (!req.body.dataset_id) { return res.status(401).json({status: 'Error', msg: 'Missing parameter dataset_id'}); }
+  // Check if user is in req
+  if (!req.user || !req.user.email) { return res.json({ status:'error', msg:'No access.' }); }
+  // Check if user is admin
+  if (req.user.admin === true) { return next(); }
+
+  validateAccountAccess(req.user, req.body.account_id,function(result){
+    if (result===true){
+      console.log('Yes access!');
       next();
     } else {
-      console.log('No access! ', user.Accounts);
+      console.log('No access!');
       return res.status(401).json({status: 'Error', msg: 'No access'});
     }
-  })
-  .catch(function(err){
-    console.log(err);
-    return res.status(401).json({status: 'Error', msg: err});
   });
 }
 

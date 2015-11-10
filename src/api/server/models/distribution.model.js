@@ -75,9 +75,11 @@ module.exports = function(sequelize, DataTypes) {
    *
    */
   Distribution.afterCreate( function(model) {
-    model.updateAttributes({
-      shortid: hashids.encode(parseInt(String(Date.now()) + String(model.id)))
-    }).success(function(){}).error(function(){});
+    if (!model.shortid) {
+      model.updateAttributes({
+        shortid: hashids.encode(parseInt(String(Date.now()) + String(model.id)))
+      });
+    }
   });
 
   return Distribution;

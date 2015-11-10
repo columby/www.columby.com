@@ -5,13 +5,9 @@
  *
  */
 var config = require('../config/config'),
-    AWS = require('aws-sdk'),
     models = require('../models/index'),
     request = require('request'),
-    fileController = require('./file.controller')
-  ;
-
-var s3 = new AWS.S3();
+    fileController = require('./file.controller');
 
 exports.index = function(req,res) {
   console.log(req.params);
@@ -27,17 +23,14 @@ exports.show = function(req,res){
 /**
  *
  * Create a new distribution
- *
  * required: dataset_id;
  *
- * @param req
- * @param res
  */
 exports.create = function(req,res) {
-  //console.log(req.body);
-  models.Distribution.create(req.body).then(function(distribution){
-    //console.log(distribution);
-    res.json(distribution);
+  var distribution = req.body;
+  // Create the distribution
+  models.Distribution.create(distribution).then(function(result){
+    return res.json(result);
   }).catch(function(err){
     return handleError(res,err);
   });
@@ -48,8 +41,6 @@ exports.create = function(req,res) {
  *
  * Update a distribution
  *
- * @param req
- * @param res
  */
 exports.update = function(req,res) {
   console.log(req.body);
@@ -67,8 +58,6 @@ exports.update = function(req,res) {
  *
  * Delete a distribution
  *
- * @param req
- * @param res
  */
 exports.destroy = function(req,res) {
 
@@ -116,43 +105,6 @@ exports.destroy = function(req,res) {
         handleError(res,err);
       });
   }
-
-
-
-    // delete file if present
-    // if (distribution.file_id) {
-    //
-    //   // Find the file, delete it from s3 and db
-    //   models.File.find({where:{id:distribution.file_id}}).then(function(file){
-    //     if (!file) {
-    //       console.log('File not found. ');
-    //     } else {
-    //       var key = file.url;
-    //       key = key.replace('https://'+config.aws.bucket+'.s3.amazonaws.com/', '');
-    //       // File found, delete it from s3
-    //       var params = {
-    //         Bucket: config.aws.bucket,
-    //         Key: key
-    //       };
-    //       // delete from s3
-    //       console.log('deleting ' + key);
-    //       s3.deleteObject(params, function (err) {
-    //         if (err) {
-    //           console.log(err);
-    //         } else {
-    //           // delete db entry
-    //           file.destroy().then(function() {
-    //             console.log('remove .thenful.');
-    //           }).catch(function(err){
-    //             console.log('err', err);
-    //           });
-    //         }
-    //       });
-    //     }
-    //   }).catch(function(err){
-    //     console.log(err);
-    //   });
-    // }
 };
 
 
@@ -160,8 +112,6 @@ exports.destroy = function(req,res) {
  *
  * Validate if a supplied link is valid for processing by columby
  *
- * @param req
- * @param res
  */
 exports.validateLink = function(req,res){
 
@@ -182,7 +132,7 @@ exports.validateLink = function(req,res){
   request({
     uri: url,
     method: 'GET',
-    timeout: '1500',
+    timeout: 1500,
     followRedirect: true,
     maxRedirects: 10
   },function(err, response, body){
@@ -208,8 +158,6 @@ exports.validateLink = function(req,res){
  *
  * Validate if a source is a readable arcgis service.
  *
- * @param url
- * @param cb
  */
 function validateArcgis(url,cb){
   request({
@@ -247,8 +195,6 @@ function validateArcgis(url,cb){
  *
  * Validate if a source is a readable Fortes service.
  *
- * @param url
- * @param cb
  */
 function validateFortes(url,cb){
   console.log('check fortes: ', url);
@@ -263,5 +209,5 @@ function validateFortes(url,cb){
 
 function handleError(res, err) {
   console.log('Dataset error,', err);
-  return res.send(500, err);
+  return res.json({status: 'error', msg:err});
 }

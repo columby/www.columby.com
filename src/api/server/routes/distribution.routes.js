@@ -22,7 +22,6 @@ module.exports = function(app){
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    auth.ensureAuthenticated,
     distributionPerms.canCreate,
     distributionCtrl.create
   );
@@ -30,7 +29,6 @@ module.exports = function(app){
   router.post('/validate-link',
     auth.checkJWT,
     auth.checkUser,
-    auth.ensureAuthenticated,
     auth.ensureAuthenticated,
     distributionCtrl.validateLink);
 
@@ -41,14 +39,12 @@ module.exports = function(app){
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    auth.ensureAuthenticated,
     distributionPerms.canEdit,
     distributionCtrl.update);
 
   router.delete('/:id',
     auth.checkJWT,
     auth.checkUser,
-    auth.ensureAuthenticated,
     auth.ensureAuthenticated,
     distributionPerms.canDelete,
     distributionCtrl.destroy);

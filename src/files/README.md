@@ -2,9 +2,3 @@
 
 # File server for columby.com
 File server for columby.com
-
-
-
-
-
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)

@@ -19,7 +19,7 @@
     };
 
 
-    $scope.wizard={
+    $scope.wizard = {
       steps: ['start','data','metadata','finish'],
       step:1,
       cancelShow: true,
@@ -128,7 +128,6 @@
       };
 
       DistributionSrv.validateLink({url:$scope.distribution.accessUrl}, function(response){
-        //$log.debug('r', response);
         $scope.distribution.validation = {
           status: 'done',
           result: response
