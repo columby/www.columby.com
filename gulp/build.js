@@ -92,8 +92,37 @@ gulp.task('other', function () {
     .pipe(gulp.dest(path.join(conf.paths.dist,'/www')));
 });
 
+
+gulp.task('api', function() {
+  return gulp.src([
+    path.join(conf.paths.src, '/api/server/**/*'),
+    '!' + path.join(conf.paths.src, '/api/server/config/env.js')
+  ])
+  .pipe(gulp.dest(path.join(conf.paths.dist, '/api')));
+});
+
+
+gulp.task('files', function() {
+  return gulp.src([
+    path.join(conf.paths.src, '/files/server/**/*'),
+    '!' + path.join(conf.paths.src, '/files/server/config/env.js')
+  ])
+  .pipe(gulp.dest(path.join(conf.paths.dist, '/files')));
+});
+
+
+gulp.task('worker', function() {
+  return gulp.src([
+    path.join(conf.paths.src, '/worker/server/**/*'),
+    '!' + path.join(conf.paths.src, '/worker/server/config/env.js')
+  ])
+  .pipe(gulp.dest(path.join(conf.paths.dist, '/worker')));
+});
+
+
 gulp.task('clean', function (done) {
   plugins.del([conf.paths.dist, conf.paths.tmp], done);
 });
 
-gulp.task('build', ['html', 'fonts', 'other']);
+
+gulp.task('build', ['html','fonts','other','api', 'files', 'worker']);
