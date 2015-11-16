@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('columbyApp')
+    .module('ng-app')
     .filter('bytes', function() {
     return function(bytes, precision) {
       if (isNaN(parseFloat(bytes)) || !isFinite(bytes)){

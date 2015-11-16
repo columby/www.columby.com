@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('columbyApp')
+    .module('ng-app')
     .service('EmbedlySrv', function ($rootScope, $http, $q, appConstants) {
 
     var key = appConstants.embedlyKey;

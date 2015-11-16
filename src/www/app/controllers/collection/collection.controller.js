@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('columbyApp')
+    .module('ng-app')
     .controller('CollectionsCtrl', function ($rootScope, $scope, CollectionSrv) {
 
     $scope.collections = CollectionSrv.index();
@@ -14,7 +14,7 @@
   'use strict';
 
   angular
-    .module('columbyApp')
+    .module('ng-app')
     .controller('CollectionCtrl', function ($rootScope, $scope, $stateParams, CollectionSrv, UserSrv,appConstants) {
 
     // Initiate pagination

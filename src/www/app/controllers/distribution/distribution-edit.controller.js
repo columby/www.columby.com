@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('columbyApp')
+    .module('ng-app')
     .controller('DistributionEditCtrl',
   function ($log,$scope, $modalInstance, distribution, DistributionSrv, ngNotify) {
 

@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('columbyApp')
+    .module('ng-app')
     .service('SearchSrv', function ($http, appConstants) {
 
     var queryTerm = '';

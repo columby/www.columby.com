@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('columbyApp')
+    .module('ng-app')
     .service('PrimaryService', function($resource, appConstants) {
 
     return $resource(appConstants.apiRoot + '/v2/primary/:id', {

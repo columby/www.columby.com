@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('columbyApp')
+  angular.module('ng-app')
     .service('AuthSrv', function($log, $rootScope, $http, auth, store, appConstants, UserSrv) {
 
     return {

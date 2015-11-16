@@ -3,5 +3,5 @@
 (function() {
   'use strict';
 
-  angular.module('columbyApp').constant('appConstants', window.settings);
+  angular.module('ng-app').constant('appConstants', window.settings);
 })();

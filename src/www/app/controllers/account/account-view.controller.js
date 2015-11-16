@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('columbyApp').controller('AccountCtrl', function(account, $rootScope, $scope, $stateParams, $state, ngNotify, AuthSrv, AccountSrv, DatasetSrv, appConstants, $log) {
+  angular.module('ng-app').controller('AccountCtrl', function(account, $rootScope, $scope, $stateParams, $state, ngNotify, AuthSrv, AccountSrv, DatasetSrv, appConstants, $log) {
 
     // Check if requested account was fetched
     if (!account.id){

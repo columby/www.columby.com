@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('columbyApp')
+  angular.module('ng-app')
   .config (function ($logProvider, $locationProvider, $urlRouterProvider, appConstants, authProvider, $httpProvider, jwtInterceptorProvider) {
 
     // Enable log

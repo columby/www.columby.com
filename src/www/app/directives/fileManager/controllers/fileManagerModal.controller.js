@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('columbyApp')
+    .module('ng-app')
     .controller('FileManagerModalCtrl',
     function(options, $rootScope, $scope, $modal, $modalInstance, FileSrv, Upload, ngNotify){
     //$log.debug('options', options);

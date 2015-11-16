@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('columbyApp')
+  angular.module('ng-app')
     .controller('SearchCtrl', function($log,$rootScope, $scope, SearchSrv) {
 
     /* ---------- SETUP ----------------------------------------------------------------------------- */

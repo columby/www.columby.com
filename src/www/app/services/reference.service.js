@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('columbyApp')
+    .module('ng-app')
     .service('ReferenceSrv', function($resource, appConstants) {
 
     return $resource(appConstants.apiRoot + '/v2/reference/:id', {

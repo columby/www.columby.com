@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('columbyApp')
+    .module('ng-app')
     .controller('StatusCtrl', function($log,$rootScope, $scope, $http,appConstants) {
 
     $scope.ckan = {

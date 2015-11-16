@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('columbyApp')  .config(function ($stateProvider) {
+    .module('ng-app')  .config(function ($stateProvider) {
 
     $stateProvider
       .state('dataset', {

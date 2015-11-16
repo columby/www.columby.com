@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('columbyApp')
+  angular.module('ng-app')
   .controller('DatasetViewCtrl', function($log, dataset, $window, $rootScope, $scope, $location, $state, $stateParams, DatasetSrv, DistributionSrv, appConstants, DataService, UserSrv, AuthSrv, ngNotify,$modal) {
 
   if (!dataset.id) {

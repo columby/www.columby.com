@@ -1,5 +1,5 @@
 {
-  "appName": "columbyApp",
+  "appName": "ng-app",
   "sshHost": "admin@dev.columby.com",
   "sshPath": "/srv/columby/sites/www.columby.com"
 }

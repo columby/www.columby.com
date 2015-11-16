@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('columbyApp')
+    .module('ng-app')
     .service('DatasetSrv', function($resource, appConstants) {
 
     var url = appConstants.apiRoot + '/v2/dataset';

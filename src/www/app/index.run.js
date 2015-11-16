@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-  .module('columbyApp')
+  .module('ng-app')
   .run(function ($log, $rootScope, $state, UserSrv, ngNotify, gettextCatalog, AuthSrv, appConstants, auth, store, jwtHelper) {
 
     // Auth0 authentication events

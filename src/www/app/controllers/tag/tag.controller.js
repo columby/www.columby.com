@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('columbyApp')
+  angular.module('ng-app')
   .controller('TagCtrl', function ($log,$scope, $stateParams, TagService) {
 
     $scope.pagination = {
