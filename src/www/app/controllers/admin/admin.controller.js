@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ng-app')
+    .module('columbyApp')
     .controller('AdminCtrl', function ($scope) {
     $scope.message = 'Hello';
   });

@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ng-app')  .config(function ($stateProvider) {
+    .module('columbyApp')  .config(function ($stateProvider) {
 
     $stateProvider
 

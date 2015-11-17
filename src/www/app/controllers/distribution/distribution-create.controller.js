@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('ng-app')
+  angular.module('columbyApp')
   .controller('DistributionNewCtrl', function($log, $rootScope, $scope, $modalInstance, dataset, FileSrv, ngNotify, ngProgress, DistributionSrv, Upload, appConstants) {
 
 

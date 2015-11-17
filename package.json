@@ -1,7 +1,7 @@
 {
   "private": true,
-  "name": "www.columby.com",
-  "version": "1.2.0",
+  "name": "columby.com",
+  "version": "1.2.0.1",
   "homepage": "https://www.columby.com",
   "repository": "https://www.github.com/columby/www.columby.com",
   "license": "proprietary",
@@ -73,7 +73,7 @@
     "gulp-load-plugins": "~1.0.0-rc",
     "gulp-minify-html": "~1.0.4",
     "gulp-ng-annotate": "~1.1.0",
-    "gulp-ng-constant": "^0.3.0",
+    "gulp-ng-constant": "^1.1.0",
     "gulp-nodemon": "^2.0.4",
     "gulp-preprocess": "^1.2.0",
     "gulp-protractor": "~1.0.0",

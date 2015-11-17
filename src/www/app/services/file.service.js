@@ -12,7 +12,7 @@
    'use strict';
 
    angular
-     .module('ng-app')
+     .module('columbyApp')
      .service('FileSrv', function ($log, $http, $q, appConstants) {
 
     return {

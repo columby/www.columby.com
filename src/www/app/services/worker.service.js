@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ng-app')
+    .module('columbyApp')
     .service('WorkerSrv', function($log,$http, appConstants) {
 
     return {

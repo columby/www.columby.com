@@ -1,7 +1,6 @@
-// Will be overwritten by gulp['constants'] based on NODE_ENV
-
-(function() {
+(function(){ 
   'use strict';
-
-  angular.module('ng-app').constant('appConstants', window.settings);
+  angular.module('columbyApp').constant('appConstants', 
+  {"appTitle":"[DEVELOP] Columby","debug":true,"env":"development","apiRoot":"https://dev-api.columby.com","workerRoot":"https://dev-worker.columby.com","filesRoot":"https://dev-files.columby.com","embedlyKey":"844b2c4d25334b4db2c327f10c70cb54","awsEndpoint":"https://s3.amazonaws.com/columby/","auth0":{"domain":"columby-dev.eu.auth0.com","clientID":"Ll9p3ipwQdthB5fBGG3vg783SQckzTKj"},"version":"1.2.0.1"}
+ ); 
 })();

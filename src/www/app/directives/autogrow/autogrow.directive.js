@@ -5,7 +5,7 @@
 
 (function() {
   'use strict';
-  angular.module('ng-app').directive('autoGrow', function($window) {
+  angular.module('columbyApp').directive('autoGrow', function($window) {
     return {
       restrict: 'A',
       link: function(scope, element) {

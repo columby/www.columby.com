@@ -1,10 +1,10 @@
 (function () {
   'use strict';
 
-  angular
-  .module('ng-app')
-  .run(function ($log, $rootScope, $state, UserSrv, ngNotify, gettextCatalog, AuthSrv, appConstants, auth, store, jwtHelper) {
+  angular.module('columbyApp').run(function ($log, $rootScope, $state, UserSrv, ngNotify, gettextCatalog, AuthSrv, appConstants, auth, store, jwtHelper) {
 
+    $rootScope.config = appConstants;
+    
     // Auth0 authentication events
     auth.hookEvents();
 

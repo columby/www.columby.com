@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ng-app')
+    .module('columbyApp')
     .controller('CollectionEditCtrl', function ($rootScope, $scope, $state, $stateParams, AuthSrv, CollectionSrv, ngNotify, appConstants) {
 
     // Configuration

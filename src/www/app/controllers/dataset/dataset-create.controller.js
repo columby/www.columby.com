@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  angular.module('ng-app').controller('DatasetCreateCtrl', function ($log, $rootScope, $scope, $modal, $state, DatasetSrv, ngNotify) {
+  angular.module('columbyApp').controller('DatasetCreateCtrl', function ($log, $rootScope, $scope, $modal, $state, DatasetSrv, ngNotify) {
     $log.debug('Initiating new dataset.');
 
     /**

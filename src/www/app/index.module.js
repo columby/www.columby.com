@@ -1,21 +1,21 @@
 'use strict';
 
-angular.module('ng-app', [
-  'auth0',
-  'angular-jwt',
-  'angular-storage',
-  'gettext',
-  'ngAnimate',
-  'ngFileUpload',
-  'ngNotify',
-  'ngProgress',
+angular.module('columbyApp', [
   'ngResource',
   'ngSanitize',
-  'ngTagsInput',
-  'ui.router',
+  'ngAnimate',
   'ui.bootstrap',
+  'angular-jwt',
   'satellizer',
   'slugifier',
+  'ngFileUpload',
+  'textAngular',
   'td.easySocialShare',
-  'textAngular'
+  'ngProgress',
+  'ngTagsInput',
+  'ngNotify',
+  'gettext',
+  'ui.router',
+  'auth0',
+  'angular-storage'
 ]);

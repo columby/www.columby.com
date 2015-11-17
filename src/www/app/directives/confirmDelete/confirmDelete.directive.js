@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ng-app')
+    .module('columbyApp')
     .directive('confirmDelete', function($timeout) {
 
     return {

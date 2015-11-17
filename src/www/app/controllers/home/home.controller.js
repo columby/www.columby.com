@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ng-app')
+    .module('columbyApp')
     .controller('HomeCtrl', function($log,$rootScope,$scope,$state,SearchSrv,DatasetSrv,appConstants) {
 
       /* ---------- SETUP ----------------------------------------------------------------------------- */

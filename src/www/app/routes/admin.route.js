@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ng-app')
+    .module('columbyApp')
     .config(function ($stateProvider) {
       $stateProvider
         .state('admin', {

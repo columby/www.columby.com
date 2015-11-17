@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ng-app')
+    .module('columbyApp')
     .controller('ReferenceEditCtrl', function($log, $scope, $modalInstance, dataset, reference, ReferenceSrv, EmbedlySrv, ngNotify) {
 
   // Add received dataset from parent to this scope.

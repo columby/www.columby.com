@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('ng-app')
+  angular.module('columbyApp')
   .directive('embedly', function ($log,EmbedlySrv) {
     return {
       restrict: 'EA',

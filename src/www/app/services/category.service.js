@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('ng-app').service('CategorySrv', function ($resource, appConstants) {
+  angular.module('columbyApp').service('CategorySrv', function ($resource, appConstants) {
 
     return $resource(appConstants.apiRoot + '/v2/category/:id', {
       id: '@id',

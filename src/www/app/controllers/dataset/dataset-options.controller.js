@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('ng-app').controller('DatasetOptionsCtrl', function($log, dataset, account, $modalInstance, $rootScope, $scope, DatasetSrv,ngNotify,appConstants, $modal,$state,Slug,CategorySrv) {
+  angular.module('columbyApp').controller('DatasetOptionsCtrl', function($log, dataset, account, $modalInstance, $rootScope, $scope, DatasetSrv,ngNotify,appConstants, $modal,$state,Slug,CategorySrv) {
 
       var modalOpened = false;
 

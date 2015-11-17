@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ng-app')
+    .module('columbyApp')
     .service('AccountSrv', function($resource, appConstants) {
 
       return $resource(appConstants.apiRoot + '/v2/account/:slug', {

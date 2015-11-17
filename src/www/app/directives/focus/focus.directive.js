@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ng-app')
+    .module('columbyApp')
     .directive('focus', function($timeout) {
   return {
     scope : {

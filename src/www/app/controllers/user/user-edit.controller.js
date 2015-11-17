@@ -6,7 +6,7 @@
  (function() {
    'use strict';
 
-  angular.module('ng-app')
+  angular.module('columbyApp')
   .controller('UserEditCtrl', function($log, $rootScope, $scope, $state, UserSrv, AccountSrv, ngNotify, Slug, $modal, appConstants, store) {
 
     // Set logged in user into scope

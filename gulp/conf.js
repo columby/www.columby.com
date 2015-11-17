@@ -8,7 +8,6 @@
 
 var gutil = require('gulp-util');
 
-exports.settings = require('./settings.json');
 
 /**
  *  The main paths of your project handle these with care
@@ -16,7 +15,7 @@ exports.settings = require('./settings.json');
 exports.paths = {
   src: 'src',
   dist: 'dist',
-  tmp: '.tmp',
+  tmp: 'tmp',
   e2e: 'e2e'
 };
 

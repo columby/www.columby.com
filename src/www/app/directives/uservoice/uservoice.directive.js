@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ng-app')
+    .module('columbyApp')
     .directive('uservoice', function () {
     return {
       templateUrl: 'views/directives/uservoice/uservoice.html',

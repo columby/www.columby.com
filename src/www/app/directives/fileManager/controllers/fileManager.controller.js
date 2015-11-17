@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ng-app')
+    .module('columbyApp')
     /**
      *
      * The file manager is activated by a $broadcast event 'openFileManager'

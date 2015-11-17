@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ng-app')
+    .module('columbyApp')
     .controller('PrimaryEditCtrl', function($scope, $modalInstance, primary){
 
     $scope.primary = primary;

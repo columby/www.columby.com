@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('ng-app').controller('DatasetEditCtrl', function($log, dataset, $rootScope, $scope, appConstants, $state, $stateParams, AccountSrv, DatasetSrv, DistributionSrv, PrimaryService, ReferenceSrv, TagService, Slug, FileSrv,ngProgress, $timeout,$modal,Upload, ngNotify, AuthSrv) {
+  angular.module('columbyApp').controller('DatasetEditCtrl', function($log, dataset, $rootScope, $scope, appConstants, $state, $stateParams, AccountSrv, DatasetSrv, DistributionSrv, PrimaryService, ReferenceSrv, TagService, Slug, FileSrv,ngProgress, $timeout,$modal,Upload, ngNotify, AuthSrv) {
 
   // Check existence
   if (!dataset.id){

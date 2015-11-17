@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('ng-app')
+    .module('columbyApp')
     .controller('PrimaryNewCtrl', function($log,$scope, $modalInstance, distribution, primary, DistributionSrv, PrimaryService, WorkerSrv, ngNotify){
 
     $scope.loading = true;
