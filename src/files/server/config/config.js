@@ -1,9 +1,12 @@
 'use strict';
-
 var path = require('path');
 
-module.exports = {
+var p = require('./../../../../package.json');
+console.log(p.appVersion);
 
+module.exports = {
+  appVersion: p.appVersion,
+  
   root: path.normalize(__dirname + '/../..'),
 
   env: process.env.NODE_ENV || 'development',
@@ -32,5 +35,9 @@ module.exports = {
 
   mandrill: {
     key: process.env.MANDRILL_API_KEY
+  },
+
+  auth0: {
+    domain: process.env.AUTH0_DOMAIN
   }
 };

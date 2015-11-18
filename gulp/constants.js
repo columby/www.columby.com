@@ -14,7 +14,7 @@ gulp.task('constants', function() {
   // Add version to constants
   var data = require('./../package.json');
   var constants = require(path.join('./../src/www/config/' + env + '.constants.json'));
-  constants.version = data.version;
+  constants.version = data.appVersion;
 
   // Create string for file
   var content = '(function(){ \n' +

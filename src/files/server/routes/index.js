@@ -1,30 +1,45 @@
-'use strict'
+(function(){
 
-var fileCtrl = require('./../controllers/file.controller')
-var auth = require('./../controllers/auth.controller')
+  'use strict';
+  var config = require('./../config/config');
+  var fileCtrl = require('./../controllers/file.controller');
+  var auth = require('./../controllers/auth.controller');
 
-module.exports = function (app) {
-  // Route to a file
-  app.get('/:type/:filename',
-    fileCtrl.serve
-  )
+  module.exports = function (app) {
 
-  // Route to a derived file
-  app.get('/:type/:style/:filename',
-    fileCtrl.serve
-  )
+    // Serve static assets
+    app.get('/assets/:filename', fileCtrl.serveAsset);
 
-  // convert a file or table
-  app.post('/convert',
-    auth.validateRemoteHost,
-    fileCtrl.convert)
+    // Serve original file
+    app.get('/f/:id/:filename', fileCtrl.serveFile);
 
-  // Fallback for all other routes
-  app.get('/', function (req, res) {
-    return res.json({ status: 200, msg: 'Columby file server.' })
-  })
+    // Serve file derivative
+    app.get('/s/:style/:id/:filename', fileCtrl.serveStyle);
 
-  app.get('/*', function (req, res) {
-    return res.sendStatus(404)
-  })
-}
+
+
+
+    // convert a file or table
+    app.post('/convert',
+      auth.validateRemoteHost,
+      fileCtrl.convert);
+
+    // Fallback for all other routes
+    app.get('/', function (req, res) {
+      var status = {
+        status: 'ok',
+        statusCode: 200,
+        msg: 'Columby file server.',
+        appVersion: config.appVersion
+      };
+      if (config.env === 'development') {
+        status.environment = 'development';
+      }
+      return res.json(status);
+    });
+
+    app.get('/*', function (req, res) {
+      return res.sendStatus(404);
+    });
+  };
+})();

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = function (sequelize, DataTypes) {
   /**
@@ -76,23 +76,10 @@ module.exports = function (sequelize, DataTypes) {
         Account.belongsTo(models.File, {
           foreignKey: 'avatar_id',
           as: 'avatar'
-        })
-
-        // Each account can have a reference to a File (image) as headerImage
-        // creates Account.headerimg_id
-        Account.belongsTo(models.File, {
-          foreignKey: 'headerimg_id',
-          as: 'headerImg'
-        })
-
-        // A user can have multiple accounts with roles
-        Account.belongsToMany(models.User, {
-          as: 'users',
-          through: models.UserAccounts
-        })
+        });
       }
     }
-  })
+  });
 
-  return Account
-}
+  return Account;
+};
