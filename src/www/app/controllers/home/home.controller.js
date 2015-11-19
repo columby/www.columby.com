@@ -14,9 +14,9 @@
       function listDatasets() {
         DatasetSrv.query(function(response){
           $scope.datasets = response;
-          angular.forEach($scope.datasets.rows, function(value,key){
-            $scope.datasets.rows[ key].account.avatar.url = appConstants.filesRoot + '/image/thumbnail/' + $scope.datasets.rows[ key].account.avatar.filename;
-          });
+          // angular.forEach($scope.datasets.rows, function(value,key){
+          //   $scope.datasets.rows[ key].account.avatar.url = appConstants.filesRoot + '/image/thumbnail/' + $scope.datasets.rows[ key].account.avatar.filename;
+          // });
           $scope.contentLoading = false;
         });
       }

@@ -7,14 +7,15 @@
     var user;
 
     function setUser(u){
+      console.log('set user');
       // update avatar links.
       if (u && u.id){
         if (u.primary.avatar){
-          u.primary.avatar.url = appConstants.filesRoot + '/image/small/' + u.primary.avatar.filename;
+          u.primary.avatar.url = appConstants.filesRoot + '/image/small/' + u.primary.avatar.path;
         }
         for (var i=0; i<u.organisations.length;i++){
           if (u.organisations[ i].avatar){
-            u.organisations[ i].avatar.url = appConstants.filesRoot + '/image/small/' + u.organisations[ i].avatar.filename;
+            u.organisations[ i].avatar.url = appConstants.filesRoot + '/image/small/' + u.organisations[ i].avatar.path;
           }
         }
       }

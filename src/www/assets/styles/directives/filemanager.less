@@ -1,0 +1,115 @@
+body.fm-open {
+  overflow: hidden;
+}
+.fm {
+  -webkit-transition: opacity 0.25s linear;
+  transition: opacity 0.25s linear;
+  opacity: 0;
+  .fm-container {
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    overflow: hidden;
+    margin:0;
+    padding:0;
+    .fm-header {
+      background-color: @lightblue;
+      color: #484848;
+      border-bottom: 1px solid #e0e0e0;
+      top: 0;
+      z-index: 4;
+      width: 100%;
+      height: 60px;
+      position: absolute;
+      padding-left: 15px;
+      h4 {
+        line-height: 60px;
+        color: #FFF;
+      }
+      a.close {
+        position: absolute;
+        right: 15px;
+        top: 19px;
+        color: #FFF;
+        opacity: 1;
+      }
+    }
+    .fm-body {
+      position: absolute;
+      top: 60px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      .fm-main-content {
+        margin-bottom: 66px;
+        .fm-controls {
+          text-align: right;
+          .fm-droptarget {
+            top: 0;
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            -ms-transition: all 0.2s linear 0s;
+            transition: all 0.2s linear 0s;
+            background-color: #fff;
+            width: 100%;
+            max-width: 100% !important;
+            height: 100%;
+            position: absolute;
+          }
+          .fm-tools {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            .fm-search-bar {}
+            .fm-actions-bar {}
+          }
+        }
+        .fm-browser {
+          height: 200px;
+          overflow: auto;
+          width: 100%;
+          float: none;
+          padding-left: 15px;
+          padding-right: 15px;
+          -moz-background-clip: padding-box !important;
+          -webkit-background-clip: padding-box !important;
+          background-clip: padding-box !important;
+          .fm-files-list {
+            .table {
+                tr:first-child {
+                  td {
+                    border-top: 0 none;
+                  }
+                }
+                td.preview {
+                  width: 100px;
+                  img {
+                    width: 80px;
+                    height: 80px;
+                  }
+                }
+                td.actions {
+                  text-align: right;
+                  padding-right: 0;
+                  min-width: 120px;
+                }
+            }
+          }
+        }
+        .fm-pagination {
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background-color: #fff;
+          border-top: 1px solid #e0e0e0;
+          height: 70px;
+        }
+      }
+    }
+  }
+}

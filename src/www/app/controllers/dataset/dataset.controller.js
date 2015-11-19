@@ -13,9 +13,9 @@
   /* --------- INITIALISATION ------------------------------------------------------------ */
   $scope.dataset = angular.copy(dataset);
 
-  if ($scope.dataset.account.avatar){
-    $scope.dataset.account.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.dataset.account.avatar.filename;
-  }
+  // if ($scope.dataset.account.avatar){
+  //   $scope.dataset.account.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.dataset.account.avatar.filename;
+  // }
 
   $scope.hostname = $location.protocol() + '://' + $location.host();
   $scope.embedUrl = $location.absUrl();

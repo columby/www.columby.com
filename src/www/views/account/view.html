@@ -18,7 +18,7 @@
     </div> -->
 
     <div class="avatar">
-      <img class="img-circle" ng-src="{{account.avatar.url || '/assets/img/avatar.png'}}"/>
+      <img class="img-circle" ng-src="{{ $root.config.filesRoot + '/s/small/' + account.avatar.url || '/assets/img/avatar.png'}}"/>
     </div>
   </div>
 </div>

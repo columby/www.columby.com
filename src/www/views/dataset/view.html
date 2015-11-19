@@ -35,7 +35,7 @@
       <!-- Avatar -->
       <div class="avatar">
         <a ui-sref="account.view({slug:dataset.account.slug})">
-          <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" alt="{{dataset.account.displayName}}"/>
+          <img class="img-circle" ng-src="{{$root.config.filesRoot + '/s/small/' + dataset.account.avatar.url  || '/assets/img/avatar.png'}}" alt="{{dataset.account.displayName}}"/>
         </a>
       </div>
     </div>

@@ -13,9 +13,9 @@
     $scope.account = account;
 
     // Update the avatar url based on the filename
-    if ($scope.account.avatar){
-      $scope.account.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.account.avatar.filename;
-    }
+    // if ($scope.account.avatar){
+    //   $scope.account.avatar.url = appConstants.filesRoot + '/s/small/' + $scope.account.avatar.url;
+    // }
 
     // Set page tittle based on result
     $rootScope.title = 'columby.com | ' + $scope.account.displayName;
@@ -64,7 +64,8 @@
 
 
     function updateHeaderImage(){
-      $scope.account.headerImg.url = appConstants.filesRoot + '/image/large/' + $scope.account.headerImg.filename;
+      $log.debug($scope.account);
+      $scope.account.headerImg.url = appConstants.filesRoot + '/s/large/' + $scope.account.headerImg.url;
       $scope.headerStyle={
         'background-image': 'linear-gradient(transparent,transparent), url(/assets/img/default-header-bw.svg), url(' + $scope.account.headerImg.url + ')',
         'background-blend-mode': 'multiply'

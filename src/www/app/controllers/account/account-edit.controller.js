@@ -78,7 +78,7 @@
       };
 
       $scope.openFileBrowser = function() {
-        $rootScope.$broadcast('openFileManager', {
+        $rootScope.$broadcast('fm-open', {
           type:'image',
           account_id: $scope.account.id,
           select: true,
@@ -86,7 +86,8 @@
         });
       };
 
-      $scope.$on('fileManagerSelected', function(event,data){
+      $scope.$on('fm-selected', function(event,data){
+        $log.debug('Acoount edit: File selected: ', data);
         if (data.action === 'updateAccountAvatar') {
           $scope.account.avatar_id = data.file.id;
           $scope.account.avatar = data.file;

@@ -1,0 +1,19 @@
+<div class="modal-header row">
+  <div class="col-xs-10">
+    <h4 class="modal-title">Confirm Deletion</h4>
+  </div>
+  <div class="col-xs-2 right">
+    <a class="close" href ng-click="$dismiss()"><span class="fa fa-close"></span></a>
+  </div>
+</div>
+
+<div class="modal-body row">
+  <div class="col-sx-12">
+    <p>Are you sure you want to delete this file?</p>
+  </div>
+</div>
+
+<div class="modal-footer row">
+  <a class="pull-left" href class="cancel" ng-click="$dismiss()">Cancel</a>
+  <button class="btn btn-danger pull-right" ng-click="$close()">Delete</button>
+</div>

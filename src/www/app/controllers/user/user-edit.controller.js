@@ -13,9 +13,9 @@
     $scope.user = $rootScope.user;
 
     // Set proper user avatar
-    if (!$scope.user.primary.avatar) { $scope.user.primary.avatar = {}; }
-    $scope.user.primary.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.user.primary.avatar.filename;
-
+    // if (!$scope.user.primary.avatar) { $scope.user.primary.avatar = {}; }
+    // $scope.user.primary.avatar.url = appConstants.filesRoot + '/s/small/' + $scope.user.primary.avatar.filename;
+    
     // Check for user's primary account
     if (!$scope.user.primary.id){
       $scope.errorMsg = 'There seems to be a problem with your account. Please contact support.';
@@ -76,7 +76,8 @@
 
 
     $scope.openFileBrowser = function() {
-      $rootScope.$broadcast('openFileManager', {
+      console.log('opening browser');
+      $rootScope.$broadcast('fm-open', {
         type:'image',
         account_id: $scope.user.primary.id,
         select: true,
@@ -84,10 +85,10 @@
       });
     };
 
-    $scope.$on('fileManagerSelected', function(event,data){
+    $scope.$on('fm-selected', function(event,data){
       $log.debug(event);
-      $log.debug(data);
-      if (data.action === 'updateAvatar') {
+      $log.debug(data.file);
+      if (data.file) {
         $scope.user.primary.avatar_id = data.file.id;
         $scope.user.primary.avatar = data.file;
         $scope.updateAccount();
