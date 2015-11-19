@@ -66,11 +66,12 @@ exports.show = function(req, res) {
       { model: models.File, as: 'avatar' },
       { model: models.File, as: 'headerImg' },
       { model: models.File, as: 'files' },
-      { model: models.User, as: 'users', include: [
-        { model: models.Account, as: 'account', where: { primary: true }, include: [
-          { model: models.File, as: 'avatar' },
-        ] }
-      ]}
+      //
+      // { model: models.User, as: 'users', include: [
+      //   { model: models.Account, as: 'account', where: { primary: true }, include: [
+      //     { model: models.File, as: 'avatar' },
+      //   ] }
+      // ]}
     ]
   }).then(function(account) {
     account.getCategories().then(function(categories){
@@ -129,14 +130,14 @@ exports.show = function(req, res) {
           categories: account.categories
         }
 
-        for (var i=0; i<account.users.length;i++){
-          var u = account.users[ i].dataValues.account[0].dataValues;
-          u.role = account.users[ i].UserAccounts.dataValues.role;
-          delete u.UserAccounts;
-          delete u.plan;
-          delete u.uuid;
-          a.people.push(u);
-        }
+        // for (var i=0; i<account.users.length;i++){
+        //   var u = account.users[ i].dataValues.account[0].dataValues;
+        //   u.role = account.users[ i].UserAccounts.dataValues.role;
+        //   delete u.UserAccounts;
+        //   delete u.plan;
+        //   delete u.uuid;
+        //   a.people.push(u);
+        // }
 
         a.registries = registries;
 

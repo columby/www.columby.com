@@ -22,7 +22,7 @@
       //
       //$log.debug('a', account);
       $scope.account = account;
-      $scope.account.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.account.avatar.filename;
+      //$scope.account.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.account.avatar.filename;
 
       //
       $rootScope.title = 'columby.com | ' + $scope.account.displayName;

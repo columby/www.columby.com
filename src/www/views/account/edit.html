@@ -4,11 +4,9 @@
   </div>
 
   <div class="container">
-    <div class="col-md-12 title">
-      <h1>{{account.displayName}}</h1>
-    </div>
-    <div class="col-md-12 meta">
-      <p>Edit your organisation details</p>
+    <div class="col-xs-12 page-title-container">
+      <h1 class="page-title">{{account.displayName}}</h1>
+      <h2 class="page-subtitle">Edit your organisation details</h2>
     </div>
   </div>
 </div>
@@ -58,7 +56,7 @@
                     <label for="displayname">Profile picture</label>
                     <div class="row">
                       <div class="col-md-3">
-                        <img class="img-circle img-responsive avatar" ng-src="{{account.avatar.url || 'assets/img/avatar.png'}}"/>
+                        <img class="img-circle img-responsive avatar" ng-src="{{$root.config.filesRoot + '/s/small/' + account.avatar.url || 'assets/img/avatar.png'}}"/>
                       </div>
                       <div class="col-md-9">
                         <div class="form-group">

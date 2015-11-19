@@ -1,8 +1,7 @@
 'use strict';
 
 var models = require('../models/index'),
-    Distribution = models.Distribution,
-    User = models.User;
+    Distribution = models.Distribution;
 
 
 // helper to check if a user has access to a certain account.

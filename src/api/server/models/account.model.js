@@ -110,19 +110,12 @@ module.exports = function(sequelize, DataTypes) {
 
           // An account can have files attached
           Account.belongsToMany(models.File, {
-            through: 'AccountFiles',
+            through: 'account_files',
             as: 'files'
           });
           models.File.belongsToMany(Account, {
-            through: 'AccountFiles',
-            as: 'accountFiles'
-          });
-
-
-          // A user can have multiple accounts with roles
-          Account.belongsToMany(models.User, {
-            as: 'users',
-            through: models.UserAccounts
+            through: 'account_files',
+            as: 'files'
           });
 
           Account.hasMany(models.Dataset);

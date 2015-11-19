@@ -14,39 +14,6 @@ var express = require('express'),
 
 module.exports = function(app) {
 
-  /**
-   *
-   * Login and registration functions
-   *
-   */
-  router.post('/login', controller.login);
-  router.post('/register', controller.register);
-
-
-  /**
-   *
-   * Show currently logged in user account
-   *
-   **/
-  router.post( '/me',
-    auth.checkJWT,
-    auth.checkUser,
-    auth.ensureAuthenticated,
-    controller.me
-  );
-
-  /**
-   *
-   * List user accounts
-   *
-   **/
-  router.get('/',
-    auth.checkJWT,
-    auth.checkUser,
-    auth.ensureAuthenticated,
-    permission.canShow,
-    controller.index
-  );
 
   /**
    * Show a user accounts
@@ -59,15 +26,6 @@ module.exports = function(app) {
     permission.canShow,
     controller.show
   );
-
-  /**
-   * Create a new user
-   *
-   * Roles: all
-   *
-   */
-  router.post('/',
-    controller.register);
 
   /**
    *

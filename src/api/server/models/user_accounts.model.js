@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
    * Schema definition
    *
    */
-  var UserAccounts = sequelize.define('UserAccounts', {
+  var UserAccounts = sequelize.define('user_accounts', {
 
     id: {
       type: DataTypes.INTEGER,

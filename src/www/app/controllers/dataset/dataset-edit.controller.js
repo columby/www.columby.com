@@ -39,6 +39,7 @@
   if ($scope.dataset.headerImg && $scope.dataset.headerImg.id) {
     //updateHeaderImage();
   }
+
   $scope.newTag = {text:null};
 
   // Show or hide the options menu

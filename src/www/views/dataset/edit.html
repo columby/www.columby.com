@@ -18,7 +18,7 @@
       </div>
 
       <div class="account-date">
-        <p>A dataset by <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.displayName || 'unknown'}}</a></span>, <span class="published">created on <time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span></p>
+        <p>A dataset by <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.displayName || 'unknown'}}</a></span>, <span class="published">created on&nbsp;<time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span></p>
       </div>
 
       <div class="tags" ng-show="dataset.tags.length>0">
@@ -36,7 +36,7 @@
       </div>
 
       <div class="avatar img-rounded">
-        <img class="img-circle" ng-src="{{dataset.account.avatar.url}}" />
+        <img class="img-circle" ng-src="{{$root.config.filesRoot + '/s/small/' + dataset.account.avatar.url  || '/assets/img/avatar.png'}}" alt="{{dataset.account.displayName}}"/>
       </div>
     </div>
   </div>

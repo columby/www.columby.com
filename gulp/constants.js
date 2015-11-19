@@ -9,7 +9,8 @@ gulp.task('constants', function() {
 
   // Get environment variable
   var env = process.env.NODE_ENV;
-  if ( (env !== 'production') || (env !== 'local')) { env = 'development'; }
+  console.log(env);
+  if ( (env !== 'production') && (env !== 'local')) { env = 'development'; }
 
   // Add version to constants
   var data = require('./../package.json');

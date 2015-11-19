@@ -1,8 +1,7 @@
 'use strict';
 
 var models = require('../models/index'),
-    Category = models.Category,
-    User = models.User;
+    Category = models.Category;
 
 
 // helper to check if a user has access to a certain account.
