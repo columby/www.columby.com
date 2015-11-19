@@ -36,7 +36,7 @@
 
     <!-- Categories -->
     <div class="category-wrapper">
-      <div class="col-md-12">
+      <div class="col-xs-12">
         <h3>Categories</h3>
         <div class="categories row">
           <div class="col-md-3 category" ng-repeat="category in dataset.account.categories">
@@ -50,7 +50,7 @@
 
     <!-- Visibility -->
     <div class="visibility-wrapper">
-      <div class="col-md-12">
+      <div class="col-xs-12">
         <h3>Visibility</h3>
         <input type="checkbox" id="private" ng-checked="dataset.private" ng-click="toggleDatasetPrivacy()">
         <label for="private">This is a private dataset</label>
@@ -113,22 +113,16 @@
 
     <!-- Background image -->
     <div class="background-wrapper">
-      <div class="col-md-12">
-        <h3>Background image
-          <button class="btn btn-default right btn-xs btn-tooltip" data-popover-placement="left" data-popover-trigger="mouseenter" data-popover="Upload a background image for your dataset">
-            <i class="fa fa-question"></i>
-          </button>
-        </h3>
-        <div>
-          <button class="btn btn-xs btn-default upload-button" ng-file-change="startUpload($files,'image','header')" ng-file-select>upload your image</button>
-        </div>
+      <div class="col-xs-12">
+        <h3>Background image</h3>
+        <button class="btn btn-xs btn-default btn-upload" ng-click="selectBgImg()">Upload your image</button>
       </div>
     </div>
 
     <div class="delete-wrapper">
       <div class="col-md-12">
         <h3>Delete</h3>
-        <button class="btn btn-danger btn-xs" ng-click="delete()" type="button"><i class="fa fa-trash-o"></i>Delete dataset</button>
+        <button class="btn btn-danger btn-xs" ng-click="delete()" type="button"><i class="fa fa-trash-o"></i> Delete dataset</button>
       </div>
     </div>
   </div>

@@ -158,7 +158,7 @@
             }
           });
         }, function () {
-          //console.log('cancel');
+          //$log.debug('cancel');
           //modalOpened=false;
         });
       };
@@ -166,7 +166,7 @@
       $scope.deleteCategory = function(index){
         $log.debug(index);
         CategorySrv.delete({id:$scope.account.categories[ index].id}, function(result){
-          console.log(result);
+          $log.debug(result);
           $scope.account.categories.splice(index, 1);
         });
       };

@@ -93,12 +93,11 @@
    */
   function updateHeaderImage(){
 
-    $log.debug($scope.dataset);
+    //$log.debug($scope.dataset);
 		if ($scope.dataset.headerImg) {
       $log.debug('updating header image');
-      $scope.dataset.headerImg.url = appConstants.filesRoot + '/a/' + $scope.dataset.headerImg.shortid + '/' + $scope.dataset.headerImg.filename;
       $scope.headerStyle={
-        'background-image': 'linear-gradient(transparent,transparent), url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
+        'background-image': 'linear-gradient(transparent,transparent), url(assets/img/default-header-bw.svg), url(' + appConstants.filesRoot + '/s/large/' + $scope.dataset.headerImg.url + ')',
         'background-blend-mode': 'multiply'
       };
     }

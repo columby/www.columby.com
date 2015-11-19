@@ -20,15 +20,16 @@
 
   // get account details for dataset accuont
   AccountSrv.get({slug: dataset.account.slug}, function(result){
-    $log.debug(result);
+    //$log.debug(result);
     $scope.dataset.account = result;
   });
 
   // Initialisation
   $scope.dataset = dataset;
-  if ($scope.dataset.account.avatar) {
-    $scope.dataset.account.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.dataset.account.avatar.filename;
-  }
+  $log.debug(dataset);
+  // if ($scope.dataset.account.avatar) {
+  //   $scope.dataset.account.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.dataset.account.avatar.filename;
+  // }
   var modalOpened = false;
   $rootScope.title = 'columby.com | ' + dataset.title;
   // Make sure there is a reference array
@@ -42,6 +43,18 @@
 
   $scope.newTag = {text:null};
 
+  /**
+   * Update the header background image
+   */
+  function updateHeaderImage(){
+    if ($scope.dataset.headerImg) {
+      $scope.headerStyle = {
+        'background-image': 'linear-gradient(transparent,transparent), url(/assets/img/default-header-bw.svg), url(' + appConstants.filesRoot + '/s/large/' + $scope.dataset.headerImg.url + ')',
+        'background-blend-mode': 'multiply'
+      };
+    }
+  }
+  updateHeaderImage();
   // Show or hide the options menu
   $scope.showOptions = function(){
     $modal.open({
@@ -390,11 +403,5 @@
       $log.debug('result', r);
     });
   };
-
-
-  // $scope.closeDialog = function(){
-  //   ngDialog.closeAll();
-  // };
-
   });
 })();

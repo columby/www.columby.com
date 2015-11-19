@@ -35,9 +35,8 @@
        */
       function updateHeaderImage(){
         if ($scope.dataset.headerImg) {
-          $scope.dataset.headerImg.url = appConstants.filesRoot + '/a/' + $scope.dataset.headerImg.shortid + '/' + $scope.dataset.headerImg.filename;
           $scope.headerStyle = {
-            'background-image': 'linear-gradient(transparent,transparent), url(/images/default-header-bw.svg), url(' + $scope.dataset.headerImg.url + ')',
+            'background-image': 'linear-gradient(transparent,transparent), url(/assets/img/default-header-bw.svg), url(' + appConstants.filesRoot + '/s/large/' + $scope.dataset.headerImg.url + ')',
             'background-blend-mode': 'multiply'
           };
         }
@@ -62,6 +61,28 @@
         });
       };
 
+
+      // Background image
+      $scope.selectBgImg = function() {
+        $rootScope.$broadcast('fm-open', {account_id: $scope.account.id, select: true});
+      };
+      $scope.$on('fm-selected', function(event, data){
+        //$log.debug(data);
+        $scope.dataset.headerImg = data.file;
+        $scope.dataset.headerimg_id = data.file.id;
+        DatasetSrv.update({id: $scope.dataset.id}, $scope.dataset, function(result){
+          $log.debug(result);
+          if (result.id){
+            $scope.dataset = result;
+            //$scope.datasetOriginal = angular.copy(result);
+            updateHeaderImage();
+            ngNotify.set('Dataset updated.');
+          } else {
+            ngNotify.set('There was an error updating the dataset. (Error message: ' + result.message + ')', 'error');
+          }
+        });
+        $log.debug($scope.dataset);
+      });
 
       // CATEGORIES
       $scope.activeCategory = function(category){
@@ -111,7 +132,7 @@
         modalOpened=true;
 
         $modal.open({
-          templateUrl: 'views/dataset/confirm-delete.html',
+          templateUrl: 'views/dataset/modals/dataset-confirm-delete.html',
           controller: 'DatasetDeleteCtrl',
           size: 'lg',
           backdrop: 'static',

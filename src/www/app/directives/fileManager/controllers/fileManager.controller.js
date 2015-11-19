@@ -1,8 +1,7 @@
 (function() {
   'use strict';
 
-  angular
-    .module('columbyApp')
+  angular.module('columbyApp')
     /**
      *
      * The file manager is activated by a $broadcast event 'fm-open'
@@ -52,7 +51,8 @@
       // Open the file manager
       function open(options) {
         if (AuthSrv.isAuthenticated()) {
-          $scope.options = options;
+          $scope.options = options || {};
+
           // Open modal
           $scope.showFileManager = true;
           angular.element('body').addClass('fm-open');
@@ -163,7 +163,11 @@
 
       // Handle show file browser event
       $scope.$on('fm-open', function(event, options){
-        $log.debug('Open filemanager. ');
+        $log.debug('fm: Open filemanager received. ');
+        if (!options || !options.account_id) {
+          $log.debug('fm: account_id is required. ');
+          return;
+        }
         open(options);
       });
     });

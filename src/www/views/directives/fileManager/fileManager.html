@@ -29,8 +29,8 @@
             <table class="table">
               <tr ng-repeat="file in files.rows">
                 <td class="preview">
-                  <a ng-href="{{filesRoot}}/s/large/{{file.filename}}" target="_blank">
-                    <img ng-src="{{filesRoot}}/small/{{file.filename}}"/>
+                  <a ng-href="{{$root.config.filesRoot + '/s/large/' + file.url }}" target="_blank">
+                    <img ng-src="{{$root.config.filesRoot + '/s/small/' + file.url }}"/>
                   </a>
                 </td>
                 <td class="title">{{file.filename}} - {{file.title}}<br> <small>Added {{file.created_at | date:'short'}}</small></td>

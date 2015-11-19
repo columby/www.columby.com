@@ -76,7 +76,7 @@
 
 
     $scope.openFileBrowser = function() {
-      console.log('opening browser');
+      $log.debug('opening browser');
       $rootScope.$broadcast('fm-open', {
         type:'image',
         account_id: $scope.user.primary.id,

@@ -15,8 +15,6 @@
 </div>
 
 <div class="modal-footer">
-  <button class="btn btn-warning"
-          ng-click="cancel()">Cancel</button>
-  <button class="btn btn-primary"
-          ng-click="confirm()">Confirm delete</button>
+  <a href class="pull-left" ng-click="$dismiss()">Cancel</a>
+  <button class="btn btn-primary pull-right" ng-click="confirm()">Confirm delete</button>
 </div>

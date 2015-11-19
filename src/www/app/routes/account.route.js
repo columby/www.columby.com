@@ -66,7 +66,7 @@
             return CategorySrv.get({id: $stateParams.id}).$promise;
           },
           account: function(AccountSrv, $stateParams) {
-            console.log($stateParams);
+            $log.debug($stateParams);
             return AccountSrv.get({slug: $stateParams.slug}).$promise;
           },
           datasets: function(CategorySrv,$stateParams) {

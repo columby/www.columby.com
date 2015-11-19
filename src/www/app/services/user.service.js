@@ -7,7 +7,7 @@
     var user;
 
     function setUser(u){
-      console.log('set user');
+      $log.debug('set user');
       // update avatar links.
       if (u && u.id){
         if (u.primary.avatar){
