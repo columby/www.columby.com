@@ -181,23 +181,22 @@ exports.sign = function(req,res) {
   var request = req.body;
   request.meta = request.meta || {};
 
+  // Handle the supplied query parameters
   var uploadType = request.type;
   var fileName = request.filename;
   var fileSize = request.filesize;
   var fileType = request.filetype;
   var account_id = request.account_id;
-
-  var s3path = '/files/' + uploadType + '/' + fileName;
-
-  // Handle the supplied query parameters
+  // Slugify and validate filename
   var ext = path.extname(fileName);
   var base = slugify(path.basename(fileName, ext));
   fileName = base + ext;
-  console.log('after slugify: ' + fileName);
+
+  // var s3path = '/files/' + uploadType + '/' + fileName;
 
   var file = {
     type: uploadType,
-    path: s3path,
+    //path: s3path,
     filename: fileName,
     status: false,
     filetype: fileType,
@@ -207,24 +206,27 @@ exports.sign = function(req,res) {
 
   // Create a File record in the database
   models.File.create(file).then(function(file) {
-    console.log('File created: ', file.dataValues);
-    fileName = base + '_' + file.dataValues.id + ext;
-    console.log('Filename after save: ' + fileName);
+    console.log('File created in db: ', file.dataValues);
+    //fileName = base + '_' + file.dataValues.id + ext;
+    //console.log('Filename after save: ' + fileName);
     file.update({
-        filename: fileName
+        url: file.dataValues.id + '/' + file.dataValues.filename
       }).then(function(file){
-        console.log('file updated with new filename ' + file.dataValues.filename);
+        console.log('file updated with new url ' + file.dataValues.url);
         // update path with new filename
-        var s3path = '/files/' + uploadType + '/' + file.dataValues.filename;
-        console.log('s3path: ' + s3path);
+        // var s3path = '/files/' + uploadType + '/' + file.dataValues.filename;
+        // console.log('s3path: ' + s3path);
 
-        var expiration = moment().add(15, 'm').toDate(); //15 minutes
+        // Create the S3 policy
+        // Set upload expiration type at 15 minutes
+        var expiration = moment().add(15, 'm').toDate();
+        //
         var readType = 'private';
 
         var s3Policy = {
           'expiration': expiration,
           'conditions': [{ 'bucket': config.aws.bucket },
-          ['starts-with', '$key', config.environment + s3path],
+          ['starts-with', '$key', config.environment + '/files/' + file.dataValues.url],
           { 'acl': readType },
           { 'success_action_status': '201' },
           ['starts-with', '$Content-Type', request.filetype],
@@ -241,7 +243,7 @@ exports.sign = function(req,res) {
         var credentials = {
           url: config.aws.endpoint,
           fields: {
-            key: config.environment + s3path,
+            key: config.environment + '/files/' + file.dataValues.url,
             AWSAccessKeyId: config.aws.key,
             acl: readType,
             policy: base64Policy,
@@ -250,11 +252,11 @@ exports.sign = function(req,res) {
             success_action_status: 201
           }
         };
-        console.log(credentials);
+        console.log('S3 sign credentials: ' + credentials);
+        // Send back file details and credentials
         return res.json({file:file, credentials:credentials});
-
       }).catch(function(err){
-        console.log('err', err);
+        return handleError(res,err);
       });
   }).catch(function (error) {
     return handleError(res, error);

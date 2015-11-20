@@ -4,7 +4,8 @@
   angular.module('columbyApp')
   .controller('DistributionNewCtrl', function($log, $rootScope, $scope, $modalInstance, dataset, FileSrv, ngNotify, ngProgress, DistributionSrv, Upload, appConstants) {
 
-
+    // Initialize the new distribution using the provided dataset
+    $scope.dataset = dataset;
     $scope.distribution = {
       license: 'cc0',
       account_id: dataset.account_id,
@@ -12,13 +13,13 @@
       title: 'Datasource'
     };
 
-
+    // Initialize upload status
     $scope.upload = {
       inProgress: false,
       finished: false
     };
 
-
+    // Initialize wizard
     $scope.wizard = {
       steps: ['start','data','metadata','finish'],
       step:1,
@@ -33,76 +34,43 @@
 
 
 
-    /** ---------- SCOPE FUNCTIONS ------------------------------------------------ **/
-
-    $scope.startUpload = function(files){
-      var file = files[0];
-      // Check if there is a file
-      if (!file) {
-        return ngNotify.set('No file selected.', 'error');
-      }
-      // Check if there is already an upload in progress
-      if ($scope.upload.file){
-        return ngNotify.set('There is already an upload in progress. ', 'error');
-      }
-      // Check if the file has the right type
-      if (!FileSrv.validateFile(file.type, 'datafile')) {
-        return ngNotify.set('The file you chose is not valid. ' + file.type, 'error');
-      }
-
-      $scope.upload.file = file;
-
-      ngProgress.start();
-      var params = {
-        filetype: file.type,
-        type: 'datafile',
-        filesize: file.size,
-        filename: file.name,
-        accountId: $scope.distribution.account_id
-      };
-
-      Upload.upload({
-        method: 'POST',
-        url   : appConstants.filesRoot + '/upload',
-        fields: params,
-        file  : file,
-      })
-
-      .progress(function (evt) {
-        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-        //$log.debug('progress: ' + progressPercentage + '% for ' + evt.config.file.name);
-        ngProgress.set(progressPercentage);
-      })
-
-      .success(function (data, status, headers, config) {
-        //$log.debug('File ' + config.file.name + 'uploaded.');
-        //$log.debug('Data', data);
-        // File upload is done
-        if (data.status === 'ok') {
-          ngProgress.complete();
-          // finish
-          $scope.upload.file = null;
-          ngNotify.set('File uploaded. ');
-
-          // Update distribution with the uploaded file.
-          $scope.distribution.file_id = data.file.id;
-          $scope.distribution.byteSize = data.file.size;
-          $scope.distribution.mediaType = data.file.filetype;
-          $scope.distribution.downloadUrl = appConstants.filesRoot + '/d/' + data.file.shortid + '/' + data.file.filename;
-
-          // $log.debug('dist', $scope.distribution);
-
-          // Go to the next step.
-          $scope.wizard.step++ ;
-          $scope.upload.finished = true;
-          $scope.next();
-
-        } else {
-          $scope.upload.file = null;
-          return ngNotify.set('Something went wrong finishing the upload. ','danger');
-        }
+    /*** ---------- SCOPE FUNCTIONS -------------- ***/
+    $scope.startUpload = function(){
+      $log.debug('Starting upload');
+      // Show the file-manager
+      $rootScope.$broadcast('fm-open', {
+        account_id: $scope.dataset.account_id,
+        select: true,
       });
     };
+
+    // Handle upload file selected
+    $scope.$on('fm-selected', function(event,data){
+      if (data.file && data.file.id) {
+
+        // Check if the file has the right type
+        // if (!FileSrv.validateFile(file.type, 'datafile')) {
+        //   return ngNotify.set('The file you chose is not valid. ' + file.type, 'error');
+        // }
+
+        // Update distribution with the uploaded file.
+        $scope.distribution.file_id = data.file.id;
+        $scope.distribution.byteSize = data.file.size;
+        $scope.distribution.mediaType = data.file.filetype;
+        $scope.distribution.downloadUrl = appConstants.filesRoot + '/f/' + data.file.url;
+
+        $log.debug('new distribution', $scope.distribution);
+
+        // Go to the next step.
+        $scope.wizard.step++ ;
+        $scope.next();
+      } else {
+        $log.debug('Something went wrong with the file selection.');
+        $log.debug(event);
+        $log.debug(data);
+      }
+
+    });
 
 
     // Initialize a file upload (named localFile indb)
@@ -160,7 +128,7 @@
 
 
     $scope.next = function(){
-      $log.debug($scope.wizard.step);
+      $log.debug('Next step: ' + $scope.wizard.step);
       if ($scope.wizard.step === 3){
         $scope.wizard.step = 4;
         $scope.wizard.nextShow=false;

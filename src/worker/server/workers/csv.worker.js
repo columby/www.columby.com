@@ -49,28 +49,28 @@ CsvWorker.prototype.start = function(job,callback){
   connect(function(err) {
     if (err) {
       handleError('There as an error connecting to the DBs.');
-      return callback(err)
+      return callback(err);
     }
     // validate job data
     validateData(function(err) {
       if (err) {
         console.log('There as an error validating the data.',err);
         handleError('There as an error validating the data.');
-        return callback(err)
+        return callback(err);
       }
       // data processing
       process(function (err) {
         if (err) {
           console.log('There as an error processing the data.',err);
           handleError('There as an error processing the data.');
-          return callback(err)
+          return callback(err);
         }
         // finish
         finish(function (err) {
           if (err) {
             console.log('There as an error finishing.',err);
             handleError('There as an error finishing.');
-            return callback(err)
+            return callback(err);
           }
           // complete
           callback(err);
@@ -153,9 +153,8 @@ CsvWorker.prototype.start = function(job,callback){
         console.log('Finish error ', err);
         return callback(err);
       }).on('end', function(){
-        processData(callback)
-      })
-
+        processData(callback);
+      });
     });
   }
 
@@ -167,7 +166,7 @@ CsvWorker.prototype.start = function(job,callback){
    **/
   function processData(callback){
     var instream = fs.createReadStream(self._localFile);
-    var outstream = new stream;
+    var outstream = new stream();
     outstream.readable = true;
     self._rl = readline.createInterface({
       input: instream,
@@ -232,7 +231,7 @@ CsvWorker.prototype.start = function(job,callback){
     }
 
     // Batch empty, done processing
-    if ( (self._batch.length===0 ) && self._parsingFinished & !self._batchInProgress) {
+    if ( (self._batch.length===0 ) && self._parsingFinished && !self._batchInProgress) {
       console.log('Batch empty, done processing');
       finish();
     }
@@ -281,12 +280,12 @@ CsvWorker.prototype.start = function(job,callback){
           params.push(row[ k]);
           valuesClause.push('$' + params.length);
         }
-        chunks.push('(' + valuesClause.join(', ') + ')')
+        chunks.push('(' + valuesClause.join(', ') + ')');
       }
       return {
         text: 'INSERT INTO ' + self._tablename + ' (' + self._columns.join(',') + ') VALUES ' + chunks.join(', '),
         values: params
-      }
+      };
     };
 
     // Execute the query
@@ -312,7 +311,7 @@ CsvWorker.prototype.start = function(job,callback){
     self._connection.cms.client.query(sql);
 
     // update Job status
-    var sql = 'UPDATE "Primaries" SET "jobStatus"=\'done\' WHERE id=' + self._job.data.primaryId;
+    sql = 'UPDATE "Primaries" SET "jobStatus"=\'done\' WHERE id=' + self._job.data.primaryId;
     self._connection.cms.client.query(sql);
 
 
@@ -329,10 +328,10 @@ CsvWorker.prototype.start = function(job,callback){
     console.log(msg);
 
     var sql = 'UPDATE "Primaries" SET "jobStatus"=\'error\',"statusMsg"=\'' + msg+ '\' WHERE id=' + self._job.data.primaryId + ';';
-    self._connection.cms.client(sql),function(err,res){
+    self._connection.cms.client.query(sql,function(err,res){
       console.log(err);
       console.log(res);
-    };
+    });
 
     self._connection.cms.done(self._connection.cms.client);
     self._connection.data.done(self._connection.data.client);
@@ -389,3 +388,10 @@ CsvWorker.prototype.sanitizeColumnNames = function(){
 
   return this._columns;
 };
+
+
+
+function handleError(res,err){
+  console.log('Error: ', err);
+  return res.json({msg: 'err', error: err});
+}

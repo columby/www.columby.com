@@ -120,7 +120,7 @@ gulp.task('files', function() {
 
 gulp.task('worker', function() {
   return gulp.src([
-    path.join(conf.paths.src, '/worker/server/**/*'),
+    path.join(conf.paths.src, '/worker/**/*'),
     '!' + path.join(conf.paths.src, '/worker/server/config/env.js')
   ])
   .pipe(gulp.dest(path.join(conf.paths.dist, '/worker')));

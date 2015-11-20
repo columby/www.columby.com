@@ -23,7 +23,7 @@ var authCtrl = require('../controllers/auth.controller');
 module.exports = function(app) {
   var env = app.get('env');
 
-  app.set('views', config.root + '/server/views');
+  app.set('views', config.root + '/client');
   app.engine('html', require('ejs').renderFile);
   app.set('view engine', 'html');
   app.use(compression());
@@ -35,26 +35,22 @@ module.exports = function(app) {
   app.use(cors());
 
   var basicAuth = auth.basic({ //basic auth config
-      realm: "ScribeJS WebPanel",
+      realm: 'ScribeJS WebPanel',
       file: __dirname + '/scribe.htpasswd'
   });
   app.use(scribe.express.logger()); //Log each request
   app.use('/logs', auth.connect(basicAuth), scribe.webPanel());
-  console.log('Logger started. ');
+  //app.use(express.static(__dirname + '/public'));
+  app.use(express.static(path.join(config.root, 'client')));
 
   if ('production' === env) {
-    app.use(express.static(path.join(config.root, 'public')));
-    app.set('appPath', config.root + '/public');
+    app.set('appPath', config.root + '/client');
     app.use(morgan('dev'));
   }
 
   if ('development' === env || 'test' === env) {
-    //app.use(require('connect-livereload')());
-    app.use(express.static(path.join(config.root, '.tmp')));
-    app.use(express.static(path.join(config.root, 'client')));
     app.set('appPath', 'client');
     app.use(morgan('dev'));
     app.use(errorHandler()); // Error handler - has to be last
   }
-
 };

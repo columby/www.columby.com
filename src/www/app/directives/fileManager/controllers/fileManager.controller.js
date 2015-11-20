@@ -86,15 +86,21 @@
 
       // Delete a file from db and file-storage
       $scope.delete = function(file){
-        $modal.open({
-          size:'lg',
-          templateUrl: '/views/directives/fileManager/modals/delete.html'
-        }).result.then(function(){
-          FileSrv.destroy(file.id).then(function(){
-            $scope.files.rows.splice( $scope.files.rows.indexOf(file), 1 );
-            $scope.pagination.totalItems = $scope.files.rows.length;
-          });
+        $log.debug(file);
+        $scope.showDeleteModal = true;
+        $scope.deleting = file;
+      };
+      $scope.confirmDelete = function(){
+        FileSrv.destroy($scope.deleting.id).then(function(){
+          $scope.files.rows.splice( $scope.files.rows.indexOf($scope.deleting.file), 1 );
+          $scope.pagination.totalItems = $scope.files.rows.length;
+          delete $scope.deleting;
+          delete $scope.showDeleteModal;
         });
+      };
+      $scope.cancelDelete = function(){
+        delete $scope.deleting;
+        delete $scope.showDeleteModal;
       };
 
       // Close the file manager
@@ -113,7 +119,8 @@
       };
 
       // Handle file upload select
-      $scope.onUpload = function(files){
+      $scope.upload = function(files) {
+        $log.debug('upload files', files);
         if (files && files.length) {
           for (var i = 0; i < files.length; i++) {
             var file = files[i];
@@ -126,7 +133,7 @@
               filetype: file.type,
               filesize: file.size
             }).then(function(result){
-              $log.debug(result);
+              $log.debug('Sign result: ', result);
               if (result.status==='error') {
                 ngNotify.set('Error: ' + result.msg, 'error');
               } else {
@@ -136,24 +143,22 @@
                   method: 'POST',
                   skipAuthorization: true,
                   file: file
-                }).progress(function (evt) {
-                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                    // $log.debug('progress: ' + progressPercentage + '% ' + evt.config.file.name);
-                    $scope.progress=progressPercentage;
-                }).success(function() {
+                }).then(function(resp){
+                  $log.debug('file ' + resp.config.file.name + 'is uploaded successfully. Response: ' + resp.data);
                   $scope.progress=0;
-                  // $log.debug('file ' + config.file.name + 'uploaded. Response: ' + data);
                   FileSrv.finishUpload({id: result.file.id}).then(function(){
                     ngNotify.set('File uploaded!');
                     $scope.files.rows.unshift(result.file);
                   }).catch(function(error){
                     ngNotify.set('Error: ' + error, 'error');
-                    // $log.debug('error: ', error)
+                    $log.debug('error: ', error);
                   });
-                }).error(function () {
-                  // $log.debug(data, headers);
-                  $scope.progress=0;
-                  // $log.debug('error status: ' + status);
+                }, function(err) {
+                  $log.debug(err);
+                  ngNotify.set('There was an error uploading the file.', 'error');
+                }, function(evt) {
+                  $scope.progress = parseInt(100.0 * evt.loaded / evt.total);
+                  // $log.debug($scope.progress);
                 });
               }
             });

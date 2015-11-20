@@ -20,14 +20,14 @@ angular.module('columbyworkerApp')
       done: false,
       error: false,
       processing: false
-    }
+    };
 
 
     function fetchJobs(){
       var params = {
         offset: $scope.currentPage * $scope.itemsPerPage,
         limit: $scope.itemsPerPage
-      }
+      };
       WorkerService.jobs(params).then(function(result){
         console.log(result);
         $scope.totalItems = result.count;
@@ -43,7 +43,7 @@ angular.module('columbyworkerApp')
     $scope.changeStatus = function(){
       console.log('change');
       console.log($scope.filter);
-    }
+    };
 
     $scope.pageChanged = function() {
       console.log('Page changed to: ' + $scope.currentPage);

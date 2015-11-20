@@ -10,6 +10,7 @@ angular.module('columbyworkerApp')
           method: 'GET',
           url: '/api/stats'
         }).then(function (result) {
+          console.log(result);
           console.log('status: ', result.data);
           return result.data;
         });
@@ -25,5 +26,5 @@ angular.module('columbyworkerApp')
           return result.data;
         });
       }
-    }
+    };
   });

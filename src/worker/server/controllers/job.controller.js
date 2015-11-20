@@ -201,7 +201,7 @@ exports.update = function(req, res) {
     return handleError(res,'Not a valid status. ');
   }
 
-  Job.findOne(req.params.id).then(function(job){
+  models.Job.findOne(req.params.id).then(function(job){
     job.updateAttributes(req.body).then(function(result){
       return res.json(result);
     }).catch(function(err){
@@ -209,7 +209,7 @@ exports.update = function(req, res) {
     });
   }).catch(function(err){
     return handleError(res,err);
-  })
+  });
 };
 
 

@@ -78,12 +78,12 @@ Worker.prototype.start = function() {
    *
    */
   function processJob() {
-    console.log('Process job');
+    //console.log('Process job');
     var self=this;
 
     if (self._processing){
       // return if already processing
-      console.log('Already processing. ');
+      //console.log('Already processing. ');
       return;
     }
 
@@ -101,14 +101,15 @@ Worker.prototype.start = function() {
       // return and turn off processing flag if error.
       if (err) {
         console.log('Error connecting to the cms-client', err);
-        return self._processing=false;
+        self._processing=false;
+        return;
       }
 
       // Set the current job
       self._job = result.rows[ 0];
       // Return if no job found
       if (!self._job){
-        console.log('No job found for processing. ');
+        //console.log('No job found for processing. ');
         self._processing=false;
         return;
       }

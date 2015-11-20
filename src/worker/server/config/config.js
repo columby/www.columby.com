@@ -18,10 +18,6 @@ module.exports = {
     }
   },
 
-  jwt: {
-    secret       : process.env.JWT_SECRET
-  },
-
   mandrill : {
     key          : process.env.MANDRILL_API_KEY
   },
