@@ -13,6 +13,8 @@ module.exports = function(app){
     primaryCtrl.index);
 
   router.post('/',
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     primaryPerms.canCreate,
     primaryCtrl.create);
@@ -21,20 +23,25 @@ module.exports = function(app){
     primaryCtrl.show);
 
   router.post('/:id/sync',
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
-    primaryPerms.canEdit,
+    primaryPerms.canUpdate,
     primaryCtrl.sync);
 
   router.put('/:id',
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
+    primaryPerms.canUpdate,
     primaryCtrl.update);
 
   router.delete('/:id',
+    auth.checkJWT,
+    auth.checkUser,
     auth.ensureAuthenticated,
     primaryPerms.canDelete,
     primaryCtrl.destroy);
 
-
   app.use('/v2/primary', router);
-
 };

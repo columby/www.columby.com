@@ -77,7 +77,11 @@ module.exports = function(sequelize, DataTypes) {
   Primary.afterCreate( function(model) {
     model.updateAttributes({
       shortid: hashids.encode(parseInt(String(Date.now()) + String(model.id)))
-    }).success(function(){}).error(function(){});
+    }).then(function(){
+      console.log('Shortid for new primary created.');
+    }).catch(function(err){
+      console.log('Error creating shortid for primary ', err);
+    });
   });
 
   return Primary;

@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  angular.module('columbyApp').controller('DatasetEditCtrl', function($log, dataset, $rootScope, $scope, appConstants, $state, $stateParams, AccountSrv, DatasetSrv, DistributionSrv, PrimaryService, ReferenceSrv, TagService, Slug, FileSrv,ngProgress, $timeout,$modal,Upload, ngNotify, AuthSrv) {
+  angular.module('columbyApp').controller('DatasetEditCtrl', function($log, dataset, $rootScope, $scope, appConstants, $state, $stateParams, AccountSrv, DatasetSrv, DistributionSrv, PrimarySrv, ReferenceSrv, TagService, Slug, FileSrv,ngProgress, $timeout,$modal,Upload, ngNotify, AuthSrv) {
 
   // Check existence
   if (!dataset.id){
@@ -341,7 +341,7 @@
    */
   $scope.deletePrimarySource = function(){
     if ($scope.dataset.primary.id){
-      PrimaryService.delete({id: $scope.dataset.primary.id}, function(result){
+      PrimarySrv.delete({id: $scope.dataset.primary.id}, function(result){
         $log.debug(result);
         if (result.status === 'success'){
           $scope.dataset.primary = null;
@@ -396,7 +396,7 @@
     };
 
     // Send request to api
-    PrimaryService.sync(job, function(r){
+    PrimarySrv.sync(job, function(r){
       ngNotify.set('The primary source will be synchronised. ');
       $scope.dataset.primary.jobStatus = 'active';
       // Process response

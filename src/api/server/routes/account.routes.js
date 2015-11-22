@@ -33,14 +33,14 @@ module.exports = function(app) {
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    permission.canEdit,
+    permission.canUpdate,
     controller.addFile
   );
 
   router.put('/:id',
     auth.checkJWT,
     auth.checkUser,
-    permission.canEdit,
+    permission.canUpdate,
     controller.update
   );
 
@@ -48,7 +48,7 @@ module.exports = function(app) {
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    permission.canEdit,
+    permission.canUpdate,
     controller.updateRegistry
   );
 
@@ -56,7 +56,7 @@ module.exports = function(app) {
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    permission.canEdit,
+    permission.canUpdate,
     controller.addDefaultCategories
   );
 

@@ -14,13 +14,13 @@ var models = require('../models/index'),
 /**
  *
  **/
- exports.index = function(req,res){};
+ exports.index = function(req,res){ };
 
 
 /**
  *
  **/
-exports.show = function(req,res){};
+exports.show = function(req,res){ };
 
 
 /**
@@ -31,11 +31,13 @@ exports.show = function(req,res){};
  * @param res
  */
 exports.create = function(req,res){
+  console.log('Creating primary source');
+  console.log(req.body);
   var primary = req.body;
 
   models.Primary.create(primary).then(function(primary) {
     console.log('p', primary.dataValues);
-    res.json(primary.dataValues);
+    return res.json(primary.dataValues);
   }).catch(function(err){
     return handleError(res,err);
   });
@@ -47,7 +49,7 @@ exports.create = function(req,res){
  **/
 exports.update = function(req,res){
 
-  models.Primary.find(req.params.id).then(function(primary){
+  models.Primary.findById(req.params.id).then(function(primary){
     primary.updateAttributes(req.body).then(function(primary){
       return res.json(primary);
     }).catch(function(err){
@@ -125,9 +127,7 @@ exports.sync = function(req,res) {
         models.Primary.update({
           jobStatus: 'active'
         },{
-          where: {
-            id: req.body.primaryId
-          }
+          where: { id: req.body.primaryId }
         }).then(function(updatedPrimary){
           console.log('updated primary ', updatedPrimary);
           res.json({result: updatedPrimary});

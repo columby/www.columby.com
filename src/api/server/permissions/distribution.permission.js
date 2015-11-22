@@ -62,8 +62,8 @@ exports.canCreate = function(req,res,next){
  * Check to see if a user can view a specific distribution
  *
  ***/
-exports.canEdit = function(req,res,next){
-  console.log('Checking canEdit for distribution ' + req.params.id);
+exports.canUpdate = function(req,res,next){
+  console.log('Checking canUpdate for distribution ' + req.params.id);
 
   // check if dataset_id is provided
   if (!req.params.id) { return res.status(401).json({status: 'Error', msg: 'Missing parameter id'}); }

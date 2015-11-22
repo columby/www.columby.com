@@ -18,6 +18,10 @@ module.exports = {
     }
   },
 
+  jwt: {
+    secret: process.env.JWT_SECRET
+  },
+
   mandrill : {
     key          : process.env.MANDRILL_API_KEY
   },
@@ -26,5 +30,9 @@ module.exports = {
     url          : process.env.FORTES_LINK,
     username     : process.env.FORTES_USERNAME,
     password     : process.env.FORTES_PASSWORD
+  },
+
+  auth0: {
+    domain: process.env.AUTH0_DOMAIN
   }
 };

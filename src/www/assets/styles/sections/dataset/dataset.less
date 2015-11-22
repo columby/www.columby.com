@@ -46,31 +46,63 @@ body.dataset {
     .distributions-wrapper {
       ul.distributions-list {
         padding:0;
-        li.distribution {
-          list-style: none;
-          background: #EFEFEF;
-          padding: 20px;
-          border-radius: 5px;
-          margin-bottom: 1.5em;
-  				h4 {
-            font-weight: 600;
-          }
-          ul.properties{
-            padding: 12px 0 0 0;
-            li{
-              display: inline-block;
-              color: #666;
-    					margin: 0 15px 0 0;
-              padding: 0;
-              font-size: 14px;
-              label{
-                margin-right: 5px;
-                color: #18242F;
-                font-family: "lato", sans-serif;
-              }
-            }
+      }
+    }
+    .primary-distribution,
+    li.distribution {
+      list-style: none;
+      background: #EFEFEF;
+      padding: 20px;
+      border-radius: 5px;
+      margin-bottom: 1.5em;
+      p.accessurl {
+        font-size: 14px;
+        overflow-wrap: break-word;
+      }
+      h4 {
+        font-weight: 600;
+      }
+      ul.properties{
+        padding: 12px 0 0 0;
+        li{
+          display: inline-block;
+          color: #666;
+          margin: 0 15px 0 0;
+          padding: 0;
+          font-size: 14px;
+          label{
+            margin-right: 5px;
+            color: #18242F;
+            font-family: "lato", sans-serif;
           }
         }
+      }
+    }
+    .primary-distribution {
+      list-style: none;
+      background: #FFF;
+      border-radius: 5px;
+      margin-bottom: 1.5em;
+      padding: 0;
+      border: 1px solid #ddd;
+      .datasource-title {
+        background: @lightblue;
+        margin: 0;
+        padding: 15px;
+        border-left-top-ra: 5px;
+        -webkit-border-top-left-radius: 5px;
+        -webkit-border-top-right-radius: 5px;
+        -moz-border-radius-topleft: 5px;
+        -moz-border-radius-topright: 5px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        color: #FFF;
+      }
+      ul.properties {
+        padding: 12px 15px 0 15px;
+      }
+      .distribution-actions {
+        padding: 5px 20px;
       }
     }
 

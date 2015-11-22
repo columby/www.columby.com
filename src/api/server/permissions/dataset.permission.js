@@ -110,7 +110,7 @@ exports.canCreate = function(req,res,next) {
  * Check to see if a user can edit a specific dataset
  *
  ***/
-exports.canEdit = function(req,res,next){
+exports.canUpdate = function(req,res,next){
 
   if (!req.params.id) {
     return res.json({status:'error', msg: 'Required parameter dataset id missing.'});

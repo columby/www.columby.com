@@ -36,7 +36,7 @@ module.exports = function(app) {
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    permission.canEdit,
+    permission.canUpdate,
     controller.update
   );
 

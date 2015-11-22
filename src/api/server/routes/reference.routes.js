@@ -28,7 +28,7 @@ module.exports = function(app){
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    referencePerms.canEdit,
+    referencePerms.canUpdate,
     referenceCtrl.update);
 
   router.delete('/:id',

@@ -39,7 +39,7 @@ module.exports = function(app){
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    distributionPerms.canEdit,
+    distributionPerms.canUpdate,
     distributionCtrl.update);
 
   router.delete('/:id',

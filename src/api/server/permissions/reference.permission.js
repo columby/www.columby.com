@@ -54,8 +54,8 @@ exports.canCreate = function(req,res,next) {
 }
 
 
-exports.canEdit = function(req,res,next){
-  console.log('validating reference.canEdit');
+exports.canUpdate = function(req,res,next){
+  console.log('validating reference.canUpdate');
   // check if dataset_id is provided
   if (!req.params.id) { return res.json({status: 'error', msg: 'Missing parameter id'}); }
   // Check if user is in req

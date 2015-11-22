@@ -33,7 +33,7 @@ exports.canShow = function(req,res,next){
  * Check if a user can edit a requested user account.
  *
  */
-exports.canEdit = function(req, res, next) {
+exports.canUpdate = function(req, res, next) {
   console.log('Check if user can edit this user account.');
   // Check if user is in req
   if (!req.user || !req.user.email) {

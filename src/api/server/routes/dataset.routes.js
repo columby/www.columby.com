@@ -28,7 +28,7 @@ module.exports = function(app){
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    datasetPerms.canEdit,
+    datasetPerms.canUpdate,
     datasetCtrl.update);
 
   router.delete('/:id',
@@ -44,7 +44,7 @@ module.exports = function(app){
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    datasetPerms.canEdit,
+    datasetPerms.canUpdate,
     datasetCtrl.updateRegistry
   );
 
@@ -53,14 +53,14 @@ module.exports = function(app){
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    datasetPerms.canEdit,
+    datasetPerms.canUpdate,
     datasetCtrl.addTag);
 
   router.delete('/:id/tag/:tid',
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    datasetPerms.canEdit,
+    datasetPerms.canUpdate,
     datasetCtrl.removeTag);
 
   // Dataset categories routes
@@ -68,14 +68,14 @@ module.exports = function(app){
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    datasetPerms.canEdit,
+    datasetPerms.canUpdate,
     datasetCtrl.addCategory);
 
   router.delete('/:id/category/:cid',
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    datasetPerms.canEdit,
+    datasetPerms.canUpdate,
     datasetCtrl.removeCategory);
 
   // Distribution Routes
@@ -86,7 +86,7 @@ module.exports = function(app){
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    datasetPerms.canEdit,
+    datasetPerms.canUpdate,
     datasetCtrl.createDistribution);
 
   router.get('/:id/distribution/:did',
@@ -96,14 +96,14 @@ module.exports = function(app){
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    datasetPerms.canEdit,
+    datasetPerms.canUpdate,
     datasetCtrl.updateDistribution);
 
   router.delete('/:id/distribution/:did',
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    datasetPerms.canEdit,
+    datasetPerms.canUpdate,
     datasetCtrl.destroyDistribution);
 
   app.use('/v2/dataset',router);

@@ -3,7 +3,7 @@
 
   angular
     .module('columbyApp')
-    .service('PrimaryService', function($resource, appConstants) {
+    .service('PrimarySrv', function($resource, appConstants) {
 
     return $resource(appConstants.apiRoot + '/v2/primary/:id', {
         id: '@id'

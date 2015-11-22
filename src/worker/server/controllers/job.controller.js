@@ -8,36 +8,6 @@ var console = process.console;
 var processing = false;
 
 
-
-/** -------- AUTHORIZATION ---------------------------- **/
-exports.canManage =function(req,res,next){
-  console.log('checking can manage');
-
-  // get user
-  if (!req.jwt || !req.jwt.sub){
-    return res.status(400).json({status:'Unauthorized.'});
-  }
-  console.log('finding jwt', req.jwt);
-  models.User.find({
-    where: { id: req.jwt.sub}
-  }).then(function(user){
-    if (!user){
-      return res.status(400).json({status:'error',msg:'No user found'});
-    }
-    // check permission
-    if (user.admin || user.id){
-      next();
-    } else {
-      return res.status(400).json({status:'error', msg: 'Unauthorized. Not admin'});
-    }
-  }).catch(function(err){
-    return res.status(400).json({status:'error',msg:err});
-  });
-};
-
-
-
-
 function finish(job){
 
 }

@@ -43,7 +43,7 @@ exports.canCreate = function(req,res,next){
 }
 
 
-exports.canEdit = function(req,res,next){
+exports.canUpdate = function(req,res,next){
   if (!req.jwt || !req.jwt.sub) { return res.status(401).json({status: 'Error', msg: 'No access token provided'}); }
   if (!req.user || !req.user.id) { return res.status(401).json({status: 'Error', msg: 'No user found'}); }
   if (!req.body.account_id) { return res.status(401).json({status: 'Error', msg: 'Missing required parameter account_id'}); }

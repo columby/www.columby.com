@@ -6,6 +6,8 @@ var models = require('../models/index'),
 
 // helper to check if a user has access to a certain account.
 function validateAccountAccess(user, account_id, cb) {
+  //console.log(user);
+  //console.log(account_id);
   if (user.admin) { return cb(true); }
 
   if (user.primary.id === account_id) {
@@ -35,23 +37,42 @@ function validateAccountAccess(user, account_id, cb) {
   **/
 exports.canCreate = function(req,res,next){
    console.log('Checking can create primary');
+   console.log(req.body);
 
    // check if dataset_id is provided
-   if (!req.body.dataset_id) { return res.status(401).json({status: 'Error', msg: 'Missing parameter dataset_id'}); }
+   if (!req.body.dataset_id) { return res.status(401).json({status: 'Error', msg: 'Missing parameter dataset_id.'}); }
+   if (!req.body.distribution_id) { return res.status(401).json({status: 'Error', msg: 'Missing parameter distribution_id.'}); }
    // Check if user is in req
-   if (!req.user || !req.user.email) { return res.json({ status:'error', msg:'No access.' }); }
+   if (!req.user || !req.user.email) { return res.json({ status:'error', msg:'No access. Not logged in.' }); }
    // Check if user is admin
    if (req.user.admin === true) { return next(); }
 
-   validateAccountAccess(req.user, req.body.account_id,function(result){
-     if (result===true){
-       console.log('Yes access!');
-       next();
-     } else {
-       console.log('No access!');
-       return res.status(401).json({status: 'Error', msg: 'No access'});
-     }
+
+   // provided: dataset_id and distribution_id
+   // Distribution has dataset_id
+   // Validate if the curent user can edit the dataset of the new primary
+   models.Distribution.findById(req.body.distribution_id, {
+     include: [{ model: models.Dataset, as: 'dataset'}]
+   }).then(function(result){
+    if (result && result.dataValues && result.dataValues.dataset && result.dataValues.dataset.dataValues) {
+      var account_id = result.dataValues.dataset.dataValues.account_id
+
+      validateAccountAccess(req.user, account_id, function(result){
+        if (result===true){
+          console.log('Yes access!');
+          next();
+        } else {
+          console.log('No access!');
+          return res.status(401).json({status: 'Error', msg: 'No access'});
+        }
+      });
+    } else {
+      return res.status(401).json({status: 'Error', msg: 'No access'});
+    }
+   }).catch(function(err){
+     return res.status(401).json({status: 'Error', msg: err});
    });
+
 }
 
 
@@ -60,8 +81,8 @@ exports.canCreate = function(req,res,next){
  *
  *
  **/
-exports.canEdit = function(req,res,next){
-  console.log('Checking canEdit for distribution ' + req.params.id);
+exports.canUpdate = function(req,res,next){
+  console.log('Checking canUpdate for distribution ' + req.params.id);
 
   // check if dataset_id is provided
   if (!req.params.id) { return res.status(401).json({status: 'Error', msg: 'Missing parameter id'}); }

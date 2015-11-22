@@ -34,7 +34,6 @@
           </a>
         </span>
       </div>
-
       <div class="avatar img-rounded">
         <img class="img-circle" ng-src="{{$root.config.filesRoot + '/s/small/' + dataset.account.avatar.url  || '/assets/img/avatar.png'}}" alt="{{dataset.account.displayName}}"/>
       </div>
@@ -64,16 +63,16 @@
           <li ng-show="dataset.primary.created_at !== dataset.primary.updated_at"><label>Modified</label>{{dataset.primary.updated_at | date:'d MMMM yyyy'}}</li>
           <li ng-show="dataset.primary.jobStatus"><label>Jobstatus</label>{{dataset.primary.jobStatus}}</li>
           <li ng-show="dataset.primary.syncDate"><label>Last synchronisation</label>{{dataset.primary.syncDate | date:'d MMMM yyyy - H:mm'}}</li>
+          <li ng-show="dataset.primary.syncPeriod">
+            <label>Synchronisation</label>{{dataset.primary.syncPeriod}}
+          </li>
         </ul>
         <p ng-show="dataset.primary.jobStatus==='error'">There was an error processing this dataset. The data is currently unavailable.</p>
-        <div class="distribution-actions">
-          <div class="col-xs-1">
-            <button class="btn btn-info btn-xs" type="button" ng-disabled="dataset.primary.jobStatus!=='done'" ng-click="syncPrimarySource()"><i class="fa fa-refresh"></i> Sync</button>
-          </div>
-          <div class="col-xs-1">
-            <button type="button" class="btn btn-warning btn-xs" ng-click="editPrimarySource()"><i class="fa fa-edit"></i> Edit</button>
-          </div>
-          <div class="col-xs-5 confirm-delete" confirm-delete on-confirm="deletePrimarySource()"></div>
+
+        <div class="distribution-actions row">
+          <button class="btn btn-xs pull-right" type="button" ng-disabled="dataset.primary.jobStatus!=='done'" ng-click="syncPrimarySource()"><i class="fa fa-refresh"></i> Sync</button>
+          <button type="button" class="btn btn-warning btn-xs pull-right" ng-click="editPrimarySource()"><i class="fa fa-edit"></i> Edit</button>
+          <div class="confirm-delete pull-right" confirm-delete on-confirm="deletePrimarySource()"></div>
         </div>
       </div>
 
@@ -81,6 +80,7 @@
         <ul class="distributions-list">
           <li class="distribution" ng-repeat="distribution in dataset.distributions">
             <h4 class="datasource-title">{{distribution.title}}</h4>
+            <p class="accessurl" ng-show="distribution.type==='remoteService'"><small>{{distribution.accessUrl}}</small></p>
             <div class="source label label-success" ng-show="distribution.id === dataset.primary.distribution_id">Source for Primary</div>
 						<div class="private label label-warning" ng-show="distribution.private">Private</div>
             <ul class="properties">

@@ -26,7 +26,7 @@ module.exports = function(app){
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    permission.canEdit,
+    permission.canUpdate,
     controller.update);
 
   router.delete('/:id',
@@ -44,14 +44,14 @@ module.exports = function(app){
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    permission.canEdit,
+    permission.canUpdate,
     controller.addDataset
   );
   router.post('/:id/removeDataset',
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
-    permission.canEdit,
+    permission.canUpdate,
     controller.removeDataset
   );
 

@@ -51,7 +51,6 @@
     $scope.update = function () {
       if (originalDistribution.accessUrl !== $scope.distribution.accessUrl){
         $log.debug('Url changed: ', $scope.distribution.accessUrl);
-
         updateDistribution();
       } else {
         updateDistribution();

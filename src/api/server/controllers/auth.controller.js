@@ -12,6 +12,7 @@ var config = require('../config/config'),
  *
  */
 exports.checkJWT = function(req,res,next){
+  console.log('checking jwt');
   req.jwt = req.jwt || {};
 
   // Decode the token if present
@@ -27,6 +28,8 @@ exports.checkJWT = function(req,res,next){
     } catch (err){
       console.log('err ', err);
     }
+  } else {
+    next();
   }
 };
 
@@ -37,6 +40,7 @@ exports.checkJWT = function(req,res,next){
  *
  */
 exports.checkUser = function(req,res,next) {
+  console.log('checking user');
   req.user = req.user || {};
 
   // Check if there is an authorization token supplied
@@ -73,6 +77,7 @@ exports.checkUser = function(req,res,next) {
  *
  **/
 exports.ensureAuthenticated = function(req,res,next) {
+  console.log('Ensure authenticated');
   if (req.user && req.user.email){
     next();
   } else {

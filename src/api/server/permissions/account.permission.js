@@ -15,7 +15,7 @@ exports.canCreate = function(req, res, next) {
   if (!req.params.id) { return res.json({status: 'error', msg: 'No account id parameter found.'}); }
 
   // An admin can edit everything
-  if (user.admin) {
+  if (req.user.admin) {
     console.log('User is admin, valid!');
     return next();
   }
@@ -40,7 +40,7 @@ exports.canCreate = function(req, res, next) {
  * Check if a user can edit a requested publication account.
  *
  */
-exports.canEdit = function(req, res, next) {
+exports.canUpdate = function(req, res, next) {
   console.log('Check if user can edit this organisation account.');
   console.log(req.params);
   console.log(req.user);

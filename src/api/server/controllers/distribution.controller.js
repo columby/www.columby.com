@@ -132,7 +132,7 @@ exports.validateLink = function(req,res){
   },function(err, response, body){
     if (err || response.statusCode !== 200) {
       console.log('url not found.');
-      return res.json({ valid: false, msg: 'Non readable url' });
+      return res.json({ valid: false, msg: 'Non readable url', err: err });
     }
 
     // Validate for arcgis

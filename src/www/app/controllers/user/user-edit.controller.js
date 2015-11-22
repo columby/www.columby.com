@@ -15,7 +15,7 @@
     // Set proper user avatar
     // if (!$scope.user.primary.avatar) { $scope.user.primary.avatar = {}; }
     // $scope.user.primary.avatar.url = appConstants.filesRoot + '/s/small/' + $scope.user.primary.avatar.filename;
-    
+
     // Check for user's primary account
     if (!$scope.user.primary.id){
       $scope.errorMsg = 'There seems to be a problem with your account. Please contact support.';
@@ -90,7 +90,9 @@
       $log.debug(data.file);
       if (data.file) {
         $scope.user.primary.avatar_id = data.file.id;
+        $rootScope.user.primary.avatar_id = data.file.id;
         $scope.user.primary.avatar = data.file;
+        $rootScope.user.primary.avatar = data.file;
         $scope.updateAccount();
       }
     });

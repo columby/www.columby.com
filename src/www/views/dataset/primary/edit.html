@@ -1,7 +1,14 @@
-
-<div class="modal-header">
-  <h3 class="modal-title">Edit Primary source</h3>
+<div class="modal-header row">
+  <div class="col-xs-10">
+    <h4 class="modal-title">Edit primary source</h4>
+  </div>
+  <div class="col-md-2 pull-right">
+    <a class="close" href ng-click="$dismiss()">
+      <span class="fa fa-close"></span>
+    </a>
+  </div>
 </div>
+
 <div class="modal-body">
   <form class="form-horizontal novalidate" role="form" name="metadataForm">
     <div class="form-group">
@@ -27,8 +34,6 @@
 </div>
 
 <div class="modal-footer">
-  <button class="btn orange pull-left"
-          ng-click="cancel()">Cancel</button>
-  <button class="default-button lightblue filled pull-right"
-          ng-click="update()">Save</button>
+  <a href class="pull-left" ng-click="cancel()">Cancel</a>
+  <button class="btn btn-default pull-right" ng-click="update()">Save</button>
 </div>
