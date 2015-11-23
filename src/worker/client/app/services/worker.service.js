@@ -25,6 +25,17 @@ angular.module('columbyworkerApp')
         }).then(function(result){
           return result.data;
         });
-      }
+      },
+
+      job: function(id){
+        console.log(id);
+        return $http({
+          method: 'get',
+          url: '/api/job/' + id,
+          //params: params
+        }).then(function(result){
+          return result.data;
+        });
+      },
     };
   });

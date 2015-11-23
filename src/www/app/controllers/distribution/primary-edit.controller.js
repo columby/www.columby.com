@@ -12,6 +12,7 @@
       PrimarySrv.update($scope.primary.id, $scope.primary, function(primary) {
         $log.debug('Primary result: ', primary);
         if (primary.id){
+          if (!$scope.primary.jobType) { return ngNotify.set('There was an error determining the job type for this source. Please contact support.', 'error'); }
           // Send to queue
           var job = {
             type: $scope.primary.jobType,

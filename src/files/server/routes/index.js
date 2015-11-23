@@ -16,14 +16,6 @@
     // Serve file derivative
     app.get('/s/:style/:id/:filename', fileCtrl.serveStyle);
 
-
-
-
-    // convert a file or table
-    app.post('/convert',
-      auth.validateRemoteHost,
-      fileCtrl.convert);
-
     // Fallback for all other routes
     app.get('/', function (req, res) {
       var status = {

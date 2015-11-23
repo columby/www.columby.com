@@ -7,8 +7,6 @@ var gm = require('gm').subClass({imageMagick: true});
 var path = require('path');
 var mv = require('mv');
 var fs = require('fs-extra');
-var pg = require('pg');
-var copyTo = require('pg-copy-streams').to;
 var moment = require('moment');
 
 var s3client = knox.createClient({
@@ -235,85 +233,6 @@ exports.serveStyle = function (req, res) {
         });
       });
     });
-  });
-};
-
-
-
-/**
- * Convert a database table to a csv file for a primary source, based on a primary_id
- *
- **/
-exports.convert = function (req, res) {
-  console.log(req.body.primaryId);
-  console.log(req.body);
-  if (!req.body.primaryId) {
-    return res.json({status: 'error', msg: 'No primary id provided. '});
-  }
-
-  models.Primary.find({
-    where: {
-      id: req.body.primaryId
-    }
-    // include: [
-    //   { model: models.Dataset },
-    // ]
-  }).then(function (primary) {
-    // console.log('primary', primary);
-    if (!primary) { return res.json({status: 'error', msg: 'No primary found'}); }
-    pg.connect(config.db.postgis.uri, function (err, client, done) {
-      console.log(err);
-      console.log(client.host);
-      // res.send(req.body.primaryId);
-      var uploadFile = config.root + '/files/tmp' + '/primary_' + req.body.primaryId + '.csv';
-      console.log(uploadFile);
-
-      var stream = client.query(copyTo('COPY "primary_' + req.body.primaryId + '" TO STDOUT'));
-      var fileStream = fs.createWriteStream(uploadFile);
-      stream.pipe(fileStream);
-      fileStream.on('finish', function () {
-        console.log('finish');
-        done();
-
-        models.File.create({
-          filename: 'primary_' + req.body.primaryId + '.csv'
-        }).then(function (file) {
-          // copy file to permanent location
-          var fileNewPath = config.root + '/files/d/' + file.shortid + '/' + file.filename;
-
-          file.updateAttributes({
-            url: '/d/' + file.shortid + '/' + file.filename
-          }).then(function (some) {
-            console.log('ok', file.dataValues);
-          }).catch(function (err) {
-            console.log('err', err);
-          });
-
-          mv(uploadFile, fileNewPath, {mkdirp: true}, function (err) {
-            if (err) {
-              console.log('error moving file', err);
-              return res.json({status: 'error', msg: err});
-            } else {
-              // update file status at primary
-              primary.setFile(file).then(function (some) {
-                res.json({status: 'ok', file: file.dataValues});
-              }).catch(function (err) {
-                return res.json({status: 'error', msg: err});
-              });
-            }
-          });
-        }).catch(function (err) {
-          console.log('err', err);
-          return res.json({status: 'error', msg: err});
-        });
-      }).on('error', function (err) {
-        console.log('error endstream');
-        done();
-        return res.json({status: 'error', msg: err});
-      });
-    });
-  }).catch(function (err) {
-    console.log('err', err);
   });
 };
 

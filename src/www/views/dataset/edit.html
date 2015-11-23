@@ -66,6 +66,9 @@
           <li ng-show="dataset.primary.syncPeriod">
             <label>Synchronisation</label>{{dataset.primary.syncPeriod}}
           </li>
+          <li><label>id: </label>{{dataset.primary.id}}</li>
+          <li><label>jobType </label>{{dataset.primary.jobType}}</li>
+          <li><label>file</label> {{dataset.primary.file.id}}</li>
         </ul>
         <p ng-show="dataset.primary.jobStatus==='error'">There was an error processing this dataset. The data is currently unavailable.</p>
 

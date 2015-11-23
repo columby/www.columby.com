@@ -94,6 +94,7 @@ exports.status = function(req,res){
  *
  */
 exports.index = function(req, res) {
+  console.log('Showing list of jobs');
   var limit = req.query.limit || 20;
   if (limit>100){ limit=50; }
   var offset = req.query.offset || 0;
@@ -123,8 +124,8 @@ exports.index = function(req, res) {
  *
  */
 exports.show = function(req, res) {
-  models.Job.findOne(req.params.id).then(function(job){
-    res.json({job: job});
+  models.Job.findById(req.params.id).then(function(job){
+    res.json(job);
   }).catch(function(err){
     return handleError(res,err);
   });
@@ -226,5 +227,5 @@ exports.jobLog = function(req,res){
  */
 function handleError(res, err) {
   console.log('Error: ', err);
-  return res.send(500, err);
+  return res.json({status:'500', msg: err});
 }

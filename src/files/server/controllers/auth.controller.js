@@ -71,18 +71,3 @@ exports.ensureAuthenticated = function (req, res, next) {
     return res.json({status: 'error', message: 'Not authenticated'});
   }
 };
-
-
-exports.validateRemoteHost = function (req, res, next) {
-  if (config.env === 'development') {
-    next();
-  } else if (config.env === 'production') {
-    if (req.connection.remoteAddress !== '127.0.0.1') {
-      res.json({status: 'error', msg: 'Only local connections allowed, not ' + req.connection.remoteAddress});
-    } else {
-      next();
-    }
-  } else {
-    res.json({status: 'error', msg: 'No environment specified'});
-  }
-};

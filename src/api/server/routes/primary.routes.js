@@ -22,6 +22,11 @@ module.exports = function(app){
   router.get('/:id',
     primaryCtrl.show);
 
+  router.post('/convert',
+    primaryPerms.canConvert,
+    primaryCtrl.convert
+  );
+  
   router.post('/:id/sync',
     auth.checkJWT,
     auth.checkUser,

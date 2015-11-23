@@ -36,23 +36,18 @@ require('./models/index');
 require('./routes/index')(app);
 
 // Setup the worker class
-var Worker =require('./worker/worker');
+var Worker = require('./worker/worker');
+var worker = new Worker(function(err){
+  if (err) { console.log('Error starting the Worker, ', err); }
+  console.log('Starting the Worker process. ')
+  worker.start();
+});
 
 /**
  * Start server
  */
 server.listen(config.port, config.ip, function () {
   console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
-
-  console.log('Connecting worker.');
-  var worker = new Worker(config, function(err){
-    if (err) {
-      console.log('err', err);
-    } else {
-      worker.start();
-    }
-  });
-
 });
 
 // Expose app

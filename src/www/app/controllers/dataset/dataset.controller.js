@@ -51,22 +51,18 @@
 
     var q = {
       type: 'select',
-      table: 'primary_' + $scope.dataset.primary.id,
+      table: $scope.dataset.primary.id,
       fields: '*',
       limit: '10'
     };
 
     // Query string for api call example.
-    $scope.dataQuery = '{"type":"select","table":"primary_' + $scope.dataset.primary.id + '","fields":"*","limit":"10"}';
+    $scope.dataQuery = '{"type":"select","table":"' + $scope.dataset.primary.id + '","fields":"*","limit":"10"}';
     $scope.apiLink = appConstants.apiRoot + '/v2/data/sql?q='+ $scope.dataQuery;
-
-    DataService.sql(q).then(function(result){
-      if (result.status === 'success') {
-        $scope.datapreview = {
-          header: result.rows.fields
-        };
-        $scope.datapreview.data = result.rows;
-      }
+    $log.debug($scope.dataQuery);
+    DataService.sql(q).then(function(result) {
+      console.log(result);
+      $scope.datapreview = result;
     });
   }
 

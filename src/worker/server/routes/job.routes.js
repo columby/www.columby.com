@@ -9,9 +9,9 @@ var express = require('express'),
 
 module.exports = function(app) {
 
-  router.get('/'        , authCtrl.checkJWT, jobCtrl.index);
-  router.get('/:id'     , authCtrl.checkJWT, jobCtrl.show);
-  router.get('/:id/log' , authCtrl.checkJWT, jobCtrl.jobLog);
+  router.get('/'        , authCtrl.checkJWT, authCtrl.checkUser, jobCtrl.index);
+  router.get('/:id'     , authCtrl.checkJWT, authCtrl.checkUser, jobCtrl.show);
+  router.get('/:id/log' , authCtrl.checkJWT, authCtrl.checkUser, jobCtrl.jobLog);
 
   router.post('/'       , authCtrl.checkJWT, authCtrl.checkUser, jobPerms.canCreate, jobCtrl.create);
   router.put('/:id'     , authCtrl.checkJWT, authCtrl.checkUser, jobPerms.canCreate, jobCtrl.update);

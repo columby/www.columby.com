@@ -47,7 +47,7 @@
       </thead>
       <tbody>
         <tr ng-repeat="job in jobs">
-          <td>{{job.id}}</td>
+          <td><a ui-sref="job({id: job.id})">{{job.id}}</a></td>
           <td>{{job.status}}</td>
           <td>{{job.type}}</td>
           <td>{{job.error}}</td>

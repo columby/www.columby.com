@@ -79,13 +79,11 @@
 						</li>
 					</ul>
       		<p ng-show="dataset.primary.jobStatus==='error'">There was an error processing this dataset. The data is currently unavailable.</p>
-					<div class="col-xs-4">
-            <div class="download datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
-              <a href="{{filesRoot}}{{dataset.primary.file.url}}"><button class="lightblue filled"><i class="fa fa-download"></i>Download source</button></a>
+					<div class="row download">
+            <div class="col-xs-12">
+              <a href="{{$root.config.filesRoot + '/f/' + dataset.primary.file.url}}" class="btn btn-default" ng-show="dataset.primary.jobStatus==='done'"><i class="fa fa-download"></i>&nbsp;Download source</a>
+              <a ng-href="{{apiLink}}" class="btn btn-default" ng-show="dataset.primary.jobStatus==='done'"><i class="fa fa-link"></i>&nbsp;Use Columby API</a>
             </div>
-            <div class="link datasource-icon" ng-show="dataset.primary.jobStatus==='done'">
-							<a ng-href="{{apiLink}}"><button class="lightblue filled disabled last"><i class="fa fa-link"></i>Use Columby API</button></a>
-						</div>
 					</div>
     		</div>
 
@@ -127,19 +125,25 @@
   </div>
 
   <!-- Dataset Preview -->
-  <div class="preview-wrapper">
+  <div class="preview-wrapper" ng-show="datapreview">
     <div class="container">
       <div class="col-xs-12">
+        <h3>Data preview</h3>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="col-xs-12">
         <div class="table-responsive">
-          <table class="table table-striped table-hover">
+          <table class="table">
             <thead>
               <tr>
-                <td ng-repeat="header in datapreview.header">{{header.name}}</td>
+                <td ng-repeat="h in datapreview.header">{{h}}</td>
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="row in datapreview.data.rows">
-                <td ng-repeat="field in datapreview.header">{{row[field.name]}}</td>
+              <tr ng-repeat="row in datapreview.rows">
+                <td ng-repeat="item in row">{{item}}</td>
               </tr>
             </tbody>
           </table>

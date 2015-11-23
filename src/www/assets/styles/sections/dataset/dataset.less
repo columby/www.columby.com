@@ -101,6 +101,9 @@ body.dataset {
       ul.properties {
         padding: 12px 15px 0 15px;
       }
+      .download {
+        padding: 15px;
+      }
       .distribution-actions {
         padding: 5px 20px;
       }
@@ -201,6 +204,27 @@ body.dataset {
       .more-about{
         float: right;
         font-family: @sans-serif;
+      }
+    }
+    .preview-wrapper {
+      background-color: #eee;
+      table {
+        font-size: 12px;
+        thead {
+          font-weight: 600;
+        }
+        tbody {
+          td {
+            padding: 5px;
+            font-family: @sans-serif;
+            vertical-align: middle;
+            max-width: 100px;
+            overflow: hidden;
+            white-space: nowrap;
+            word-wrap: normal;
+            text-overflow: ellipsis;
+          }
+        }
       }
     }
   }

@@ -1,0 +1,39 @@
+<div class="page-header">
+  <div class="container">
+    <div class="col-xs-12">
+      <h1>Job Details</h1>
+      <h2>{{job.id}}</h2>
+    </div>
+  </div>
+</div>
+
+<div class="page-body">
+  <div class="container">
+    <div class="col-xs-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Status</th>
+            <th>Type</th>
+            <th>Error message</th>
+            <th>Dataset id</th>
+            <th>Created at</th>
+            <th>Updated at</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{job.id}}</td>
+            <td>{{job.status}}</td>
+            <td>{{job.type}}</td>
+            <td>{{job.error}}</td>
+            <td>{{job.dataset_id}}</td>
+            <td>{{job.created_at | date:'dd MMMM yyyy - H:m'}}</td>
+            <td>{{job.updated_at | date:'dd MMMM yyyy - H:m'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -16,27 +16,29 @@ var config = require('../config/config'),
  * And add the user id to req
  *
  */
- exports.checkJWT = function (req, res, next) {
-   console.log('Checking JWT.');
-   req.jwt = req.jwt || {};
+exports.checkJWT = function (req, res, next) {
+  console.log('Checking JWT.');
+  req.jwt = req.jwt || {};
 
-   // Decode the token if present
-   if (req.headers.authorization){
-     var token = req.headers.authorization.split(' ')[1];
-     try {
-       var payload = jwt.decode(token, config.jwt.secret, 'base64');
-       // Check token expiration date
-       if ( (payload.exp) && (payload.exp > moment().unix()) ) {
-         console.log('Token found.');
-         req.jwt = payload;
-       }
-       next();
-     } catch (err){
-       console.log('err ', err);
-       next();
-     }
-   }
- };
+  // Decode the token if present
+  if (req.headers.authorization){
+    var token = req.headers.authorization.split(' ')[1];
+    try {
+      var payload = jwt.decode(token, config.jwt.secret, 'base64');
+      // Check token expiration date
+      if ( (payload.exp) && (payload.exp > moment().unix()) ) {
+        console.log('Token found.');
+        req.jwt = payload;
+      }
+      next();
+    } catch (err){
+      console.log('err ', err);
+      next();
+    }
+  } else {
+    next();
+  }
+};
 
 
 exports.checkUser = function (req, res, next) {

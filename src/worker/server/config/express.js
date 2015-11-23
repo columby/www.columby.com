@@ -34,12 +34,12 @@ module.exports = function(app) {
 
   app.use(cors());
 
-  var basicAuth = auth.basic({ //basic auth config
-      realm: 'ScribeJS WebPanel',
-      file: __dirname + '/scribe.htpasswd'
-  });
-  app.use(scribe.express.logger()); //Log each request
-  app.use('/logs', auth.connect(basicAuth), scribe.webPanel());
+  // var basicAuth = auth.basic({ //basic auth config
+  //     realm: 'ScribeJS WebPanel',
+  //     file: __dirname + '/scribe.htpasswd'
+  // });
+  // app.use(scribe.express.logger()); //Log each request
+  // app.use('/logs', auth.connect(basicAuth), scribe.webPanel());
   //app.use(express.static(__dirname + '/public'));
   app.use(express.static(path.join(config.root, 'client')));
 

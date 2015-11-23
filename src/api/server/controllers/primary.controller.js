@@ -5,9 +5,14 @@
  * Dependencies
  *
  */
-var models = require('../models/index'),
-  pg = require('pg'),
-  config = require('../config/config');
+var models = require('../models/index');
+var pg = require('pg');
+var copyTo = require('pg-copy-streams').to;
+var config = require('../config/config');
+var fs = require('fs');
+var mv = require('mv');
+var path = require('path');
+var knox = require('knox');
 
 
 /*-------------- PRIMARY DISTRIBUTION --------------------------------------------------------*/
@@ -27,8 +32,6 @@ exports.show = function(req,res){ };
  *
  * Create a new Primary source
  *
- * @param req
- * @param res
  */
 exports.create = function(req,res){
   console.log('Creating primary source');
@@ -140,6 +143,92 @@ exports.sync = function(req,res) {
     });
 };
 
+
+/**
+ * Convert a database table to a csv file for a primary source, based on a primary_id
+ *
+ **/
+exports.convert = function (req, res) {
+  console.log('Primary controller, convert.');
+  console.log(req.body.primary_id);
+
+  var primaryId = req.body.primary_id;
+
+  models.Primary.findById(primaryId, {
+    include: [
+      {model: models.Dataset, as: 'dataset'}
+    ]
+  }).then(function(primary) {
+    console.log(primary.dataValues.dataset.dataValues.account_id);
+    if (!primary) { return res.json({status: 'error', msg: 'No primary found'}); }
+    // Connect to the postgis database
+    pg.connect(config.db.postgis.uri, function (err, client, done) {
+      console.log('err ', err);
+      console.log('host ', client.host);
+
+      var uploadFile = path.join(config.root, '../../tmp/primary_' + primaryId + '.csv');
+      console.log('uploadfile', uploadFile);
+
+      var stream = client.query(copyTo('COPY "primary_' + primaryId + '" TO STDOUT WITH DELIMITER \',\' CSV HEADER'));
+      var fileStream = fs.createWriteStream(uploadFile);
+      stream.pipe(fileStream);
+      fileStream.on('finish', function () {
+        console.log('Table convert finished.');
+        done();
+        fs.stat(uploadFile, function(error, stat) {
+          if (error) { return handleError(res,error); }
+          console.log(stat.size);
+          var f = {
+            filename: 'primary_' + primaryId + '.csv',
+            account_id: primary.dataValues.dataset.dataValues.account_id,
+            type: 'datafile',
+            size: stat.size,
+            status: true,
+            filetype: 'text/csv',
+            title: '',
+            description: ''
+          }
+          models.File.create(f).then(function(file) {
+            console.log(file.dataValues);
+            var s3client = knox.createClient({
+              key: config.aws.key,
+              secret: config.aws.secret,
+              bucket: config.aws.bucket
+            });
+            file.updateAttributes({
+              url: file.dataValues.id + '/' + file.dataValues.filename
+            }).then(function (some) {
+              console.log('ok', file.dataValues.url);
+              var s3file = '/' + config.environment + '/files/' + file.url;
+              console.log('s3file url: ' + s3file);
+              s3client.putFile(uploadFile, s3file, function(err, result){
+                console.log(err);
+                console.log(result.statusCode);
+                // update file status at primary
+                primary.setFile(file).then(function(some) {
+                  console.log('sss', some.dataValues.id);
+                  return res.json({status: '200', primary: some, file: file});
+                }).catch(function (err) {
+                  console.log('e', err);
+                  return handleError(res,err);
+                });
+              });
+            }).catch(function (err) {
+              return handleError(res,err);
+            });
+          }).catch(function (err) {
+            return handleError(res,err);
+          });
+        });
+      }).on('error', function (err) {
+        done();
+        return handleError(res,err);
+      });
+    });
+  }).catch(function (err) {
+    return handleError(res,err);
+  });
+};
 
 
 function handleError(res, err) {

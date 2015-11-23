@@ -14,8 +14,8 @@ module.exports = function(app) {
   });
 
 
+  // Client routes for bower components
   app.route('/bower_components/*').get(function(req,res){
-    console.log('Serving bower component. ');
     fs.readFile(path.join(__dirname, '../../../../bower_components/' + req.params[0]), 'binary', function(err, file) {
       if (err) {
         res.writeHeader(500, {'Content-Type': 'text/plain'});

@@ -1,7 +1,8 @@
 'use strict';
 
 var models = require('../models/index'),
-    Distribution = models.Distribution;
+    Distribution = models.Distribution,
+    config = require('./../config/config');
 
 
 // helper to check if a user has access to a certain account.
@@ -138,3 +139,22 @@ exports.canDelete = function(req,res,next) {
     return res.status(401).json({status: 'Error', msg: err});
   });
 }
+
+
+// Make sure only a local connection can create a file from a table.
+// Todo: make this better.
+exports.canConvert = function(req, res, next) {
+  console.log('environment: ' + config.environment);
+  console.log('remote address: ' + req.connection.remoteAddress);
+  if (config.environment === 'development') {
+    next();
+  } else if (config.environment === 'production') {
+    if (req.connection.remoteAddress !== '127.0.0.1') {
+      res.json({ status: 'error', msg: 'Only local connections allowed, not ' + req.connection.remoteAddress});
+    } else {
+      next();
+    }
+  } else {
+    res.json({status: 'error', msg: 'No environment specified'});
+  }
+};

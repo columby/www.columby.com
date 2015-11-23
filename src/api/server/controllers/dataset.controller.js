@@ -453,7 +453,7 @@ exports.updateRegistry = function(req,res){
       }).then(function(result){
         return res.json(result);
       }).catch(function(err){
-        handleerror(res,err);
+        return handleError(res,err);
       });
     }
   });

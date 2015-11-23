@@ -12,7 +12,7 @@
       <!-- endbower -->
     <!-- endbuild -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bower_components/ng-notify/dist/ng-notify.min.js">
+    <link rel="stylesheet" href="bower_components/ng-notify/dist/ng-notify.min.css">
     <!-- build:css({.tmp,client}) app/app.css -->
     <link rel="stylesheet" href="assets/app.css">
       <!-- injector:css -->
@@ -24,7 +24,9 @@
 
     <div class="footer">
       <div class="container">
-        <p><span class="glyphicon glyphicon-heart"></span> from the <a href="http://www.columby.com">Columby</a> team. <span>v{{$root.config.version}}</span></p>
+        <div class="col-xs-12">
+          <p><span class="glyphicon glyphicon-heart"></span> from the <a href="http://www.columby.com">Columby</a> team. <span>v{{$root.config.version}}</span></p>
+        </div>
       </div>
     </div>
 
@@ -59,6 +61,7 @@
     <script src="app/app.js"></script>
     <!-- injector:js -->
     <script src="app/controllers/main.js"></script>
+    <script src="app/controllers/job/job-show.controller.js"></script>
     <script src="app/routes/index.js"></script>
     <script src="app/services/auth.service.js"></script>
     <script src="app/services/config.service.js"></script>
