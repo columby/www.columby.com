@@ -234,9 +234,9 @@ Worker.prototype.handleProcessedJob = function(err) {
     });
 
     // Create a downloadable file for this table
-    var apiRoot = 'https://api.columby.com/v2/file/';
+    var apiRoot = 'https://api.columby.com/v2/primary/';
     if (self._config.env === 'development') {
-      apiRoot = 'https://dev-api.columby.com/v2/file/';
+      apiRoot = 'https://dev-api.columby.com/v2/primary/';
     }
     if (self._config.env === 'local') {
       apiRoot = 'http://localhost:8000/v2/primary/';
@@ -251,6 +251,7 @@ Worker.prototype.handleProcessedJob = function(err) {
       }
     }, function(error, response, data) {
       if (error) { console.log('Error: ', err); }
+      console.log(data);
       data = JSON.parse(data);
       console.log('data ', data);
       // Update Primary

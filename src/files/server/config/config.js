@@ -1,12 +1,12 @@
 'use strict';
 var path = require('path');
 
-var p = require('./../../../../package.json');
+//var p = require('./../../../../package.json');
 console.log(p.appVersion);
 
 module.exports = {
-  appVersion: p.appVersion,
-  
+  //appVersion: p.appVersion,
+
   root: path.normalize(__dirname + '/../..'),
 
   env: process.env.NODE_ENV || 'development',
