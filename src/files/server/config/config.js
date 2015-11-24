@@ -2,7 +2,7 @@
 var path = require('path');
 
 //var p = require('./../../../../package.json');
-console.log(p.appVersion);
+//console.log(p.appVersion);
 
 module.exports = {
   //appVersion: p.appVersion,

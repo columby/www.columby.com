@@ -255,14 +255,19 @@ Worker.prototype.handleProcessedJob = function(err) {
       data = JSON.parse(data);
       console.log('data ', data);
       // Update Primary
+      console.log('Updating primary status to done.');
       var sql = 'UPDATE "Jobs" SET status=\'done\', error=NULL WHERE id=' + job.id;
+      console.log('sql ' + sql);
       self._connection.client.query(sql, function(err,result) {
         if (err) { console.log('err',err);}
+        else { console.log('Job updated'); }
       });
       // Update Job
-      sql = 'UPDATE "Primary" SET file_id='+data.file.id+' WHERE id=' + job.id;
-      self._connection.client.query(sql, function(err,result) {
+      var sql2 = 'UPDATE "Primary" SET file_id='+data.file.id+' WHERE id=' + job.id;
+      console.log('sql2' + sql2);
+      self._connection.client.query(sql2, function(err,result) {
         if (err) { console.log('err',err);}
+        else { console.log('Primary updated.'); }
       });
 
     });
