@@ -263,7 +263,7 @@ Worker.prototype.handleProcessedJob = function(err) {
         else { console.log('Job updated'); }
       });
       // Update Job
-      var sql2 = 'UPDATE "Primary" SET file_id='+data.file.id+' WHERE id=' + job.id;
+      var sql2 = 'UPDATE "Primary" SET file_id='+data.file.id+' WHERE id=' + job.data.primaryId;
       console.log('sql2' + sql2);
       self._connection.client.query(sql2, function(err,result) {
         if (err) { console.log('err',err);}
