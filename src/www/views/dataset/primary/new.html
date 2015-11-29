@@ -1,0 +1,49 @@
+<div class="modal-header row">
+  <div class="col-xs-10">
+    <h4 class="modal-title">New primary source</h4>
+  </div>
+  <div class="col-md-2 pull-right">
+    <a class="close" href ng-click="$dismiss()">
+      <span class="fa fa-close"></span>
+    </a>
+  </div>
+</div>
+
+
+<div class="modal-body row">
+  <div class="col-xs-12">
+    <!-- sync -->
+    <div data-ng-show="primaryStatus.jobType==='arcgis'">
+      <p>Creating a new primary source for distribution <em>{{distribution.title || 'No title'}}</em> from a <a target="_blank" ng-href="{{distribution.accessUrl}}">remote source</a>.</p>
+      <p class="bg-danger" ng-show="primaryStatus.valid==='false'">There seems to be something wrong with the provided source. Please check the <a target="_blank" ng-href="{{distribution.accessUrl}}">remote link</a>. </p>
+      <div class="synchronisation" ng-show="primaryStatus.valid===true">
+        <h3>Synchronisation</h3>
+        <p>How often would you like to sync the data? </p>
+        <div class="btn-group">
+          <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="0">Do not sync</label>
+          <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="1">Yearly</label>
+          <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="2">Quarterly</label>
+          <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="3">Monthly</label>
+          <label class="btn btn-default" data-ng-model="primary.syncPeriod" btn-radio="4">Weekly</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- csv -->
+    <div ng-show="primary.jobType==='csv'">
+      <p>The distribution you are about to convert to a primary source is a CSV file. The file will be sent to the processing queue and converted to the Columby API. Depending on the size this can take a while. This process happens in the background. <br />
+      Please select <em>create primary source</em> to start the process. </p>
+    </div>
+
+    <!-- csv -->
+    <div ng-show="primary.jobType==='fortes'">
+      <p>The distribution you are about to convert to a primary source is a Fortes link. The link will be sent to the processing queue and converted to the Columby API. Depending on the size this can take a while. This process happens in the background. <br />
+        Please select <em>create primary source</em> to start the process. </p>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <a href class="pull-left" ng-click="$dismiss()">Cancel</a>
+  <button class="btn btn-primary" ng-click="confirm()" ng-disabled="!primaryStatus.valid">Create primary source</button>
+</div>

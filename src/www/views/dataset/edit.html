@@ -1,0 +1,159 @@
+<!-- Page Header -->
+<div class="page-header" ng-style="{{headerStyle}}">
+  <div class="actions-bar">
+    <a class="btn btn-default" ui-sref="dataset.view({ id: dataset.shortid })"><i class="fa fa-chevron-left"></i>view dataset</a>
+    <a class="btn btn-default" href ng-click="showOptions()"><i class="fa fa-cog"></i>dataset options</a>
+  </div>
+
+  <div class="container">
+    <!-- Dataset Title -->
+  	<div class="col-xs-12 page-title-container">
+      <textarea class="page-title edit" auto-grow name="page-title" placeholder="Your title" ng-model="dataset.title" ng-blur="update()" focus = "true"></textarea>
+    </div>
+
+    <!-- Dataset Meta -->
+    <div class="col-xs-12 meta">
+      <div class="private" ng-show="dataset.status === true">
+        <span class="label bg-primary private">private</span>
+      </div>
+
+      <div class="account-date">
+        <p>A dataset by <span class="account"><a ui-sref="account.view({slug:dataset.account.slug})">{{dataset.account.displayName || 'unknown'}}</a></span>, <span class="published">created on&nbsp;<time class="post-date">{{dataset.created_at | date:'d MMMM yyyy'}}</time></span></p>
+      </div>
+
+      <div class="tags" ng-show="dataset.tags.length>0">
+        <span class="tag" ng-repeat="tag in dataset.tags">
+          <a ui-sref="tag.view({slug: tag.slug })"><i class="fa fa-tag"></i>{{tag.text}}</a>
+        </span>
+      </div>
+
+      <div class="categories" ng-show="dataset.categories.length>0">
+        <span class="category" ng-repeat="category in dataset.categories">
+          <a ui-sref="account.category({slug: '{{dataset.account.slug}}', id: '{{category.id}}'})">
+            <i class="fa fa-bookmark-o"></i>{{category.name}}
+          </a>
+        </span>
+      </div>
+      <div class="avatar img-rounded">
+        <img class="img-circle" ng-src="{{$root.config.filesRoot + '/s/small/' + dataset.account.avatar.url  || '/assets/img/avatar.png'}}" alt="{{dataset.account.displayName}}"/>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Page Content -->
+<div class="page-body">
+  <div class="container">
+
+    <!-- Dataset Description -->
+    <div class="col-md-12 description-wrapper">
+      <h3>Description</h3>
+      <div placeholder="Add a nice description to your dataset. If your audience may contact you, write down how." ng-model="dataset.description" text-angular ta-default-wrap="p" ng-blur="update()" ta-toolbar="[['quote','bold','italics','underline'],['ul','ol','indent','outdent'],['insertLink','insertVideo']]"></div>
+    </div>
+
+    <!-- Dataset Sources -->
+    <div class="col-md-12 distributions-wrapper">
+      <h3>Sources</h3>
+
+      <div class="primary-distribution" ng-show="dataset.primary.id">
+        <h4 class="datasource-title">Primary source</h4>
+        <ul class="properties">
+          <li><label>Datasource status</label>{{dataset.primary.status}}</li>
+          <li><label>Issued</label>{{dataset.primary.created_at | date:'d MMMM yyyy'}}</li>
+          <li ng-show="dataset.primary.created_at !== dataset.primary.updated_at"><label>Modified</label>{{dataset.primary.updated_at | date:'d MMMM yyyy'}}</li>
+          <li ng-show="dataset.primary.jobStatus"><label>Jobstatus</label>{{dataset.primary.jobStatus}}</li>
+          <li ng-show="dataset.primary.syncDate"><label>Last synchronisation</label>{{dataset.primary.syncDate | date:'d MMMM yyyy - H:mm'}}</li>
+          <li ng-show="dataset.primary.syncPeriod">
+            <label>Synchronisation</label>{{dataset.primary.syncPeriod}}
+          </li>
+          <li><label>id: </label>{{dataset.primary.id}}</li>
+          <li><label>jobType </label>{{dataset.primary.jobType}}</li>
+          <li><label>file</label> {{dataset.primary.file.id}}</li>
+        </ul>
+        <p ng-show="dataset.primary.jobStatus==='error'">There was an error processing this dataset. The data is currently unavailable.</p>
+
+        <div class="distribution-actions row">
+          <button class="btn btn-xs pull-right" type="button" ng-disabled="dataset.primary.jobStatus!=='done'" ng-click="syncPrimarySource()"><i class="fa fa-refresh"></i> Sync</button>
+          <button type="button" class="btn btn-warning btn-xs pull-right" ng-click="editPrimarySource()"><i class="fa fa-edit"></i> Edit</button>
+          <div class="confirm-delete pull-right" confirm-delete on-confirm="deletePrimarySource()"></div>
+        </div>
+      </div>
+
+      <div class="distributions" ng-show="dataset.distributions.length>0">
+        <ul class="distributions-list">
+          <li class="distribution" ng-repeat="distribution in dataset.distributions">
+            <h4 class="datasource-title">{{distribution.title}}</h4>
+            <p class="accessurl" ng-show="distribution.type==='remoteService'"><small>{{distribution.accessUrl}}</small></p>
+            <div class="source label label-success" ng-show="distribution.id === dataset.primary.distribution_id">Source for Primary</div>
+						<div class="private label label-warning" ng-show="distribution.private">Private</div>
+            <ul class="properties">
+              <li><label>Datasource type</label>{{distribution.type}}</li>
+              <li><label>License</label>{{distribution.license}}</li>
+              <li><label>Media type</label>{{distribution.type}}</li>
+              <li ng-show="distribution.byteSize"><label>File size</label>{{distribution.byteSize | bytes}}</li>
+              <li><label>Issued</label>{{distribution.created_at | date:'d MMMM yyyy'}}</li>
+              <li ng-show="distribution.created_at !== distribution.updated_at"><label>Modified</label>{{distribution.updated_at | date:'d MMMM yyyy'}}</li>
+            </ul>
+            <div>
+              <div class="download datasource-icon" ng-show="distribution.downloadUrl">
+                <a href="{{distribution.downloadUrl}}"><button class="btn btn-default"><i class="fa fa-download"></i> Download source</button></a>
+              </div>
+              <div class="link datasource-icon" ng-show="distribution.accessUrl">
+                <a href="{{distribution.accessUrl}}" target="_blank">
+                  <button class="btn btn-default"><i class="fa fa-external-link"></i> Go to Source</button>
+                </a>
+              </div>
+            </div>
+            <div class="distribution-actions row">
+              <button type="button" class="btn btn-warning btn-xs pull-right" ng-click="editDistribution(distribution)"><i class="fa fa-edit"></i> Edit</button>
+              <button class="valid-api btn btn-primary btn-xs pull-right" ng-click="convertPrimary(distribution)" ng-hide="!distribution.valid || dataset.primary.id || distribution.id === dataset.primary.distribution_id">Convert to API</button>
+              <div class="confirm-delete pull-right" ng-hide="distribution.id === dataset.primary.distribution_id" confirm-delete on-confirm="deleteDistribution(distribution)"></div>
+            </div>
+  				</li>
+        </ul>
+      </div>
+      <button class="btn btn-default pull-right" type="button" ng-click="newDistribution()">Add a new datasource</button>
+    </div>
+
+    <!-- Dataset references -->
+    <div class="col-md-12 references-wrapper">
+      <h3>References</h3>
+
+      <div class="row">
+        <div class="col-sm-6 col-md-6 reference" ng-repeat="reference in dataset.references">
+          <div class="reference-container">
+            <img src="assets/img/reference-placeholder.png" class="placeholder"/>
+            <a ng-href="{{reference.url}}" target="_blank">
+              <div class="reference-image" style="background: url({{reference.image}}); background-size:cover;background-position: 50% 50%;">
+                <div class="reference-top"></div>
+                <h3 class="reference-title">{{reference.title}}</h3>
+                <p class="small reference-source">{{reference.provider_display}}</p>
+              </div>
+            </a>
+            <div class="reference-actions">
+              <div class="edit"><a class="btn btn-warning btn-xs" ng-click="editReference(reference)">Edit</a></div>
+              <div class="confirm-delete" confirm-delete on-confirm="deleteReference(reference)"></div>
+            </div>
+          </div>
+				</div>
+      </div>
+
+      <div class="row add-reference">
+        <div class="col-md-12">
+          <button class="btn btn-default pull-right" type="button" ng-click="createReference()">Add a new reference</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create new dataset -->
+		<div class="col-md-12 create-buttons" ng-hide="dataset.id">
+      <button class="btn btn-default create disabled" ng-hide="dataset.id || dataset.title">Save draft &amp; proceed to add data</button>
+      <p ng-hide="dataset.id || dataset.title">Please add a title first.</p>
+      <button class="btn btn-default create" ng-hide="dataset.id || !dataset.title" ng-click="create()">Save draft &amp; proceed to add data</button>
+		  <p ng-hide="dataset.id || !dataset.title">Don't worry, you can still change your title and description.</p>
+		</div>
+  </div>
+</div>
+
+<!-- Page Footer -->
+<div class="page-footer"></div>

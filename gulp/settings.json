@@ -1,5 +1,0 @@
-{
-  "appName": "columbyApp",
-  "sshHost": "admin@dev.columby.com",
-  "sshPath": "/srv/columby/sites/www.columby.com"
-}

@@ -1,7 +1,7 @@
 node_modules
-dist
-public
 .tmp
+public
+dist
 .idea
 client/bower_components
 *.bts
@@ -12,3 +12,9 @@ server/config/local.env.js
 /client/assets/styles/css/app.css
 /bower_components/
 /npm-debug.log
+logs
+src/files/server/config/env.js
+src/api/server/config/env.js
+src/worker/server/config/env.js
+pm2/startall.json
+tmp

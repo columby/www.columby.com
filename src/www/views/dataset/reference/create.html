@@ -1,0 +1,122 @@
+<div class="modal-reference-create">
+
+  <!-- Modal header -->
+  <div class="modal-header row">
+    <div class="col-xs-10">
+      <h2 class="modal-title" ng-hide="reference.id">Add a reference to a dataset</h2>
+      <h2 class="modal-title" ng-show="reference.id">Edit reference</h2>
+    </div>
+    <div class="col-xs-2 pull-right">
+      <a class="close" href ng-click="$dismiss()"><span class="fa fa-close"></span></a>
+    </div>
+  </div>
+  <!-- // Modal header -->
+
+  <!-- Modal body -->
+  <div class="modal-body">
+    <div ng-switch="step">
+      <!-- Step 1: Reference type -->
+      <div ng-switch-when="type" class="reference-type my-switch-animation">
+        <h3>Add a reference to your datatset</h3>
+        <p>You can add a link or upload a file related to this dataset. </p>
+        <ul>
+          <li><a href="#" ng-click="nextStep('create-link')">Link</a></li>
+          <li>Upload document (we are working on this option right now!)</li>
+        </ul>
+      </div>
+      <!-- // Step 1 -->
+
+      <!-- Step 2a: Create link -->
+      <div ng-switch-when="create-link" class="create-link">
+        <h3>Add link</h3>
+        <p>You can create a link reference. We will fetch the details and you can change them afterwards. </p>
+
+        <div class="alert alert-info" ng-show="reference.checkingLink">
+          <i class="fa fa-spinner fa-spin"></i>Validating link ...
+        </div>
+
+        <div class="alert alert-danger" role="alert" ng-show="reference.error">
+          {{reference.error}}
+        </div>
+
+        <form class="form-horizontal" role="form" name="checkForm">
+          <div class="form-group form-group-lg">
+            <div class="col-sm-10">
+              <input class="form-control form-group-lg" type="url" ng-model="reference.url" placeholder="http://www.website.com/reference"/>
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-default btn-primary" ng-disabled="reference.checkingLink || checkForm.$invalid || checkForm.$pristine" ng-click="validateLink()">Check</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- // Step 2a -->
+
+      <!-- Step 2b: Upload file -->
+      <div ng-switch-when="upload-files" class="upload-file">
+        upload file
+      </div>
+      <!-- // Step 2b -->
+
+      <!-- Step 3: Change details -->
+      <div  ng-switch-when="details" class="change-details">
+        <div class="preview row">
+          <div class="col-md-offset-3 col-md-6 reference">
+      			<div>
+      				<img src="assets/img/reference/placeholder.png" class="placeholder">
+      				<div class="reference-image" style="background: url({{reference.image}}); background-size:cover;">
+      		      <h3 class="reference-title">{{reference.title}}</h3>
+      		      <p class="small reference-source">on <a ng-href="{{reference.url}}" target="_blank">{{reference.provider_name}}</a></p>
+      		    </div>
+      			</div>
+      		</div>
+      		<div class="col-md-offset-3 col-md-6">
+      			<div class="small reference-text">{{reference.description}}</div>
+      		</div>
+        </div>
+
+        <div class="change-details row">
+          <div class="col-xs-12">
+            <h3>Change details</h3>
+          </div>
+          <div class="col-xs-12" ng-show="reference.result.images.length>1">
+            <label>Select Image</label>
+            <a href ng-click="nextImage()">Next <i class="fa fa-arrow-right"></i></a> ({{reference.selectedImage +1}}/{{reference.result.images.length}})
+          </div>
+          <div class="col-xs-12">
+            <label>Title</label>
+            <input class="form-control" ng-model="reference.title"/>
+          </div>
+          <div class="col-xs-12">
+            <label>Description</label>
+            <textarea class="form-control" rows="5" ng-model="reference.description"></textarea>
+          </div>
+        </div>
+      </div>
+      <!-- // Step 3 -->
+
+      <!-- Step 4 Submit -->
+      <div  ng-switch-when="submit" class="submit-reference">
+        <form class="form-horizontal" role="form" name="referenceForm">
+
+        </form>
+      </div>
+      <!-- // Step 4 -->
+
+    </div>
+  </div>
+
+  <!-- Modal footer -->
+  <div class="modal-footer">
+    <a class="btn-cancel pull-left" href ng-click="$dismiss()">Cancel</a>
+
+    <button class="btn btn-default btn-primary pull-right"
+      ng-show="reference.valid"
+      ng-click="save()"
+      ng-disabled="saveInProgress">Add Reference</button>
+    <button class="btn btn-default btn-primary pull-right"
+      ng-show="reference.id"
+      ng-click="update()"
+      ng-disabled="saveInProgress">Update Reference</button>
+  </div>
+</div>

@@ -1,10 +1,6 @@
-# Columby Website frontend
+# Columby
 
 ## About
-This is the frontend for columby.com.
+Columby.com data discovery
 
 ## Development
-Serve locally:
-
-    NODE_ENV=development gulp serve
-    

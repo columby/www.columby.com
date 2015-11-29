@@ -3,20 +3,29 @@
 var gulp = require('gulp');
 var conf = require('./conf');
 var path = require('path');
-var rename = require('gulp-rename');
 
-gulp.task('constants', function () {
-  console.log('env: ' + process.env.NODE_ENV);
-  var configPath;
-  if (process.env.NODE_ENV === 'production') {
-    configPath = path.join(conf.paths.src, './config/production.constants.js');
-  } else if (process.env.NODE_ENV === 'local') {
-    configPath = path.join(conf.paths.src, './config/local.constants.js');
-  } else {
-    configPath = path.join(conf.paths.src, './config/development.constants.js');
-  }
-  console.log(configPath);
-  return gulp.src(configPath)
-    .pipe(rename('settings.js'))
-    .pipe(gulp.dest(path.join(conf.paths.src, './app/')));
+// Add environment specific angular constants.
+gulp.task('constants', function() {
+
+  // Get environment variable
+  var env = process.env.NODE_ENV;
+  console.log(env);
+  if ( (env !== 'production') && (env !== 'local')) { env = 'development'; }
+
+  // Add version to constants
+  var data = require('./../package.json');
+  var constants = require(path.join('./../src/www/config/' + env + '.constants.json'));
+  constants.version = data.appVersion;
+
+  // Create string for file
+  var content = '(function(){ \n' +
+    '  \'use strict\';\n' +
+    '  angular.module(\'columbyApp\').constant(\'appConstants\', \n' +
+    '  ' + JSON.stringify(constants) + '\n' +
+    ' ); \n' +
+    '})();';
+
+  // Save file
+  require('fs').writeFileSync(path.join(conf.paths.src, 'www/app/index.constants.js'), content);
+
 });

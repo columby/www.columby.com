@@ -1,0 +1,72 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <base href="/">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(client) app/vendor.css -->
+      <!-- bower:css -->
+      <!-- endbower -->
+    <!-- endbuild -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/ng-notify/dist/ng-notify.min.css">
+    <!-- build:css({.tmp,client}) app/app.css -->
+    <link rel="stylesheet" href="assets/app.css">
+      <!-- injector:css -->
+      <!-- endinjector -->
+    <!-- endbuild -->
+  </head>
+  <body ng-app="columbyworkerApp" ng-class="$root.bodyStyles">
+    <div ui-view autoscroll="true"></div>
+
+    <div class="footer">
+      <div class="container">
+        <div class="col-xs-12">
+          <p><span class="glyphicon glyphicon-heart"></span> from the <a href="http://www.columby.com">Columby</a> team. <span>v{{$root.config.version}}</span></p>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
+    <![endif]-->
+
+    <!-- build:js({client,node_modules}) app/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/ng-notify/dist/ng-notify.min.js"></script>
+
+    <script src="bower_components/auth0.js/build/auth0.min.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
+    <script src="bower_components/auth0-lock/build/auth0-lock.min.js"></script>
+    <script src="bower_components/auth0-angular/build/auth0-angular.min.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/auth0/angular-storage/master/dist/angular-storage.js"></script>
+    <script src="bower_components/angular-jwt/dist/angular-jwt.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js({.tmp,client}) app/app.js -->
+    <script src="app/app.js"></script>
+    <!-- injector:js -->
+    <script src="app/controllers/main.js"></script>
+    <script src="app/controllers/job/job-show.controller.js"></script>
+    <script src="app/routes/index.js"></script>
+    <script src="app/services/auth.service.js"></script>
+    <script src="app/services/config.service.js"></script>
+    <script src="app/services/worker.service.js"></script>
+    <!-- endinjector -->
+    <!-- endbuild -->
+</body>
+</html>

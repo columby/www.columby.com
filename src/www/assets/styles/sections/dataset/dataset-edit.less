@@ -1,0 +1,117 @@
+body.dataset.edit,
+body.dataset.create {
+  .page-header {
+    margin-top: 50px;
+    padding-top: 0;
+    textarea.page-title {
+      width: 100%;
+      max-width: 100%;
+      border: 1px solid #fff;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 4px;
+      padding: 10px;
+      font-size: 3em;
+      background-color: rgba(255,255,255,0.2);
+      text-align: center;
+      color: #FFF;
+    }
+    .tags-title{
+      color: #fff;
+      padding: 7px 0 0 50px;
+    }
+  }
+  .page-body {
+    .description-wrapper {
+      .ta-bind {
+        min-height: 5em;
+      }
+    }
+    .distributions,
+    .primary-distribution {
+      .distribution-actions {
+        line-height: 1;
+        .btn {
+          margin: 5px;
+        }
+        .confirm-delete {
+          font-size: 12px;
+        }
+        .btn-warning {
+          margin: 5px;
+        }
+      }
+    }
+    .references-wrapper {
+      .reference {
+        margin-bottom: 1.5em;
+      }
+      .reference-actions {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background-color: rgba(0,0,0,0.5);
+        padding: 10px;
+        text-align: right;
+        .edit {
+          float: left;
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .create {
+      text-align: center;
+      padding-top: 20px;
+      button{
+        background: #345;
+        font-size: 1.2em;
+        border-radius: 45px;
+        position: relative;
+        padding: 8px 34px;
+        &:hover {
+          background: #1E2730;
+          color: #fff;
+        }
+      }
+      button.disabled{
+        background: #DDD;
+        font-size: 1.2em;
+        border-radius: 45px;
+        position: relative;
+        padding: 8px 34px;
+      }
+      p{
+        font-style: italic;
+        font-size: 0.8em;
+        margin-top: 12px;
+        opacity: 0.8;
+      }
+    }
+  }
+  .page-footer {
+    padding: 3em 0;
+    p.notice {
+      font-size: 0.9em;
+      font-weight: 600;
+    }
+  }
+}
+
+body.dataset.create {
+  .page-header {
+    margin-top: 0;
+    padding-top: 100px;
+  }
+}
+
+.dataset-modal-options {
+  .categories {
+    .category {
+      label {
+        max-width: 80%;
+      }
+    }
+  }
+}

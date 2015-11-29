@@ -1,0 +1,74 @@
+<div class="fm" ng-show="showFileManager">
+
+  <div class="fm-container">
+
+    <div class="fm-header">
+      <h4 class="modal-title"><span class="fa fa-image"></span> File manager</h4>
+      <a class="close" href ng-click="close()"><span class="fa fa-close"></span></a>
+    </div>
+
+    <div class="fm-body">
+      <div class="fm-main-content">
+        <div class="fm-controls">
+          <div class="fm-droptarget"></div>
+          <div class="fm-tools">
+            <div class="fm-controls-bar">
+              <div class="upload">
+                <div class="btn btn-default btn-upload" ngf-select="upload($files)">Upload</div>
+                <progressbar ng-show="progress>0" class="progress-striped active" value="progress"></progressbar>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fm-browser">
+          <div class="col-xs-12 empty" ng-show="files.rows.length<1">
+            <div>No files yet</div>
+          </div>
+          <div class="fm-files-list" ng-show="files.rows.length>0">
+            <table class="table">
+              <tr ng-repeat="file in files.rows">
+                <td class="preview">
+                  <a ng-href="{{$root.config.filesRoot + '/s/large/' + file.url }}" target="_blank">
+                    <img ng-src="{{$root.config.filesRoot + '/s/small/' + file.url }}"/>
+                  </a>
+                </td>
+                <td class="title">{{file.filename}} - {{file.title}}<br> <small>Added {{file.created_at | date:'short'}}</small></td>
+                <td class="actions">
+                  <a ng-click="select(file)" class="btn btn-default" ng-show="options.select">Select</a>
+                  <!-- <a ng-click="edit(asset)" class="btn btn-default"><i class="fa fa-cog"></i></a> -->
+                  <a ng-click="delete(file)" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="fm-pagination">
+          <pagination ng-show="pagination.totalItems/pagination.itemsPerPage > 1" boundary-links="true" total-items="pagination.totalItems" ng-model="pagination.currentPage" ng-change="pageChanged()" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" max-size="pagination.maxSize" rotate="false"></pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fm-modal-delete" ng-show="showDeleteModal">
+    <div class="modal-header row">
+      <div class="col-xs-10">
+        <h4 class="modal-title">Confirm Deletion</h4>
+      </div>
+      <div class="col-xs-2 right">
+        <a class="close" href ng-click="$dismiss()"><span class="fa fa-close"></span></a>
+      </div>
+    </div>
+
+    <div class="modal-body row">
+      <div class="col-sx-12">
+        <p>Are you sure you want to delete this file?</p>
+      </div>
+    </div>
+
+    <div class="modal-footer row">
+      <a class="pull-left" href class="cancel" ng-click="cancelDelete()">Cancel</a>
+      <button class="btn btn-danger pull-right" ng-click="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>

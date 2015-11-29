@@ -7,13 +7,15 @@ var preprocess = require('gulp-preprocess');
 
 var browserSync = require('browser-sync');
 
-var $ = require('gulp-load-plugins')();
+var plugins = require('gulp-load-plugins')();
 
 gulp.task('scripts', ['constants'], function () {
-  return gulp.src(path.join(conf.paths.src, '/app/**/*.js'))
-    .pipe(preprocess())
-    .pipe($.jshint())
-    .pipe($.jshint.reporter('jshint-stylish'))
+  return gulp.src(path.join(conf.paths.src, '/www/app/**/*.js'))
+    //.pipe(preprocess())
+    .pipe(plugins.jshint())
+    .pipe(plugins.jshint.reporter('jshint-stylish'))
+
     .pipe(browserSync.reload({ stream: true }))
-    .pipe($.size());
+    // Display the size of the project
+    .pipe(plugins.size());
 });
