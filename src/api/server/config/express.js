@@ -29,14 +29,14 @@ module.exports = function(app) {
 
   app.use(cors());
 
-  var basicAuth = auth.basic({ //basic auth config
-      realm: "ScribeJS WebPanel",
-      file: __dirname + '/scribe.htpasswd'
-  });
-
-  app.use(scribe.express.logger()); //Log each request
-  app.use('/logs', auth.connect(basicAuth), scribe.webPanel());
-  console.log('Logger started. ');
+  // var basicAuth = auth.basic({ //basic auth config
+  //     realm: "ScribeJS WebPanel",
+  //     file: __dirname + '/scribe.htpasswd'
+  // });
+  //
+  // app.use(scribe.express.logger()); //Log each request
+  // app.use('/logs', auth.connect(basicAuth), scribe.webPanel());
+  // console.log('Logger started. ');
 
 
   if ('production' === env) {
