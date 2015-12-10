@@ -55,9 +55,7 @@
     "sequelize": "^3.11.0",
     "serve-favicon": "^2.3.0",
     "uuid": "2.0.1",
-    "wrench": "~1.5.8"
-  },
-  "devDependencies": {
+    "wrench": "~1.5.8",
     "gulp": "~3.9.0",
     "gulp-angular-filesort": "~1.1.1",
     "gulp-angular-templatecache": "~1.7.0",

@@ -40,5 +40,13 @@
   },
   "resolutions": {
     "angular": "1.4.4"
+  },
+  "overrides": {
+    "ngprogress": {
+      "main": [
+        "build/ngprogress.js",
+        "ngProgress.css"
+      ]
+    }
   }
 }
