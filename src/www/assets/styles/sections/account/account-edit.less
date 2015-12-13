@@ -7,19 +7,36 @@ body.account.edit {
       }
     }
   }
-	.content {
+	.page-body {
 		.header.wrapper {
 			margin-bottom: 1.5em;
 		}
-		.menus {
-			a {
-				color: #333;
-				&.active {
-					font-weight: bold;
-					text-decoration: none;
-				}
-			}
+		ul.account-edit-menu {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 1em;
+      li {
+        display: inline-block;
+        padding: 10px;
+        a {
+          font-family: @sans-serif;
+          font-weight: 600;
+          color: #000;
+          letter-spacing: 1px;
+          font-size: 14px;
+          text-decoration: none;
+          &:hover {
+            color: @lightblue;
+          }
+          &.active {
+            color: @lightblue;
+          }
+        }
+      }
 		}
+
     .panel-profile {
       img {
         width: 80px;
@@ -27,5 +44,69 @@ body.account.edit {
         margin-bottom: 20px;
       }
     }
-	}
+
+    .tab-people {
+      margin-bottom: 30px;
+      h3 {
+        color: #000;
+        border-bottom-color: @lightgrey;
+        margin-bottom: 10px;
+      }
+      ul {
+        padding: 0;
+        list-style-type: none;
+        margin: 0;
+        li {
+          border-bottom: 1px solid @lightgrey;
+          font-family: @sans-serif;
+          font-weight: 600;
+          text-transform: uppercase;
+          font-size: 14px;
+          letter-spacing: 1px;
+          min-height: 60px;
+          img.avatar {
+            width: 40px;
+            height: auto;
+            margin: 15px;
+          }
+          a {
+            color: #000;
+            line-height: 40px;
+            text-decoration: none;
+          }
+          .role {
+            color: @lightgrey;
+          }
+          .actions {
+            float: right;
+            a {
+              background-color: @lightgrey;
+              border: 0;
+              font-size: 12px;
+              padding: 10px;
+              line-height: 1.5;
+              color: #FFF;
+              margin: 10px;
+              text-transform: capitalize;
+              &:hover {
+                background-color: @darkgrey;
+              }
+            }
+          }
+        }
+      }
+      .invite-user {
+        a {
+          margin: 10px 0;
+        }
+      }
+      .invite-form {
+        img.avatar {
+          width: 30px;
+          heigth: auto;
+          margin: 10px;
+        }
+      }
+    }
+  }
 }

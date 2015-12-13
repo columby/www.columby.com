@@ -21,31 +21,23 @@
       </div>
     </div>
 
-    <div class="col-md-12">
+    <div class="col-xs-12">
       <div class="row">
-        <div class="col-md-3 menus">
-          <div class="panel panel-default panel-usermenu">
-            <div class="panel-heading">Organisation settings</div>
-            <table class="table">
-              <tr>
-                <td>
-                  <a href ng-click="changePanel('profile')" ng-class="{ active: activePanel==='profile'}">Profile</a>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href ng-click="changePanel('categories')" ng-class="{ active: activePanel==='categories'}">Categories</a>
-                </td>
-              </tr>
-              <!-- <tr><td><a href="#" ng-click="changePanel('account')" ng-class="{ active: activePanel==='account'}">Account</a></td></tr> -->
-              <!-- <tr><td><a href="#" ng-click="changePanel('people')" ng-class="{ active: activePanel==='people'}">People</a></td></tr> -->
-              <!-- <tr><td><a href="#" ng-click="changePanel('registries')" ng-class="{ active: activePanel==='registries'}">Registries</a></td></tr> -->
-              <!-- <tr><td><a href="#" ng-click="changePanel('support')" ng-class="{ active: activePanel==='support'}">Support</a></td></tr> -->
-            </table>
-          </div>
+        <div class="col-xs-12 menus">
+          <ul class="account-edit-menu">
+            <li>
+              <a href ng-click="changePanel('profile')" ng-class="{ active: activePanel==='profile'}">Basic Profile</a>
+            </li>
+            <li>
+              <a href ng-click="changePanel('categories')" ng-class="{ active: activePanel==='categories'}">Categories</a>
+            </li>
+            <li>
+              <a href="#" ng-click="changePanel('people')" ng-class="{ active: activePanel==='people'}">Users</a>
+            </li>
+          </ul>
         </div>
 
-        <div class="col-md-9">
+        <div class="col-xs-12">
           <div ng-switch on="activePanel">
             <!-- Profile panel -->
             <div class="profile-panels" ng-switch-when="profile">
@@ -163,27 +155,56 @@
               </div>
             </div>
 
-            <div class="billing-panels" ng-switch-when="people">
-              <div class="panel panel-default panel-people">
-                <div class="panel-heading">
-                  People
-                </div>
-                <div class="panel-body">
-                  <h3>The public data team</h3>
-                  <p>This is the public data team. <a href="">Add team member</a></p>
+            <div class="tab-people row" ng-switch-when="people">
+              <div class="col-xs-12">
+                <h3 class="tab-title">Users</h3>
+              </div>
+              <div class="col-xs-12 administrators">
+                <ul>
+                  <li ng-repeat="user in account.people | filter: {role:2}">
+                    <img ng-src="{{$root.config.filesRoot + '/s/thumbnail/' + user.avatar_url}}" class="avatar img-circle"/> <a ui-sref="account.view({slug: user.slug})">{{user.displayname}}</a> <span class="role">&middot; {{user.roleName}}</span>
+                    <div ng-show="account.isAdmin">
+                      <a href="#"><i class="fa fa-edit"></i></a><a href="#"><i class="fa fa-trash"></i></a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-xs-12 editors">
+                <ul>
+                  <li ng-repeat="user in account.people | filter: {role:3}">
+                    <img ng-src="{{$root.config.filesRoot + '/s/thumbnail/' + user.avatar_url}}" class="avatar img-circle"/> <a ui-sref="account.view({slug: user.slug})">{{user.displayname}}</a> <span class="role">&middot; {{user.roleName}}</span>
+                    <div ng-show="isAdmin" class="actions">
+                      <a href class="btn btn-default" ng-click="revokeUserAccess(user)">Revoke access</a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-xs-12 invite-user" ng-show="isAdmin && !showInviteForm">
+                <a href ng-click="showInviteForm=true" class="btn btn-primary">Add a new editor</a>
+              </div>
 
-                  <h3>Organisation editors</h3>
-                  <table class="table">
-                    <li>{{account}}</li>
-                    <tr ng-repeat="user in account.people">
-                      <td><img ng-src="{{user.avatar.url || 'assets/img/avatar.png'}}"/> </td>
-                      <td>{{user.role}}</td>
-                      <td><a ui-sref="account.view({slug: user.slug})">{{user.displayName}}</a></td>
-                      <td><a href="#"><i class="fa fa-edit"></i></a><a href="#"><i class="fa fa-trash"></i></a></td>
-                    </td>
+              <div class="col-xs-12 invite-form" ng-show="showInviteForm">
+                <h3>Add a new editor</h3>
+                <form class="form">
+                  <div class="form-item">
+                    <label>Search by username</label>
+                    <input class="form-control" placeholder="search ..." ng-model="invite.username"  ng-model-options="{ debounce: 500 }" ng-change="doSearch()"/>
+                  </div>
+                </form>
+                <div class="inviteUserResults">
+                  <table class="table table-bordered">
+                    <tr ng-repeat="user in invite.result">
+                      <td class="username"><img class="img-circle avatar" ng-src="{{$root.config.filesRoot + '/s/small/' + user.avatar.url || 'assets/img/avatar.png'}}"/><span class="displayname"><a ui-sref="account.view({slug: user.slug})">{{user.displayName}}</a></span></td>
+                      <td class="actions">
+                        <a class="btn btn-primary" ng-click="addPerson(user)">Add user</a>
+                      </td>
+                    </tr>
                   </table>
-                  <a href="#">Add user</a>
                 </div>
+                  <div class="form-item">
+                    <a href ng-click="showInviteForm=false">cancel</a>
+                  </div>
+                </form>
               </div>
             </div>
 

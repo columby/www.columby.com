@@ -65,51 +65,39 @@ exports.show = function(req, res) {
     include: [
       { model: models.File, as: 'avatar' },
       { model: models.File, as: 'headerImg' },
-      { model: models.File, as: 'files' },
-      //
-      // { model: models.User, as: 'users', include: [
-      //   { model: models.Account, as: 'account', where: { primary: true }, include: [
-      //     { model: models.File, as: 'avatar' },
-      //   ] }
-      // ]}
+      { model: models.File, as: 'files' }
     ]
   }).then(function(account) {
+    // Get categories associated to this account
     account.getCategories().then(function(categories){
-      // restructure categories
+      // Restructure categories to handle parent and child
       var c=[];
+      // Get all the parent categories
       for(var i=0;i<categories.length;i++){
         if (categories[i].dataValues.parent_id===null){
-          var _c=categories[ i].dataValues;
+          var _c = categories[ i].dataValues;
           _c.children = [];
           c.push(_c);
-          //delete categories[ i];
         }
       }
-      //console.log(c);
-      // console.log(categories.length);
-      // console.log(categories[ 0]);
-
+      // Get all the child categories and add them to their parent
       for(var i=0;i<categories.length;i++){
-      //  console.log(categories);
         if (categories[i].dataValues.parent_id !== null){
-          //console.log(categories[i].dataValues.parent_id);
-
+          // Find the parent location in the parent array.
           var selected;
           for (var k=0; k<c.length; k++){
-
-            if (c[ k].id===categories[i].dataValues.parent_id){
+            if (c[ k].id===categories[i].dataValues.parent_id) {
               selected=k;
-              //console.log('ppp', k);
             }
           }
-          //console.log(c[ selected]);
+          // Add the child to the parent category.
           c[ selected].children.push(categories[ i].dataValues);
         }
       }
-      //console.log(c);
-
+      // Add the categories to the account.
       account.categories = c;
 
+      // Get registries connected to the account
       account.getRegistries().then(function(registries){
 
         var a = {
@@ -130,22 +118,43 @@ exports.show = function(req, res) {
           categories: account.categories
         }
 
-        // for (var i=0; i<account.users.length;i++){
-        //   var u = account.users[ i].dataValues.account[0].dataValues;
-        //   u.role = account.users[ i].UserAccounts.dataValues.role;
-        //   delete u.UserAccounts;
-        //   delete u.plan;
-        //   delete u.uuid;
-        //   a.people.push(u);
-        // }
-
         a.registries = registries;
 
-        return res.json(a);
+        // Get users connected to this publication account
+        var sql=" SELECT " +
+        "    ua1.role AS role, " +
+        "    ua1.account_id AS account_id, " +
+        "    a.id AS id, " +
+        "    a.shortid AS shortid, " +
+        "    a.\"displayName\" AS displayname, " +
+        "    a.slug AS slug, " +
+        "    a.description AS description, " +
+        "    f.url AS avatar_url " +
+
+        "FROM user_accounts AS ua1 " +
+
+        "LEFT JOIN user_accounts AS ua2 ON " +
+        "    ua1.user_email=ua2.user_email " +
+
+        "LEFT JOIN \"Accounts\" AS a ON " +
+        "    ua2.account_id=a.id " +
+
+        "LEFT JOIN \"Files\" AS f ON " +
+        "    a.avatar_id = f.id " +
+
+        "WHERE  " +
+        "    ua1.account_id=" + a.id + " AND " +
+        "    ua2.role=1;";
+
+        models.sequelize.query(sql).then(function(people){
+          a.people =people[0];
+          return res.json(a);
+        }).catch(function(err){
+          return handleError(res,err);
+        });
       });
     });
   }).catch(function(err){
-    console.log('err', err);
     return handleError(res,err);
   });
 };
@@ -221,6 +230,28 @@ exports.destroy = function(req, res) {
 };
 
 
+exports.search = function(req,res) {
+  console.log(req.query);
+  if (!req.query.username) { return res.json({users: []})}
+
+  models.Account.findAll({
+    where: {
+      'primary': true,
+      displayName: {
+        ilike: '%'+req.query.username+'%'
+      }
+    },
+    include: [
+      {model: models.File, as: 'avatar'}
+    ],
+    limit: 10
+  }).then(function(users){
+    return res.json({users: users});
+  }).catch(function(err) {
+    return handleError(res,err);
+  });
+}
+
 // Add a file to a user account.
 exports.addFile = function(req,res){
   console.log(req.body);
@@ -237,7 +268,103 @@ exports.addFile = function(req,res){
   });
 };
 
+/**
+ * params: account_id, primary_id, role
+ **/
+exports.addUser = function(req,res){
+  var account_id = parseInt(req.params.id);
+  var primary_id = parseInt(req.body.primary_id);
 
+  if (!account_id) {
+    return handleError(res, 'Missing required parameter account id');
+  }
+  if (!primary_id) {
+    return handleError(res, 'Missing required parameter primary_id');
+  }
+
+  // find the primary account email based on primary id
+  models.user_accounts.find({
+    where: {
+      account_id: primary_id
+    }
+  }).then(function(result){
+    if (!result) { return res.json(result); }
+    var email = result.user_email;
+    console.log(email);
+    // Check for existing relation
+    models.user_accounts.findOne({
+      where: {
+        user_email: email,
+        account_id: account_id
+      }
+    }).then(function(result){
+      if (result && result.id){
+        console.log('Relation already exists.');
+        return res.json({status: 'error', msg: 'Relation already exists'});
+      } else {
+        var relation = {
+          account_id: account_id,
+          user_email: email,
+          role: 3
+        };
+        console.log('creating relation ', relation);
+        models.user_accounts.create(relation).then(function(result){
+          console.log(result);
+          return res.json(result);
+        }).catch(function(err){
+          return handleError(res,err);
+        });
+      }
+    }).catch(function(err){
+      return handleError(res,err);
+    })
+  });
+}
+
+
+/**
+ * params: account_id, primary_id, role
+ **/
+exports.removeUser = function(req,res){
+  var account_id = parseInt(req.params.id);
+  var primary_id = parseInt(req.body.primary_id);
+
+  if (!account_id) {
+    return handleError(res, 'Missing required parameter account id');
+  }
+  if (!primary_id) {
+    return handleError(res, 'Missing required parameter primary_id');
+  }
+
+  // find the primary account email based on primary id
+  models.user_accounts.find({
+    where: {
+      account_id: primary_id
+    }
+  }).then(function(result){
+    if (!result) { return res.json(result); }
+    var email = result.user_email;
+    console.log(email);
+    // Check for existing relation
+    models.user_accounts.findOne({
+      where: {
+        user_email: email,
+        account_id: account_id
+      }
+    }).then(function(result){
+      if (result && result.id){
+        console.log('Relation exists.');
+        result.destroy().then(function(result){
+          return res.json({status: 'ok', msg: result});
+        });
+      } else {
+        return res.json({status: 'error', msg: 'relation not found.'})
+      }
+    }).catch(function(err){
+      return handleError(res,err);
+    })
+  });
+}
 /**
  * @api {post} v2/account/:id/registry/:rid Update account registry
  * @apiName UpdateAccountRegistry
@@ -365,7 +492,7 @@ function addSubCategory(cb) {
 
 // Error handler
 function handleError(res, err) {
-  console.log('Account controller error: ', err.name);
+  console.log('Account controller error: ', err);
   if (err.name === 'SequelizeUniqueConstraintError') {
     return res.json({
       status: 'error',
