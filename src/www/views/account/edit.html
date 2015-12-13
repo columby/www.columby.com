@@ -7,6 +7,9 @@
     <div class="col-xs-12 page-title-container">
       <h1 class="page-title">{{account.displayName}}</h1>
       <h2 class="page-subtitle">Edit your organisation details</h2>
+      <div class="avatar">
+        <img class="img-circle" ng-src="{{ $root.config.filesRoot + '/s/small/' + account.avatar.url || '/assets/img/avatar.png'}}"/>
+      </div>
     </div>
   </div>
 </div>
