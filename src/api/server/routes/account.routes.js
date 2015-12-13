@@ -15,6 +15,13 @@ module.exports = function(app) {
     controller.index
   );
 
+  router.get('/search',
+    auth.checkJWT,
+    auth.checkUser,
+    auth.ensureAuthenticated,
+    controller.search
+  );
+
   router.get('/:slug',
     auth.checkJWT,
     auth.checkUser,
@@ -35,6 +42,22 @@ module.exports = function(app) {
     auth.ensureAuthenticated,
     permission.canUpdate,
     controller.addFile
+  );
+
+  router.post('/:id/addUser',
+    auth.checkJWT,
+    auth.checkUser,
+    auth.ensureAuthenticated,
+    permission.canUpdate,
+    controller.addUser
+  );
+
+  router.post('/:id/removeUser',
+    auth.checkJWT,
+    auth.checkUser,
+    auth.ensureAuthenticated,
+    permission.canUpdate,
+    controller.removeUser
   );
 
   router.put('/:id',

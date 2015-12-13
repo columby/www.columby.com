@@ -131,7 +131,7 @@
             <div class="panel-body">
               <div class="empty" ng-show="user.organisations.length<1"><p>No organisations added yet.</p></div>
               <ul>
-                <li ng-repeat="organisation in user.organisations"><a ui-sref="account.edit({slug: organisation.slug})">{{organisation.displayName}}</a></li>
+                <li ng-repeat="organisation in user.organisations"><a ui-sref="account.edit({slug: organisation.slug})"><img src="{{ $root.config.filesRoot + '/s/thumbnail/' + organisation.avatar_url}}" class="img-rounded avatar"/> {{organisation.displayName}}</a></li>
               </ul>
             </div>
           </div>

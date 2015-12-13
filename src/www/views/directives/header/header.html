@@ -10,8 +10,13 @@
         <li ng-hide="$root.user.email"><a href ng-click="login()">Sign in</a></li>
         <li dropdown on-toggle="toggleUsermenu(open)" ng-show="$root.user.email">
           <a href class="dropdown-toggle avatar" dropdown-toggle>
-            <span class="username">{{$root.user.primary.displayName}}</span>
-            <img class="img-circle avatar" ng-src="{{$root.config.filesRoot + '/s/small/' + $root.user.primary.avatar_url || '/assets/img/avatar.png'}}"/>  <!-- <span class="caret"></span> -->
+            <div class="username-container">
+              <span class="username">{{$root.user.primary.displayName}}</span><br>
+              <span class="subname">Profile &amp; Settings</span>
+            </div>
+            <div class="user-image-container">
+              <img class="img-circle avatar" ng-src="{{$root.config.filesRoot + '/s/small/' + $root.user.primary.avatar_url || '/assets/img/avatar.png'}}"/>
+            </div>
           </a>
           <ul class="dropdown-menu usermenu">
             <li><a ui-sref="account.view({slug: $root.user.primary.slug})">Your profile</a></li>

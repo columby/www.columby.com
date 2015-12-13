@@ -20,7 +20,7 @@
       }
 
       //
-      //$log.debug('a', account);
+      $log.debug('a', account);
       $scope.account = account;
       //$scope.account.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.account.avatar.filename;
 
@@ -43,6 +43,24 @@
 
       //
       $scope.registries.active = $scope.account.registries;
+
+
+      // Set rolename for people
+      if (account.people.length > 0) {
+        angular.forEach(account.people, function(value,key){
+          if (value.role === 2) {
+            account.people[ key].roleName = 'Admin';
+            if ($rootScope.user.primary.id === value.id) {
+              $scope.isAdmin=true;
+            }
+          } else if (value.role === 3) {
+            account.people[ key].roleName = 'Editor';
+            if ($rootScope.user.primary.id === value.id) {
+              $scope.isEditor=true;
+            }
+          }
+        });
+      }
 
       //
       function updateHeaderImage(){
@@ -76,6 +94,63 @@
           });
         }
       };
+
+
+
+      $scope.openInviteForm = function() {
+        $scope.showInviteForm = true;
+      };
+      $scope.invite = {
+        username: null
+      };
+
+      $scope.doSearch = function(){
+        $log.debug('search ' + $scope.invite.username);
+        AccountSrv.search({username: $scope.invite.username}, function(result) {
+          $log.debug(result);
+          $scope.invite.result=result.users;
+        });
+      };
+
+      $scope.addPerson = function(user) {
+        AccountSrv.addUser({id:account.id}, {
+          account_id: account.id,
+          primary_id: user.id
+        }, function(result){
+          if (result.id) {
+            var a = {
+              displayname: user.displayName,
+              slug: user.slug,
+              role: 3,
+              roleName: 'Editor'
+            };
+            if (user.avatar && user.avatar.url) {
+              a.avatar_url = user.avatar.url;
+            }
+            account.people.push(a);
+            delete $scope.invite.username;
+            $scope.invite.result = {};
+            delete $scope.showInviteForm;
+            ngNotify.set(user.displayName + ' was added as an editor to the publication account ' + account.displayName, 'success');
+          } else {
+            $log.debug(result);
+            ngNotify.set(user.displayName + ' is already an editor for the publication account ' + account.displayName, 'warning');
+          }
+        });
+      };
+
+      $scope.revokeUserAccess = function(user){
+        AccountSrv.removeUser({id: account.id}, {
+          primary_id: user.id
+        }, function(result){
+          console.log(result);
+          var idx = $scope.account.people.indexOf(user);
+          console.log(idx);
+          $scope.account.people.splice(idx, 1);
+          ngNotify.set('Revoked access for user ' + user.displayname + ' for the publication account ' + account.displayName, 'success');
+        });
+      };
+
 
       $scope.openFileBrowser = function() {
         $rootScope.$broadcast('fm-open', {

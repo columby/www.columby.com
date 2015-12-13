@@ -39,7 +39,7 @@
 .page-header {
   margin: 0 0 1.5em 0;
   border: 0;
-  padding: 50px 0 50px 0;
+  padding: 50px 0 0 0;
   background-image: url('/assets/img/default-header.png');
   background-image: linear-gradient(transparent,transparent), url('/assets/img/default-header.svg');
   background-position: 50% 50%;
@@ -64,20 +64,23 @@
 			}
 	  }
 	}
+  .page-title-container {
+
+  }
   .avatar {
-		width: 125px;
-		margin: 0 auto;
-    -ms-transform: translate(0,110px);
-    -webkit-transform: translate(0,110px);
-    transform: translate(0,110px);
+		width: 100%;
+    height:150px;
+    text-align: center;
+    -ms-transform: translate(0,40px);
+    -webkit-transform: translate(0,40px);
+    transform: translate(0,40px);
+    clear: both;
     img {
-      display: block;
-      margin: 0 auto;
-      width: 125px;
-      height: 125px;
+      width: 150px;
+      height: 150px;
       /* background-color: #eee; */
-      border: 1px solid #eee;
-      border: 1px solid rgba(112, 112, 112, 0.2);
+      border: 5px solid #eee;
+      border: 5px solid rgba(112, 112, 112, 0.2);
     }
   }
 }

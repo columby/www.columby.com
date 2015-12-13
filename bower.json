@@ -2,20 +2,22 @@
   "name": "columby-ui",
   "version": "1.2.1",
   "dependencies": {
-
     "jquery": "~2.1.4",
-    "bootstrap": "~3.3.5",
-
+    "a0-angular-storage": "~0.0.12",
     "angular": "~1.4.7",
     "angular-animate": "~1.4.7",
     "angular-bootstrap": "~0.13.0",
+    "angular-cookies": "~1.4.7",
     "angular-easy-social-share": "*",
     "angular-gettext": "~2.1.2",
+    "angular-jwt": "~0.0.9",
     "angular-resource": ">=1.4.*",
     "angular-sanitize": ">=1.4.*",
     "angular-slugify": "~1.0.1",
     "angular-ui-router": "~0.2.15",
-
+    "auth0-angular": "~4.0.5",
+    "auth0-lock": "~7.12.5",
+    "bootstrap": "~3.3.5",
     "es5-shim": "~4.3.1",
     "font-awesome": ">=4.4.0",
     "json3": "~3.3.2",
@@ -26,13 +28,7 @@
     "ngprogress": "~1.1.1",
     "satellizer": "~0.13.0",
     "textAngular": "~1.4.3",
-    "xml2json": "~1.1.1",
-
-    "angular-cookies": "~1.4.7",
-    "auth0-lock": "~7.11.1",
-    "auth0-angular": "~4.0.5",
-    "a0-angular-storage": "~0.0.12",
-    "angular-jwt": "~0.0.9"
+    "xml2json": "~1.1.1"
   },
   "devDependencies": {
     "angular-mocks": ">=1.4.*",

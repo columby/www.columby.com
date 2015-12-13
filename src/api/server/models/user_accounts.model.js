@@ -23,6 +23,10 @@ module.exports = function(sequelize, DataTypes) {
      **/
     role: DataTypes.INTEGER,
 
+    user_email: DataTypes.STRING,
+
+    account_id: DataTypes.INTEGER,
+
     created_at:{
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
