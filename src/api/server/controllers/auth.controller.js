@@ -79,6 +79,7 @@ exports.checkUser = function(req,res,next) {
 exports.ensureAuthenticated = function(req,res,next) {
   console.log('Ensure authenticated');
   if (req.user && req.user.email){
+    console.log('Authenticated. ');
     next();
   } else {
     return res.json({status: 'error', message: 'Not authenticated'});

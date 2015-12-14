@@ -93,32 +93,41 @@
             </div>
 
             <!-- Categories panel -->
-            <div class="profile-panels" ng-switch-when="categories">
-              <div class="panel panel-default panel-categories">
-                <div class="panel-heading">Organisation categories</div>
-                <div class="panel-body">
-                  <p>Organise datasets by adding categories.</p>
-                  <div class="category-list">
-                    <form class="novalidate" role="form" name="categoryForm">
-                      <div class="form-group">
-                        <label for="category">Add a new category</label>
-                        <input type="text" class="form-control" id="category" ng-model="newCategory"></input>
-                      </div>
-                      <button class="btn btn-default btn-blue" ng-disabled="categoryForm.$pristine || addingCategory" ng-click="addCategory(newCategory)"><span class="btn-text" ng-hide="addingCategory">Add category</span><i class="fa fa-spinner fa-spin" ng-show="addingCategory"></i></span></button>
-                    </form>
-                    <p>Categories: </p>
-                    <ul class="categories">
-                      <li ng-repeat="category in account.categories">{{category.name}} ({{category.count}})
-                        <a href ng-click="deleteCategory(category)" ng-hide="category.children.length>0"><i class="fa fa-trash"></i></a>
-                        <ul class="subcategories">
-                          <li ng-repeat="subcat in category.children">{{subcat.name}} ({{subcat.count}})
-                            <a href ng-click="deleteCategory(subcat)"><i class="fa fa-trash"></i></a>
-                          </li>
-                        </ul>
-                      </li>
+            <div class="tab-categories row" ng-switch-when="categories">
+              <div class="col-xs-12">
+                <h3 class="tab-title">Categories</h3>
+              </div>
+
+              <div class="col-xs-4 add-category">
+                <form class="novalidate" role="form" name="categoryForm">
+                  <div class="form-group">
+                    <label for="category">New category</label>
+                    <input type="text" class="form-control" id="category" ng-model="newCategory.name"></input>
                   </div>
-                  <a href ng-click="showStandardCategoriesModal()">Import a standard category set</a>
-                </div>
+                  <div class="form-group">
+                    <label for="parent">Parent</label>
+                    <select class="form-control" ng-model="newCategory.parent">
+                      <option ng-selected="{{category.id == newCategory.parent}}" ng-repeat="category in account.categories | orderBy: 'name'" value="{{category.id}}">{{category.name}}</option>
+                    </select>
+                  </div>
+                  <button class="btn btn-default btn-primary" ng-disabled="categoryForm.$pristine || addingCategory" ng-click="addCategory(newCategory)"><span class="btn-text" ng-hide="addingCategory">Add category</span><i class="fa fa-spinner fa-spin" ng-show="addingCategory"></i></span></button>
+                </form>
+                <a href ng-click="showStandardCategoriesModal()" class="import">Import a standard category set</a>
+              </div>
+
+              <div class="col-xs-8 categories">
+                <ul class="categories-list">
+                  <li ng-repeat="category in account.categories | orderBy: 'name'">
+                    <a href ng-click="deleteCategory(category)" ng-hide="category.children.length>0" class="btn btn-danger btn-xs delete-category"><i class="fa fa-trash"></i></a>
+                    <span class="category-name">{{category.name}}</span> <span class="category-count">({{category.count}})</span>
+                    <ul class="subcategories">
+                      <li ng-repeat="subcat in category.children | orderBy: 'name'">
+                        <a href ng-click="deleteCategory(subcat)" class="btn btn-danger btn-xs delete-category"><i class="fa fa-trash"></i></a>
+                        <span class="category-name">{{subcat.name}}</span> <span class="category-count">({{subcat.count}})</span>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
               </div>
             </div>
 

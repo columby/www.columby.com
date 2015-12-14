@@ -62,6 +62,8 @@
         });
       }
 
+
+
       //
       function updateHeaderImage(){
         $scope.account.headerImg.url = appConstants.filesRoot + '/a/' + $scope.account.headerImg.shortid + '/' + $scope.account.headerImg.filename;
@@ -206,14 +208,36 @@
 
       // Category functions
       $scope.addCategory = function(category) {
-        $log.debug('add category: ' + category);
+        // Set a flag to prevent double deletion
+        if ($scope.addCategoryInProgress) {
+          $log.debug('inprogress');
+          return;
+        }
+        $scope.addCategoryInProgress = true;
+
+        $log.debug('add category: ', category);
         var c = {
           account_id: account.id,
-          name: category
+          name: category.name,
+          parent_id: category.parent
         };
+
         CategorySrv.save(c, function(result){
-          $scope.account.categories.push(result);
-          $log.debug(result);
+          // Add to right spot in the categories list
+          if (!c.parent_id) {
+            $scope.account.categories.push(result);
+          } else {
+            var keepGoing=true;
+            angular.forEach($scope.account.categories, function(value, key){
+              if (parseInt(value.id) === parseInt(c.parent_id)) {
+                $scope.account.categories[ key].children.push(result);
+              }
+            });
+          }
+
+          delete $scope.addCategoryInProgress;
+          ngNotify.set('Category added.','notice');
+
         });
       };
 
@@ -238,11 +262,41 @@
         });
       };
 
-      $scope.deleteCategory = function(index){
-        $log.debug(index);
-        CategorySrv.delete({id:$scope.account.categories[ index].id}, function(result){
-          $log.debug(result);
-          $scope.account.categories.splice(index, 1);
+      $scope.deleteCategory = function(category) {
+        // Set a flag to prevent double deletion
+        if ($scope.deleteInProgress) {
+          $log.debug('inprogress');
+          return;
+        }
+        $scope.deleteInProgress = true;
+
+        // Delete the category from the server
+        CategorySrv.delete({ id: category.id }, function(result){
+          // Check the result
+
+          // Delete the category from the scope
+          var keepGoing = true;
+          angular.forEach($scope.account.categories, function(value, key){
+            if(keepGoing) {
+              if (parseInt(value.id) === parseInt(category.id)) {
+                $scope.account.categories.splice(key, 1);
+                keepGoing=false;
+              }
+              if ($scope.account.categories[ key] && $scope.account.categories[ key].children){
+                angular.forEach($scope.account.categories[ key].children, function(v,k){
+                  if(keepGoing) {
+                    if (parseInt(v.id) === parseInt(category.id)) {
+                      $scope.account.categories[ key].children.splice(k, 1);
+                      keepGoing=false;
+                    }
+                  }
+                });
+              }
+            }
+          });
+          // Turn of the flag
+          delete $scope.deleteInProgress;
+          ngNotify.set('Category deleted.','notice');
         });
       };
     });

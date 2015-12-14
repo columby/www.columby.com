@@ -21,13 +21,17 @@
           </span>
         </div>
         <div class="tag-add">
-          <p>Add a new tag: </p>
-          <form name="addTagForm">
-            <div class="col-md-6">
-              <input class="form-control" ng-model="newTag.text" ng-change="slugifyTag()"/>
+          <form class="form-horizontal" name="addTagForm">
+            <div class="form-group">
+              <label for="title" class="col-xs-2 control-label">Add a new tag</label>
+              <div class="col-xs-10">
+                <input class="form-control" name="title" ng-model="newTag.text" ng-change="slugifyTag()" placeholder="New tagname ... "/>
+              </div>
             </div>
-            <div class="col-md-3">
-              <button class="btn btn-default btn-primary" ng-click="addTag()" ng-disabled="addTagForm.$pristine">Add tag</button>
+            <div class="form-group">
+              <div class="col-xs-offset-2 col-xs-10">
+                <button class="btn btn-default btn-primary" ng-click="addTag()" ng-disabled="addTagForm.$pristine">Add tag</button>
+              </div>
             </div>
           </form>
         </div>
@@ -38,11 +42,19 @@
     <div class="category-wrapper">
       <div class="col-xs-12">
         <h3>Categories</h3>
-        <div class="categories row">
-          <div class="col-md-3 category" ng-repeat="category in dataset.account.categories">
-            <input type="checkbox" id="{{category.id}}" ng-checked="activeCategory(category)" ng-click="toggleSelectedCategory(category)">
-            <label for="{{category.id}}">{{category.name}}</label>
-          </div>
+        <div class="categories">
+          <ul class="category">
+            <li ng-repeat="category in dataset.account.categories | orderBy: 'name'">
+              <input type="checkbox" id="{{category.id}}" ng-checked="activeCategory(category)" ng-click="toggleSelectedCategory(category)">
+              <label for="{{category.id}}">{{category.name}}</label>
+              <ul ng-show="activeCategory(category)">
+                <li ng-repeat="subcat in category.children | orderBy: 'name'">
+                  <input type="checkbox" id="{{subcat.id}}" ng-checked="activeCategory(subcat)" ng-click="toggleSelectedCategory(subcat)">
+                  <label for="{{subcat.id}}">{{subcat.name}}</label>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
         <p class="small">Manage dataset categories at the account administration page</p>
       </div>
