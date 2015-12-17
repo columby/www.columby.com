@@ -6,7 +6,6 @@ angular.module('columbyApp', [
   'ngAnimate',
   'ui.bootstrap',
   'angular-jwt',
-  'satellizer',
   'slugifier',
   'ngFileUpload',
   'textAngular',
