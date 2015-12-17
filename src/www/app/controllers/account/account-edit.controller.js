@@ -6,7 +6,9 @@
 
     .controller('AccountEditCtrl', function($log, account, $rootScope, $scope, $state, $stateParams, AccountSrv, ngNotify, Upload, FileSrv, RegistrySrv,appConstants,CategorySrv,$modal) {
 
+      // Initialization
       $scope.activePanel = 'profile';
+      $scope.newCategory = {};
 
       //
       if (!account.id){
@@ -124,7 +126,8 @@
               displayname: user.displayName,
               slug: user.slug,
               role: 3,
-              roleName: 'Editor'
+              roleName: 'Editor',
+              id: user.id
             };
             if (user.avatar && user.avatar.url) {
               a.avatar_url = user.avatar.url;
@@ -207,7 +210,7 @@
       };
 
       // Category functions
-      $scope.addCategory = function(category) {
+      $scope.addCategory = function() {
         // Set a flag to prevent double deletion
         if ($scope.addCategoryInProgress) {
           $log.debug('inprogress');
@@ -215,7 +218,8 @@
         }
         $scope.addCategoryInProgress = true;
 
-        $log.debug('add category: ', category);
+        $log.debug('add category: ', $scope.newCategory);
+        var category = $scope.newCategory;
         var c = {
           account_id: account.id,
           name: category.name,
@@ -230,12 +234,15 @@
             var keepGoing=true;
             angular.forEach($scope.account.categories, function(value, key){
               if (parseInt(value.id) === parseInt(c.parent_id)) {
+                $scope.account.categories[ key].children = $scope.account.categories[ key].children || [];
                 $scope.account.categories[ key].children.push(result);
               }
             });
           }
 
+          $scope.newCategory = {};
           delete $scope.addCategoryInProgress;
+
           ngNotify.set('Category added.','notice');
 
         });
