@@ -42,9 +42,11 @@ exports.create = function(req,res){
   } else {
     var category = {
       account_id: parseInt(req.body.account_id),
-      name: req.body.name,
-      parent_id: parseInt(req.body.parent_id)
+      name: req.body.name
     };
+    if (req.body.parent_id) {
+      category.parent_id = parseInt(req.body.parent_id);
+    }
     models.Category.create(category).then(function(model){
       return res.json(model);
     }).catch(function(err){
