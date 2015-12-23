@@ -1,11 +1,11 @@
-$VERSION=1.2.1
+$VERSION=1.2.2
 
 mkdir /srv/columby/$VERSION
 cd /srv/columby/$VERSION
 
 git clone https://github.com/columby/www.columby.com.git
 
-npm install 
+npm install
 bower install
 gulp build
 
