@@ -41,9 +41,12 @@ exports.create = function(req,res){
     return handleError(res,'No account id provided.');
   } else {
     var category = {
-      account_id: req.body.account_id,
+      account_id: parseInt(req.body.account_id),
       name: req.body.name
     };
+    if (req.body.parent_id) {
+      category.parent_id = parseInt(req.body.parent_id);
+    }
     models.Category.create(category).then(function(model){
       return res.json(model);
     }).catch(function(err){
@@ -81,7 +84,9 @@ exports.update = function(req,res){
  * @param req
  * @param res
  */
-exports.destroy = function(req,res){
+exports.destroy = function(req,res) {
+  console.log('Destroying category id: ' + req.params.id);
+
   if (req.params.id){
     models.Category.findById(req.params.id).then(function(model){
       // todo: delete associated datasets
@@ -115,7 +120,7 @@ exports.getDatasets = function(req,res){
   var sql = 'SELECT COUNT(dataset_id) from "dataset_categories" WHERE category_id=' + req.params.id;
 console.log(sql);
   models.sequelize.query(sql).then(function(result){
-    
+
     out.count = result[ 0][0].count;
 
     if (out.count === 0){

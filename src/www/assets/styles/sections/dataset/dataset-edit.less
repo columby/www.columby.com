@@ -107,11 +107,53 @@ body.dataset.create {
 }
 
 .dataset-modal-options {
-  .categories {
-    .category {
-      label {
-        max-width: 80%;
+  h3 {
+    color: #000;
+  }
+  .tags-wrapper {
+    .tags-list {
+      margin-bottom: 1.5em;
+    }
+    .tag-add {
+      .control-label {
+        padding-top: 0;
+        font-family: @sans-serif;
       }
+    }
+  }
+  .categories {
+    font-family: @sans-serif;
+    font-size: 14px;
+    ul.category {
+      list-style-type: none;
+      padding: 0;
+      li {
+        font-weight: 600;
+        line-height: 1.5;
+        font-size: 14px;
+        margin-bottom: 5px;
+        display: block;
+        label {
+          margin: 0 0 0 10px;
+          line-height: 1.5;
+        }
+        ul {
+          list-style-type: none;
+          padding-left: 30px;
+          li {
+            margin-bottom: 0;
+            display: inline-block;
+            margin-right: 20px;
+            label {
+              font-weight: 200;
+              font-size: 12px;
+              margin: 0;
+            }
+          }
+        }
+      }
+
+
     }
   }
 }

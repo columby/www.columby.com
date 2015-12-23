@@ -3,102 +3,125 @@
 </div>
 
 <div class="modal-body standard-categories">
-  <div>
+  <div class="col-=xs-12">
     <p>Existing standard category lists: </p>
     <div class="btn-group">
-        <label class="btn btn-primary" ng-model="selectedSet" btn-radio="'overheid.nl'">Overheid.nl</label>
-        <!-- <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Middle'">Middle</label>
-        <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Right'">Right</label> -->
+      <label class="btn btn-primary" ng-model="selectedSet" btn-radio="'overheid.nl'">Overheid.nl</label>
+      <!-- <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Middle'">Middle</label>
+      <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Right'">Right</label> -->
     </div>
     <div class="list-details" ng-show="selectedSet">
       <p>The following categories will be created automatically based on your selection for: {{selectedSet}}</p>
       <ul>
         <li>Bestuur</li>
-        <ul>
-          <li>Organisatie en beleid</li>
-          <li>Gemeenten</li>
-          <li>Rijksoverheid</li>
-          <li>Provincies</li>
-          <li>Waterschappen</li>
-          <li>Parlement</li>
-        </ul>
+        <li>
+          <ul>
+            <li>Organisatie en beleid</li>
+            <li>Gemeenten</li>
+            <li>Rijksoverheid</li>
+            <li>Provincies</li>
+            <li>Waterschappen</li>
+            <li>Parlement</li>
+          </ul>
+        </li>
         <li>Cultuur en recreatie</li>
-        <ul>
-          <li>kunst</li>
-          <li>Media</li>
-          <li>Cultuur</li>
-          <li>Recreatie</li>
-        </ul>
+        <li>
+          <ul>
+            <li>kunst</li>
+            <li>Media</li>
+            <li>Cultuur</li>
+            <li>Recreatie</li>
+          </ul>
+        </li>
         <li>Economie</li>
-        <ul>
-          <li>Transport</li>
-          <li>Industrie</li>
-          <li>Handel</li>
-          <li>Toerisme</li>
-          <li>ICT</li>
-        </ul>
+        <li>
+          <ul>
+            <li>Transport</li>
+            <li>Industrie</li>
+            <li>Handel</li>
+            <li>Toerisme</li>
+            <li>ICT</li>
+          </ul>
+        </li>
         <li>Financiën</li>
-        <ul>
-          <li>Begroting</li>
-          <li>Belasting</li>
-        </ul>
+        <li>
+          <ul>
+            <li>Begroting</li>
+            <li>Belasting</li>
+          </ul>
+        </li>
         <li>Huisvesting</li>
-        <ul>
-          <li>Bouwen en verbouwen</li>
-        </ul>
+        <li>
+          <ul>
+            <li>Bouwen en verbouwen</li>
+          </ul>
+        </li>
         <li>Internationaal</li>
-        <ul>
-          <li>Europese zaken</li>
-          <li>Ontwikkelingssamenwerking</li>
-        </ul>
+        <li>
+          <ul>
+            <li>Europese zaken</li>
+            <li>Ontwikkelingssamenwerking</li>
+          </ul>
+        </li>
         <li>Landbouw</li>
         <li>Migratie en integratie</li>
         <li>Natuur en milieu</li>
-        <ul>
-          <li>Bodem</li>
-          <li>Natuur- en landschapsbeheer</li>
-          <li>Lucht</li>
-          <li>Energie</li>
-          <li>Stoffen</li>
-          <li>Afval</li>
-          <li>Geluid</li>
-        </ul>
+        <li>
+          <ul>
+            <li>Bodem</li>
+            <li>Natuur- en landschapsbeheer</li>
+            <li>Lucht</li>
+            <li>Energie</li>
+            <li>Stoffen</li>
+            <li>Afval</li>
+            <li>Geluid</li>
+          </ul>
+        </li>
         <li>Onderwijs en wetenschap</li>
-        <ul>
-          <li>Beroepsonderwijs</li>
-          <li>Basisonderwijs</li>
-          <li>Voortgezet onderwijs</li>
-          <li>Hoger onderwijs</li>
-          <li>Overige vormen van onderwijs</li>
-          <li>Onderzoek en wetenschap</li>
-        </ul>
+        <li>
+          <ul>
+            <li>Beroepsonderwijs</li>
+            <li>Basisonderwijs</li>
+            <li>Voortgezet onderwijs</li>
+            <li>Hoger onderwijs</li>
+            <li>Overige vormen van onderwijs</li>
+            <li>Onderzoek en wetenschap</li>
+          </ul>
+        </li>
         <li>Openbare orde en veiligheid</li>
-        <ul>
-          <li>Politie, brandweer en hulpdiensten</li>
-          <li>Recht</li>
-        </ul>
+        <li>
+          <ul>
+            <li>Politie, brandweer en hulpdiensten</li>
+            <li>Recht</li>
+          </ul>
+        </li>
         <li>Ruimte en infrastructuur</li>
-        <ul>
-          <li>Ruimtelijke ordening</li>
-          <li>Waterkeringen en waterbeheer</li>
-          <li>Netwerken</li>
-        </ul>
+        <li>
+          <ul>
+            <li>Ruimtelijke ordening</li>
+            <li>Waterkeringen en waterbeheer</li>
+            <li>Netwerken</li>
+          </ul>
+        </li>
         <li>Sociale zekerheid</li>
         <li>Verkeer</li>
-        <ul>
-          <li>Water</li>
-          <li>Weg</li>
-          <li>Luchtvaart</li>
-        </ul>
+        <li>
+          <ul>
+            <li>Water</li>
+            <li>Weg</li>
+            <li>Luchtvaart</li>
+          </ul>
+        </li>
         <li>Werk</li>
         <li>Zorg en gezondheid</li>
-        <ul>
-          <li>Gezondheidsrisico's</li>
-        </ul>
+        <li>
+          <ul>
+            <li>Gezondheidsrisico's</li>
+          </ul>
+        </li>
       </ul>
       <a href="https://data.overheid.nl/lijst_themas" target="_blank">Details op https://data.overheid.nl/lijst_themas</a>
     </div>
-
   </div>
 </div>
 

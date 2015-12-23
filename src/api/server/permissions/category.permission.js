@@ -32,7 +32,7 @@ function validateAccountAccess(user, account_id, cb) {
 
 exports.canCreate = function(req,res,next){
   if (!req.jwt || !req.jwt.sub) { return res.json({status: 'Error', msg: 'No access token provided'}); }
-  if (!req.user || !req.user.id) { return res.json({status: 'Error', msg: 'No user found'}); }
+  if (!req.user) { return res.json({status: 'Error', msg: 'No user found'}); }
   if (!req.body.account_id) { return res.json({status: 'Error', msg: 'Missing required parameter account_id'}); }
   if (req.user.admin) { return next(); }
 
@@ -45,7 +45,7 @@ exports.canCreate = function(req,res,next){
 
 exports.canUpdate = function(req,res,next){
   if (!req.jwt || !req.jwt.sub) { return res.status(401).json({status: 'Error', msg: 'No access token provided'}); }
-  if (!req.user || !req.user.id) { return res.status(401).json({status: 'Error', msg: 'No user found'}); }
+  if (!req.user) { return res.status(401).json({status: 'Error', msg: 'No user found'}); }
   if (!req.body.account_id) { return res.status(401).json({status: 'Error', msg: 'Missing required parameter account_id'}); }
   if (req.user.admin) { return next(); }
 
@@ -56,8 +56,9 @@ exports.canUpdate = function(req,res,next){
 }
 
 exports.canDelete = function(req,res,next){
+  console.log('Checking can delete category.');
   if (!req.jwt || !req.jwt.sub) { return res.json({status: 'Error', msg: 'No access token provided'}); }
-  if (!req.user || !req.user.id) { return res.json({status: 'Error', msg: 'No user found'}); }
+  if (!req.user) { return res.json({status: 'Error', msg: 'No user found'}); }
   if (!req.params.id) { return res.json({status: 'Error', msg: 'Missing required parameter id'}); }
   if (req.user.admin) { return next(); }
 

@@ -1,32 +1,30 @@
-<div class="header wrapper" ng-style="headerStyle">
-  <div class="container" >
-      <h1>{{category.name}}</h1>
-      <a ui-sref="account.view({slug: account.slug})"><h2 ng-bind-html="account.displayName"></h2></a>
-      <div class="registries">
-        <div class="col-md-1" ng-repeat="registry in account.registries">
-          <img class="img-responsive img-circle registry-icon" ng-src="{{registry.icon || 'assets/img/avatar.png'}}" popover="{{registry.title}}" popover-trigger="mouseenter" popover-placement="bottom"/>
-        </div>
-      </div>
-      <div class="avatar">
-        <img class="img-circle" ng-src="{{account.avatar.url || '/assets/img/avatar.png'}}"/>
-      </div>
+<div class="page-header" ng-style="headerStyle">
+  <div class="container">
+    <div class="col-xs-12 page-title-container">
+      <h1 class="page-title">{{category.name}}</h1>
+    </div>
+
+    <div class="avatar">
+      <a ui-sref="account.view({slug: '{{account.slug}}'})">
+        <img class="img-circle" ng-src="{{ $root.config.filesRoot + '/s/small/' + account.avatar.url || '/assets/img/avatar.png'}}"/>
+      </a>
     </div>
   </div>
 </div>
 
-<div class="content wrapper">
+<div class="page-content">
   <!-- Dataset Description -->
   <div class="description-wrapper">
     <div class="container">
-      <div class="col-md-12">
+      <div class="col-xs-12">
         <div class="description" ng-bind-html="account.description || '<p>No account description yet.</p>'"></div>
       </div>
     </div>
   </div>
 
-  
+
   <!-- Datasets listing -->
-  <div class="datasets wrapper">
+  <div class="datasets-wrapper">
     <div class="container">
 
       <div class="col-md-12 publications">

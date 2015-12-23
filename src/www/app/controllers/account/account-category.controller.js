@@ -7,10 +7,6 @@
     $scope.datasets = datasets;
     $scope.category = category;
 
-    if ($scope.account.avatar){
-      $scope.account.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.account.avatar.filename;
-    }
-
   }
 );
 })();

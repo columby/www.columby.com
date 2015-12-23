@@ -1,6 +1,6 @@
 {
   "name": "columby-ui",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "dependencies": {
 
     "jquery": "~2.1.4",
@@ -23,13 +23,12 @@
     "ng-file-upload": "~10.0.2",
     "ng-notify": "~0.7.1",
     "ng-tags-input": "~3.0.0",
-    "ngprogress": "~1.1.1",
-    "satellizer": "~0.13.0",
+    "ngprogress": "~1.1.2",
     "textAngular": "~1.4.3",
     "xml2json": "~1.1.1",
 
     "angular-cookies": "~1.4.7",
-    "auth0-lock": "~7.11.1",
+    "auth0-lock": "~7.12.5",
     "auth0-angular": "~4.0.5",
     "a0-angular-storage": "~0.0.12",
     "angular-jwt": "~0.0.9"

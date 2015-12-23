@@ -9,6 +9,6 @@
   "awsEndpoint": "https://s3.amazonaws.com/columby/",
   "auth0": {
   	"domain": "columby.eu.auth0.com",
-  	"clientID": "12345"
+  	"clientID": "OHzNryaiHXZjBQF2KgwgxygoZ44MW4Ju"
   }
 }

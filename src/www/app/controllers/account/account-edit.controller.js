@@ -6,7 +6,9 @@
 
     .controller('AccountEditCtrl', function($log, account, $rootScope, $scope, $state, $stateParams, AccountSrv, ngNotify, Upload, FileSrv, RegistrySrv,appConstants,CategorySrv,$modal) {
 
+      // Initialization
       $scope.activePanel = 'profile';
+      $scope.newCategory = {};
 
       //
       if (!account.id){
@@ -20,7 +22,7 @@
       }
 
       //
-      //$log.debug('a', account);
+      $log.debug('a', account);
       $scope.account = account;
       //$scope.account.avatar.url = appConstants.filesRoot + '/image/small/' + $scope.account.avatar.filename;
 
@@ -43,6 +45,26 @@
 
       //
       $scope.registries.active = $scope.account.registries;
+
+
+      // Set rolename for people
+      if (account.people.length > 0) {
+        angular.forEach(account.people, function(value,key){
+          if (value.role === 2) {
+            account.people[ key].roleName = 'Admin';
+            if ($rootScope.user.primary.id === value.id) {
+              $scope.isAdmin=true;
+            }
+          } else if (value.role === 3) {
+            account.people[ key].roleName = 'Editor';
+            if ($rootScope.user.primary.id === value.id) {
+              $scope.isEditor=true;
+            }
+          }
+        });
+      }
+
+
 
       //
       function updateHeaderImage(){
@@ -76,6 +98,64 @@
           });
         }
       };
+
+
+
+      $scope.openInviteForm = function() {
+        $scope.showInviteForm = true;
+      };
+      $scope.invite = {
+        username: null
+      };
+
+      $scope.doSearch = function(){
+        $log.debug('search ' + $scope.invite.username);
+        AccountSrv.search({username: $scope.invite.username}, function(result) {
+          $log.debug(result);
+          $scope.invite.result=result.users;
+        });
+      };
+
+      $scope.addPerson = function(user) {
+        AccountSrv.addUser({id:account.id}, {
+          account_id: account.id,
+          primary_id: user.id
+        }, function(result){
+          if (result.id) {
+            var a = {
+              displayname: user.displayName,
+              slug: user.slug,
+              role: 3,
+              roleName: 'Editor',
+              id: user.id
+            };
+            if (user.avatar && user.avatar.url) {
+              a.avatar_url = user.avatar.url;
+            }
+            account.people.push(a);
+            delete $scope.invite.username;
+            $scope.invite.result = {};
+            delete $scope.showInviteForm;
+            ngNotify.set(user.displayName + ' was added as an editor to the publication account ' + account.displayName, 'success');
+          } else {
+            $log.debug(result);
+            ngNotify.set(user.displayName + ' is already an editor for the publication account ' + account.displayName, 'warning');
+          }
+        });
+      };
+
+      $scope.revokeUserAccess = function(user){
+        AccountSrv.removeUser({id: account.id}, {
+          primary_id: user.id
+        }, function(result){
+          console.log(result);
+          var idx = $scope.account.people.indexOf(user);
+          console.log(idx);
+          $scope.account.people.splice(idx, 1);
+          ngNotify.set('Revoked access for user ' + user.displayname + ' for the publication account ' + account.displayName, 'success');
+        });
+      };
+
 
       $scope.openFileBrowser = function() {
         $rootScope.$broadcast('fm-open', {
@@ -130,15 +210,41 @@
       };
 
       // Category functions
-      $scope.addCategory = function(category) {
-        $log.debug('add category: ' + category);
+      $scope.addCategory = function() {
+        // Set a flag to prevent double deletion
+        if ($scope.addCategoryInProgress) {
+          $log.debug('inprogress');
+          return;
+        }
+        $scope.addCategoryInProgress = true;
+
+        $log.debug('add category: ', $scope.newCategory);
+        var category = $scope.newCategory;
         var c = {
           account_id: account.id,
-          name: category
+          name: category.name,
+          parent_id: category.parent
         };
+
         CategorySrv.save(c, function(result){
-          $scope.account.categories.push(result);
-          $log.debug(result);
+          // Add to right spot in the categories list
+          if (!c.parent_id) {
+            $scope.account.categories.push(result);
+          } else {
+            var keepGoing=true;
+            angular.forEach($scope.account.categories, function(value, key){
+              if (parseInt(value.id) === parseInt(c.parent_id)) {
+                $scope.account.categories[ key].children = $scope.account.categories[ key].children || [];
+                $scope.account.categories[ key].children.push(result);
+              }
+            });
+          }
+
+          $scope.newCategory = {};
+          delete $scope.addCategoryInProgress;
+
+          ngNotify.set('Category added.','notice');
+
         });
       };
 
@@ -163,11 +269,41 @@
         });
       };
 
-      $scope.deleteCategory = function(index){
-        $log.debug(index);
-        CategorySrv.delete({id:$scope.account.categories[ index].id}, function(result){
-          $log.debug(result);
-          $scope.account.categories.splice(index, 1);
+      $scope.deleteCategory = function(category) {
+        // Set a flag to prevent double deletion
+        if ($scope.deleteInProgress) {
+          $log.debug('inprogress');
+          return;
+        }
+        $scope.deleteInProgress = true;
+
+        // Delete the category from the server
+        CategorySrv.delete({ id: category.id }, function(result){
+          // Check the result
+
+          // Delete the category from the scope
+          var keepGoing = true;
+          angular.forEach($scope.account.categories, function(value, key){
+            if(keepGoing) {
+              if (parseInt(value.id) === parseInt(category.id)) {
+                $scope.account.categories.splice(key, 1);
+                keepGoing=false;
+              }
+              if ($scope.account.categories[ key] && $scope.account.categories[ key].children){
+                angular.forEach($scope.account.categories[ key].children, function(v,k){
+                  if(keepGoing) {
+                    if (parseInt(v.id) === parseInt(category.id)) {
+                      $scope.account.categories[ key].children.splice(k, 1);
+                      keepGoing=false;
+                    }
+                  }
+                });
+              }
+            }
+          });
+          // Turn of the flag
+          delete $scope.deleteInProgress;
+          ngNotify.set('Category deleted.','notice');
         });
       };
     });
