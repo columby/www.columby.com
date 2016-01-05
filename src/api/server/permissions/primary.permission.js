@@ -1,3 +1,10 @@
+/************************
+ *
+ * Permission to check if a given user has permission
+ * for primary sources (distributions)
+ *
+ ************************/
+
 'use strict';
 
 var models = require('../models/index'),
@@ -7,22 +14,25 @@ var models = require('../models/index'),
 
 // helper to check if a user has access to a certain account.
 function validateAccountAccess(user, account_id, cb) {
-  //console.log(user);
-  //console.log(account_id);
+
   if (user.admin) { return cb(true); }
 
+  // Check if the given account id is the current user's primary account
   if (user.primary.id === account_id) {
+    console.log('The given account id is the current users primary account, access granted.');
     return cb(true);
   }
 
-  // Iterate over user's accounts
+  // Check if the given account id is one of the user's publication accounts
+  console.log('Validating if account id ' + account_id + ' is one of the user publication accounts.');
   for (var i=0; i<user.organisations.length; i++){
     // Check if account is same as requested account
     if (parseInt(user.organisations[ i].id) === parseInt(account_id)) {
       // Check if account has the right role to edit.
-      // User account with role owner or admin can edit an account. (not editor or viewer)
-      var roles = [1,2];
+      // User account with role owner, admin or editor  can edit the primary source for an account.
+      var roles = [1,2,3];
       if (roles.indexOf(user.organisations[ i].role) !== -1) {
+        console.log('The current user can edit the primary source for the given account. ');
         return cb(true);
       }
     }
@@ -33,7 +43,8 @@ function validateAccountAccess(user, account_id, cb) {
 
  /**
   *
-  *
+  * Validate if a logged in user can create a new primary source
+  * for a distribution in a dataset
   *
   **/
 exports.canCreate = function(req,res,next){
@@ -57,13 +68,13 @@ exports.canCreate = function(req,res,next){
    }).then(function(result){
     if (result && result.dataValues && result.dataValues.dataset && result.dataValues.dataset.dataValues) {
       var account_id = result.dataValues.dataset.dataValues.account_id
-
+      console.log('Validating account access for account: ' + account_id);
       validateAccountAccess(req.user, account_id, function(result){
         if (result===true){
-          console.log('Yes access!');
+          console.log('User has access to account ' + account_id);
           next();
         } else {
-          console.log('No access!');
+          console.log('User has NO access to account ' + account_id);
           return res.status(401).json({status: 'Error', msg: 'No access'});
         }
       });
@@ -79,32 +90,55 @@ exports.canCreate = function(req,res,next){
 
 /**
  *
- *
+ * Validate if a logged in user can update a given primary source.
  *
  **/
-exports.canUpdate = function(req,res,next){
-  console.log('Checking canUpdate for distribution ' + req.params.id);
+exports.canUpdate = function(req,res,next) {
+  console.log('Checking canUpdate for user for distribution ' + req.params.id);
 
   // check if dataset_id is provided
-  if (!req.params.id) { return res.status(401).json({status: 'Error', msg: 'Missing parameter id'}); }
+  if (!parseInt(req.params.id)) {
+    console.log('Missing parameter id');
+    return res.status(401).json({status: 'Error', msg: 'Missing parameter id'});
+  }
   // check if dataset_id is provided
-  if (!req.body.dataset_id) { return res.status(401).json({status: 'Error', msg: 'Missing parameter dataset_id'}); }
+  // if (!req.body.dataset_id) {
+  //   console.log('Missing parameter dataset_id');
+  //   return res.status(401).json({status: 'Error', msg: 'Missing parameter dataset_id'});
+  // }
+
   // Check if user is in req
-  if (!req.user || !req.user.email) { return res.json({ status:'error', msg:'No access.' }); }
+  if (!req.user || !req.user.email) {
+    console.log('No authenticated user found');
+    return res.json({ status:'error', msg:'No access.' });
+  }
   // Check if user is admin
-  if (req.user.admin === true) { return next(); }
+  if (req.user.admin === true) {
+    console.log('User is admin');
+    return next();
+  }
 
-  // get account for dataset for Distribution
-  models.Dataset.findById(req.body.dataset_id, {
-    include: [{ model: models.Account, as: 'account' }]
-  }).then(function(result){
-    req.distribution = result;
-    validateAccountAccess(req.user, result.dataValues.account_id, function(result){
-      if (!result) { return res.status(401).json({status: 'Error', msg: 'No user found'}); }
+  // get dataset and account for the given primary source
+  models.Primary.findById(req.params.id, {
+    include: [
+      { model: models.Dataset, as: 'dataset', include: [
+        { model: models.Account, as: 'account' }
+      ]}
+    ]
+  }).then(function(result) {
+    if (!result) { return res.status(401).json({status: 'Error', msg: 'No primary found'}); }
+
+    var account_id = result.dataValues.dataset.dataValues.account_id;
+    console.log(account_id);
+    console.log('Validating if user can access account id: ' + account_id);
+    validateAccountAccess(req.user, account_id, function(result) {
+      console.log('Validate account access result: ' + result);
+      if (!result) { return res.status(401).json({status: 'Error', msg: 'No access'}); }
       console.log('Can edit TRUE');
       return next();
     });
   }).catch(function(err){
+    console.log(err);
     return res.status(401).json({status: 'Error', msg: err});
   });
  }
