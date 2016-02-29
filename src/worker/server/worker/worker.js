@@ -13,16 +13,16 @@
 
 'use strict';
 
-var pg = require('pg'),
-    csvWorker = require('../workers/csv.worker'),
-    arcgisWorker = require('../workers/arcgis.worker'),
-    fortesWorker = require('../workers/fortes.worker'),
-    request = require('request'),
-    console = process.console;
+var pg = require('pg');
+var csvWorker = require('../workers/csv.worker');
+var arcgisWorker = require('../workers/arcgis.worker');
+var fortesWorker = require('../workers/fortes.worker');
+var request = require('request');
+var logger = require('winston');
 
 
 function Worker(cb) {
-  console.log('initiating Worker.');
+  logger.debug('Initiating a new worker. ');
   var self = this;
 
   // Get configuration options from app's config file
@@ -35,8 +35,8 @@ function Worker(cb) {
   self._job          = {};
   self._connection   = null;
   // setup the database connection
-  pg.connect(self._config.db.cms.uri, function(err,client,done){
-    if (err) { console.log('Error connecting to the database, ', err); }
+  pg.connect(self._config.db.cms.uri, function(err, client, done){
+    if (err) { logger.error(err); }
     self._connection = {
       client: client,
       done: done
@@ -84,7 +84,7 @@ Worker.prototype.clearProcessingList = function(cb) {
   var values = ['error','Processor restarted','processing'];
   this._connection.client.query({text: sql, values: values}, function(err, result) {
     if (err) {
-      console.log('Error clearing jobs list: ', err);
+      logger.error(err);
       cb(err);
     }
     console.log('Clearing list finished. Rows affected: ' +  result.rowCount);
@@ -95,17 +95,12 @@ Worker.prototype.clearProcessingList = function(cb) {
 
 // Check for a job and process it
 Worker.prototype.processJob = function() {
-  //console.log('Looking for a new job.');
-
   var self=this;
 
   // Check if process is already running
-  if (self._processing) {
-    //return self.handleProcessedJob('Already processing. ');
-    return;
-  }
+  if (self._processing) { return; }
 
-  // turn on processing flag
+  // Turn on processing flag to avoid multiple processes
   self._processing = true;
 
   // select the next job in queue
@@ -118,13 +113,14 @@ Worker.prototype.processJob = function() {
 
     // return and turn off processing flag if error.
     if (err) {
-      console.log('Error connecting to the cms-client', err);
-      self._processing=false;
+      logger.error(err);
+      self._processing = false;
       return self.handleProcessedJob(err);
     }
-    //console.log('Job query result ', result.rows);
+
     // Set the new job
     self._job = result.rows[ 0];
+
     // Return if no job found
     if (!self._job){
       self._processing=false;
@@ -197,8 +193,14 @@ Worker.prototype.processJob = function() {
           });
         break;
         case 'fortes':
+          console.log('Creating a new FortesWorker ');
           var fortes = new fortesWorker();
-          fortes.start(self._job, self.handleProcessedJob());
+          console.log('Starting the new FortesWorker ');
+          fortes.start(self._job, function(result){
+            console.log('Fortesworker done');
+            console.log(result);
+            self.handleProcessedJob();
+          });
         break;
       }
     });
@@ -208,27 +210,29 @@ Worker.prototype.processJob = function() {
 
 // Handler for when a job is finished processing.
 Worker.prototype.handleProcessedJob = function(err) {
-  var self=this;
-  console.log('handling processed job');
-  console.log(self._job.data);
+  var self = this;
+  var sql;
 
-  self._processing = false;
+  logger.debug('handling processed job');
 
-  // Handle error
+  // Handle error if present
   if (err) {
-    console.log('There was an error', err);
-    console.log('Setting error in Job');
-    var sql='UPDATE "Jobs" SET status=\'error\', error='+err+' WHERE id=' + self._job.id;
+    logger.error(err);
+    logger.debug('Setting error in Job');
+    sql='UPDATE "Jobs" SET status=\'error\', error='+err+' WHERE id=' + self._job.id;
     self._connection.client.query(sql, function(err,result) {
-      if (err) { console.log('err',err);}
-      console.log('Processing done for Job: ' + self._job.id);
+      if (err) { logger.error(err); }
+      logger.debug('Processing done for Job: ' + self._job.id);
     });
-  }
+  } else {
+    // Update status for Primary
+    sql = 'UPDATE "Primaries" SET jobStatus=\'processed\', statusMsg=\'The data has been processed, the conversion to a downloadable file is scheduled.\' WHERE id=' + self._job.data.primaryId;
+    self._connection.client.query(sql, function(err,result) {
+      if (err) { logger.error(err); }
+    });
 
-  // Handle success
-  else {
-    // Update status
-    var sql = 'UPDATE "Jobs" SET status=\'done\', error=NULL WHERE id=' + self._job.id;
+    // Update status for Job
+    sql = 'UPDATE "Jobs" SET status=\'done\', error=NULL WHERE id=' + self._job.id;
     self._connection.client.query(sql, function(err,result) {
       if (err) { console.log('err',err);}
     });
@@ -241,35 +245,16 @@ Worker.prototype.handleProcessedJob = function(err) {
     if (self._config.env === 'local') {
       apiRoot = 'http://localhost:8000/v2/primary/';
     }
-    console.log('sending for file processing: ' + self._job.data.primaryId + ' to: ' + apiRoot);
+    logger.debug('Start the conversion of Primary table to downloadable file: ' + self._job.data.primaryId + ' to: ' + apiRoot);
     var job = self._job;
-    console.log('job, ', job);
     request.post({
       url: apiRoot + 'convert',
       form: {
         primary_id: self._job.data.primaryId
       }
     }, function(error, response, data) {
-      if (error) { console.log('Error: ', err); }
-      console.log(data);
-      data = JSON.parse(data);
-      console.log('data ', data);
-      // Update Primary
-      console.log('Updating primary status to done.');
-      var sql = 'UPDATE "Jobs" SET status=\'done\', error=NULL WHERE id=' + job.id;
-      console.log('sql ' + sql);
-      self._connection.client.query(sql, function(err,result) {
-        if (err) { console.log('err',err);}
-        else { console.log('Job updated'); }
-      });
-      // Update Job
-      var sql2 = 'UPDATE "Primary" SET file_id='+data.file.id+' WHERE id=' + job.data.primaryId;
-      console.log('sql2' + sql2);
-      self._connection.client.query(sql2, function(err,result) {
-        if (err) { console.log('err',err);}
-        else { console.log('Primary updated.'); }
-      });
-
+      // The Primaries API handles the Primary database values.
+      if (error) { logger.error(err); }
     });
   }
 };

@@ -13,6 +13,7 @@ var fs = require('fs');
 var mv = require('mv');
 var path = require('path');
 var knox = require('knox');
+var logger = require('winston');
 
 
 /*-------------- PRIMARY DISTRIBUTION --------------------------------------------------------*/
@@ -149,35 +150,33 @@ exports.sync = function(req,res) {
  *
  **/
 exports.convert = function (req, res) {
-  console.log('Primary controller, convert.');
-  console.log(req.body.primary_id);
+  logger.debug('Primary controller convert data to file was called for Primary ' + req.body.primary_id);
 
   var primaryId = req.body.primary_id;
 
   models.Primary.findById(primaryId, {
     include: [
-      {model: models.Dataset, as: 'dataset'}
+      { model: models.Dataset, as: 'dataset' }
     ]
   }).then(function(primary) {
-    console.log(primary.dataValues.dataset.dataValues.account_id);
     if (!primary) { return res.json({status: 'error', msg: 'No primary found'}); }
-    // Connect to the postgis database
+    // Connect to the postgis database to get the data from the data-table.
     pg.connect(config.db.postgis.uri, function (err, client, done) {
-      console.log('err ', err);
-      console.log('host ', client.host);
-
-      var uploadFile = path.join(config.root, '../../tmp/primary_' + primaryId + '.csv');
-      console.log('uploadfile', uploadFile);
-
+      if (err) { logger.error(err); }
+      // create a local tmp file to create the csv
+      var localTmpFile = path.join(config.root, '../../tmp/primary_' + primaryId + '.csv');
+      logger.debug('tmp local file location: ', localTmpFile);
+      // Copy the table to the local tmp file
       var stream = client.query(copyTo('COPY "primary_' + primaryId + '" TO STDOUT WITH DELIMITER \',\' CSV HEADER'));
-      var fileStream = fs.createWriteStream(uploadFile);
+      var fileStream = fs.createWriteStream(localTmpFile);
       stream.pipe(fileStream);
       fileStream.on('finish', function () {
-        console.log('Table convert finished.');
+        logger.debug('Table convert finished.');
         done();
-        fs.stat(uploadFile, function(error, stat) {
+        fs.stat(localTmpFile, function(error, stat) {
           if (error) { return handleError(res,error); }
-          console.log(stat.size);
+          logger.debug('New file size: ' + stat.size);
+          // Create a new file object for storage in the database.
           var f = {
             filename: 'primary_' + primaryId + '.csv',
             account_id: primary.dataValues.dataset.dataValues.account_id,
@@ -187,29 +186,40 @@ exports.convert = function (req, res) {
             filetype: 'text/csv',
             title: '',
             description: ''
-          }
+          };
+          // Create the file-db-record
           models.File.create(f).then(function(file) {
-            console.log(file.dataValues);
-            var s3client = knox.createClient({
-              key: config.aws.key,
-              secret: config.aws.secret,
-              bucket: config.aws.bucket
-            });
+            // Update the file-url based on the returned file-id
+            // Todo: Should be done server side.
             file.updateAttributes({
               url: file.dataValues.id + '/' + file.dataValues.filename
-            }).then(function (some) {
-              console.log('ok', file.dataValues.url);
+            }).then(function(some) {
+              // Create an S3 client to upload the file
+              var s3client = knox.createClient({
+                key: config.aws.key,
+                secret: config.aws.secret,
+                bucket: config.aws.bucket
+              });
+              // Setup S3 path
               var s3file = '/' + config.environment + '/files/' + file.url;
-              console.log('s3file url: ' + s3file);
-              s3client.putFile(uploadFile, s3file, function(err, result){
-                console.log(err);
+              logger.debug('S3 file url: ' + s3file);
+              s3client.putFile(localTmpFile, s3file, function(err, result){
+                if (err) { logger.error(err); }
                 console.log(result.statusCode);
                 // update file status at primary
                 primary.setFile(file).then(function(some) {
-                  console.log('sss', some.dataValues.id);
-                  return res.json({status: '200', primary: some, file: file});
+                  // All is done
+                  // Update Primary status
+                  primary.updateAttributes({
+                    jobStatus: 'converted',
+                    statusMsg: 'The source is synchronised and converted to a file download. ',
+                    syncDate: new Date()
+                  }).then(function(result) {
+                    return res.json({status: '200', primary: some, file: file});
+                  }).catch(function(err) {
+                    return handleError(res, err);
+                  });
                 }).catch(function (err) {
-                  console.log('e', err);
                   return handleError(res,err);
                 });
               });

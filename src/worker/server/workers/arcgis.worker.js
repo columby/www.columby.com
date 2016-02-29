@@ -13,8 +13,7 @@
 var request = require('request'),
   pg = require('pg'),
   escape = require('pg-escape'),
-  config = require('../config/config'),
-  console = process.console;
+  config = require('../config/config');
 
 
 function ArcgisWorker() {
@@ -48,7 +47,7 @@ ArcgisWorker.prototype.start = function(job, callback) {
 
   // Connect to the database
   connect(function(err) {
-    if (err) { return handleError('There as an error connecting to the DBs.'); }
+    if (err) { return handleError('There was an error connecting to the DBs.'); }
     // Validate job data
     validateData(function(err) {
       if (err) { return handleError('There as an error validating the data.'); }
@@ -323,7 +322,7 @@ ArcgisWorker.prototype.start = function(job, callback) {
       console.log('Batch all done');
 
       finish();
-      
+
     } else {
       console.log('Items in batch, but also processing... ');
     }
@@ -448,7 +447,7 @@ ArcgisWorker.prototype.start = function(job, callback) {
     var valueLines = [];
 
     // Process data
-    if (data.features.length<1) {
+    if (!data.features || (data.features.length<1) ) {
       console.log('No features in the data.');
       return valueLines;
     }
@@ -459,8 +458,10 @@ ArcgisWorker.prototype.start = function(job, callback) {
       var row = data.features[ i];
 
       var values = [];
-      for(var k in row.attributes) {
-        values.push(row.attributes[ k]);
+      if (row.attributes.lenght>0) {
+        for(var k in row.attributes) {
+          values.push(row.attributes[ k]);
+        }
       }
 
       // add current id if OBJECTID field is missing

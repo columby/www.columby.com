@@ -6,8 +6,7 @@
 var config = require('../config/config'),
   jwt    = require('jwt-simple'),
   moment = require('moment'),
-  request = require('request'),
-  console = process.console;
+  request = require('request');
 
 
 /**
@@ -51,7 +50,7 @@ exports.checkUser = function (req, res, next) {
     var token = req.headers.authorization.split(' ')[1];
     // Send a request to auth0 to get user info based on token
     request.post(
-      config.auth0.domain + 'tokeninfo',
+      config.auth0.domain + '/tokeninfo',
       { form: { id_token: token } },
       function (error, response, body) {
         if (!error && response.statusCode === 200) {

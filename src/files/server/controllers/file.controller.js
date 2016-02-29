@@ -67,6 +67,7 @@ exports.serveFile = function(req,res) {
     }
     // Stream file
     else if (s3res.statusCode === 200) {
+      res.setHeader('Content-disposition', 'attachment; filename=' + filename);
       s3res.pipe(res);
       s3res.on('error', function (err) { return handleError(res, err); });
     }
