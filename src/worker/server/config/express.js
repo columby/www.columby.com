@@ -15,8 +15,6 @@ var errorHandler = require('errorhandler');
 var path = require('path');
 var config = require('./config');
 var cors = require('cors');
-var scribe = require('scribe-js')();
-var console = process.console;
 var authCtrl = require('../controllers/auth.controller');
 
 
@@ -34,12 +32,6 @@ module.exports = function(app) {
 
   app.use(cors());
 
-  // var basicAuth = auth.basic({ //basic auth config
-  //     realm: 'ScribeJS WebPanel',
-  //     file: __dirname + '/scribe.htpasswd'
-  // });
-  // app.use(scribe.express.logger()); //Log each request
-  // app.use('/logs', auth.connect(basicAuth), scribe.webPanel());
   //app.use(express.static(__dirname + '/public'));
   app.use(express.static(path.join(config.root, 'client')));
 

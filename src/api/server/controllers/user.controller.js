@@ -4,18 +4,17 @@ var _             = require('lodash'),
 
     models        = require('../models/index'),
 
-    config        = require('../config/config'),
-    emailService  = require('../controllers/email.controller');
+    config        = require('../config/config');
 
 
 
 exports.update = function(req,res) {
 
-}
+};
 
 exports.show = function(req,res) {
 
-}
+};
 
 
 /**
