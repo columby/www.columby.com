@@ -22,8 +22,8 @@ module.exports = {
     secret: process.env.JWT_SECRET
   },
 
-  mandrill : {
-    key          : process.env.MANDRILL_API_KEY
+  sendgrid: { 
+    key         : process.env.SENDGRID_API_KEY
   },
 
   fortes: {

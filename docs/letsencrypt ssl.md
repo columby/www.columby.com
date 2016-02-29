@@ -28,5 +28,4 @@ Configure
 
 
 ## References
-
 https://community.letsencrypt.org/t/nginx-installation/3502/5

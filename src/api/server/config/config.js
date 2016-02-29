@@ -35,8 +35,8 @@ module.exports = {
     googleSecret: process.env.GOOGLE_SECRET         || env.GOOGLE_SECRET           || '',
   },
 
-  mandrill : {
-    key         : process.env.MANDRILL_API_KEY      || env.MANDRILL_API_KEY        || '',
+  sendgrid : {
+    key         : process.env.SENDGRID_API_KEY      || env.SENDGRID_API_KEY        || '',
   },
 
   aws: {
