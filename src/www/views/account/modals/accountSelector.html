@@ -14,7 +14,7 @@
     <div class="col-sm-offset-3 col-sm-6 account primary-account" ng-class="{ 'active': selectedAccount === $root.user.primary.id }">
       <a href ng-click="selectAccount($root.user.primary)">
         <div class="col-sm-3">
-          <img class="img-circle avatar img-responsive" ng-src="{{account.avatar.url || '/assets/img/avatar.png'}}"/>
+          <img class="img-circle avatar img-responsive" ng-src="{{ $root.config.filesRoot + '/s/small/' + $root.user.primary.avatar_url || '/assets/img/avatar.png'}}"/>
         </div>
         <div class="col-sm-9 account-name">
           {{$root.user.primary.displayName}}
@@ -24,7 +24,7 @@
     <div class="col-sm-offset-3 col-sm-6 account account-organisation" ng-repeat="account in organisations" ng-class="{ 'active': selectedAccount === account.id }">
       <a href ng-click="selectAccount(account)">
         <div class="col-sm-3">
-          <img class="img-circle avatar" ng-src="{{account.avatar.url || '/assets/img/avatar.png'}}"/>
+          <img class="img-circle avatar" ng-src="{{ $root.config.filesRoot + '/s/small/' + account.avatar_url || '/assets/img/avatar.png'}}"/>
         </div>
         <div class="col-sm-9 account-name">
           {{account.displayName}}

@@ -4,8 +4,8 @@ var request = require('request'),
   pg = require('pg'),
   escape = require('pg-escape'),
   //copyFrom = require('pg-copy-streams').from,
-  config = require('../config/config'),
-  console = process.console;
+  config = require('../config/config');
+
 
 
 var FortesWorker = module.exports = function() {
@@ -22,42 +22,40 @@ var FortesWorker = module.exports = function() {
 
 
 FortesWorker.prototype.start = function(job,callback) {
+  console.log('Starting job: ', job);
 
   var self = this;
   self._job = job;
 
-  /**
-   *
-   * Init
-   *
-   */
-  console.log('Starting fortes worker.');
-  connect(function(err){
-    if (err) {
-      handleError('There was an error connecting to the DBs.');
-      return callback(err)
-    }
-    // validate job data
+  // Add the main callback to self
+  self._callback = callback;
+
+  // Connect to the database
+  connect(function(err) {
+    if (err) { return handleError('There as an error connecting to the DBs.'); }
+    // Validate job data
     validateData(function(err) {
-      if (err) {
-        handleError('There was an error validating the data.');
-        return callback(err)
-      }
-      process(function (err) {
-        if (err) {
-          console.log('There was an error processing the data.', err);
-          handleError('There was an error processing the data.');
-          return callback(err)
-        }
-        // finish
-        finish(function (err) {
-          if (err) {
-            console.log('There was an error finishing.', err);
-            handleError('There was an error finishing.');
-            return callback(err)
-          }
-          // complete
-          callback(err);
+      if (err) { return handleError('There as an error validating the data.'); }
+      // Drop existing table if present
+      dropTable(function(err){
+        if (err) { return handleError(err); }
+        // Update Job status to processing
+        updateJobStatus('processing', function(err){
+          if (err) { return handleError(err); }
+          // Get stats about the url
+          getData(function(err) {
+            if (err) { return handleError(err); }
+            createTable(function(err){
+              if (err) { return handleError(err); }
+              // Process the data batch
+              processData(function(err){
+                if (err) { return handleError(err); }
+                finish(function(err){
+                  callback(err);
+                });
+              });
+            });
+          });
         });
       });
     });
@@ -67,7 +65,6 @@ FortesWorker.prototype.start = function(job,callback) {
   /**
    * Connect to CMS and GEO db
    *
-   * @param callback
    */
   function connect(callback) {
     self._connection = {};
@@ -97,94 +94,109 @@ FortesWorker.prototype.start = function(job,callback) {
    *
    * Validate if required elements in job are present.
    *
-   * @param callback
-   * @returns {*}
    */
-  function validateData(callback){
-
+  function validateData(cb){
     if (!self._job.data.primaryId) {
-      return callback('No primary ID!');
+      return cb('No primary ID!');
     }
-
+    console.log('job data: ', self._job.data);
     self._tablename = 'primary_' + self._job.data.primaryId;
-    console.log('Tablename is ' + self._tablename);
 
-    // Delete columby data-table
-    self._connection.data.client.query('DROP TABLE IF EXISTS ' + self._tablename, function(err, result) {
-      if(err) {
-        return callback('Error create table if not exist.');
-      }
-      console.log('Existing table dropped. ');
-      callback();
-    });
+    cb();
   }
 
 
-  function process(callback) {
+  // Delete columby data-table
+  function dropTable(cb){
+    console.log('Deleting existing table.');
+    self._connection.data.client.query('DROP TABLE IF EXISTS ' + self._tablename, function(err) {
+      if (err) { console.log(err); } else { console.log('Table dropped. '); }
+      cb(err);
+    });
+  }
+
+  // Update job status
+  function updateJobStatus(status, cb){
+    var sql = 'UPDATE "Jobs" SET "status"=\'' + status + '\' WHERE id=' + self._job.data.primaryId;
+    self._connection.cms.client.query(sql, function(err) {
+      cb(err);
+    });
+  }
+
+  function getData(cb) {
+    if (!config.fortes.username || !config.fortes.password || !config.fortes.url) {
+      return callback('Missing fortes config parameters. ');
+    }
+    console.log(config.fortes);
+    console.log('Sending data request to fortes for user: ' + config.fortes.username);
     request.get(config.fortes.url, {
       'auth': {
         'user': config.fortes.username,
         'pass': config.fortes.password,
         'sendImmediately': false
       }
-    },function(err, res, body){
-      if (err) {
-        return callback(err);
+    }, function(err, res, body){
+      if (err) { return callback(err); }
+      console.log('Response received from fortes.');
+      //console.log(body);
+      var data;
+      try {
+        data = JSON.parse(body);
+      } catch(e){
+        console.log(e);
       }
-      var data = JSON.parse(body);
-      // transform into array
-      var dataArray = [];
-      for( var i in data ) {
-        if (data.hasOwnProperty(i)){
-          dataArray.push(data[i]);
-        }
-      }
-      //console.log(dataArray[ 0]);
+      console.log('json', data);
+      self._data = data;
 
-      var result = [];
-
-      // create columns
-      self._columns = Object.keys(dataArray[ 0]);
-      console.log('Columns, ', self._columns);
-
-      // create data
-      for (i=0; i<dataArray.length; i++){
-        var obj = dataArray[ i];
-        var values = [];
-        for (var key in obj) {
-          if (obj.hasOwnProperty(key)) {
-            var val = obj[key];
-            // use val
-            values.push(val);
-          }
-        }
-        result.push(values);
-      }
-      self._processedData = result;
-      console.log(self._processedData[ 0]);
-
-      console.log('Creating table');
-      var columns = self._columns.join(' TEXT, ');
-      columns += ' TEXT, "created_at" timestamp, "updated_at" timestamp';
-      var sql='CREATE TABLE IF NOT EXISTS ' + self._tablename + ' (cid serial PRIMARY KEY, ' + columns + ');';
-      self._connection.data.client.query(sql, function(err, result) {
-        if (err) {
-          return callback(err);
-        }
-        console.log('Create table result: ', result);
-
-        insertData(callback);
-      });
-
+      return cb();
     });
   }
 
-  /**
-   *
-   * Insert data
-   *
-   */
-  function insertData(callback){
+  function createTable(cb) {    // transform into array
+    var dataArray = [];
+    for( var i in self._data ) {
+      if (self._data.hasOwnProperty(i)){
+        dataArray.push(self._data[i]);
+      }
+    }
+    self._dataArray = dataArray;
+    console.log(dataArray);
+
+    // create columns
+    self._columns = Object.keys(dataArray[ 0]);
+    console.log('Columns, ', self._columns);
+    console.log('Creating table');
+    var columns = self._columns.join(' TEXT, ');
+    columns += ' TEXT, "created_at" timestamp, "updated_at" timestamp';
+    var sql='CREATE TABLE IF NOT EXISTS ' + self._tablename + ' (cid serial PRIMARY KEY, ' + columns + ');';
+    console.log('sql', sql);
+    console.log(self._connection.data.client);
+    self._connection.data.client.query(sql, function(err, result) {
+      console.log('Create table result: ', result);
+      return cb(err);
+    });
+  }
+
+
+  function processData(cb) {
+    var result = [];
+    // create data
+    for (var i=0; i<self._dataArray.length; i++){
+      var obj = self._dataArray[ i];
+      var values = [];
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          var val = obj[key];
+          // use val
+          values.push(val);
+        }
+      }
+      result.push(values);
+    }
+    self._processedData = result;
+    console.log('data processed. ');
+    //console.log(self._processedData[ 0]);
+
     console.log('Inserting data. ');
     var columns = self._columns;
     columns.push('"created_at"');
@@ -193,8 +205,8 @@ FortesWorker.prototype.start = function(job,callback) {
     var now = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
     var valueLines = [];
-    for (var i=0; i<self._processedData.length;i++){
-      var valueLine = self._processedData[ i];
+    for (var k=0; k<self._processedData.length;k++){
+      var valueLine = self._processedData[ k];
       valueLine.push(now);
       valueLine.push(now);
       valueLine.forEach(function(value,key){
@@ -209,13 +221,14 @@ FortesWorker.prototype.start = function(job,callback) {
       valueLine = '(' + valueLine.join(', ') + ')';
       valueLines.push(valueLine);
     }
-    var values = valueLines.join(', ');
+    var sqlvalues = valueLines.join(', ');
 
-    var sql = 'INSERT INTO ' + self._tablename + ' (' + columns + ') VALUES ' + values + ';';
+    var sql = 'INSERT INTO ' + self._tablename + ' (' + columns + ') VALUES ' + sqlvalues + ';';
 
     //console.log('sql, ', sql);
     self._connection.data.client.query(sql, function(err){
-      callback(err);
+
+      cb(err);
     });
   }
 
@@ -226,16 +239,24 @@ FortesWorker.prototype.start = function(job,callback) {
    */
   function finish(callback){
 
-    console.log('Finished');
-    var now = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    console.log('Finished processing the fortes job.');
 
     // update Job status
     var sql = 'UPDATE "Jobs" SET "status"=\'done\' WHERE id=' + self._job.id;
     self._connection.cms.client.query(sql, function(err){
-      console.log('e',err);
+      if (err) {
+        console.log('Error updating job status: ', err);
+      } else {
+        console.log('Job status updated to Done.');
+      }
       // update Job status
-      sql = 'UPDATE "Primaries" SET "jobStatus"=\'done\', "syncDate"=\'' + now + '\' WHERE id=' + self._job.data.primaryId;
-      self._connection.cms.client.query(sql, function(err){
+      sql = 'UPDATE "Primaries" SET "jobStatus"=\'done\', "syncDate"="now()" WHERE id=' + self._job.data.primaryId;
+      self._connection.cms.client.query(sql, function(err) {
+        if (err) {
+          console.log('Error updating job status: ', err);
+        } else {
+          console.log('Primary updated to Done.');
+        }
         self._connection.cms.done(self._connection.cms.client);
         self._connection.data.done(self._connection.data.client);
         callback();
@@ -244,24 +265,24 @@ FortesWorker.prototype.start = function(job,callback) {
   }
 
 
-  /**
-   *
-   * General error handler
-   *
-   */
-  function handleError(msg){
+  function handleError(err){
+    console.log('___error___');
+    console.log(err);
+    // update Job status
+    var sql = 'UPDATE "Jobs" SET "status"=\'error\', "error"=\''+ String(err) + '\' WHERE id=' + self._job.id;
+    console.log('Updating job status: ' + sql);
+    self._connection.cms.client.query(sql);
 
-    console.log('Error!');
-    console.log(msg);
+    // update Primary status
+    sql = 'UPDATE "Primaries" SET "jobStatus"=\'error\' WHERE id=' + self._job.data.primaryId;
+    console.log('Updating primary status: ' + sql);
+    self._connection.cms.client.query(sql);
 
-    var sql = 'UPDATE "Primaries" SET "jobStatus"=\'error\',"statusMsg"=\'' + msg+ '\' WHERE id=' + self._job.data.primaryId + ';';
-    self._connection.cms.client(sql,function(err,res){
-      console.log(err);
-      console.log(res);
-    });
 
     self._connection.cms.done(self._connection.cms.client);
     self._connection.data.done(self._connection.data.client);
+
+    self._callback(err);
   }
 
 };

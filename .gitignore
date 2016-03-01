@@ -19,3 +19,4 @@ src/worker/server/config/env.js
 pm2/startall.json
 tmp
 .vagrant
+pm2

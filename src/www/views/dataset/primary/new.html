@@ -40,6 +40,8 @@
       <p>The distribution you are about to convert to a primary source is a Fortes link. The link will be sent to the processing queue and converted to the Columby API. Depending on the size this can take a while. This process happens in the background. <br />
         Please select <em>create primary source</em> to start the process. </p>
     </div>
+
+    <div ng-show="{{errorMsg}}"><p class="danger">Sorry, there was an error processing the new primary source. </p></div>
   </div>
 </div>
 

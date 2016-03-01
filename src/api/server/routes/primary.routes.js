@@ -1,3 +1,9 @@
+/************************
+ *
+ * Routes to handle API requests dealing with primary sources
+ *
+ ************************/
+
 'use strict';
 
 var express = require('express'),
@@ -9,44 +15,59 @@ var express = require('express'),
 
 module.exports = function(app){
 
+  // Get a list of primary sources
   router.get('/',
-    primaryCtrl.index);
+    primaryCtrl.index
+  );
 
+  // Create a new primary source for a dataset with existing distribution
   router.post('/',
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
     primaryPerms.canCreate,
-    primaryCtrl.create);
+    primaryCtrl.create
+  );
 
+  // Get a spicific primary source
   router.get('/:id',
-    primaryCtrl.show);
+    primaryCtrl.show
+  );
 
+  //
   router.post('/convert',
     primaryPerms.canConvert,
     primaryCtrl.convert
   );
-  
+
+  // Synchronize a primary source with the remote source
   router.post('/:id/sync',
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
     primaryPerms.canUpdate,
-    primaryCtrl.sync);
+    primaryCtrl.sync
+  );
 
+  // Update an existing primary source
   router.put('/:id',
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
     primaryPerms.canUpdate,
-    primaryCtrl.update);
+    primaryCtrl.update
+  );
 
+  // Delete an existing primary source
   router.delete('/:id',
     auth.checkJWT,
     auth.checkUser,
     auth.ensureAuthenticated,
     primaryPerms.canDelete,
-    primaryCtrl.destroy);
+    primaryCtrl.destroy
+  );
 
+  // Add the routes to the app-router
   app.use('/v2/primary', router);
+  
 };

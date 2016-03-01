@@ -6,9 +6,8 @@
 var config = require('../config/config'),
   jwt    = require('jwt-simple'),
   moment = require('moment'),
-  request = require('request'),
-  console = process.console;
-
+  request = require('request');
+var logger = require('winston');
 
 /**
  *
@@ -42,7 +41,7 @@ exports.checkJWT = function (req, res, next) {
 
 
 exports.checkUser = function (req, res, next) {
-  console.log('Checking user. ');
+  logger.debug('AuthController: Validate user. ');
   req.user = req.user || {};
 
   // Check if there is an authorization token supplied
@@ -54,23 +53,25 @@ exports.checkUser = function (req, res, next) {
       config.auth0.domain + 'tokeninfo',
       { form: { id_token: token } },
       function (error, response, body) {
-        if (!error && response.statusCode === 200) {
+        if (error) {
+          logger.debug('There was an error: ' + error);
+        } else if(response.statusCode === 200) {
           // parse result to json
           var u = JSON.parse(body);
           // validate if user
           if (u.email) {
-            console.log('Check user found.');
+            console.log('User found.');
             req.user = u;
           }
         } else {
-          console.log('Check user error: ', error);
+          logger.debug('Something went wrong fetching the user.');
         }
         // Always proceed
         next();
       }
     );
   } else {
-    console.log('Anonymous');
+    console.log('Anonymous user. ');
     next();
   }
 };

@@ -14,7 +14,7 @@ exports.query = function(req,res) {
   }
 
   var q = JSON.parse(req.query.q);
-  console.log(q);
+  //console.log(q);
 
   // Validate for required query elements
   if (!q.table) {
@@ -56,7 +56,7 @@ exports.query = function(req,res) {
           h.push(th);
         }
       }
-      console.log(h);
+      //console.log(h);
       return res.json({
         rows: result.rows,
         header: h

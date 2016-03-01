@@ -38,7 +38,7 @@ exports.search = function(req, res) {
   // Define Account filters
   var account_wheres = [];
   for(idx=0; idx < _q.length; idx++) {
-    account_wheres.push({displayName: { ilike: "%"+_q[idx]+"%" }});
+    account_wheres.push({displayName: { ilike: '%' + _q[idx] + '%' }});
   }
 
   // calculate fuzzy weight
@@ -136,7 +136,7 @@ exports.search = function(req, res) {
   }).catch(function(err){
     return handleError(res,err);
   });
-}
+};
 
 
 function searchDatasets(cb){

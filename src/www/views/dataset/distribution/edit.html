@@ -11,6 +11,11 @@
   <form class="form-horizontal novalidate" role="form" name="metadataForm">
 
     <div class="form-group">
+      <div class="col-xs-4"><label>Source</label></div>
+      <div class="col-xs-8"><p>{{distribution.accessUrl || distribution.downloadUrl}}</p></div>
+      <div class="col-xs-12"><p class="small">The souece of the distribution can't be changed once it is published. </p></div>
+    </div>
+    <div class="form-group">
       <div class="col-xs-4"><label>Title</label></div>
       <div class="col-xs-8">
         <input class="form-control"
@@ -57,7 +62,7 @@
       <div class="col-xs-8">
         <div class="btn-group">
           <label>
-            <input type="checkbox" ng-model="distribution.private">Hide this datasource for the public
+            <input type="checkbox" ng-model="distribution.private"> Make this dataset private
           </label>
         </div>
       </div>

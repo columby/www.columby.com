@@ -2,7 +2,7 @@
 
 var models = require('../models/index');
 var request = require('request');
-var console = process.console;
+var logger = require('winston');
 
 // Worker is busy
 var processing = false;
