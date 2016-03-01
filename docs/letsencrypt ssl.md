@@ -4,6 +4,7 @@
 
     sudo git clone https://github.com/letsencrypt/letsencrypt /opt/letsencrypt
     cd /opt/letsencrypt
+    sudo service nginx stop
     ./letsencrypt-auto certonly
 
 Result  
@@ -17,7 +18,7 @@ Configure
     # test configuration
     nginx -t
     # Restart to make changes
-    nginx restart
+    nginx start
     # done!
 
 

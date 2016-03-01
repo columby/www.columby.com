@@ -169,6 +169,7 @@ exports.convert = function (req, res) {
       stream.pipe(fileStream);
       fileStream.on('finish', function () {
         logger.debug('Table convert finished.');
+        logger.debug('Closing connection');
         done();
         fs.stat(localTmpFile, function(error, stat) {
           if (error) { return handleError(res,error); }
@@ -202,7 +203,6 @@ exports.convert = function (req, res) {
               logger.debug('S3 file url: ' + s3file);
               s3client.putFile(localTmpFile, s3file, function(err, result){
                 if (err) { logger.error(err); }
-                console.log(result.statusCode);
                 // update file status at primary
                 primary.setFile(file).then(function(some) {
                   // All is done
@@ -228,6 +228,8 @@ exports.convert = function (req, res) {
           });
         });
       }).on('error', function (err) {
+        logger.debug('There was an error with the postgis connection. ');
+        logger.debug('Closing connection');
         done();
         return handleError(res,err);
       });
