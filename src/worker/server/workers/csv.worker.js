@@ -8,7 +8,7 @@ var fs = require('fs'),
   escape = require('pg-escape'),
   config = require('../config/config'),
   Baby = require('babyparse');
-var logger = require('watson');
+var logger = require('winston');
 
 
 var CsvWorker = module.exports = function() {
@@ -61,7 +61,7 @@ CsvWorker.prototype.start = function(job, callback){
             if (err) { return handleError(err); }
             processData(function(err) {
               if (err) { return handleError(err); }
-              // Finish is handled at the end of processData 
+              // Finish is handled at the end of processData
             });
           });
         });

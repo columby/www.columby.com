@@ -42,16 +42,17 @@
 
     $scope.confirm = function() {
       // Save the Primary
-      $log.debug('Saving primary, ', $scope.primary);
+      $log.debug('Saving new primary source', $scope.primary);
       PrimarySrv.save($scope.primary, function(primary){
-        $log.debug('Save result: ', primary);
-        if (primary.id){
-          // Send to queue
+        $log.debug('Save result: ' + primary.id);
+        if (primary.id) {
+          // Send to Job queue
           var job = {
             type: $scope.primary.jobType,
             data: $scope.primary
           };
-          WorkerSrv.add(job).then(function(jobResult){
+          $log.debug('The primary source is created, sending the source for processing to the Job Worker. ');
+          WorkerSrv.add(job).then(function(jobResult) {
             $log.debug('Job result: ', jobResult);
             if (jobResult.id){
               // update primary job status
@@ -65,16 +66,15 @@
             // All done, close modal
             $modalInstance.close(primary);
           }, function(err){
-            $log.debug('err', err);
-            $log.debug(primary);
+            $log.debug('There was an error sending the Job for this Primary. ', err);
             ngNotify.set('There was an error sending the primary for processing...','error');
+            $log.debug('Deleting the primary source. ');
             PrimarySrv.delete({id: primary.id}, function(result){
               $log.debug('result', result);
             });
           });
-
         } else {
-          ngNotify.set('warning',null,'There was an error creating the primary source.');
+          ngNotify.set('There was an error creating the primary source.', 'error');
         }
       });
       // Send to Worker Queue

@@ -81,8 +81,8 @@
       		<p ng-show="dataset.primary.jobStatus==='error'">There was an error processing this dataset. The data is currently unavailable.</p>
 					<div class="row download">
             <div class="col-xs-12">
-              <a href="{{$root.config.filesRoot + '/f/' + dataset.primary.file.url}}" class="btn btn-default" ng-show="dataset.primary.jobStatus==='done'"><i class="fa fa-download"></i>&nbsp;Download source</a>
-              <a ng-href="{{apiLink}}" class="btn btn-default" ng-show="dataset.primary.jobStatus==='done'"><i class="fa fa-link"></i>&nbsp;Use Columby API</a>
+              <a href="{{$root.config.filesRoot + '/f/' + dataset.primary.file.url}}" class="btn btn-default" ng-show="dataset.primary.file.url"><i class="fa fa-download"></i>&nbsp;Download source</a>
+              <a ng-href="{{apiLink}}" class="btn btn-default" ng-show="apiLink"><i class="fa fa-link"></i>&nbsp;Use Columby API</a>
             </div>
 					</div>
     		</div>

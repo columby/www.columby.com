@@ -40,8 +40,8 @@ exports.create = function(req,res){
   var primary = req.body;
 
   models.Primary.create(primary).then(function(primary) {
-    console.log('p', primary.dataValues);
-    return res.json(primary.dataValues);
+    logger.debug('New primary source created', primary.dataValues);
+    return res.json(primary);
   }).catch(function(err){
     return handleError(res,err);
   });
@@ -69,36 +69,33 @@ exports.update = function(req,res){
  *
  **/
 exports.destroy = function(req,res){
-
+  logger.debug('Deleting a primary source. ');
   models.Primary.find({
     where: { id: req.params.id },
     include: [
       { model: models.Distribution, as: 'distribution', include: [
         { model: models.Dataset, as: 'dataset' }
       ] }
-    ]}).then(function(primary){
-
+    ]}).then(function(primary) {
       // Delete the table
-      var conn = config.db.postgis;
-      pg.connect(conn, function(err,client,done){
-        if (err){
-          console.log('error connectiing: ', err);
-        }
+      logger.debug('Deleting geo table if exists');
+      var conn = config.db.postgis.uri;
+      pg.connect(conn, function(err, client, done) {
+        if (err) { return handleError(res, 'Error connecting to the geo-database. '); }
         var sql='DROP TABLE IF EXISTS primary_' +  primary.id + ';';
-        console.log('sql', sql);
-        client.query(sql, function(err,result){
-          if (err){
-            console.log(err);
-          }
+        client.query(sql, function(err, result) {
+          if (err) { return handleError(res, err); }
+          logger.debug('Done dropping geo table.');
           done();
         });
       });
-      primary.destroy().then(function(){
+      logger.debug('Deleting primary source.');
+      primary.destroy().then(function() {
+        logger.debug('Primary source deleted.');
         return res.json({status:'success'});
       }).catch(function(err){
         return handleError(res,err);
       });
-
     }).catch(function(err){
       return handleError(res,err);
     });

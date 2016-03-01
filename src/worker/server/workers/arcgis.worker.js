@@ -14,6 +14,7 @@ var request = require('request'),
   pg = require('pg'),
   escape = require('pg-escape'),
   config = require('../config/config');
+var logger = require('winston');
 
 
 function ArcgisWorker() {
@@ -273,7 +274,6 @@ ArcgisWorker.prototype.start = function(job, callback) {
         columnNames.push('_objectid');
         columnTypes.push('TEXT');
       }
-      console.log('Sanitized columns: ', columnNames);
 
       // Add geometry and dates
       self._geoColumn = columnNames.length;
@@ -349,7 +349,8 @@ ArcgisWorker.prototype.start = function(job, callback) {
 
 
   function sendRows(rows, callback){
-    console.log('Send rows:', rows.length);
+    logger.debug('Sending ' + rows.length + ' rows');
+    logger.debug('Get workBatch records from external source. ');
 
     // Get records
     var params = {
@@ -365,71 +366,62 @@ ArcgisWorker.prototype.start = function(job, callback) {
       objectIds: rows.join(',')
     };
 
-    //console.log(params);
-
-    // GET url (for debugging)
     request.get({
       url: self._job.data.url + '/query',
       qs: params,
       json: true
-    }, function(err,res,data){
-      if (err) {
-        console.log(err);
-        return callback('Error getting data.');
+    }, function(err, res, data){
+      if (err) { return callback(err);
       } else {
-        //console.log('data', data);
+
         // Process data
         data = processGeodata(data);
 
-        // build query
-        var buildStatement = function(rows) {
-          // flat array of all values; ["a","b","c","d"]
-          var params = [];
-          // array with valueClauses per row [ [$1,$2], [$3,$4] ]
-          var chunks = [];
-          // Process each row
-          for(var i = 0; i < rows.length; i++) {
-            var row = rows[ i];
-            //console.log('Processing row ' + i + ' with length: ' + row.length);
-            // container for individual parameters
-            var valuesClause = [];
-            // Process each element in the row
-            for (var k=0; k<row.length; k++) {
-              // parse geometry column (https://github.com/brianc/node-postgres/issues/693)
-              params.push(row[ k]);
-              var value = '$' + params.length;
-              if (k === self._geoColumn) {
-                value = 'ST_GeomFromText(' + value + ', 4326)';
-              }
-              //
-              valuesClause.push(value);
-            }
-            chunks.push('(' + valuesClause.join(', ') + ')');
-          }
-          return {
-            text: 'INSERT INTO ' + self._tablename + ' (' + self._columns.join(',') + ') VALUES ' + chunks.join(', '),
-            values: params
-          };
-        };
-
         var sql = buildStatement(data);
-        //console.log('sending SQL: ', sql);
+
         self._connection.data.client.query(sql, function(err, result) {
           if (err) {
             console.log(err);
             return callback(err);
           } else {
             console.log('inserted ' + data.length + ' rows');
-            // if(chunki<self.chunks.length && chunki<self.max_test_chunks){
-
             return callback();
-            //checkBatch();
           }
         });
       }
     });
   }
 
+
+  function buildStatement(rows) {
+    // flat array of all values; ["a","b","c","d"]
+    var params = [];
+    // array with valueClauses per row [ [$1,$2], [$3,$4] ]
+    var chunks = [];
+    // Process each row
+    for(var i = 0; i < rows.length; i++) {
+      var row = rows[ i];
+      //console.log('Processing row ' + i + ' with length: ' + row.length);
+      // container for individual parameters
+      var valuesClause = [];
+      // Process each element in the row
+      for (var k=0; k<row.length; k++) {
+        // parse geometry column (https://github.com/brianc/node-postgres/issues/693)
+        params.push(row[ k]);
+        var value = '$' + params.length;
+        if (k === self._geoColumn) {
+          value = 'ST_GeomFromText(' + value + ', 4326)';
+        }
+        //
+        valuesClause.push(value);
+      }
+      chunks.push('(' + valuesClause.join(', ') + ')');
+    }
+    return {
+      text: 'INSERT INTO ' + self._tablename + ' (' + self._columns.join(',') + ') VALUES ' + chunks.join(', '),
+      values: params
+    };
+  }
 
   function sanitizeColumnNames(columns){
     var fields = [];
@@ -441,45 +433,36 @@ ArcgisWorker.prototype.start = function(job, callback) {
     return fields;
   }
 
-
+  // Convert geo-service output to SQL Statement
   function processGeodata(data){
-
+    logger.debug('Processing incoming geodata to sql-data');
     var valueLines = [];
 
     // Process data
     if (!data.features || (data.features.length<1) ) {
-      console.log('No features in the data.');
+      logger.debug('No features in the data.');
       return valueLines;
     }
 
+    var features = data.features;
+
     // array for all value rows.
-    for(var i=0; i<data.features.length; i++){
-
-      var row = data.features[ i];
-
+    for(var i=0; i<features.length; i++){
+      // array to hold values
       var values = [];
-      if (row.attributes.lenght>0) {
-        for(var k in row.attributes) {
-          values.push(row.attributes[ k]);
-        }
-      }
-
-      // add current id if OBJECTID field is missing
-      if(!self._objectidpresent) {
-        values.unshift('1');
-      }
-
-      // escape string
-      values.forEach(function(v,k) {
-        if(!v || v === '') {
+      // the value row containing the data
+      var row = features[ i];
+      // add object data to values-array
+      for(var k in row.attributes) {
+        var v = row.attributes[ k];
+        // escape strings and validation
+        if (!v || v === '') {
           v = 'null';
         }
-        // else {
-          //v = String(v).replace(/'/g, '\'\'');
-          //v = '\'' + escape(String(v)) + '\'';
-        // }
-        values[ k] = v;
-      });
+        values.push(v);
+      }
+      // add current id if OBJECTID field is missing
+      if (!self._objectidpresent) { values.unshift(i); }
 
       // get geodata
       if (row.geometry) {
@@ -512,52 +495,28 @@ ArcgisWorker.prototype.start = function(job, callback) {
   }
 
 
+  /**
+   * Arcgis worker error handler
+   **/
   function handleError(err){
-    console.log('___error___');
-    console.log(err);
-    // update Job status
-    var sql = 'UPDATE "Jobs" SET "status"=\'error\', "error"=\''+ String(err) + '\' WHERE id=' + self._job.id;
-    console.log('Updating job status: ' + sql);
-    self._connection.cms.client.query(sql);
+    logger.debug('Arcgis, handling error');
 
-    // update Primary status
-    sql = 'UPDATE "Primaries" SET "jobStatus"=\'error\' WHERE id=' + self._job.data.primaryId;
-    console.log('Updating primary status: ' + sql);
-    self._connection.cms.client.query(sql);
-
-
+    // close connection, error processing is done at the main worker process.
     self._connection.cms.done(self._connection.cms.client);
     self._connection.data.done(self._connection.data.client);
 
+    // Send back the error
     self._callback(err);
   }
 
 
+  /**
+   * Finalize the arcgis worker
+   **/
   function finish(cb) {
-    console.log('Finished processing the arcgis job');
-
-    // update Job status
-    var sql = 'UPDATE "Jobs" SET "status"=\'done\' WHERE id=' + self._job.id;
-    self._connection.cms.client.query(sql, function(err, result) {
-      if (err) {
-        console.log('Error updating job status: ', err);
-      } else {
-        console.log('Job status updated to Done.');
-      }
-      // update Job status
-      sql = 'UPDATE "Primaries" SET "jobStatus"=\'done\' WHERE id=' + self._job.data.primaryId;
-      self._connection.cms.client.query(sql, function(err, result) {
-        if (err) {
-          console.log('Error updating job status: ', err);
-        } else {
-          console.log('Primary updated to Done.');
-        }
-        self._connection.cms.done(self._connection.cms.client);
-        self._connection.data.done(self._connection.data.client);
-
-        self._callback(err);
-      });
-    });
+    logger.debug('Finished processing the arcgis job');
+    // update Job and Primaries status is handled at the main worker process.
+    self._callback();
   }
 
 

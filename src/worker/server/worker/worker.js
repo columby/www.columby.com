@@ -213,20 +213,21 @@ Worker.prototype.handleProcessedJob = function(err) {
   var self = this;
   var sql;
 
-  logger.debug('handling processed job');
+  logger.debug('Handling processed job.');
 
   // Handle error if present
   if (err) {
-    logger.error(err);
-    logger.debug('Setting error in Job');
-    sql='UPDATE "Jobs" SET status=\'error\', error='+err+' WHERE id=' + self._job.id;
+    logger.debug('Setting error in Job and Primary');
+    console.log(err);
+    sql='UPDATE "Jobs" SET status=\'error\', error=' + err + ' WHERE id=' + self._job.id;
     self._connection.client.query(sql, function(err,result) {
       if (err) { logger.error(err); }
       logger.debug('Processing done for Job: ' + self._job.id);
     });
   } else {
     // Update status for Primary
-    sql = 'UPDATE "Primaries" SET jobStatus=\'processed\', statusMsg=\'The data has been processed, the conversion to a downloadable file is scheduled.\' WHERE id=' + self._job.data.primaryId;
+    logger.log('Finalize the work process. Update Job and Primary');
+    sql = 'UPDATE "Primaries" SET "jobStatus"=\'processed\', "statusMsg"=\'The data has been processed, the conversion to a downloadable file is scheduled.\' WHERE id=' + self._job.data.primaryId;
     self._connection.client.query(sql, function(err,result) {
       if (err) { logger.error(err); }
     });
@@ -234,18 +235,14 @@ Worker.prototype.handleProcessedJob = function(err) {
     // Update status for Job
     sql = 'UPDATE "Jobs" SET status=\'done\', error=NULL WHERE id=' + self._job.id;
     self._connection.client.query(sql, function(err,result) {
-      if (err) { console.log('err',err);}
+      if (err) { logger.error(err); }
     });
 
     // Create a downloadable file for this table
+    logger.debug('Initiate the conversion of the primary data. ');
     var apiRoot = 'https://api.columby.com/v2/primary/';
-    if (self._config.env === 'development') {
-      apiRoot = 'https://dev-api.columby.com/v2/primary/';
-    }
-    if (self._config.env === 'local') {
-      apiRoot = 'http://localhost:8000/v2/primary/';
-    }
-    logger.debug('Start the conversion of Primary table to downloadable file: ' + self._job.data.primaryId + ' to: ' + apiRoot);
+    if (self._config.env === 'development') { apiRoot = 'http://localhost:8000/v2/primary/'; }
+    logger.debug('Start the conversion of Primary table to downloadable file: ' + self._job.data.primaryId + ' to: ' + apiRoot + 'convert');
     var job = self._job;
     request.post({
       url: apiRoot + 'convert',
@@ -254,7 +251,14 @@ Worker.prototype.handleProcessedJob = function(err) {
       }
     }, function(error, response, data) {
       // The Primaries API handles the Primary database values.
-      if (error) { logger.error(err); }
+
+      if (error || response.statusCode!==200) {
+        logger.error('Error converting file. StatusCode ' + response.statusCode + ', StatusMessage: ' + response.statusMessage + ', error: ' +  JSON.stringify(error));
+      } else {
+        logger.debug('Conversion complete. ');
+        console.log(data);
+      }
+
     });
   }
 };

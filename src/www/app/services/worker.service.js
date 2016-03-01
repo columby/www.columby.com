@@ -8,8 +8,6 @@
     return {
 
       add: function(job) {
-        $log.debug(appConstants.workerRoot);
-        $log.debug(job);
         return $http.post(appConstants.workerRoot + '/api/job', job)
           .then(function (response) {
             return response.data;

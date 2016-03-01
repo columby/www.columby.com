@@ -10,7 +10,7 @@
 var models = require('../models/index'),
     Distribution = models.Distribution,
     config = require('./../config/config');
-
+var logger = require('winston');
 
 // helper to check if a user has access to a certain account.
 function validateAccountAccess(user, account_id, cb) {
@@ -67,7 +67,7 @@ exports.canCreate = function(req,res,next){
      include: [{ model: models.Dataset, as: 'dataset'}]
    }).then(function(result){
     if (result && result.dataValues && result.dataValues.dataset && result.dataValues.dataset.dataValues) {
-      var account_id = result.dataValues.dataset.dataValues.account_id
+      var account_id = result.dataValues.dataset.dataValues.account_id;
       console.log('Validating account access for account: ' + account_id);
       validateAccountAccess(req.user, account_id, function(result){
         if (result===true){
@@ -85,7 +85,7 @@ exports.canCreate = function(req,res,next){
      return res.status(401).json({status: 'Error', msg: err});
    });
 
-}
+};
 
 
 /**
@@ -141,38 +141,49 @@ exports.canUpdate = function(req,res,next) {
     console.log(err);
     return res.status(401).json({status: 'Error', msg: err});
   });
- }
+};
 
 
 /**
  *
- *
+ * Delete a Primary source
  *
  **/
-exports.canDelete = function(req,res,next) {
-  console.log('Checking canDelete for primary ' + req.params.id);
+exports.canDelete = function(req, res, next) {
+  logger.debug('Checking canDelete for primary ' + req.params.id);
 
   // check if dataset_id is provided
   if (!req.params.id) { return res.status(401).json({status: 'Error', msg: 'Missing parameter id'}); }
   // Check if user is in req
-  if (!req.user || !req.user.email) { return res.json({ status:'error', msg:'No access.' }); }
+  if (!req.user || !req.user.email) {
+    logger.debug('User is not logged in.');
+    return res.json({ status:'error', msg:'No access.' });
+  }
   // Check if user is admin
   if (req.user.admin === true) { return next(); }
-
-  // get account for dataset for Distribution
+  logger.debug('Fetching primary source');
+  // Get the primary from the database, include the source's dataset
   models.Primary.findById(req.params.id, {
-    include: [{ model: models.Dataset, as: 'dataset' }]
-  }).then(function(result){
+    include: [
+      { model: models.Dataset, as: 'dataset' }
+    ]
+  }).then(function(result) {
+    if (!result) {
+      logger.debug('Primary not found');
+      return res.status(401).json({status: 'Error', msg: 'Primary not found'});
+    }
+    // add the distribution to the req.
     req.distribution = result;
-    validateAccountAccess(req.user, result.dataValues.account_id, function(result){
-      if (!result) { return res.status(401).json({status: 'Error', msg: 'No user found'}); }
-      console.log('Can delete TRUE');
+    // // Check if the current user is allowed to edit the provided publication account.
+    validateAccountAccess(req.user, result.dataValues.dataset.dataValues.account_id, function(result){
+      if (!result) { return res.status(401).json({ status: 'Error', msg: 'No access for this account' }); }
+      logger.debug('User can delete this Primary. ');
       return next();
     });
   }).catch(function(err){
     return res.status(401).json({status: 'Error', msg: err});
   });
-}
+};
 
 
 // Make sure only a local connection can create a file from a table.
