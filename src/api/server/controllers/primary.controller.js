@@ -158,8 +158,8 @@ exports.convert = function (req, res) {
   }).then(function(primary) {
     if (!primary) { return res.json({status: 'error', msg: 'No primary found'}); }
     // Connect to the postgis database to get the data from the data-table.
-    pg.connect(config.db.postgis.uri, function (err, client, done) {
-      if (err) { logger.error(err); }
+    pg.connect(config.db.postgis.uri, function(err, client, done) {
+      if (err) { return handleError(res,err); }
       // create a local tmp file to create the csv
       var localTmpFile = path.join(config.root, '../../tmp/primary_' + primaryId + '.csv');
       logger.debug('tmp local file location: ', localTmpFile);
@@ -167,7 +167,11 @@ exports.convert = function (req, res) {
       var stream = client.query(copyTo('COPY "primary_' + primaryId + '" TO STDOUT WITH DELIMITER \',\' CSV HEADER'));
       var fileStream = fs.createWriteStream(localTmpFile);
       stream.pipe(fileStream);
-      fileStream.on('finish', function () {
+      stream.on('error', function(error) {
+        console.log('stream error end', error);
+      });
+      stream.on('end', function(result) {
+        console.log('end result', result);
         logger.debug('Table convert finished.');
         logger.debug('Closing connection');
         done();
@@ -230,7 +234,6 @@ exports.convert = function (req, res) {
       }).on('error', function (err) {
         logger.debug('There was an error with the postgis connection. ');
         logger.debug('Closing connection');
-        done();
         return handleError(res,err);
       });
     });

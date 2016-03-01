@@ -252,7 +252,7 @@ Worker.prototype.handleProcessedJob = function(err) {
     }, function(error, response, data) {
       // The Primaries API handles the Primary database values.
 
-      if (error || response.statusCode!==200) {
+      if (error || (response && (response.statusCode!==200) )) {
         logger.error('Error converting file. StatusCode ' + response.statusCode + ', StatusMessage: ' + response.statusMessage + ', error: ' +  JSON.stringify(error));
       } else {
         logger.debug('Conversion complete. ');
